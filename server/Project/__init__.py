@@ -1,9 +1,17 @@
-from flask import Flask, request, abort, render_template
+from flask import Flask, request, abort, render_template, session,url_for,redirect
 import requests
 import json
 from Project.Config import *
 from pymessenger import Bot
 import pymongo
+from flask_pymongo import PyMongo
+import bcrypt
+from werkzeug.security import generate_password_hash, check_password_hash
+from base64 import encodebytes
+from hashlib import sha1
+import hmac
+
+
 
 # client = pymongo.MongoClient("")
 # db = client.test
@@ -12,9 +20,47 @@ import pymongo
 app = Flask(__name__)
 bot = Bot(page_facebook_access_token)
 
+app.config["MONGO_URI"] = "mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority"
+mongo = PyMongo(app)
+
 @app.route('/')
 def home():
     return render_template('home.html')
+
+@app.route('/login', methods=['POST','GET'])
+def login():
+
+    if request.method == 'POST':
+        users = mongo.db.users
+        login_user = users.find_one({'name' : request.form['username']})
+    
+        if login_user:
+            if bcrypt.hashpw(request.form['password'].encode('utf-8'), login_user['password']) == login_user['password']:
+                session['username'] = request.form['username']
+                return redirect(url_for('home'))
+
+        return 'Invalid username/password '
+    elif request.method == 'GET':
+        return render_template('login.html')
+
+
+
+@app.route('/signup', methods=['POST', 'GET'])
+def signup():
+    
+    if request.method == 'POST':
+        users = mongo.db.users
+        existing_user = users.find_one({'name' : request.form['username']})
+
+        if existing_user is None:
+            hashpass = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
+            users.insert({'name' : request.form['username'], 'password' : hashpass})
+            session['username'] = request.form['username']
+            return render_template('home.html')
+        
+        return 'That username already exists!'
+
+    return render_template('signup.html')
 
 @app.route('/<platform>/webhook',methods=["POST", "GET"])
 def webhook(platform):
