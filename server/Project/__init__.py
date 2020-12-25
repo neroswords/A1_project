@@ -54,13 +54,21 @@ def signup():
 
         if existing_user is None:
             hashpass = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
-            users.insert({'name' : request.form['username'], 'password' : hashpass})
+            users.insert({'name' : request.form['username'], 'password' : hashpass,'email' : request.form['email']
+            ,'ft_name' : request.form['ft_name'],'la_name' : request.form['la_name']
+            ,'address' : request.form['address'],'type_shop' : request.form['type_shop'],'birthday' : request.form['birthday']})
+
             session['username'] = request.form['username']
             return render_template('home.html')
         
         return 'That username already exists!'
 
     return render_template('signup.html')
+
+
+@app.route('/connect', methods=['POST', 'GET'])
+def connect():
+    return render_template('connect.html')
 
 @app.route('/<platform>/webhook',methods=["POST", "GET"])
 def webhook(platform):

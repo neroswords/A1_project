@@ -4,18 +4,41 @@
 <div id="id01" class="modal">
   <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">times;</span>
   <form action="/signup" method = 'POST' class="container">
-    <div class="container">
+    <div class="container" ><center>
       <h1>Sign Up</h1>
       <p>Please fill in this form to create an account.</p>
       <hr>
-      <label for="email"><b>Email</b></label>
-      <input type="text" placeholder="Enter Email" name="username" required>
-
+      <label for="Username"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="username" required>
+      <br>
       <label for="psw"><b>Password</b></label>
       <input type="password" placeholder="Enter Password" name="password" required>
-
+      <br>
       <label for="psw-repeat"><b>Repeat Password</b></label>
       <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+      <br>
+      <label for="email"><b>Email</b></label>
+      <input type="email" placeholder="Enter Email" name="email" required>
+      <br>
+      <label for="ft_name"><b>name</b></label>
+      <input type="text" placeholder="Enter Name" name="ft_name" >
+      <br>
+      <label for="la_name"><b>Lastname</b></label>
+      <input type="text" placeholder="Enter Last-Name" name="la_name" >
+      <br>
+      <label for="address"><b>Address</b></label>
+      <input type="text" placeholder="Enter Address" name="address" >
+      <br>
+      <label for="shop_name"><b>Shop Name</b></label>
+      <input type="text" placeholder="Enter Shop Name" name="shop_name" >
+      <br>
+      <label for="type_shop"><b>type</b></label>
+      <input type="text" placeholder="Enter type" name="type_shop" >
+      <br>
+      <label for="birthday"><b>Birthday</b></label>
+      <input type="date" placeholder="Enter Birthday" name="birthday" >
+      <br>
+
 
       <label>
         <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
@@ -27,6 +50,7 @@
         <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
         <button type="submit" class="signup">Sign Up</button>
       </div>
+    </center>
     </div>
   </form>
 </div>
