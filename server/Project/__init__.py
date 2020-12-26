@@ -11,7 +11,7 @@ from base64 import encodebytes
 from hashlib import sha1
 import hmac
 from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
-from Project.db import get_user,save_user,update_connect
+from Project.db import get_user,save_user,update_connect,new_bot,check_user
 
 
 
@@ -57,22 +57,24 @@ def signup():
 
     message = ''
     if request.method == 'POST':
- 
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        ft_name = request.form.get('ft_name')
-        la_name = request.form.get('la_name')
-        birthday = request.form.get('birthday')
-        address = request.form.get('address')
-        shop_name = request.form.get('shop_name')
-        type_shop = request.form.get('type_shop')
-        
-        try:
-            save_user(username, email, password,ft_name,la_name,birthday,address,shop_name,type_shop)
-            return redirect(url_for('login'))
-        except:
+        print("00000000000000000000")
+        print(get_user(request.form.get('username')))
+        print("00000000000000000000++++++")
+        if  not check_user(request.form.get('username')):
             message = "User already exists!"
+        elif  check_user(request.form.get('username')):
+            username = request.form.get('username')
+            email = request.form.get('email')
+            password = request.form.get('password')
+            ft_name = request.form.get('ft_name')
+            la_name = request.form.get('la_name')
+            birthday = request.form.get('birthday')
+            address = request.form.get('address')
+            shop_name = request.form.get('shop_name')
+            type_shop = request.form.get('type_shop')
+            save_user(username, email, password,ft_name,la_name,birthday,address,shop_name,type_shop)
+            new_bot(username)
+            return redirect(url_for('login'))
     return render_template('signup.html', message=message)
 
 @app.route("/logout/")
@@ -86,7 +88,7 @@ def logout():
 def connect():
     if request.method == 'POST':
         print("DSADASDAS")
-        print(current_user._id)
+        # print(current_user._id)
         username = current_user.username
         ch_sc = request.form.get('ch_sc')
         ch_ac_tk = request.form.get('ch_ac_tk')
@@ -175,52 +177,52 @@ def connect():
 # def logout():
 #     session.pop('username',None)
 #     return render_template('home.html')
-# @app.route('/<platform>/webhook',methods=["POST", "GET"])
-# def webhook(platform):
-#     if  platform == "facebook":
-#         if request.method == "GET":
-#             if  request.args.get("hub.verify_token") == VERIFY_TOKEN:
-#                 return request.args.get("hub.challenge")
-#             else:
-#                 return "This is method get from facebook"
-#         elif request.method == "POST":
-#             payload = request.json
-#             event = payload['entry'][0]['messaging']
-#             for msg in event:
-#                 text = msg['message']['text']
-#                 sender_id = msg['sender']['id']
-#                 response = process_message(text)
-#                 bot.send_text_message(sender_id, response)
-#             return "Message received"
+@app.route('/<platform>/webhook',methods=["POST", "GET"])
+def webhook(platform):
+    if  platform == "facebook":
+        if request.method == "GET":
+            if  request.args.get("hub.verify_token") == VERIFY_TOKEN:
+                return request.args.get("hub.challenge")
+            else:
+                return "This is method get from facebook"
+        elif request.method == "POST":
+            payload = request.json
+            event = payload['entry'][0]['messaging']
+            for msg in event:
+                text = msg['message']['text']
+                sender_id = msg['sender']['id']
+                response = process_message(text)
+                bot.send_text_message(sender_id, response)
+            return "Message received"
 
-#     elif platform == "line":
-#         if request.method == "GET":
-#             return "This is method get from line"
+    elif platform == "line":
+        if request.method == "GET":
+            return "This is method get from line"
 
-#         elif request.method == "POST":
-#             payload = request.json
-#             Reply_token = payload['events'][0]['replyToken']
-#             # print(Reply_token)
-#             message = payload['events'][0]['message']['text']
-#             print(message)
-#             if 'สวัสดี' in message :
-#                 Reply_messasge = 'ดี'
-#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
+        elif request.method == "POST":
+            payload = request.json
+            Reply_token = payload['events'][0]['replyToken']
+            # print(Reply_token)
+            message = payload['events'][0]['message']['text']
+            print(message)
+            if 'สวัสดี' in message :
+                Reply_messasge = 'ดี'
+                ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
             
-#             elif "เป็นไงบ้าง" in message :
-#                 Reply_messasge = 'สบายดี'
-#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-#                 # Reply_messasge = 'ราคา BITCOIN ขณะนี้ : {}'.format(GET_BTC_PRICE())
-#                 # ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-#             elif "ไอเหี้ยซัน" in message :
-#                 Reply_messasge = 'จริง'
-#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-#             else:
-#                 Reply_messasge = 'ขอโทษค่ะ ชั้นไม่เข้าใจที่คุณพูด'
-#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-#             return request.json, 200
-#     else:
-#         return 200
+            elif "เป็นไงบ้าง" in message :
+                Reply_messasge = 'สบายดี'
+                ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
+                # Reply_messasge = 'ราคา BITCOIN ขณะนี้ : {}'.format(GET_BTC_PRICE())
+                # ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
+            elif "ไอเหี้ยซัน" in message :
+                Reply_messasge = 'จริง'
+                ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
+            else:
+                Reply_messasge = 'ขอโทษค่ะ ชั้นไม่เข้าใจที่คุณพูด'
+                ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
+            return request.json, 200
+    else:
+        return 200
 
 
 
