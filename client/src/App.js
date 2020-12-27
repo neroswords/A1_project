@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 
+
+import Navbar from './components/Navbar/navbar';
+
 function App() {
   const [initialData, setInitialData] = useState([{}])
 
@@ -12,8 +15,8 @@ function App() {
 
   return (
     <div className="App">
-      <h1>{initialData.Hi}</h1>
-      <h2>{initialData.h1}</h2>
+      <Navbar />
+
     </div>
   );
 }
