@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from werkzeug.security import generate_password_hash
 
 from Project.user import User
-
+from Project.connection import Connection
 
 client = MongoClient("mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority")
 db_a1 = client.get_database("a1")
@@ -39,3 +39,8 @@ def check_user(username):
         return True
     else:
         return False
+
+
+def get_connection(username):
+    user_data = bot_collection.find_one({'username': username})
+    return Connection(user_data['username'], user_data['Channel_access_token'], user_data['Channel_secret'], user_data['VERIFY_TOKEN'], user_data['basic_id'], user_data['page_facebook_access_token']) if user_data else None

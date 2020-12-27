@@ -3,18 +3,6 @@ from werkzeug.security import check_password_hash
 
 class User:
 
-    # def __init__(self, username, email, password,ft_name,address,shop_name,type_shop,birthday):
-    #     self.username = username
-    #     self.email = email
-    #     self.password = password
-    #     self.ft_name = ft_name
-    #     self.la_name = la_name
-    #     self.address = address
-    #     self.shop_name = shop_name
-    #     self.type_shop = type_shop
-    #     self.birthday = birthday
-    #     self._id = _id
-
     def __init__(self, username, email, password,ft_name,la_name,address,shop_name,type_shop,birthday):
         self.username = username
         self.email = email
@@ -25,6 +13,8 @@ class User:
         self.address = address
         self.shop_name = shop_name
         self.type_shop = type_shop
+
+
         
 
 

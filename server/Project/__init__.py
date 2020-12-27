@@ -11,8 +11,8 @@ from base64 import encodebytes
 from hashlib import sha1
 import hmac
 from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
-from Project.db import get_user,save_user,update_connect,new_bot,check_user
-
+from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection
+import os 
 
 
 app = Flask(__name__)
@@ -20,7 +20,6 @@ bot = Bot(page_facebook_access_token)
 login_manager = LoginManager()
 login_manager.login_view = 'login'
 login_manager.init_app(app)
-
 
 
 @login_manager.user_loader
@@ -57,9 +56,6 @@ def signup():
 
     message = ''
     if request.method == 'POST':
-        print("00000000000000000000")
-        print(get_user(request.form.get('username')))
-        print("00000000000000000000++++++")
         if  not check_user(request.form.get('username')):
             message = "User already exists!"
         elif  check_user(request.form.get('username')):
@@ -93,13 +89,13 @@ def connect():
         ch_sc = request.form.get('ch_sc')
         ch_ac_tk = request.form.get('ch_ac_tk')
         basic_id = request.form.get('basic_id')
-        basic_id = request.form.get('basic_id')
         pfa_tk = request.form.get('pfa_tk')
         vf_tk = request.form.get('vf_tk')
         update_connect(username, ch_sc,ch_ac_tk,basic_id,pfa_tk,vf_tk)
         return redirect(url_for('home'))
     elif request.method == 'GET':
-        return render_template('connect.html',username=current_user.username)
+        a = get_connection(current_user.username)
+        return render_template('connect.html',username=current_user.username,cth = a.Channel_access_token)
 
 
 
