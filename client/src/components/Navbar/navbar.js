@@ -11,6 +11,9 @@ function Navbar(){
             <a className="btn btn-info" href="#" role="button">Register</a>   
             </form>
         </div>
+        <div>
+            
+        </div>
         </nav>
     </header>
     )
