@@ -5,5 +5,8 @@ $ flask run
 """
 from  Project import app
 
+
+
 if __name__ == '__main__':
-    app.run(port=200,debug=True)
+    app.secret_key = 'mysecret'
+    app.run(port= 200,debug=True)

@@ -4,6 +4,10 @@ import './App.css';
 import { CardList } from './components/cardList';
 import { Firstpage } from './components/Firstpage';
 
+
+import Navbar from './components/Navbar/navbar';
+import Footer from './components/footer/footer'
+
 function App() {
   const [initialData, setInitialData] = useState([{}])
 
@@ -14,16 +18,13 @@ function App() {
   // }, []);
 
   return (
-    <div className ="App">
-      <div className="One">
-        <Firstpage />
-      </div>
-        {/* <div className="Two">
-          <CardList /> 
-        </div> */}
-        
-    </div>    
-
+    // for footer
+    <div className="page-container"> 
+    <div className="content-wrap">
+      <Navbar />  
+    </div>
+      <Footer />
+    </div>
   );
 }
 
