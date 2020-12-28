@@ -1,18 +1,15 @@
-.App {
-  text-align: center;
+
+/* footer */
+.page-container{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.content-wrap{
+  flex: 1;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
+/*  */
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -24,17 +21,14 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+
+.conatainer {
+  margin: auto;
+  
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Mainpage {
+  margin-bottom: 5%;
 }
 
 .md-social-btn .mbsc-ic {
