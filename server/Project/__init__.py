@@ -4,19 +4,30 @@ import json
 from Project.Config import *
 from pymessenger import Bot
 import pymongo
+from Project.process import process_message
 
 # client = pymongo.MongoClient("")
 # db = client.test
 # col = db["User"]
 
 app = Flask(__name__)
-bot = Bot(page_facebook_access_token)
+
 
 @app.route('/')
 def home():
     return render_template('home.html')
 
-@app.route('/<platform>/webhook',methods=["POST", "GET"])
+@app.route('/test', methods=["POST"])
+def test():
+    # return render_template('home.html')
+    print(request.get_json())
+    return "OK"
+
+@app.route('/api')
+def api():
+    return {"Hi": "Hi"}
+
+@app.route('/webhook/<botid>/<platform>',methods=["POST", "GET"])
 def webhook(platform):
     if  platform == "facebook":
         if request.method == "GET":
@@ -25,8 +36,10 @@ def webhook(platform):
             else:
                 return "This is method get from facebook"
         elif request.method == "POST":
+            bot = Bot(page_facebook_access_token)
             payload = request.json
             event = payload['entry'][0]['messaging']
+            print(event)
             for msg in event:
                 text = msg['message']['text']
                 sender_id = msg['sender']['id']
@@ -63,7 +76,50 @@ def webhook(platform):
     else:
         return 200
 
+# check state for keep data
+# @app.route('/webhook/<botid>/<platform>/<state>',methods=["POST"])
+# def getrequest():
+#     sentence = ["ขอชื่อ-นามสกุลด้วยครับ","โปรดระบุที่อยู่ที่ต้องการจัดส่ง","จ่ายเงิน"]
+#     if  platform == "facebook":
+#         elif request.method == "POST":
+#             if state == "none":
+#             elif state == "address":
+#             bot = Bot(page_facebook_access_token)
+#             payload = request.json
+#             event = payload['entry'][0]['messaging']
+#             print(event)
+#             for msg in event:
+#                 text = msg['message']['text']
+#                 sender_id = msg['sender']['id']
+#                 response = process_message(text)
+#                 bot.send_text_message(sender_id, response)
+#             return "Message received"
 
+#     elif platform == "line":
+#         elif request.method == "POST":
+#             payload = request.json
+#             Reply_token = payload['events'][0]['replyToken']
+#             # print(Reply_token)
+#             message = payload['events'][0]['message']['text']
+#             print(message)
+#             if 'สวัสดี' in message :
+#                 Reply_messasge = 'ดี'
+#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
+            
+#             elif "เป็นไงบ้าง" in message :
+#                 Reply_messasge = 'สบายดี'
+#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
+#                 # Reply_messasge = 'ราคา BITCOIN ขณะนี้ : {}'.format(GET_BTC_PRICE())
+#                 # ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
+#             elif "ไอเหี้ยซัน" in message :
+#                 Reply_messasge = 'จริง'
+#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
+#             else:
+#                 Reply_messasge = 'ขอโทษค่ะ ชั้นไม่เข้าใจที่คุณพูด'
+#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
+#             return request.json, 200
+#     else:
+#         return 200
 
 # @app.route('/facebook/webhook', methods=["POST","GET"])
 # def facebook_webhook():
@@ -135,10 +191,3 @@ def ReplyMessage(Reply_token, TextMessage, Line_Acess_Token):
     r = requests.post(LINE_API, headers=headers, data=data) 
     return 200
 
-def process_message(text):
-    formatted_massage = text.lower()
-    if  formatted_massage == "hi":
-        response = "Hello"
-    else:
-        response = "Sorry, I dont know what you mean"
-    return response

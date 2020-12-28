@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
+import { TestForm } from './component/testForm';
+import {Container} from'semantic-ui-react';
 
 function App() {
   const [initialData, setInitialData] = useState([{}])
@@ -12,8 +14,9 @@ function App() {
 
   return (
     <div className="App">
-      <h1>{initialData.Hi}</h1>
-      <h2>{initialData.h1}</h2>
+      <Container>
+        <TestForm />
+      </Container>
     </div>
   );
 }

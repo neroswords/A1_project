@@ -7,6 +7,8 @@ from pythainlp.soundex import udom83
 import numpy as np
 
 warnings.filterwarnings('ignore')
+#ss1 is input from client
+#ss2 is from data base
 
 model=get_model() # ดึง model ของ thai2vec มาเก็บไว้ในตัวแปร model
 def sentence_vectorizer(ss,dim=300,use_mean=True): # ประกาศฟังก์ชัน sentence_vectorizer
@@ -22,31 +24,59 @@ def sentence_vectorizer(ss,dim=300,use_mean=True): # ประกาศฟัง
 def sentence_similarity(s1,s2):
     return cosine_similarity(sentence_vectorizer(str(s1)),sentence_vectorizer(str(s2)))
 
-def sentence_sound_index(ss1,ss2):
-    s1 = word_tokenize(ss1)
-    s2 = word_tokenize(ss2)
-    if len(s1) > len(s2):
-        s1 = x
-        s1 = s2
-        s2 = x
-    catch = 0
-    print(len(s1))
-    print(len(s2))
-    for i in range(len(s1)):
-        if udom83(s1[i]) == udom83(s2[i]) or (i+1<len(s2) and udom83(s1[i]) == udom83(s2[i+1])) or (i-1 >=0 and udom83(s1[i]) == udom83(s2[i-1])): 
-            catch += 1
-    if len(s1) > len(s2):
-        return catch/len(s1)
-    else:
-        return catch/len(s2)
+def sentence_sound_index(ss1,ss2,list = "none"):
+    if list == "invert":
+        s1 = word_tokenize(ss1)
+        s2 = word_tokenize(ss2)
+        if len(s1) > len(s2):
+            s1 = x
+            s1 = s2
+            s2 = x
+        catch = 0
+        print(len(s1))
+        print(len(s2))
+        for i in range(len(s1)):
+            if udom83(s1[i]) == udom83(s2[i]) or (i+1<len(s2) and udom83(s1[i]) == udom83(s2[i+1])) or (i-1 >=0 and udom83(s1[i]) == udom83(s2[i-1])): 
+                catch += 1
+        if len(s1) < len(s2):
+            return catch/len(s1)
+        else:
+            return catch/len(s2)
+    elif list == "none":
+        s1 = word_tokenize(ss1)
+        s2 = word_tokenize(ss2)
+        if len(s1) > len(s2):
+            s1 = x
+            s1 = s2
+            s2 = x
+        catch = 0
+        print(len(s1))
+        print(len(s2))
+        for i in range(len(s1)):
+            if udom83(s1[i]) == udom83(s2[i]) or (i+1<len(s2) and udom83(s1[i]) == udom83(s2[i+1])) or (i-1 >=0 and udom83(s1[i]) == udom83(s2[i-1])): 
+                catch += 1
+        if len(s1) > len(s2):
+            return catch/len(s1)
+        else:
+            return catch/len(s2)
 
-def sentence_get_confident(ss1,ss2):
-    return (sentence_similarity(ss1,ss2)+sentence_sound_index(ss1, ss2))/2
+def sentence_get_confident(ss1,ss2,list = "none"):
+    if list == "none":
+        if pythainlp.util.isthai(ss1, ignore_chars="1234567890.-,$ "):
+            return (sentence_similarity(ss1,ss2)+sentence_sound_index(ss1, ss2))/2
+        else:
+            return "ขอโทษครับ ผมพูดได้แค่ภาษาไทย"
+    elif list == "invert":
+        if pythainlp.util.isthai(ss1, ignore_chars="1234567890.-,$ "):
+            return (sentence_similarity(ss1,ss2)+sentence_sound_index(ss1, ss2, list=invert))/2
+        else:
+            return "ขอโทษครับ ผมพูดได้แค่ภาษาไทย"
 
 # print(example[inp])
 # print(pythainlp.util.isthai(inp))
-# print(sentence_similarity("ครับ", "คร้าบ"))
-# print(word_tokenize("มีเสื้อสีแดงป้ะ"))
+# print(sentence_similarity("เสื้อสีแดง","เสื้อสี"))
+# print(word_tokenize("ผมเรียนที่มหาวิทยาาลัยพระจอมเกล้า"))
 # print(sentence_get_confident("มีเสื้อสีแดงมั้ย", "มีเสื้อแดงมั้ย"))
+
 
 
