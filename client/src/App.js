@@ -1,20 +1,29 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
+// import Chatbot from './images/Chatbot.svg'; 
+import { CardList } from './components/cardList';
+import { Firstpage } from './components/Firstpage';
 
 function App() {
   const [initialData, setInitialData] = useState([{}])
 
-  useEffect(()=>{
-    fetch('/api').then(
-      response => response.json()
-    ).then(data => setInitialData(data))
-  }, []);
+  // useEffect(()=>{
+  //   fetch('/api').then(
+  //     response => response.json()
+  //   ).then(data => setInitialData(data))
+  // }, []);
 
   return (
-    <div className="App">
-      <h1>{initialData.Hi}</h1>
-      <h2>{initialData.h1}</h2>
-    </div>
+    <div className ="App">
+      <div className="One">
+        <Firstpage />
+      </div>
+        {/* <div className="Two">
+          <CardList /> 
+        </div> */}
+        
+    </div>    
+
   );
 }
 
