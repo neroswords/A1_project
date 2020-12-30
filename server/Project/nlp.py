@@ -77,6 +77,3 @@ def sentence_get_confident(ss1,ss2,list = "none"):
 # print(sentence_similarity("เสื้อสีแดง","เสื้อสี"))
 # print(word_tokenize("ผมเรียนที่มหาวิทยาาลัยพระจอมเกล้า"))
 # print(sentence_get_confident("มีเสื้อสีแดงมั้ย", "มีเสื้อแดงมั้ย"))
-
-
-

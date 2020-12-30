@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Styles = styled.div`
 h1 {
@@ -16,8 +17,12 @@ function Navbar(){
                 <div className="container-fluid">
                         <h1 className="navbar-brand me-auto">A1 Chatbot Logo</h1>
                     <form className="d-flex">
-                        <a className="btn btn-outline-secondary me-4 " href="#" role="button">Log in</a>
-                        <a className="btn btn-info " href="#" role="button">Register</a>   
+                        <Link to="/">
+                            <a className="btn btn-outline-secondary me-4 " href="#" role="button">Log in</a>
+                        </Link>
+                        <Link to="/register">
+                            <a className="btn btn-info " href="#" role="button">Register</a>
+                        </Link> 
                     </form>
                 </div>
                 </nav>

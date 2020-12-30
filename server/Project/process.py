@@ -104,9 +104,9 @@ def isnotSymbol(string):
     else: 
         return False
 
-print(checkVariable("ขายเสื้อ<สีแดง>มั้ย"))
+# print(checkVariable("ขายเสื้อ<สีแดง>มั้ย"))
 
 
-def checkState(custid,state){
-    
-}
+# def checkState(custid,state){
+
+# }

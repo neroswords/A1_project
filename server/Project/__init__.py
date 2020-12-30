@@ -14,6 +14,11 @@ import hmac
 from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
 from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection
 import os 
+from werkzeug.utils import secure_filename
+from flask_cors import CORS, cross_origin
+
+UPLOAD_FOLDER = './Project/static/images'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 
 app = Flask(__name__)
@@ -21,7 +26,20 @@ bot = Bot(page_facebook_access_token)
 login_manager = LoginManager()
 login_manager.login_view = 'login'
 login_manager.init_app(app)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+@app.route('/upload', methods=['POST'])
+def fileUpload():
+    target=os.path.join(UPLOAD_FOLDER,'test_docs')
+    if not os.path.isdir(target):
+        os.mkdir(target)
+    file = request.files['file'] 
+    filename = secure_filename(file.filename)
+    destination="/".join([target, filename])
+    file.save(destination)
+    session['uploadFilePath']=destination
+    response="success"
+    return response
 
 @login_manager.user_loader
 def load_user(username):
@@ -170,7 +188,6 @@ def connect():
 #         g.user = session['username']
       
 
-<<<<<<< HEAD
 @app.route('/test', methods=["POST"])
 def test():
     # return render_template('home.html')
@@ -179,16 +196,19 @@ def test():
 
 @app.route('/api')
 def api():
-    return {"Hi": "Hi"}
+    return {"Hi": "Hi",
+            "a1" : "kuy"}
 
-@app.route('/webhook/<botid>/<platform>',methods=["POST", "GET"])
-=======
+#route start order state
+# @app.route('/webhook/<botid>/<platform>/order',methods=["POST"])
+# def getinfo():
+
+
 # @app.route('/logout')
 # def logout():
 #     session.pop('username',None)
 #     return render_template('home.html')
 @app.route('/<platform>/webhook',methods=["POST", "GET"])
->>>>>>> 22a7aed5689ce83f2ea18e15d1732a4512d9fc98
 def webhook(platform):
     if  platform == "facebook":
         if request.method == "GET":
@@ -352,3 +372,4 @@ def ReplyMessage(Reply_token, TextMessage, Line_Acess_Token):
     r = requests.post(LINE_API, headers=headers, data=data) 
     return 200
 
+CORS(app, expose_headers='Authorization')
