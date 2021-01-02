@@ -31,3 +31,7 @@
 .Mainpage {
   margin-bottom: 5%;
 }
+
+.md-social-btn .mbsc-ic {
+  float: left;
+}
