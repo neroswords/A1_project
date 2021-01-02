@@ -11,7 +11,7 @@ from base64 import encodebytes
 from hashlib import sha1
 import hmac
 from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
-from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection
+from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection,check_bot,find_bot
 import os 
 
 
@@ -68,8 +68,9 @@ def signup():
             address = request.form.get('address')
             shop_name = request.form.get('shop_name')
             type_shop = request.form.get('type_shop')
+            
             save_user(username, email, password,ft_name,la_name,birthday,address,shop_name,type_shop)
-            new_bot(username)
+            
             return redirect(url_for('login'))
     return render_template('signup.html', message=message)
 
@@ -83,20 +84,42 @@ def logout():
 @login_required
 def connect():
     if request.method == 'POST':
-        print("DSADASDAS")
         # print(current_user._id)
-        username = current_user.username
-        ch_sc = request.form.get('ch_sc')
-        ch_ac_tk = request.form.get('ch_ac_tk')
-        basic_id = request.form.get('basic_id')
-        pfa_tk = request.form.get('pfa_tk')
-        vf_tk = request.form.get('vf_tk')
-        update_connect(username, ch_sc,ch_ac_tk,basic_id,pfa_tk,vf_tk)
+        # username = current_user.username
+        # ch_sc = request.form.get('ch_sc')
+        # ch_ac_tk = request.form.get('ch_ac_tk')
+        # basic_id = request.form.get('basic_id')
+        # pfa_tk = request.form.get('pfa_tk')
+        # vf_tk = request.form.get('vf_tk')
+        # update_connect(username, ch_sc,ch_ac_tk,basic_id,pfa_tk,vf_tk)
         return redirect(url_for('home'))
     elif request.method == 'GET':
-        a = get_connection(current_user.username)
-        return render_template('connect.html',username=current_user.username,cth = a.Channel_access_token)
+        gg = find_bot(current_user.username)
+        # print(gg[0]["name_bot"])
+        return render_template('connect.html',username = gg)
 
+
+@app.route('/connect/newbot', methods=['GET', 'POST'])
+@login_required
+def newbot():
+    message = '555'
+    if request.method == 'POST':
+        if  not check_bot(request.form.get('name_bot')):
+            message = "Bot name already exists!"
+        elif  check_bot(request.form.get('name_bot')):
+            username = current_user.username
+            name_bot = request.form.get('name_bot')
+            ch_sc = request.form.get('ch_sc')
+            ch_ac_tk = request.form.get('ch_ac_tk')
+            basic_id = request.form.get('basic_id')
+            pfa_tk = request.form.get('pfa_tk')
+            vf_tk = request.form.get('vf_tk')
+            new_bot(username,name_bot, ch_sc,ch_ac_tk,basic_id,pfa_tk,vf_tk)
+            return redirect(url_for('connect'))
+
+    # elif request.method == 'GET':
+    a = get_connection(current_user.username)
+    return render_template('newbot.html',username=current_user.username,message=message)
 
 
 
