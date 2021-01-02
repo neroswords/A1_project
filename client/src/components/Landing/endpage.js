@@ -1,6 +1,7 @@
 import React from 'react';
 import { Jumbotron as Jumbo, Container } from 'react-bootstrap';
 import styled from 'styled-components';
+
 // import Telephone from './images/Telephone.png';
 
 const Styles = styled.div`
@@ -31,6 +32,8 @@ const Styles = styled.div`
     font-size: 40px;
     font-weight: 700;
     margin-bottom: 5%;
+    font-family: 'Roboto', sans-serif;
+
   }
 
   span {
