@@ -1,4 +1,4 @@
-from flask import Flask, request, abort, render_template, session,url_for,redirect,g
+from flask import Flask, request, abort, render_template, session,url_for,redirect,g,send_from_directory,send_file
 import requests
 import json
 from Project.Config import *
@@ -30,15 +30,13 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/upload', methods=['POST'])
 def fileUpload():
-    target=os.path.join(UPLOAD_FOLDER,'test_docs')
-    if not os.path.isdir(target):
-        os.mkdir(target)
     file = request.files['file'] 
     filename = secure_filename(file.filename)
-    destination="/".join([target, filename])
+    destination="/".join([UPLOAD_FOLDER, filename])
     file.save(destination)
     session['uploadFilePath']=destination
     response="success"
+    print(destination)
     return response
 
 @login_manager.user_loader
@@ -102,7 +100,6 @@ def logout():
 @login_required
 def connect():
     if request.method == 'POST':
-        print("DSADASDAS")
         # print(current_user._id)
         username = current_user.username
         ch_sc = request.form.get('ch_sc')
@@ -116,7 +113,9 @@ def connect():
         a = get_connection(current_user.username)
         return render_template('connect.html',username=current_user.username,cth = a.Channel_access_token)
 
-
+@app.route('/images/<path:image_name>')
+def serve_image(image_name):
+    return send_from_directory('./static/images',image_name)
 
 
 # class Anonymous(AnonymousUserMixin):
