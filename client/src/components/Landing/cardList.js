@@ -45,7 +45,6 @@ h1 {
     font-weight: 700;
     margin-bottom: 40px;
     font-family: 'Roboto', sans-serif;
-
   }
 
 h5 {
@@ -68,7 +67,7 @@ li i {
     margin-right: 5%;
     
 } 
-}
+
 `;
 
 export const CardList = () => (
@@ -77,25 +76,40 @@ export const CardList = () => (
         <div className="title">
             <h1>About Features</h1>
         </div>
-        <Jumbo className=" jumbo d-flex position-relative">
-            <div className="card">
-                <img src="./images/chat.png" width="100%"/>
-                <h5 className="card-title">Feature1</h5>
-                <p className="card-text">ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp</p>
-            </div>
-            <div className="card ms-4">
-                <img src="./images/parcel.png" width="100%"/>
-                <h5 className="card-title">Feature2</h5>
-                <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
-            <div className="card ms-4">
-                <img src="./images/data-analytics.png" width="100%"/>
-                <h5 className="card-title">Feature3</h5>
-                <ul> 					
-                      <li><i class="fas fa-check"></i>List Features</li> 					
-                      <li><i class="fas fa-check"></i>List Features</li> 					
-                      <li><i class="fas fa-check"></i>List Features</li> 				
-                </ul>
+        <Jumbo className="jumbo col-lg-12">
+            <div className="row col-lg-12 justify-content-around">
+                <div className="card col-lg-6">
+                    {/* <div className="col-lg-12">
+                        <img src="./images/chat.png" width="80%"/>
+                    </div> */}
+                    
+                    <h5 className="card-title">Group Feature1</h5>
+                    <ul> 					
+                        <li><i class="fas fa-check"></i>List Features</li> 					
+                        <li><i class="fas fa-check"></i>List Features</li> 					
+                        <li><i class="fas fa-check"></i>List Features</li> 				
+                    </ul>
+                </div>
+
+                <div className="card col-lg-6">
+                    {/* <img src="./images/parcel.png" width="100%"/> */}
+                    <h5 className="card-title">Group Feature2</h5>
+                    <ul> 					
+                        <li><i class="fas fa-check"></i>List Features</li> 					
+                        <li><i class="fas fa-check"></i>List Features</li> 					
+                        <li><i class="fas fa-check"></i>List Features</li> 				
+                    </ul>
+                </div>
+
+                <div className="card col-lg-6">
+                    {/* <img src="./images/data-analytics.png" width="100%"/> */}
+                    <h5 className="card-title">Group Feature3</h5>
+                    <ul> 					
+                        <li><i class="fas fa-check"></i>List Features</li> 					
+                        <li><i class="fas fa-check"></i>List Features</li> 					
+                        <li><i class="fas fa-check"></i>List Features</li> 				
+                    </ul>
+                </div>
             </div>
         </Jumbo>
         </Container>

@@ -7,9 +7,10 @@ import { Mainpage } from './components/Landing/Mainpage';
 import { Endpage }  from  './components/Landing/endpage';
 
 import Register from './Page/Register';
-
+import Login from './Page/Login';
 import Navbar from './components/Navbar/navbar';
 import Footer from './components/footer/footer'
+
 // import Main from './components/Main';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Switch>
             <Route path="/" exact component = { Home } />
             <Route path="/register" component={ Register } />
+            <Route path="/login" component={ Login } />
           </Switch>
     </Router>
   );

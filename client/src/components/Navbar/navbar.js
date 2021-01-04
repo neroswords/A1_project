@@ -13,19 +13,25 @@ h1 {
 function Navbar(){
     return (
         <Styles>
-                <nav className="navbar">
-                <div className="container-fluid">
-                        <h1 className="navbar-brand me-auto">A1 Chatbot Logo</h1>
-                    <form className="d-flex">
-                        <Link to="/">
-                            <a className="btn btn-outline-secondary me-4 " href="#" role="button">Log in</a>
-                        </Link>
-                        <Link to="/register">
-                            <a className="btn btn-info " href="#" role="button">Register</a>
-                        </Link> 
-                    </form>
+                <div className="container">
+                    <div className="col-sm-10 col-md-9 col-lg-12 mx-auto">
+                        <nav className="navbar">
+                        <div className="container-fluid">
+                        <a class="navbar-brand" href="/">
+                            <img href="/" src="/images/logo2.PNG" height="70" className="d-inline-block align-top mt-2"/>
+                        </a>
+                            <form className="d-flex">
+                                <Link to="/register">
+                                    <a className="btn btn-outline-secondary me-4" href="#" role="button">Register</a>
+                                </Link>
+                                <Link to="/login">
+                                    <a className=" btn btn-info " href="#" role="button">Log in</a>
+                                </Link>    
+                            </form>
+                        </div>
+                        </nav>
+                    </div>
                 </div>
-                </nav>
         </Styles>
     )
 }

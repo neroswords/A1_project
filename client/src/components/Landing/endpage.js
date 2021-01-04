@@ -49,12 +49,12 @@ export const Endpage = () => (
     <Container className="container">
     <Jumbo fluid className="jumbo d-flex position-relative">
         <section id="main">
-          <img src="./images/phone_group.png" width="100%"/>
+          <img src="./images/phone_group.png" width="90%"/>
           <div className="main-text">
             <h1>Improve at every stage <br/> of your business growth</h1>
             <span>No matter whether you’re a growing company <br/> ChatBot helps you communicate better with customers.</span>
             <div class="d-grid gap-2 col-6 mx-auto mt-5">
-              <button class="btn btn-primary" type="button">Try it for FREE! </button>
+              <button class="btn btn-primary" type="button">Register for FREE! </button>
             </div>
           </div>
           
