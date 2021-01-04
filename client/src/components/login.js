@@ -28,7 +28,7 @@ class App extends React.Component {
     hideLogin = () => {
         this.refs.login.instance.hide();
     }
-    
+
     render() {
         return (
             <div>

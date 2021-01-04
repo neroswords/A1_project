@@ -22,7 +22,7 @@ function Navbar(){
                         </Link>
                         <Link to="/register">
                             <a className="btn btn-info " href="#" role="button">Register</a>
-                        </Link> 
+                        </Link>
                     </form>
                 </div>
                 </nav>
