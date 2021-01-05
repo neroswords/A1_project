@@ -13,8 +13,8 @@ function Home(){
             <Mainpage />
             <CardList/>
             <Endpage/>
-            {/* <img src={'http://127.0.0.1:200/images/cats.jpg'}></img>
-            <img src={'http://127.0.0.1:200/images/logo.png'}></img> */}
+            <img src={'/images/profile/cats.jpg'}></img>
+            <img src={'/images/logo.png'}></img>
         </div>
         <Footer />
         </div>

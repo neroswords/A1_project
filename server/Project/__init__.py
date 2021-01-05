@@ -1,7 +1,7 @@
 from flask import Flask, request, abort, render_template, session,url_for,redirect,g,send_from_directory,send_file
 import requests
 import json
-from Project.Config import *
+from Project.config import *
 from pymessenger import Bot
 import pymongo
 from Project.process import process_message
@@ -13,26 +13,26 @@ from hashlib import sha1
 import hmac
 from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
 from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection,check_bot,find_bot
-import os 
+import os
 from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
-from flask_mongoengine import MongoEngine
-from app import models #จะเรียกใช้ model
-from mongoengine import Document, connect # pip install mongoengine ก่อน
-from mongoengine import DateTimeField, StringField, ReferenceField, ListField, EmailField, FloatField 
+from Project.test import test
+from .extensions import mongo
 
 UPLOAD_FOLDER = './Project/static/images'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-
+MONGO_URI='mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority'
 
 app = Flask(__name__)
+# app.config.from_envvar('MONGO_URI')
+# mongo.init_app(app)
 login_manager = LoginManager()
 login_manager.login_view = 'login'
 login_manager.init_app(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = './static/images'
-connect('a1', host='mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority') # connect db
-
+# connect('a1', host='mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority') # connect db
+app.register_blueprint(test, url_prefix='/test')
 
 
 
@@ -51,9 +51,6 @@ def fileUpload():
 def load_user(username):
     return get_user(username)
 
-@app.route('/')
-def home():
-    return render_template("home.html")
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -225,6 +222,7 @@ def newbot():
 def test():
     # return render_template('home.html')
     print(request.get_json())
+    a = request.get_json()
     return "OK"
 
 #route start order state

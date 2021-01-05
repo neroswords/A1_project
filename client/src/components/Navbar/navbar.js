@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import {Button} from "react-bootstrap";
+import {isLoggedIn, deleteTokens} from '../auth';
 
 const Styles = styled.div`
 h1 {
@@ -9,6 +11,27 @@ h1 {
 }
 
 `;
+
+const Log = () =>{
+    if(isLoggedIn()){
+        return(
+            <Button className=" btn btn-info"
+          onClick={() => {
+            deleteTokens();
+            window.location.replace("/")
+          }}
+        >
+          Sign out
+        </Button>
+        )
+    }else{
+        return(
+            <Link to="/login">
+                <a className=" btn btn-info" role="button">Log in</a>
+            </Link> 
+        )
+    }
+}
 
 function Navbar(){
     return (
@@ -24,9 +47,7 @@ function Navbar(){
                                 <Link to="/register">
                                     <a className="btn btn-outline-secondary me-4" href="#" role="button">Register</a>
                                 </Link>
-                                <Link to="/login">
-                                    <a className=" btn btn-info " href="#" role="button">Log in</a>
-                                </Link>    
+                                <Log />   
                             </form>
                         </div>
                         </nav>

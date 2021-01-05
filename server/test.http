@@ -6,10 +6,15 @@ GET http://127.0.0.1:200/facebook/webhook
 
 ###
 
-POST http://127.0.0.1:200/line/webhook
+POST http://080a600dd776.ngrok.io/signup
 Content-Type: application/json
 
-{"sender": {"id": "1548123025259282"}, 
-"recipient": {"id": "236592119856614"}, 
-"timestamp": 1608998175164, 
-"message": {"mid": "m_bcFX6olC1Z63kiOYoFpKYOw4bC5iLNIsgAo4RqV1Awt7KLxU0GL2UccSSJhxErt29uz050nst74eyW-uhat0Mw", "text": "Hi"}}
+{"birthday": "2021-01-11",
+"email": "tanathep.min@gmail.com",
+"firstname": "Tanathep",
+"lastname": "Roongpipat",
+"password": "1234",
+"shop_address": "asdsfga",
+"shop_name": "sdfgfdg",
+"shop_type": "fdgdfbdf",
+"username": "neroswords"}
