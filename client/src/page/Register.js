@@ -68,8 +68,34 @@ const Styles = styled.div`
 `;
 
 
-function Register(){
+class Register extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {password : '',
+                  confirm_password : ''};
+  
+  }
 
+  handlePasswordChange= (e) => {
+    this.setState({password: e.target.value});
+    console.log(this.state.password);
+  }
+
+  handleConfirmPasswordChange= (e) => {
+    this.setState({confirm_password: e.target.value});
+  }
+
+  handleSubmit= (e) => {
+    e.preventDefault()
+
+    if (this.state.password !== this.state.confirm_password){
+      console.log('error');
+    }
+    // console.log('pass' + this.state.password);
+    // console.log('con' + this.state.confirm_password);
+  }
+
+  render() {
     return(
         <Styles>
               <div className="container">
@@ -89,16 +115,16 @@ function Register(){
                               </div>
                               <div className="input-group my-3">
                                 {/* <label for="exampleInputEmail1" className="form-label">Username</label> */}
-                                <input type="email" className="form-control" id="inputusername" placeholder="Username"/>
+                                <input type="text" className="form-control" id="inputusername" placeholder="Username"/>
                               </div>
                               <div className="row ">
                                 <div className="col ">
                                   {/* <label for="exampleInputPassword1" className="form-label">Password</label> */}
-                                  <input type="password" className="form-control" id="inputpassword" placeholder="Password"/> 
+                                  <input type="password" className="form-control" id="inputpassword" placeholder="Password" value={this.state.password} onChange={this.handlePasswordChange} /> 
                                 </div>
                                 <div className="col">
                                   {/* <label for="exampleInputPassword1" className="form-label">Comfirm Password</label> */}
-                                  <input type="password" className="form-control" id="confirmpassword" placeholder="Confirm Password"/>  
+                                  <input type="password" className="form-control" id="confirmpassword" placeholder="Confirm Password" value={this.state.confirm_password} onChange={this.handleConfirmPasswordChange} />  
                                 </div>
                               </div>
                               <div className="title_part">
@@ -121,7 +147,7 @@ function Register(){
                                 </div>
                                 <div className=" input-group my-3">
                                   {/* <label for="exampleInputEmail1" className="form-label">Shop name</label> */}
-                                  <input type="email" className="form-control" placeholder="Shop name" id="inputshopname"/>
+                                  <input type="text" className="form-control" placeholder="Shop name" id="inputshopname"/>
                                 </div>
                                 <div className="input-group my-3">
                                   {/* <label for="exampleInputEmail1" className="form-label">Type of sale</label> */}
@@ -140,7 +166,7 @@ function Register(){
                                 </label>
                               </div>                                
                               <div className="btn-login">
-                                  <button className="btn btn-primary text-uppercase" type="submit">register</button>
+                                  <button className="btn btn-primary text-uppercase" type="submit" onClick={this.handleSubmit} >register</button>
                               </div>
                               <hr className="my-4"/>
                               <div align="center">
@@ -156,6 +182,7 @@ function Register(){
                 </div>
         </Styles>
     );
+  }
 }
 
 export default Register;
