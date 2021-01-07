@@ -8,6 +8,14 @@ h1 {
     font-weight: 700;
 }
 
+.btn {
+    border-radius: 1rem;
+    font-weight: bold;
+    transition: all 0.2s;
+    width: 100%;
+    text-transform : uppercase;
+  }
+
 `;
 
 function Navbar(){
@@ -20,14 +28,18 @@ function Navbar(){
                         <a class="navbar-brand" href="/">
                             <img href="/" src="/images/logo2.PNG" height="70" className="d-inline-block align-top mt-2"/>
                         </a>
-                            <form className="d-flex">
-                                <Link to="/register">
-                                    <a className="btn btn-outline-secondary me-4" href="#" role="button">Register</a>
-                                </Link>
-                                <Link to="/login">
-                                    <a className=" btn btn-info " href="#" role="button">Log in</a>
-                                </Link>    
-                            </form>
+                                <form className="d-flex">
+                                    <div className="btn-regis me-4">
+                                        <Link to="/register">
+                                            <a className="btn btn-outline-secondary me-5" href="#" role="button">Register</a>
+                                        </Link>
+                                    </div>
+                                    <div className="btn-login">
+                                        <Link to="/login">
+                                            <a className="btn btn-info me-5 " href="#" role="button">Log in</a>
+                                        </Link>
+                                    </div>    
+                                </form>
                         </div>
                         </nav>
                     </div>

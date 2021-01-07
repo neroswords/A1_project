@@ -10,6 +10,7 @@ import Register from './Page/Register';
 import Login from './Page/Login';
 import Navbar from './components/Navbar/navbar';
 import Footer from './components/footer/footer'
+import Create_bot from './Page/Create_bot';
 
 // import Main from './components/Main';
 
@@ -29,6 +30,7 @@ function App() {
             <Route path="/" exact component = { Home } />
             <Route path="/register" component={ Register } />
             <Route path="/login" component={ Login } />
+            <Route path="/Create_bot" component={ Create_bot} />
           </Switch>
     </Router>
   );
