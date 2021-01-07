@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-// import Chatbot from './images/Chatbot.svg'; 
 
 import Home from './Page/Home';
 import Register from './Page/Register';
@@ -14,11 +13,11 @@ import Navbar from './components/Navbar/navbar';
 function App() {
   const [initialData, setInitialData] = useState([{}])
 
-  useEffect(()=>{
-    fetch('/api').then(
-      response => response.json()
-    ).then(data => setInitialData(data))
-  }, []);
+  // useEffect(()=>{
+  //   fetch('/api').then(
+  //     response => response.json()
+  //   ).then(data => setInitialData(data))
+  // }, []);
 
   return (
     <Router>

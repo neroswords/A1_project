@@ -6,4 +6,7 @@ from .extensions import mongo
 test = Blueprint('test', __name__)
 @test.route('/')
 def show():
-    return "hi"
+    user_collection = mongo.db.users
+    user = user_collection.find_one({'username': 'admin1'})
+    print(user)
+    return 'hi'
