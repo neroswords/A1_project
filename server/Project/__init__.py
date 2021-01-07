@@ -6,56 +6,50 @@ from pymessenger import Bot
 from Project.process import process_message
 from flask_pymongo import PyMongo
 import bcrypt
+from flask_jwt_extended import JWTManager
 # from werkzeug.security import generate_password_hash, check_password_hash
 from base64 import encodebytes
 from hashlib import sha1
 import hmac
 from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
 from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection,check_bot,find_bot
-import os 
+import os
 from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
 from Project.route.profile import profile
 from Project.route.bot import bot
 from .extensions import mongo
-# from Config import mongo
 UPLOAD_FOLDER = './Project/static/images'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
-# app = Flask(__name__)
-# config_object='server.settings'
-# # app.config.from_object(config_object)
-# mongo.init_app(app)
-# login_manager = LoginManager()
-# login_manager.login_view = 'login'
-# login_manager.init_app(app)
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-# app.config['DOWNLOAD_FOLDER'] = './static/images'
-# app.register_blueprint(profile, url_prefix='/profile')
-app = Flask(__name__)
-# config_object='Project.settings'
 
-# app.config.from_object(config_object)
-# mongo.init_app(app)
+
+from Project.test import test
+from .extensions import mongo
+
+UPLOAD_FOLDER = './Project/static/images'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+# MONGO_URI='mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority'
+
+app = Flask(__name__)
+app.config['MONGO_URI'] = 'mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority'
+# app.config.from_envvar('MONGO_URI')
+mongo.init_app(app)
+app.config['JWT_SECRET_KEY'] = 'boost-is-the-secret-of-our-app'
+jwt=JWTManager(app)
 login_manager = LoginManager()
 login_manager.login_view = 'profile.login'
 login_manager.init_app(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = './static/images'
+
 app.register_blueprint(profile, url_prefix='/profile')
 app.register_blueprint(bot, url_prefix='/bot')
 
-def create_app(config_object='settings'):
-    app = Flask(__name__)
 
-    app.config.from_object(config_object)
+# connect('a1', host='mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority') # connect db
+app.register_blueprint(test, url_prefix='/test')
 
-    mongo.init_app(app)
-
-
-
-    return app
-    
 
 
 
@@ -74,9 +68,6 @@ def fileUpload():
 def load_user(username):
     return get_user(username)
 
-@app.route('/')
-def home():
-    return render_template("home.html")
 
 
 
@@ -89,7 +80,7 @@ def api():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('profile.login'))
 
 # @app.route('/connect', methods=['GET', 'POST'])
 # @login_required
@@ -211,6 +202,7 @@ def newbot():
 def test():
     # return render_template('home.html')
     print(request.get_json())
+    a = request.get_json()
     return "OK"
 
 #route start order state
