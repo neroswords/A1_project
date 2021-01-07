@@ -5,7 +5,7 @@ import re
 # while True:
 #     inp = input()
 #     print(sentence_get_confident(inp, "มีเสื้อแดงมั้ย"))
-sentence = ["ขอชื่อ-นามสกุลด้วยครับ","ระบุที่อยู่ที่ต้องการจัดส่ง","ยอดรายการทั้งหมด ถูกต้องใช่มั้ยครับ","ขอบคุณมากครับ"]
+
 
 def process_message(text):                      #แปลงข้อความ
     formatted_massage = text.lower()
@@ -15,43 +15,6 @@ def process_message(text):                      #แปลงข้อควา�
         response = "Sorry, I dont know what you mean"
     return response
 
-# def confirmSaleOrder(user_id, platform, state):
-#     if platform == "facebook":
-#         response = process_message(text)
-#         bot.send_text_message(sender_id, response)
-#         bot = Bot(page_facebook_access_token)
-#         payload = request.json
-#         event = payload['entry'][0]['messaging']
-#         for msg in event:
-#             text = msg['message']['text']
-#             sender_id = msg['sender']['id']
-#         return "Message received"
-
-#     elif platform == "line":
-#         elif request.method == "POST":
-#             payload = request.json
-#             Reply_token = payload['events'][0]['replyToken']
-#             # print(Reply_token)
-#             message = payload['events'][0]['message']['text']
-#             print(message)
-#             if 'สวัสดี' in message :
-#                 Reply_messasge = 'ดี'
-#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-            
-#             elif "เป็นไงบ้าง" in message :
-#                 Reply_messasge = 'สบายดี'
-#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-#                 # Reply_messasge = 'ราคา BITCOIN ขณะนี้ : {}'.format(GET_BTC_PRICE())
-#                 # ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-#             elif "ไอเหี้ยซัน" in message :
-#                 Reply_messasge = 'จริง'
-#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-#             else:
-#                 Reply_messasge = 'ขอโทษค่ะ ชั้นไม่เข้าใจที่คุณพูด'
-#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-#             return request.json, 200
-#     else:
-#         return 200
 
 def checkVariable(ss2):
     flag = []
@@ -86,11 +49,7 @@ def checkVariable(ss2):
     # print(sentence_get_confident(ss1,ss2,list=invert))
     return flag, endflag, key
 
-
-
-
 #use with reg
-
 
 def isnotSymbol(string): 
     # Make own character set and pass  
@@ -106,7 +65,3 @@ def isnotSymbol(string):
 
 # print(checkVariable("ขายเสื้อ<สีแดง>มั้ย"))
 
-
-# def checkState(custid,state){
-
-# }

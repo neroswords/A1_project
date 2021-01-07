@@ -6,6 +6,7 @@ import styled from 'styled-components';
 const Styles = styled.div`
   .jumbo {
     align-items: center;
+    font-family: 'Public Sans', sans-serif;
   }
 
   .container {
@@ -28,7 +29,11 @@ const Styles = styled.div`
 
   h1 {
     font-size: 40px;
-    font-weight: 700;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  span {
+    color: grey;
   }
 
 `;
