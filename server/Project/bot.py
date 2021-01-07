@@ -1,4 +1,4 @@
-class Bot:
+class ChatBot:
    
 
     def __init__(self, username,name_bot, Channel_access_token, Channel_secret,VERIFY_TOKEN,basic_id,page_facebook_access_token):
