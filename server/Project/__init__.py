@@ -1,13 +1,13 @@
 from flask import Flask, request, abort, render_template, session,url_for,redirect,g,send_from_directory,send_file
 import requests
 import json
-from Project.config import *
+from Project.Config import *
 from pymessenger import Bot
-import pymongo
 from Project.process import process_message
 from flask_pymongo import PyMongo
 import bcrypt
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import JWTManager
+# from werkzeug.security import generate_password_hash, check_password_hash
 from base64 import encodebytes
 from hashlib import sha1
 import hmac
@@ -16,6 +16,14 @@ from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_
 import os
 from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
+from Project.route.profile import profile
+from Project.route.bot import bot
+from .extensions import mongo
+UPLOAD_FOLDER = './Project/static/images'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
+
+
 from Project.test import test
 from .extensions import mongo
 
@@ -25,13 +33,17 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config['MONGO_URI'] = 'mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority'
 mongo.init_app(app)
+app.config['JWT_SECRET_KEY'] = 'boost-is-the-secret-of-our-app'
+jwt=JWTManager(app)
 login_manager = LoginManager()
-login_manager.login_view = 'login'
+login_manager.login_view = 'profile.login'
 login_manager.init_app(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = './static/images'
-app.register_blueprint(test, url_prefix='/test')
 
+app.register_blueprint(profile, url_prefix='/profile')
+app.register_blueprint(bot, url_prefix='/bot')
+app.register_blueprint(test, url_prefix='/test')
 
 
 @app.route('/upload', methods=['POST'])
@@ -51,72 +63,35 @@ def load_user(username):
 
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
 
-    message = ''
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password_input = request.form.get('password')
-        user = get_user(username)
 
-        if user and user.check_password(password_input):
-            login_user(user)
-            return redirect(url_for('home'))
-        else:
-            message = 'Failed to login!'
-    return render_template('login.html', message=message)
-
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-
-    message = ''
-    if request.method == 'POST':
-        if  not check_user(request.form.get('username')):
-            message = "User already exists!"
-        elif  check_user(request.form.get('username')):
-            username = request.form.get('username')
-            email = request.form.get('email')
-            password = request.form.get('password')
-            ft_name = request.form.get('ft_name')
-            la_name = request.form.get('la_name')
-            birthday = request.form.get('birthday')
-            address = request.form.get('address')
-            shop_name = request.form.get('shop_name')
-            type_shop = request.form.get('type_shop')
-            
-            save_user(username, email, password,ft_name,la_name,birthday,address,shop_name,type_shop)
-            
-            return redirect(url_for('login'))
-    return render_template('signup.html', message=message)
+@app.route("/api")
+def api():
+    return {"TEST","SUN"}
 
 @app.route("/logout/")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('profile.login'))
 
-@app.route('/connect', methods=['GET', 'POST'])
-@login_required
-def connect():
-    if request.method == 'POST':
-        # print(current_user._id)
-        # username = current_user.username
-        # ch_sc = request.form.get('ch_sc')
-        # ch_ac_tk = request.form.get('ch_ac_tk')
-        # basic_id = request.form.get('basic_id')
-        # pfa_tk = request.form.get('pfa_tk')
-        # vf_tk = request.form.get('vf_tk')
-        # update_connect(username, ch_sc,ch_ac_tk,basic_id,pfa_tk,vf_tk)
-        return redirect(url_for('home'))
-    elif request.method == 'GET':
-        gg = find_bot(current_user.username)
-        # print(gg[0]["name_bot"])
-        return render_template('connect.html',username = gg)
+# @app.route('/connect', methods=['GET', 'POST'])
+# @login_required
+# def connect():
+#     if request.method == 'POST':
+#         # print(current_user._id)
+#         # username = current_user.username
+#         # ch_sc = request.form.get('ch_sc')
+#         # ch_ac_tk = request.form.get('ch_ac_tk')
+#         # basic_id = request.form.get('basic_id')
+#         # pfa_tk = request.form.get('pfa_tk')
+#         # vf_tk = request.form.get('vf_tk')
+#         # update_connect(username, ch_sc,ch_ac_tk,basic_id,pfa_tk,vf_tk)
+#         return redirect(url_for('home'))
+#     elif request.method == 'GET':
+#         gg = find_bot(current_user.username)
+#         # print(gg[0]["name_bot"])
+#         return render_template('connect.html',username = gg)
 
 
 @app.route('/images/<path:image_name>')
