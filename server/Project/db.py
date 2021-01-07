@@ -1,8 +1,9 @@
-from pymongo import MongoClient
-from werkzeug.security import generate_password_hash
 
+from werkzeug.security import generate_password_hash
+from pymongo import MongoClient
 from Project.user import User
-from Project.connection import Connection
+from Project.bot import Bot
+from Project.training import Training
 
 client = MongoClient("mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority")
 db_a1 = client.get_database("a1")
@@ -47,8 +48,6 @@ def get_user(username): #for login
 
 def check_user(username): #for signup not duplicate username
     check_user = users_collection.find_one({'username': username})
-    print("---------")
-    print("---------")
     if check_user is None:
         # return User(user_data['username'], user_data['email'], user_data['password'], user_data['ft_name'], user_data['la_name'], user_data['address'], user_data['shop_name'], user_data['type_shop'], user_data['birthday']) if user_data else None
         return True

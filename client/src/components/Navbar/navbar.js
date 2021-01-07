@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import {Button} from "react-bootstrap";
+import {isLoggedIn, deleteTokens} from '../auth';
 
 const Styles = styled.div`
 h1 {
@@ -18,6 +20,27 @@ h1 {
 
 `;
 
+const Log = () =>{
+    if(isLoggedIn()){
+        return(
+            <Button className=" btn btn-info"
+          onClick={() => {
+            deleteTokens();
+            window.location.replace("/")
+          }}
+        >
+          Sign out
+        </Button>
+        )
+    }else{
+        return(
+            <Link to="/login">
+                <a className=" btn btn-info" role="button">Log in</a>
+            </Link> 
+        )
+    }
+}
+
 function Navbar(){
     return (
         <Styles>
@@ -28,18 +51,12 @@ function Navbar(){
                         <a class="navbar-brand" href="/">
                             <img href="/" src="/images/logo2.PNG" height="70" className="d-inline-block align-top mt-2"/>
                         </a>
-                                <form className="d-flex">
-                                    <div className="btn-regis me-4">
-                                        <Link to="/register">
-                                            <a className="btn btn-outline-secondary me-5" href="#" role="button">Register</a>
-                                        </Link>
-                                    </div>
-                                    <div className="btn-login">
-                                        <Link to="/login">
-                                            <a className="btn btn-info me-5 " href="#" role="button">Log in</a>
-                                        </Link>
-                                    </div>    
-                                </form>
+                            <form className="d-flex">
+                                <Link to="/register">
+                                    <a className="btn btn-outline-secondary me-4" href="#" role="button">Register</a>
+                                </Link>
+                                <Log />   
+                            </form>
                         </div>
                         </nav>
                     </div>

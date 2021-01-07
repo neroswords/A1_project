@@ -2,9 +2,6 @@ import React, {useState, useEffect} from 'react';
 import './App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 // import Chatbot from './images/Chatbot.svg'; 
-import { CardList } from './components/Landing/cardList';
-import { Mainpage } from './components/Landing/Mainpage';
-import { Endpage }  from  './components/Landing/endpage';
 
 import Register from './Page/Register';
 import Login from './Page/Login';
@@ -12,6 +9,11 @@ import Navbar from './components/Navbar/navbar';
 import Footer from './components/footer/footer'
 import Create_bot from './Page/Create_bot';
 
+import Navbar from './components/Navbar/navbar';
+import Footer from './components/footer/footer';
+import Learned from './page/Learned';
+import Group from './page/Group';
+import Mapping from './page/Mapping';
 // import Main from './components/Main';
 
 function App() {
@@ -29,24 +31,14 @@ function App() {
           <Switch>
             <Route path="/" exact component = { Home } />
             <Route path="/register" component={ Register } />
-            <Route path="/login" component={ Login } />
-            <Route path="/Create_bot" component={ Create_bot} />
+            <Route path="/Train" component={ Train }/>
+            <Route path="/Learned" component={ Learned }/>
+            <Route path="/Group" component={ Group }/>
+            <Route path="/Mapping" component={ Mapping }/>
           </Switch>
     </Router>
   );
 }
 
-const Home = () => (
-  <div className="page-container"> 
-    <div className="conatainer">
-      <Mainpage />
-      <CardList/>
-      <Endpage/>
-      {/* <img src={'http://127.0.0.1:200/images/cats.jpg'}></img>
-      <img src={'http://127.0.0.1:200/images/logo.png'}></img> */}
-    </div>
-    <Footer />
-  </div>
-)
 
 export default App;
