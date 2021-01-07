@@ -1,6 +1,6 @@
 
 from werkzeug.security import generate_password_hash
-
+from pymongo import MongoClient
 from Project.user import User
 from Project.bot import Bot
 from Project.training import Training
