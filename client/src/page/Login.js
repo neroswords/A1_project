@@ -51,38 +51,6 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
 
-<<<<<<< HEAD
-function Login(){
-    return(
-        <Styles>
-              <div class="container">
-                    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                      <div class="card card-signin my-5">
-                        <div class="card-body">
-                          <h5 class="card-title text-center">Log in</h5>
-                          <form class="form-signin">
-                          <div class="form-floating ">
-                                <input type="email" class="form-control" id="floatingInput" placeholder="Email" required/>
-                                <label for="floatingInput">Email address</label>
-                              </div>
-
-                              <div class="form-floating mt-3">
-                                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" required />
-                                <label for="floatingPassword">Password</label>
-                              </div>
-
-
-                              <div className="btn-login my-4">
-                                  <button class="btn btn-primary text-uppercase" type="submit">Log in</button>
-                              </div>
-                              <hr className="my-4"/>
-                              
-                              <div align="center">
-                                <span>Don't have an account ? </span>
-                                <a  href="/Register" >Register</a> 
-                              </div>
-                          </form>
-=======
     this.state = {
       username: '',
       password : '',
@@ -152,7 +120,6 @@ function Login(){
                                 </div>
                             </form>
                           </div>
->>>>>>> 4d750166062a85d9a45f18e0fc0938cda45807fb
                         </div>
                       </div>
                   </div>
