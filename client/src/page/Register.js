@@ -116,8 +116,11 @@ class Register extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault()
 
-    
-      const profile = {
+    if(this.state.password !== this.state.confirm_password){
+      console.log('errors');
+  }
+  else{
+    const profile = {
         email: this.state.email,
         username: this.state.username,
         password : this.state.password,
@@ -137,7 +140,7 @@ class Register extends React.Component {
       },
       body: JSON.stringify(profile)
     })
-  
+  }
 
     
 

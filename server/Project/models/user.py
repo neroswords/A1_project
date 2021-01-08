@@ -1,13 +1,41 @@
-from mongoengine import Document
-from mongoengine import DateTimeField, StringField, ReferenceField, ListField, EmailField, FloatField # ย้ายไป __init ได้
+from werkzeug.security import check_password_hash
 
-class User(Document):
-    username = StringField(required=True,unique=True)
-    email = EmailField(required=True,unique=True)
-    password = StringField(required=True,unique=True)
-    ft_name = StringField(required=True,unique=True)
-    la_name = StringField(required=True,unique=True)
-    birthday = DateTimeField()
-    address = StringField(required=True,unique=True)
-    shop_name = StringField(required=True,unique=True)
-    type_shop = StringField(required=True,unique=True)
+
+class User:
+
+    def __init__(self, username, email, password,ft_name,la_name,address,shop_name,type_shop,birthday):
+        self.username = username
+        self.email = email
+        self.password = password
+        self.ft_name = ft_name
+        self.la_name = la_name
+        self.birthday = birthday
+        self.address = address
+        self.shop_name = shop_name
+        self.type_shop = type_shop
+
+
+        
+
+
+
+    @staticmethod
+    def is_authenticated():
+        return True
+
+    @staticmethod
+    def is_active():
+        return True
+
+    @staticmethod
+    def is_anonymous():
+        return False
+
+    def get_id(self):
+        return self.username
+
+    def check_password(self, password_input):
+        return check_password_hash(self.password, password_input)
+    
+
+    

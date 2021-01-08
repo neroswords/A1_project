@@ -2,7 +2,7 @@
   "name": "app",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://080a600dd776.ngrok.io/",
+  "proxy": "http://127.0.0.1:200/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
@@ -16,7 +16,9 @@
     "react-scripts": "4.0.1",
     "semantic-ui-react": "^2.0.1",
     "styled-components": "^5.2.1",
-    "web-vitals": "^0.2.4"
+    "util-deprecate": "^1.0.2",
+    "web-vitals": "^0.2.4",
+    "yarn": "^1.22.10"
   },
   "scripts": {
     "start": "react-scripts start",

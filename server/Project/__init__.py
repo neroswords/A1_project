@@ -1,39 +1,44 @@
 from flask import Flask, request, abort, render_template, session,url_for,redirect,g,send_from_directory,send_file
-import requests
-import json
-from Project.config import *
-from pymessenger import Bot
-import pymongo
+import requests #
+import json #
+from Project.Config import * #
+from pymessenger import Bot #
 from Project.process import process_message
 from flask_pymongo import PyMongo
 import bcrypt
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import JWTManager
+# from werkzeug.security import generate_password_hash, check_password_hash
 from base64 import encodebytes
 from hashlib import sha1
 import hmac
 from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
 from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection,check_bot,find_bot
-import os
 from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
-from Project.test import test
+from Project.route.profile import profile
+from Project.route.bot import bot
 from .extensions import mongo
+
 
 UPLOAD_FOLDER = './Project/static/images'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-MONGO_URI='mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority'
 
 app = Flask(__name__)
-# app.config.from_envvar('MONGO_URI')
-# mongo.init_app(app)
+app.config['MONGO_URI'] = 'mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority'
+mongo.init_app(app)
+
+app.config['JWT_SECRET_KEY'] = 'boost-is-the-secret-of-our-app'
+jwt=JWTManager(app)
+
 login_manager = LoginManager()
-login_manager.login_view = 'login'
+login_manager.login_view = 'profile.login'
 login_manager.init_app(app)
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = './static/images'
-# connect('a1', host='mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority') # connect db
-app.register_blueprint(test, url_prefix='/test')
 
+app.register_blueprint(profile, url_prefix='/profile')
+app.register_blueprint(bot, url_prefix='/bot')
 
 
 @app.route('/upload', methods=['POST'])
@@ -52,73 +57,28 @@ def load_user(username):
     return get_user(username)
 
 
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-
-    message = ''
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password_input = request.form.get('password')
-        user = get_user(username)
-
-        if user and user.check_password(password_input):
-            login_user(user)
-            return redirect(url_for('home'))
-        else:
-            message = 'Failed to login!'
-    return render_template('login.html', message=message)
-
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-
-    message = ''
-    if request.method == 'POST':
-        if  not check_user(request.form.get('username')):
-            message = "User already exists!"
-        elif  check_user(request.form.get('username')):
-            username = request.form.get('username')
-            email = request.form.get('email')
-            password = request.form.get('password')
-            ft_name = request.form.get('ft_name')
-            la_name = request.form.get('la_name')
-            birthday = request.form.get('birthday')
-            address = request.form.get('address')
-            shop_name = request.form.get('shop_name')
-            type_shop = request.form.get('type_shop')
-            
-            save_user(username, email, password,ft_name,la_name,birthday,address,shop_name,type_shop)
-            
-            return redirect(url_for('login'))
-    return render_template('signup.html', message=message)
-
-@app.route("/logout/")
+@app.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('profile.login'))
 
-@app.route('/connect', methods=['GET', 'POST'])
-@login_required
-def connect():
-    if request.method == 'POST':
-        # print(current_user._id)
-        # username = current_user.username
-        # ch_sc = request.form.get('ch_sc')
-        # ch_ac_tk = request.form.get('ch_ac_tk')
-        # basic_id = request.form.get('basic_id')
-        # pfa_tk = request.form.get('pfa_tk')
-        # vf_tk = request.form.get('vf_tk')
-        # update_connect(username, ch_sc,ch_ac_tk,basic_id,pfa_tk,vf_tk)
-        return redirect(url_for('home'))
-    elif request.method == 'GET':
-        gg = find_bot(current_user.username)
-        # print(gg[0]["name_bot"])
-        return render_template('connect.html',username = gg)
+# @app.route('/connect', methods=['GET', 'POST'])
+# @login_required
+# def connect():
+#     if request.method == 'POST':
+#         # print(current_user._id)
+#         # username = current_user.username
+#         # ch_sc = request.form.get('ch_sc')
+#         # ch_ac_tk = request.form.get('ch_ac_tk')
+#         # basic_id = request.form.get('basic_id')
+#         # pfa_tk = request.form.get('pfa_tk')
+#         # vf_tk = request.form.get('vf_tk')
+#         # update_connect(username, ch_sc,ch_ac_tk,basic_id,pfa_tk,vf_tk)
+#         return redirect(url_for('home'))
+#     elif request.method == 'GET':
+#         gg = find_bot(current_user.username)
+#         return render_template('connect.html',username = gg)
 
 
 @app.route('/images/<path:image_name>')
@@ -173,7 +133,6 @@ def newbot():
 #                 if bcrypt.hashpw(request.form['password'].encode('utf-8'), login_user['password']) == login_user['password']:
 #                     session['username'] = request.form['username']
 #                     return redirect(url_for('home'))
-
 #             return 'Invalid username/password '
 #         elif request.method == 'GET':
 #             return render_template('login.html')
@@ -192,12 +151,9 @@ def newbot():
 #             users.insert({'username' : request.form['username'], 'password' : hashpass,'email' : request.form['email']
 #             ,'ft_name' : request.form['ft_name'],'la_name' : request.form['la_name']
 #             ,'address' : request.form['address'],'type_shop' : request.form['type_shop'],'birthday' : request.form['birthday']})
-
 #             session['username'] = request.form['username']
-#             return render_template('home.html')
-        
+#             return render_template('home.html')      
 #         return 'That username already exists!'
-
 #     return render_template('signup.html')
 
 
@@ -216,25 +172,18 @@ def newbot():
 
 #     if 'username' in session:
 #         g.user = session['username']
-      
 
-@app.route('/test', methods=["POST"])
-def test():
-    # return render_template('home.html')
-    print(request.get_json())
-    a = request.get_json()
-    return "OK"
 
 #route start order state
 # @app.route('/webhook/<botid>/<platform>/order',methods=["POST"])
 # def getinfo():
 
-
 # @app.route('/logout')
 # def logout():
 #     session.pop('username',None)
 #     return render_template('home.html')
-@app.route('/<platform>/webhook',methods=["POST", "GET"])
+
+@app.route('/webhook/<platform>/<botID>',methods=["POST", "GET"])
 def webhook(platform):
     if  platform == "facebook":
         if request.method == "GET":
@@ -246,7 +195,6 @@ def webhook(platform):
             bot = Bot(page_facebook_access_token)
             payload = request.json
             event = payload['entry'][0]['messaging']
-            print(event)
             for msg in event:
                 text = msg['message']['text']
                 sender_id = msg['sender']['id']
@@ -328,52 +276,6 @@ def webhook(platform):
 #     else:
 #         return 200
 
-# @app.route('/facebook/webhook', methods=["POST","GET"])
-# def facebook_webhook():
-#     if  request.method == "GET":
-#         if  request.args.get("hub.verify_token") == VERIFY_TOKEN:
-#             return request.args.get("hub.challenge")
-#         else:
-#             return "you didnot connect to facebook"
-#     elif request.method == "POST":
-#         payload = request.json
-#         event = payload['entry'][0]['messaging']
-#         for msg in event:
-#             text = msg['message']['text']
-#             sender_id = msg['sender']['id']
-#             response = process_message(text)
-#             bot.send_text_message(sender_id, response)
-#         return "Message received"
-#     else:
-#         return 200
-
-
-# @app.route('/line/webhook', methods=['POST','GET'])
-# def webhook():
-#     if request.method == 'POST':
-#         payload = request.json
-#         Reply_token = payload['events'][0]['replyToken']
-#         # print(Reply_token)
-#         message = payload['events'][0]['message']['text']
-#         print(message)
-#         if 'สวัสดี' in message :
-#             Reply_messasge = 'ดี'
-#             ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-        
-#         elif "เป็นไงบ้าง" in message :
-#             Reply_messasge = 'สบายดี'
-#             ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-#             # Reply_messasge = 'ราคา BITCOIN ขณะนี้ : {}'.format(GET_BTC_PRICE())
-#             # ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-
-
-#         return request.json, 200
-
-#     elif request.method == 'GET' :
-#         return 'this is method GET!!!' , 200
-
-#     else:
-#         abort(400)
 
 
 def ReplyMessage(Reply_token, TextMessage, Line_Acess_Token):
@@ -431,172 +333,5 @@ def ReplyMessage(Reply_token, TextMessage, Line_Acess_Token):
 #         ReplyMessage(Reply_token,response,Channel_access_token)
 #     else:
 #         return 200
-
-def flexmassage(query) :
-    res = getdata(query)
-    if res == 'nodata':
-        return 'nodata'
-    else:
-        productName,imgUrl,desc,cont = res
-    flex = '''
-        {
-            "type": "bubble",
-            "direction": "ltr",
-            "hero": {
-                "type": "image",
-                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
-                "size": "full",
-                "aspectRatio": "20:13",
-                "aspectMode": "cover",
-                "action": {
-                "type": "uri",
-                "label": "Line",
-                "uri": "https://linecorp.com/"
-                }
-            },
-            "body": {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                {
-                    "type": "text",
-                    "text": "Brown Cafe",
-                    "weight": "bold",
-                    "size": "xl",
-                    "contents": []
-                },
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "margin": "md",
-                    "contents": [
-                    {
-                        "type": "icon",
-                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                        "size": "sm"
-                    },
-                    {
-                        "type": "icon",
-                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                        "size": "sm"
-                    },
-                    {
-                        "type": "icon",
-                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                        "size": "sm"
-                    },
-                    {
-                        "type": "icon",
-                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                        "size": "sm"
-                    },
-                    {
-                        "type": "icon",
-                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png",
-                        "size": "sm"
-                    },
-                    {
-                        "type": "text",
-                        "text": "4.0",
-                        "size": "sm",
-                        "color": "#999999",
-                        "flex": 0,
-                        "margin": "md",
-                        "contents": []
-                    }
-                    ]
-                },
-                {
-                    "type": "box",
-                    "layout": "vertical",
-                    "spacing": "sm",
-                    "margin": "lg",
-                    "contents": [
-                    {
-                        "type": "box",
-                        "layout": "baseline",
-                        "spacing": "sm",
-                        "contents": [
-                        {
-                            "type": "text",
-                            "text": "Place",
-                            "size": "sm",
-                            "color": "#AAAAAA",
-                            "flex": 1,
-                            "contents": []
-                        },
-                        {
-                            "type": "text",
-                            "text": "Miraina Tower, 4-1-6 Shinjuku, Tokyo",
-                            "size": "sm",
-                            "color": "#666666",
-                            "flex": 5,
-                            "wrap": true,
-                            "contents": []
-                        }
-                        ]
-                    },
-                    {
-                        "type": "box",
-                        "layout": "baseline",
-                        "spacing": "sm",
-                        "contents": [
-                        {
-                            "type": "text",
-                            "text": "Time",
-                            "size": "sm",
-                            "color": "#AAAAAA",
-                            "flex": 1,
-                            "contents": []
-                        },
-                        {
-                            "type": "text",
-                            "text": "10:00 - 23:00",
-                            "size": "sm",
-                            "color": "#666666",
-                            "flex": 5,
-                            "wrap": true,
-                            "contents": []
-                        }
-                        ]
-                    }
-                    ]
-                }
-                ]
-            },
-            "footer": {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 0,
-                "spacing": "sm",
-                "contents": [
-                {
-                    "type": "button",
-                    "action": {
-                    "type": "uri",
-                    "label": "CALL",
-                    "uri": "https://linecorp.com"
-                    },
-                    "height": "sm",
-                    "style": "link"
-                },
-                {
-                    "type": "button",
-                    "action": {
-                    "type": "uri",
-                    "label": "WEBSITE",
-                    "uri": "https://linecorp.com"
-                    },
-                    "height": "sm",
-                    "style": "link"
-                },
-                {
-                    "type": "spacer",
-                    "size": "sm"
-                }
-                ]
-            }
-        }'''%(imgUrl,productName,desc,cont)
-    return flex
 
 CORS(app, expose_headers='Authorization')
