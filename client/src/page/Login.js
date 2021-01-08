@@ -25,8 +25,9 @@ const Styles = styled.div`
     margin: 2rem;
   }
   
-  .form-floating input {
+  .form-signin input {
     border-radius: 1rem;
+    padding: 0.5rem;
   }
 
   .form-signin .btn {
@@ -40,8 +41,9 @@ const Styles = styled.div`
     margin-top: 10%;
   }
 
-  input {
-    margin-top : 6%;
+  .form-signin .row {
+    margin-top 5%;
+    border-radius: 1rem;
   }
 
 `;
@@ -55,15 +57,16 @@ function Login(){
                         <div class="card-body">
                           <h5 class="card-title text-center">Log in</h5>
                           <form class="form-signin">
-                              <div class="form-floating ">
+                          <div class="form-floating ">
                                 <input type="email" class="form-control" id="floatingInput" placeholder="Email" required/>
                                 <label for="floatingInput">Email address</label>
                               </div>
 
-                              <div class="form-floating">
+                              <div class="form-floating mt-3">
                                 <input type="password" class="form-control" id="floatingPassword" placeholder="Password" required />
                                 <label for="floatingPassword">Password</label>
                               </div>
+
 
                               <div className="btn-login my-4">
                                   <button class="btn btn-primary text-uppercase" type="submit">Log in</button>

@@ -4,18 +4,15 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 // import Chatbot from './images/Chatbot.svg'; 
 
 import Register from './Page/Register';
-import Login from './Page/Login';
-import Navbar from './components/Navbar/navbar';
-import Footer from './components/footer/footer'
-import Create_bot from './Page/Create_bot';
-
+import Login from './Page/Login'; 
+import create_bot from './Page/Create_bot';
 import Navbar from './components/Navbar/navbar';
 import Footer from './components/footer/footer';
-import Learned from './page/Learned';
-import Group from './page/Group';
-import Mapping from './page/Mapping';
-// import Main from './components/Main';
-
+import Home from './Page/Home';
+import Learned from './Page/Learned';
+import Group from './Page/Group';
+import Mapping from './Page/Mapping';
+import Train from './Page/Train';
 function App() {
   const [initialData, setInitialData] = useState([{}])
 
@@ -31,10 +28,12 @@ function App() {
           <Switch>
             <Route path="/" exact component = { Home } />
             <Route path="/register" component={ Register } />
-            <Route path="/Train" component={ Train }/>
-            <Route path="/Learned" component={ Learned }/>
-            <Route path="/Group" component={ Group }/>
-            <Route path="/Mapping" component={ Mapping }/>
+            <Route path="/login" component={ Login } />
+            <Route path="/create_bot" component={ create_bot } />
+            <Route path="/train" component={ Train }/>
+            <Route path="/learned" component={ Learned }/>
+            <Route path="/group" component={ Group }/>
+            <Route path="/mapping" component={ Mapping }/>
           </Switch>
     </Router>
   );
