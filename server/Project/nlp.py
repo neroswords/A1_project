@@ -65,12 +65,12 @@ def sentence_get_confident(ss1,ss2,list = "none"):
         if pythainlp.util.isthai(ss1, ignore_chars="1234567890.-,$ "):
             return (sentence_similarity(ss1,ss2)+sentence_sound_index(ss1, ss2))/2
         else:
-            return "ขอโทษครับ ผมพูดได้แค่ภาษาไทย"
+            return False #"ขอโทษครับ ผมพูดได้แค่ภาษาไทย"
     elif list == "invert":
         if pythainlp.util.isthai(ss1, ignore_chars="1234567890.-,$ "):
             return (sentence_similarity(ss1,ss2)+sentence_sound_index(ss1, ss2, list=invert))/2
         else:
-            return "ขอโทษครับ ผมพูดได้แค่ภาษาไทย"
+            return False #"ขอโทษครับ ผมพูดได้แค่ภาษาไทย"
 
 # print(example[inp])
 # print(pythainlp.util.isthai(inp))

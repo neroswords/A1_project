@@ -45,42 +45,84 @@ const Styles = styled.div`
   }
 
 `;
+class Login extends React.Component {
+  constructor(props) {
+    super(props);
 
-function Login(){
-    return(
-        <Styles>
-              <div class="container">
-                    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                      <div class="card card-signin my-5">
-                        <div class="card-body">
-                          <h5 class="card-title text-center">Log in</h5>
-                          <form class="form-signin">
-                              <div class="form-floating ">
-                                <input type="email" class="form-control" id="floatingInput" placeholder="Email" required/>
-                                <label for="floatingInput">Email address</label>
-                              </div>
+    this.state = {
+      username: '',
+      password : '',
+    };
+    this.handleChange = this.handleChange.bind(this);
+  }
 
-                              <div class="form-floating">
-                                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" required />
-                                <label for="floatingPassword">Password</label>
-                              </div>
+  handleChange (evt) {
+    this.setState({ [evt.target.name]: evt.target.value });
+  }
 
-                              <div className="btn-login my-4">
-                                  <button class="btn btn-primary text-uppercase" type="submit">Log in</button>
-                              </div>
-                              <hr className="my-4"/>
-                              
-                              <div align="center">
-                                <span>Don't have an account ? </span>
-                                <a  href="/Register" >Register</a> 
-                              </div>
-                          </form>
+  handleSignIn = e =>{
+    e.preventDefault() ;
+    const formLogin = {
+      username: this.state.username,
+      password : this.state.password
+    }
+
+    const response = fetch('/login', {
+      method: 'POST',
+      headers : {
+        "Access-Control-Allow-Origin": "*",
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify(formLogin)
+      }).then( res => res.json())
+      .then(data=>{
+        localStorage.setItem('access_token', data.access_token);
+        
+        localStorage.setItem('username', data.username);
+
+        if (localStorage.getItem("access_token") !== null && localStorage.getItem("access_token")!=="undefined") {
+          window.location.replace("/")
+        }else{
+            alert(data.error);
+        }
+      }).catch(err => console.log(err));
+  }
+
+  render(){
+      return(
+          <Styles>
+                <div class="container">
+                      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                        <div class="card card-signin my-5">
+                          <div class="card-body">
+                            <h5 class="card-title text-center">Log in</h5>
+                            <form class="form-signin">
+                                <div class="form-floating ">
+                                  <input type="email" class="form-control" name="username" id="floatingInput" value={this.state.username} onChange={this.handleChange} placeholder="Email" required/>
+                                  <label for="floatingInput">Email address</label>
+                                </div>
+
+                                <div class="form-floating">
+                                  <input type="password" class="form-control" name="password" id="floatingPassword" value={this.state.password} onChange={this.handleChange} placeholder="Password" required />
+                                  <label for="floatingPassword">Password</label>
+                                </div>
+
+                                <div className="btn-login my-4">
+                                    <button class="btn btn-primary text-uppercase" type="submit">Log in</button>
+                                </div>
+                                <hr className="my-4"/>
+                                
+                                <div align="center">
+                                  <span>Don't have an account ? </span>
+                                  <a  href="/Register" >Register</a> 
+                                </div>
+                            </form>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                </div>
-        </Styles>
-  );
+                  </div>
+          </Styles>
+    );
+  }
 }
-
 export default Login;
