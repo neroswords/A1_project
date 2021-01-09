@@ -51,7 +51,7 @@ def signup():
             shop_name = request.form.get('shop_name')
             type_shop = request.form.get('type_shop')
             password_hash = generate_password_hash(password)
-            info_user = {'info': {'username': username, 'email': email, 'password': password_hash, 'ft_name': ft_name, 'la_name': la_name, 'address': address, 'shop_name': shop_name, 'type_shop': type_shop, 'birthday': birthday}}
+            info_user = {'username': username, 'email': email, 'password': password_hash, 'ft_name': ft_name, 'la_name': la_name, 'address': address, 'shop_name': shop_name, 'type_shop': type_shop, 'birthday': birthday}
             users_collection.insert_one(info_user)
             return redirect(url_for('profile.login'))
     return render_template('signup.html')
