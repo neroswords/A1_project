@@ -1,10 +1,22 @@
+class ChatBot:
+   
 
+    def __init__(self, username,name_bot, Channel_access_token, Channel_secret,VERIFY_TOKEN,basic_id,page_facebook_access_token):
+        self.username = username
+        self.name_bot = name_bot
+        self.Channel_access_token = Channel_access_token
+        self.Channel_secret = Channel_secret
+        self.VERIFY_TOKEN = VERIFY_TOKEN
+        self.basic_id = basic_id
+        self.page_facebook_access_token = page_facebook_access_token
 
-class Bot(Document):
-    username = StringField(required=True,unique=True)
-    name_bot = StringField(required=True,unique=True)
-    Channel_access_token = StringField(required=True,unique=True)
-    Channel_secret = StringField(required=True,unique=True)
-    VERIFY_TOKEN = StringField(required=True,unique=True)
-    basic_id = StringField(required=True,unique=True) # owner?
-    page_facebook_access_token = StringField(required=True,unique=True)
+    # def __init__(self, username, Channel_access_token, Channel_secret,VERIFY_TOKEN,basic_id,page_facebook_access_token):
+    #     self.username = username
+    #     self.Channel_access_token = Channel_access_token
+    #     self.Channel_secret = Channel_secret
+    #     self.VERIFY_TOKEN = VERIFY_TOKEN
+    #     self.basic_id = basic_id
+    #     self.page_facebook_access_token = page_facebook_access_token
+
+    def get_connect(self):
+        return self.username

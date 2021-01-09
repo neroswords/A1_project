@@ -1,9 +1,9 @@
 
 from werkzeug.security import generate_password_hash
 from pymongo import MongoClient
-from Project.user import User
-from Project.bot import Bot
-from Project.training import Training
+from Project.models.user import User
+from Project.models.bot import ChatBot
+from Project.models.training import Training
 
 client = MongoClient("mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority")
 db_a1 = client.get_database("a1")
@@ -14,7 +14,6 @@ def save_user(username, email, password,ft_name,la_name,birthday,address,shop_na
     password_hash = generate_password_hash(password)
     info_user = {'info': {'username': username, 'email': email, 'password': password_hash, 'ft_name': ft_name, 'la_name': la_name, 'address': address, 'shop_name': shop_name, 'type_shop': type_shop, 'birthday': birthday}}
     # users_collection.insert_one({'username': username, 'email': email, 'password': password_hash, 'ft_name': ft_name, 'la_name': la_name, 'address': address, 'shop_name': shop_name, 'type_shop': type_shop, 'birthday': birthday})
-    #
     users_collection.insert_one(info_user)
 
 def new_bot(username,name_bot, ch_sc,ch_ac_tk,basic_id,pfa_tk,vf_tk):  #
