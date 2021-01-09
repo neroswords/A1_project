@@ -13,6 +13,7 @@ profile = Blueprint("profile",__name__)
 
 @profile.route('/signup', methods=['GET', 'POST'])
 def signup():
+    users_collection = mongo.db.users
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     message = ''
@@ -31,16 +32,6 @@ def signup():
             address = user_info['shop_address']
             shop_name = user_info['shop_name']
             type_shop = user_info['shop_type']
-            # users_collection = mongo.db.users
-            # username = request.form.get('username')
-            # password = request.form.get('password')
-            # email = request.form.get('email')
-            # ft_name = request.form.get('ft_name')
-            # la_name = request.form.get('la_name')
-            # birthday = request.form.get('birthday')
-            # address = request.form.get('address')
-            # shop_name = request.form.get('shop_name')
-            # type_shop = request.form.get('type_shop')
             password_hash = generate_password_hash(password)
             info_user = {'info': {'username': username, 'email': email, 'password': password_hash, 'ft_name': ft_name, 'la_name': la_name, 'address': address, 'shop_name': shop_name, 'type_shop': type_shop, 'birthday': birthday}}
             users_collection.insert_one(info_user)
@@ -54,17 +45,18 @@ def login():
 
     message = ''
     if request.method == 'POST':
-        username = request.form.get('username')
-        password_input = request.form.get('password')
+        user_info = request.get_json()
         users_collection = mongo.db.users
-        a =  users_collection.find_one({'username': username})
-        user = User(a['username'], a['email'], a['password'], a['ft_name'], a['la_name'], a['address'], a['shop_name'], a['type_shop'], a['birthday']) 
+        a =  users_collection.find_one({'username': user_info['username']})
+        print(a)
+        user = User(a['info']['username'], a['info']['email'], a['info']['password'], a['info']['ft_name'], a['info']['la_name'], a['info']['address'], a['info']['shop_name'], a['info']['type_shop'], a['info']['birthday']) 
 
-        if user and user.check_password(password_input):
+        if user and user.check_password(user_info['password']):
             login_user(user)
             access_token = create_access_token(identity=a['username'])
             refresh_token = create_refresh_token(identity=a['username'])
-            # return redirect(url_for('newbot'))
+            print(access_token)
+            print(refresh_token)
             return {
                     'username': current_user.username,
                     'access_token': access_token,
@@ -73,6 +65,6 @@ def login():
                 
         else:
             message = 'Failed to login!'
-    return render_template('login.html', message=message)
+            return message
 
 
