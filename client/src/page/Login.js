@@ -69,7 +69,7 @@ class Login extends React.Component {
       password : this.state.password
     }
 
-    const response = fetch('/login', {
+    fetch('/profile/login', {
       method: 'POST',
       headers : {
         "Access-Control-Allow-Origin": "*",
@@ -100,8 +100,8 @@ class Login extends React.Component {
                             <h5 class="card-title text-center">Log in</h5>
                             <form class="form-signin">
                                 <div class="form-floating ">
-                                  <input type="email" class="form-control" name="username" id="floatingInput" value={this.state.username} onChange={this.handleChange} placeholder="Email" required/>
-                                  <label for="floatingInput">Email address</label>
+                                  <input type="text" class="form-control" name="username" id="floatingInput" value={this.state.username} onChange={this.handleChange} placeholder="Email" required/>
+                                  <label for="floatingInput">Username</label>
                                 </div>
 
                                 <div class="form-floating mt-3">
@@ -110,7 +110,7 @@ class Login extends React.Component {
                                 </div>
 
                                 <div className="btn-login my-4">
-                                    <button class="btn btn-primary text-uppercase" type="submit">Log in</button>
+                                    <button class="btn btn-primary text-uppercase" type="submit" onClick={this.handleSignIn}>Log in</button>
                                 </div>
                                 <hr className="my-4"/>
                                 

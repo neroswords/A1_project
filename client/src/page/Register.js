@@ -132,7 +132,7 @@ class Register extends React.Component {
         shop_address : this.state.shop_address
       }
       console.log(profile);
-      const response = fetch('/signup', {
+      const response = fetch('/profile/signup', {
       method : 'POST',
       headers : {
             "Access-Control-Allow-Origin": "*",
