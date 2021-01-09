@@ -1,5 +1,16 @@
-class Training(Document):
-    username = StringField(required=True,unique=True)
-    question = StringField(required=True,unique=True)
-    answer = ListField()
-    confident = FloatField()
+class Training:
+  
+
+    def __init__(self, question, answer, username,confident):
+        self.username = username
+        self.question = question
+        self.answer = answer
+        self.confident = confident
+        
+
+
+        
+
+
+
+    

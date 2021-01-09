@@ -23,35 +23,44 @@ const Styles = styled.div`
     margin: 1rem;
   }
   
-  .form-floating input {
-    border-radius: 1rem;
-    height: 2%;
+  .form-regis input {
+    border-radius: 0.5rem;
+    padding: 0.5rem;
   }
 
-  .form-regis{
-    
+  .form-regis input {
+    border-radius: 0.5rem;
+    padding: 0.5rem;
   }
 
-  .form-regis .btn {
+   .btn {
     border-radius: 1rem;
     letter-spacing: .1rem;
     font-weight: bold;
     padding: 0.75rem;
     transition: all 0.2s;
     width: 100%;
-    align-items: center;
   }
+
 
     label {
         font-weight: 
     }
 
-  input {
-  }
+  .title_part {
+      margin-top: 4rem;
+    }
 
   .title_part  p{
     font-weight: bold;
     margin-top:5%;
+  }
+
+  .title_part  .line{
+    border: 10;
+    height: 4px;
+    background-color: #fca311;
+    width: 200px;
   }
 
   input-icon{
@@ -123,7 +132,7 @@ class Register extends React.Component {
         shop_address : this.state.shop_address
       }
       console.log(profile);
-      const response = fetch('/signup', {
+      const response = fetch('/profile/signup', {
       method : 'POST',
       headers : {
             "Access-Control-Allow-Origin": "*",
@@ -152,56 +161,57 @@ class Register extends React.Component {
                           <form className="form-regis">
                           <div className="title_part">
                                 <p className="col">Account infomation</p>
-                                <hr className="col"/>
+                                <div className="line"></div>
+                          </div>
+                              <div className="my-3">
+                              <label for="exampleInputEmail1" className="form-label">Email address</label>
+                              <input type="email" className="form-control " id="inputemail" name='email' required value={this.state.email} onChange={this.handleChange} />
                               </div>
-                              <div className="input-group my-3">
-                                {/* <label for="exampleInputEmail1" className="form-label">Email address</label> */}
-                               {/* <i class="fa fa-lock"></i> */}
-                              <input type="email" className="form-control " id="inputemail" name='email' placeholder="Email Address" value={this.state.email} onChange={this.handleChange} />
+                              <div className="my-3">
+                                <label for="exampleInputEmail1" className="form-label">Username</label>
+                                <input type="text" className="form-control" id="inputusername" name='username' required value={this.state.username} onChange={this.handleChange}/>
                               </div>
-                              <div className="input-group my-3">
-                                {/* <label for="exampleInputEmail1" className="form-label">Username</label> */}
-                                <input type="text" className="form-control" id="inputusername" placeholder="Username" name='username' value={this.state.username} onChange={this.handleChange}/>
-                              </div>
-                              <div className="row ">
+                              <div className="row">
                                 <div className="col ">
-                                  {/* <label for="exampleInputPassword1" className="form-label">Password</label> */}
-                                  <input type="password" className="form-control" id="inputpassword" placeholder="Password" name='password'  value={this.state.password} onChange={this.handleChange} /> 
+                                  <label for="exampleInputPassword1" className="form-label">Password</label>
+                                  <input type="password" className="form-control" id="inputpassword" name='password'  value={this.state.password} onChange={this.handleChange} /> 
                                 </div>
                                 <div className="col">
-                                  {/* <label for="exampleInputPassword1" className="form-label">Comfirm Password</label> */}
-                                  <input type="password" className="form-control" id="confirmpassword" placeholder="Confirm Password" name='confirm_password' value={this.state.confirm_password} onChange={this.handleChange} />  
+                                  <label for="exampleInputPassword1" className="form-label">Comfirm Password</label>
+                                  <input type="password" className="form-control" id="confirmpassword" name='confirm_password' value={this.state.confirm_password} onChange={this.handleChange} />  
                                 </div>
                               </div>
                               <div className="title_part">
                                 <p className="col">Personal infomation</p>
-                                <hr className="col"/>
+                                <div className="line"></div>
                               </div>
-                                <div className="row ">
+                                <div className="row my-3">
                                     <div className="col">
-                                        {/* <label for="inputFirstname" className="form-label">Firstname</label> */}
-                                        <input type="text" className="form-control" id="inputfirstname" placeholder="Firstname" name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
+                                        <label for="inputFirstname" className="form-label">Firstname</label>
+                                        <input type="text" className="form-control" id="inputfirstname"  name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
                                     </div>
                                     <div className="col">
-                                    {/* <label for="inputLastname" className="form-label">Last name</label> */}
-                                        <input type="text" className="form-control" id="inputlastname" placeholder="Lastname" name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
+                                    <label for="inputLastname" className="form-label">Last name</label>
+                                        <input type="text" className="form-control" id="inputlastname"  name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
                                     </div>
                                     <div className="col">
-                                      {/* <label for="exampleInputEmail1" className="form-label">Birthday</label> */}
+                                      <label for="exampleInputEmail1" className="form-label">Birthday</label>
                                       <input type="date" className="form-control" id="inputdate" name='birthday' value={this.state.birthday} onChange={this.handleChange} />
                                      </div> 
                                 </div>
-                                <div className=" input-group my-3">
-                                  {/* <label for="exampleInputEmail1" className="form-label">Shop name</label> */}
-                                  <input type="text" className="form-control" placeholder="Shop name" id="inputshopname" value={this.state.shop_name} name='shop_name' onChange={this.handleChange} />
+                                <div className="row">
+                                  <div className="col my-3">
+                                    <label for="exampleInputEmail1" className="form-label">Shop name</label>
+                                    <input type="text" className="form-control" id="inputshopname" value={this.state.shop_name} name='shop_name' onChange={this.handleChange} />
+                                  </div>
+                                  <div className="col my-3">
+                                    <label for="exampleInputEmail1" className="form-label">Type of sale</label>
+                                    <input type="text" className="form-control" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' onChange={this.handleChange} />
+                                  </div>
                                 </div>
-                                <div className="input-group my-3">
-                                  {/* <label for="exampleInputEmail1" className="form-label">Type of sale</label> */}
-                                  <input type="text" className="form-control" placeholder="Type of sale" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' onChange={this.handleChange} />
-                                </div>
-                                <div className="input-group my-3">
-                                  {/* <label for="exampleFormControlTextarea1" className="form-label">Shop Address (หากไม่มีให้เว้นว่างเอาไว้)</label> */}
-                                  <textarea className="form-control" id="inputshopaddress" rows="2" placeholder="Shop Address (หากไม่มีให้เว้นว่างเอาไว้)" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
+                                <div className="my-3">
+                                  <label for="exampleFormControlTextarea1" className="form-label">Shop Address</label>
+                                  <textarea className="form-control" id="inputshopaddress" rows="2" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
                                 </div>
                               <div class="form-check">
                                 <input className="form-check-input" type="checkbox" value="" id="chaeckvalidate"/>
