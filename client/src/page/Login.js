@@ -25,8 +25,9 @@ const Styles = styled.div`
     margin: 2rem;
   }
   
-  .form-floating input {
+  .form-signin input {
     border-radius: 1rem;
+    padding: 0.5rem;
   }
 
   .form-signin .btn {
@@ -40,8 +41,9 @@ const Styles = styled.div`
     margin-top: 10%;
   }
 
-  input {
-    margin-top : 6%;
+  .form-signin .row {
+    margin-top 5%;
+    border-radius: 1rem;
   }
 
 `;
@@ -102,7 +104,7 @@ class Login extends React.Component {
                                   <label for="floatingInput">Email address</label>
                                 </div>
 
-                                <div class="form-floating">
+                                <div class="form-floating mt-3">
                                   <input type="password" class="form-control" name="password" id="floatingPassword" value={this.state.password} onChange={this.handleChange} placeholder="Password" required />
                                   <label for="floatingPassword">Password</label>
                                 </div>
