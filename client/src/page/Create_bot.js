@@ -114,8 +114,41 @@ const Styles = styled.div`
   }
 `;
 
-function Create_bot() {
-    return (
+
+
+class Create_bot extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      platform: 'line'
+    };
+    this.handlelineChange = this.handlelineChange.bind(this);
+    this.handlefacebookChange = this.handlefacebookChange.bind(this);
+  }
+  
+  renderSwitch(param) {
+    switch(param) {
+      case 'facebook':
+        return <Facebookform />
+      default:
+        return <Lineform />
+    }
+  }
+  
+  handlelineChange (evt) {
+    evt.preventDefault() ;
+    this.setState({ platform: "line" });
+    console.log(this.state.platform)
+  }
+  handlefacebookChange (evt) {
+    evt.preventDefault() ;
+    this.setState({ platform: "facebook" });
+    console.log(this.state.platform)
+  }
+
+    render() {
+      return(
         <Styles>
               <div className="container">
                     <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
@@ -166,16 +199,16 @@ function Create_bot() {
                                 <div className="connect_platform">
                                   <div className="row col-lg-12">
                                       <div className="col-lg-6">
-                                          <button className="btn btn-primary text-uppercase" type="">facebook</button>
+                                          <button className="btn btn-primary text-uppercase" onClick={this.handlefacebookChange} type="">facebook</button>
                                       </div>
                                       <div className="col-lg-6">
-                                          <button className="btn btn-success btn-line text-uppercase" type="">line</button>
+                                          <button className="btn btn-success btn-line text-uppercase" onClick={this.handlelineChange} type="">line</button>
                                       </div>
                                   </div>
                                 </div>
 
-                            <Facebookform />
-                            <Lineform />                                
+                            {this.renderSwitch(this.state.platform)}
+                            {/* <Lineform />                                 */}
 
                               <div className="btn-createbot">
                                   <button className="btn btn-success text-uppercase" type="submit">Create ChatBot</button>
@@ -190,8 +223,8 @@ function Create_bot() {
                     
                 </div>
         </Styles>
-        
-    );
+      )
+    }
 }
 
 export default Create_bot;

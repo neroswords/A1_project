@@ -20,7 +20,7 @@ def signup():
         user_info = request.get_json()
         print(user_info)
         if  users_collection.find_one({'username': user_info['username']}):
-            print("User already exists!")
+            return {'error':'This username already exists'}
         elif not users_collection.find_one({'username': user_info['username']}):
             username = user_info['username']
             password = user_info['password']
@@ -44,17 +44,20 @@ def login():
         user_info = request.get_json()
         users_collection = mongo.db.users
         a =  users_collection.find_one({'username': user_info['username']})
-        user = User(a['username'], a['email'], a['password'], a['ft_name'], a['la_name'], a['address'], a['shop_name'], a['type_shop'], a['birthday']) 
-        if user and user.check_password(user_info['password']):
-            login_user(user)
-            access_token = create_access_token(identity=a['username'])
-            refresh_token = create_refresh_token(identity=a['username'])
-            print(access_token)
-            print(refresh_token)
-            return {
-                    'username': current_user.username,
-                    'access_token': access_token,
-                    'refresh_token': refresh_token
-                }
+        if a : 
+            user = User(a['username'], a['email'], a['password'], a['ft_name'], a['la_name'], a['address'], a['shop_name'], a['type_shop'], a['birthday']) 
+            if user and user.check_password(user_info['password']):
+                login_user(user)
+                access_token = create_access_token(identity=a['username'])
+                refresh_token = create_refresh_token(identity=a['username'])
+                # print(access_token)
+                # print(refresh_token)
+                return {
+                        'username': current_user.username,
+                        'access_token': access_token,
+                        'refresh_token': refresh_token
+                    }
+            else:
+                return {"error":"Username or password wrong"}
         else:
-            return {"error","User or pass wrong"}
+            return {"error":"Username is not valid"}

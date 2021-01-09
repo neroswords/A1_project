@@ -78,16 +78,17 @@ class Login extends React.Component {
       body: JSON.stringify(formLogin)
       }).then( res => res.json())
       .then(data=>{
-        localStorage.setItem('access_token', data.access_token);
-        
-        localStorage.setItem('username', data.username);
 
-        if (localStorage.getItem("access_token") !== null && localStorage.getItem("access_token")!=="undefined") {
-          window.location.replace("/")
-        }else{
-            alert(data.error);
+          localStorage.setItem('access_token', data.access_token);
+          
+          localStorage.setItem('username', data.username);
+
+          if (localStorage.getItem("access_token") !== null && localStorage.getItem("access_token")!=="undefined") {
+            window.location.replace("/")
+          }else{
+              alert(data.error);  
         }
-      }).catch(err => console.log(err));
+      }).catch(error => console.log(error));
   }
 
   render(){
