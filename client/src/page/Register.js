@@ -131,7 +131,6 @@ class Register extends React.Component {
         shop_type : this.state.shop_type,
         shop_address : this.state.shop_address
       }
-      console.log(profile);
       const response = fetch('/profile/signup', {
       method : 'POST',
       headers : {
@@ -141,14 +140,7 @@ class Register extends React.Component {
       body: JSON.stringify(profile)
     })
   }
-
-    
-
 }
-
-    // console.log('pass' + this.state.password);
-    // console.log('con' + this.state.confirm_password);
-
 
   render() {
     return(
@@ -214,7 +206,7 @@ class Register extends React.Component {
                                   <textarea className="form-control" id="inputshopaddress" rows="2" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
                                 </div>
                               <div class="form-check">
-                                <input className="form-check-input" type="checkbox" value="" id="chaeckvalidate"/>
+                                <input className="form-check-input" type="checkbox" value="" id="chaeckvalidate" required/>
                                 <label className="form-check-label" for="flexCheckDefault">
                                   ยินยอมตามข้อกำหนด
                                   <a  href="/Login"> ข้อกำหนดการใช้บริการ </a>
@@ -237,6 +229,7 @@ class Register extends React.Component {
                     
                 </div>
         </Styles>
+        
     );
   }
 }
