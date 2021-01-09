@@ -1,6 +1,7 @@
 import React from 'react';
 import { Jumbotron as Jumbo, Container } from 'react-bootstrap';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 // import Telephone from './images/Telephone.png';
 
@@ -54,7 +55,9 @@ export const Endpage = () => (
             <h1>Improve at every stage <br/> of your business growth</h1>
             <span>No matter whether you’re a growing company <br/> ChatBot helps you communicate better with customers.</span>
             <div class="d-grid gap-2 col-6 mx-auto mt-5">
-              <button class="btn btn-primary" type="button">Register for FREE! </button>
+              <Link to = "/register">
+                <button class="btn btn-primary" type="button">Register for FREE! </button>
+              </Link>
             </div>
           </div>
           
