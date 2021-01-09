@@ -72,4 +72,3 @@ def webhook(platform,botID):
             return request.json, 200
     else:
         return 200
-
