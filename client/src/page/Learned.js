@@ -4,8 +4,9 @@ import Navbar_member from '../components/Navbar/navbar_member';
 function Learned(){
     return(
         <div>
-            <Navbar_member />
+            
             <div className="container">
+                <Navbar_member />
                 <div className="container-top d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight'>Lerned</h2>
                     <div className="p-2 bd-highlight"><button className="btn btn-danger" type="button">Delete</button></div>
