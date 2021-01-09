@@ -33,7 +33,7 @@ function App() {
             <Route path="/learned" component={ Learned }/>
             <Route path="/group" component={ Group }/>
             <Route path="/mapping" component={ Mapping }/>
-            <Route path="/create_bot" component ={ Create_bot} />
+            <Route path="/create_bot" component ={ Create_bot } />
           </Switch>
     </Router>
   );
