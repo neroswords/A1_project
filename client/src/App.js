@@ -5,7 +5,7 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 import Register from './page/Register';
 import Train from './page/Train';
-
+import Home from './page/Home';
 import Navbar from './components/Navbar/navbar';
 import Footer from './components/footer/footer';
 import Learned from './page/Learned';
@@ -28,10 +28,10 @@ function App() {
           <Switch>
             <Route path="/" exact component = { Home } />
             <Route path="/register" component={ Register } />
-            <Route path="/Train" component={ Train }/>
-            <Route path="/Learned" component={ Learned }/>
-            <Route path="/Group" component={ Group }/>
-            <Route path="/Mapping" component={ Mapping }/>
+            <Route path="/train" component={ Train }/>
+            <Route path="/learned" component={ Learned }/>
+            <Route path="/group" component={ Group }/>
+            <Route path="/mapping" component={ Mapping }/>
           </Switch>
     </Router>
   );

@@ -1,5 +1,34 @@
 import React, { useState, useEffect } from "react";
-// import { Link } from "react-router-dom";
+import styled from 'styled-components';
+
+const Styles = styled.div`
+.table{
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 0.9em;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  // box-shadow: 0 0 10px rgba(0, 0, 0.15);
+}
+
+.table thead tr{
+  text-align: left;
+  font-weight: bold;
+}
+
+.table th,
+.table td{
+  padding: 12px 15px;
+}
+
+.table tbody tr{
+  border-bottom: 1px solid #dddddd;
+}
+
+.table tbody tr:nth-of-type(even){
+  background-color: #e5e5e5;
+}
+`;
 
 function Tablemap() {
   const [TablemapState, setTablemapState] = useState([]);
@@ -26,6 +55,7 @@ function Tablemap() {
   }, []);
 
   return (
+    <Styles>
     <div className="container">
       
         <button
@@ -103,6 +133,7 @@ function Tablemap() {
         </tbody>
       </table>
     </div>
+    </Styles>
   );
 }
 
