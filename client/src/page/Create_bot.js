@@ -114,7 +114,7 @@ const Styles = styled.div`
   }
 `;
 
-function create_bot() {
+function Create_bot() {
     return (
         <Styles>
               <div className="container">
@@ -194,4 +194,4 @@ function create_bot() {
     );
 }
 
-export default create_bot;
+export default Create_bot;
