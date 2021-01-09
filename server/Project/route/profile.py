@@ -48,6 +48,7 @@ def login():
         user_info = request.get_json()
         users_collection = mongo.db.users
         a =  users_collection.find_one({'username': user_info['username']})
+        # a =  users_collection.find_one({info:{$elemMatch : {username : : user_info['username']}}})
         print(a)
         user = User(a['info']['username'], a['info']['email'], a['info']['password'], a['info']['ft_name'], a['info']['la_name'], a['info']['address'], a['info']['shop_name'], a['info']['type_shop'], a['info']['birthday']) 
 
