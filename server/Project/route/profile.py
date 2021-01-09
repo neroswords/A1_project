@@ -11,18 +11,17 @@ from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_r
 profile = Blueprint("profile",__name__)
 
 
-@profile.route('/signup', methods=['GET', 'POST'])
+@profile.route('/signup', methods=[ 'POST'])
 def signup():
     users_collection = mongo.db.users
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    message = ''
+ 
     
     if request.method == 'POST':
         user_info = request.get_json()
-        if  not check_user(user_info['username']):
-            message = "User already exists!"
-        elif  check_user(user_info['username']):
+        print(user_info)
+        if  users_collection.find_one({'username': user_info['username']}):
+            print("User already exists!")
+        elif not users_collection.find_one({'username': user_info['username']}):
             username = user_info['username']
             password = user_info['password']
             email = user_info['email']
@@ -35,22 +34,17 @@ def signup():
             password_hash = generate_password_hash(password)
             info_user = {'username': username, 'email': email, 'password': password_hash, 'ft_name': ft_name, 'la_name': la_name, 'address': address, 'shop_name': shop_name, 'type_shop': type_shop, 'birthday': birthday}
             users_collection.insert_one(info_user)
-            return redirect(url_for('profile.login',message = message))
-    return render_template('signup.html')
+            return "pass"
+        return "not"
 
-@profile.route('/login', methods=['GET', 'POST'])
+
+@profile.route('/login', methods=[ 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-
-    message = ''
     if request.method == 'POST':
         user_info = request.get_json()
         users_collection = mongo.db.users
         a =  users_collection.find_one({'username': user_info['username']})
-        print(a)
-        user = User(a['info']['username'], a['info']['email'], a['info']['password'], a['info']['ft_name'], a['info']['la_name'], a['info']['address'], a['info']['shop_name'], a['info']['type_shop'], a['info']['birthday']) 
-
+        user = User(a['username'], a['email'], a['password'], a['ft_name'], a['la_name'], a['address'], a['shop_name'], a['type_shop'], a['birthday']) 
         if user and user.check_password(user_info['password']):
             login_user(user)
             access_token = create_access_token(identity=a['username'])
@@ -62,9 +56,7 @@ def login():
                     'access_token': access_token,
                     'refresh_token': refresh_token
                 }
-                
         else:
-            message = 'Failed to login!'
-            return message
+            return {"ERROR 108","User or pass wrong"}
 
 
