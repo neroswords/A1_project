@@ -34,9 +34,9 @@ def create():
             owner = bot_info['owner'] #ref id คนสร้างมาใส่ตัวแปรนี้
             gender = bot_info['gender']
             age = bot_info['age']
-            # image = bot_image['image']
+            image = bot_image['image'] # req file name มาใส่ db
             
-            info_bot = {'bot_name': bot_name, ' chanel_secret':  chanel_secret, 'chanel_access_token': chanel_access_token, 'basic_id': basic_id, 'fb_access_token': fb_access_token , 'verify_token': verify_token, 'owner': owner, 'gender' : gender, 'age': age}
+            info_bot = {'bot_name': bot_name, 'chanel_secret':  chanel_secret, 'chanel_access_token': chanel_access_token, 'basic_id': basic_id, 'fb_access_token': fb_access_token , 'verify_token': verify_token, 'owner': owner, 'gender' : gender, 'age': age, 'image': image}
             bots_collection.insert_one(info_bot)
             return "add bot successfully"
         return "add bot unsuccessfully"
@@ -56,9 +56,9 @@ def edit(id):
             basic_id = bot_update['basic_id']
             fb_access_token = bot_update['pfa_tk']
             verify_token = bot_update['vf_tk']
+            #image = bot_update['image']
 
-
-            info_update = { "$set": {'bot_name': bot_name, ' chanel_secret':  chanel_secret, 'chanel_access_token': chanel_access_token, 'basic_id': basic_id, 'fb_access_token': fb_access_token , 'verify_token': verify_token}}
+            info_update = { "$set": {'bot_name': bot_name, 'chanel_secret':  chanel_secret, 'chanel_access_token': chanel_access_token, 'basic_id': basic_id, 'fb_access_token': fb_access_token , 'verify_token': verify_token, 'image' : image}}
             # bot_id = { "_id": ObjectId (id)}
             done = bots_collection.update_one({'_id': ObjectId (id)}, info_update)
             if done:
@@ -67,9 +67,9 @@ def edit(id):
                 return "Update unsuccessfully"
 
     elif request.method == 'GET':
-       bot =  bots_collection.find_one({'_id': ObjectId (id)}) # กุเขียนมั่ว
+       bot =  bots_collection.find_one({'_id': ObjectId (id)}) 
         if bot:
-            bot_info = ChatBot(bot['owner'], bot['bot_name'], bot['chanel_access_token'], bot['chanel_secret'], bot['verify_token'], bot['basic_id'], bot['fb_access_token'],bot['age'],bot['gender'])
+            bot_info = ChatBot(bot['owner'], bot['bot_name'], bot['chanel_access_token'], bot['chanel_secret'], bot['verify_token'], bot['basic_id'], bot['fb_access_token'],bot['age'],bot['gender'],bot['image'])
        
             return bot_info
         else: 
