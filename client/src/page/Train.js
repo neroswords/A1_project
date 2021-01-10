@@ -3,6 +3,7 @@ import Table from '../components/table/Tablecon';
 
 function Train(){
     return(
+        
         <div>
             <div className="container">
                 <div className="container-top d-flex bd-highlight">
@@ -11,11 +12,13 @@ function Train(){
                     <div className="p-2 bd-highlight"><button className="btn btn-success" type="button">Train</button></div>
                 </div>
                 <hr></hr>
-                <Table />
+                    <div className="container-table">
+                        <Table />
+                    </div>
             </div>
 
         </div>
-                
+              
         
     );
 }

@@ -6,11 +6,13 @@ function Mapping(){
         <div>
             <div className="container">
                 <div className="container-top d-flex bd-highlight">
-                    <h2 className='p-2 flex-grow-1 bd-highlight'>Trainning</h2>
+                    <h2 className='p-2 flex-grow-1 bd-highlight'>Mapping</h2>
                     
                 </div>
                 <hr></hr>
-                <Table />
+                    <div className="container-table">
+                        <Table />
+                    </div>
             </div>
 
         </div>
