@@ -14,7 +14,6 @@ from bson.objectid import Objectid # find by id
 bot = Blueprint("bot",__name__)
 bots_collection = mongo.db.bots
 
-<<<<<<< HEAD
 #create bot
 @bot.route('/create', methods=[ 'POST'])
 def create():
@@ -45,13 +44,7 @@ def create():
 #edit
 @bot.route('/edit/<id>', methods=['GET', 'POST'])
 def edit(id):
-=======
 
-
-@bot.route('/connect', methods=['GET', 'POST'])
-@login_required
-def connect():
->>>>>>> f515190a0368b9385a73836824437b9eaaf00ac4
     if request.method == 'POST':
 
         bot_update = request.get_json()
