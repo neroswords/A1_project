@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styled from 'styled-components';
 
 const Styles = styled.div`
+
 .table{
   border-collapse: collapse;
   margin: 10px 0;
@@ -59,7 +60,7 @@ function Table() {
       <div className="container">
 
         <Link to="/add">
-          
+
           <button type="button"className="btn btn-primary Add-word btn-sm float-right my-3">Add</button>
 
         </Link> 

@@ -25,6 +25,12 @@ h1 {
     margin-left: 2rem;
 }
 
+.nav {
+    height:10vh;
+}
+.nav_bar{
+    height:100%;
+}
 `;
 
 const Log = () =>{
@@ -62,8 +68,7 @@ const Log = () =>{
 function Navbar(){
     return (
         <Styles>
-                <div className="container">
-                    <div className="col-sm-10 col-md-9 col-lg-12 mx-auto">
+                    <div className="col-sm-10 col-md-9 col-lg-12 mx-auto nav">
                         <nav className="navbar">
                             <div className="container-fluid">
                                 <a class="navbar-brand" href="/">
@@ -73,7 +78,7 @@ function Navbar(){
                             </div>
                         </nav>
                     </div>
-                </div>
+                
         </Styles>
     )
 }
