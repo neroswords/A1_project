@@ -1,5 +1,35 @@
 import React, { useState, useEffect } from "react";
-// import { Link } from "react-router-dom";
+import styled from 'styled-components';
+
+const Styles = styled.div`
+.table{
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 0.9em;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+}
+
+.table thead tr{
+  text-align: left;
+  font-weight: bold;
+  border: none;
+}
+
+.table th,
+.table td{
+  padding: 12px 15px;
+  border: none;
+}
+
+.table tbody tr{
+  border-bottom: 1px solid #dddddd;
+}
+
+.table tbody tr:nth-of-type(even){
+  background-color: #e5e5e5;
+}
+`;
 
 function Tablecon() {
   const [TableconState, setTableconState] = useState([]);
@@ -26,14 +56,10 @@ function Tablecon() {
   }, []);
 
   return (
+    <Styles>
     <div className="container">
       
-        <button
-          type="button"
-          className="btn btn-primary btn-sm float-right my-3"
-        >
-          Add
-        </button>
+      <button type="button"className="btn btn-primary Add-word btn-sm float-right my-3">Add</button>
       
       <table className="table table-bordered">
         <thead>
@@ -103,6 +129,7 @@ function Tablecon() {
         </tbody>
       </table>
     </div>
+    </Styles>
   );
 }
 

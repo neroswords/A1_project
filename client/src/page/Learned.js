@@ -1,6 +1,7 @@
 import React from 'react';
 import Table from '../components/table/Table';
 import Navbar_member from '../components/Navbar/navbar_member';
+
 function Learned(){
     return(
         <div>
