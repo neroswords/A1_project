@@ -11,6 +11,8 @@ from Project.nlp import sentence_get_confident
 
 bot = Blueprint("bot",__name__)
 
+
+
 @bot.route('/connect', methods=['GET', 'POST'])
 @login_required
 def connect():
