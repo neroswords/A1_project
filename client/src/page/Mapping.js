@@ -10,9 +10,8 @@ function Mapping(){
                     
                 </div>
                 <hr></hr>
-                    <div className="container-table">
-                        <Table />
-                    </div>
+                <Table />
+                    
             </div>
 
         </div>
