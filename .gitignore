@@ -1,1 +1,3 @@
 client/.eslintcache
+server/__pycache__
+server/Project/__pycache__
