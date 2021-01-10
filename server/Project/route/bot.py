@@ -12,13 +12,13 @@ from Project.nlp import sentence_get_confident
 from bson.objectid import Objectid # find by id
 
 bot = Blueprint("bot",__name__)
-bots_collection = mongo.db.bots
+
 
 #create bot
 @bot.route('/create', methods=[ 'POST'])
 def create():
    
-    # bots_collection = mongo.db.bots
+    bots_collection = mongo.db.bots
  
     
     if request.method == 'POST':
@@ -44,7 +44,8 @@ def create():
 #edit
 @bot.route('/edit/<id>', methods=['GET', 'POST'])
 def edit(id):
-
+    bots_collection = mongo.db.bots
+ 
     if request.method == 'POST':
 
         bot_update = request.get_json()
@@ -78,6 +79,8 @@ def edit(id):
  #delete
 @bot.route('/delete/<id>', methods=['POST'])
 def delete(id):
+    bots_collection = mongo.db.bots
+ 
     if request.method == 'POST':
         if  bots_collection.find_one({'_id': ObjectId(id)}):
             result = bots_collection.delete_one({'_id': ObjectId(id)})
