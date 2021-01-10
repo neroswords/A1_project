@@ -7,16 +7,23 @@
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",
+<<<<<<< HEAD
+    "axios": "^0.21.1",
+=======
+>>>>>>> 4f67813ca8c4813f3bae28462617479aab6c3a3e
     "bootstrap": "^4.5.3",
     "html-react-parser": "^1.1.0",
     "react": "^17.0.1",
+    "react-accessible-accordion": "^3.3.3",
     "react-bootstrap": "^1.4.0",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "semantic-ui-react": "^2.0.1",
     "styled-components": "^5.2.1",
-    "web-vitals": "^0.2.4"
+    "util-deprecate": "^1.0.2",
+    "web-vitals": "^0.2.4",
+    "yarn": "^1.22.10"
   },
   "scripts": {
     "start": "react-scripts start",

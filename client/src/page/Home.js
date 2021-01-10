@@ -1,5 +1,6 @@
-import React from 'react'
+import React,{ useState } from 'react';
 
+import {Button, Collapse } from 'react-bootstrap';
 import { CardList } from '../components/Landing/cardList';
 import { Mainpage } from '../components/Landing/Mainpage';
 import { Endpage }  from '../components/Landing/endpage';
@@ -8,16 +9,18 @@ import Footer from '../components/footer/footer';
 
 function Home(){
     return(
+        
         <div className="page-container"> 
-        <div className="conatainer">
-            <Mainpage />
-            <CardList/>
-            <Endpage/>
-            {/* <img src={'http://127.0.0.1:200/images/cats.jpg'}></img>
-            <img src={'http://127.0.0.1:200/images/logo.png'}></img> */}
+                <div className="conatainer">
+                    <Mainpage />
+                    <CardList/>
+                    <Endpage/>
+                    {/* <img src={'/images/profile/cats.jpg'}></img>
+                    <img src={'/images/logo.png'}></img> */}
+                </div>
+            <Footer />
         </div>
-        <Footer />
-        </div>
+        
     )
 }
 

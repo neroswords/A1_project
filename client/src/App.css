@@ -35,3 +35,7 @@
 .md-social-btn .mbsc-ic {
   float: left;
 }
+
+.btn{
+  cursor: pointer;
+}

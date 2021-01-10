@@ -1,0 +1,4 @@
+client/.eslintcache
+server/__pycache__
+server/Project/__pycache__
+client/package.json

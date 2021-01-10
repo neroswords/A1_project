@@ -4,3 +4,5 @@ basic_id = '@255vrqmp'
 
 page_facebook_access_token = "EAAFuWsj2desBAKbFgmF7hZAhnb6kEyLSZARNzSg4O8LyPN6hYRoKwGCK4tTtE83zfpPEpooeNnEnZAc7qewgx8JklE80ijWJRqFOoN4UK2FanMk8PrI4hZBGddxqvEnIeXHxE9Ifd7E7tZC8HGI7a4UASNBiqiRBc0RRN47fPVZChZAfv86ZAYBB"
 VERIFY_TOKEN = 'setestproject'
+
+MONGO_URI='mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority'
