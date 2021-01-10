@@ -75,7 +75,7 @@ const Styles = styled.div`
     .navbar {
       top: 0;
       width: 5rem;
-      height: auto;
+      height:90vh;
     }
   
     .navbar:hover {

@@ -7,6 +7,9 @@ const Styles = styled.div`
 .pop {
     display: flex;
 }
+.container {
+    margin-top:2%
+}
 `
 
 function Learned(){
