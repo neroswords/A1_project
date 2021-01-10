@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
 
 const Styles = styled.div`
+
 .table{
   border-collapse: collapse;
   margin: 10px 0;
@@ -27,7 +28,7 @@ const Styles = styled.div`
 
 .table tbody tr:nth-of-type(even){
   background-color: #e5e5e5;
-}\
+}
 
 .Add-word{
   

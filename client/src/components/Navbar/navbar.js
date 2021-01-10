@@ -62,7 +62,6 @@ const Log = () =>{
 function Navbar(){
     return (
         <Styles>
-                <div className="container">
                     <div className="col-sm-10 col-md-9 col-lg-12 mx-auto">
                         <nav className="navbar">
                             <div className="container-fluid">
@@ -73,7 +72,7 @@ function Navbar(){
                             </div>
                         </nav>
                     </div>
-                </div>
+                
         </Styles>
     )
 }
