@@ -5,6 +5,10 @@ import {Button} from "react-bootstrap";
 import {isLoggedIn, deleteTokens} from '../auth';
 
 const Styles = styled.div`
+.container-fluid {
+    margin-left: 5%;
+    margin-right: 5%;
+}
 
 h1 {
     font-size: 35px;
