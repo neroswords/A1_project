@@ -50,8 +50,8 @@ def login():
                 login_user(user)
                 access_token = create_access_token(identity=a['username'])
                 refresh_token = create_refresh_token(identity=a['username'])
-                # print(access_token)
-                # print(refresh_token)
+                print(access_token)
+                print(refresh_token)
                 return {
                         'username': current_user.username,
                         'access_token': access_token,
