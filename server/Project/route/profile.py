@@ -3,7 +3,7 @@ from flask import Flask, request, abort, render_template, session,url_for,redire
 from werkzeug.security import generate_password_hash, check_password_hash
 from pymongo import MongoClient
 from Project.models.user import User
-from Project.extensions import mongo 
+from Project.extensions import mongo, JSONEncoder
 from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
 from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection,check_bot,find_bot
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required,
@@ -50,11 +50,13 @@ def login():
                 login_user(user)
                 access_token = create_access_token(identity=a['username'])
                 refresh_token = create_refresh_token(identity=a['username'])
-                print(access_token)
-                print(refresh_token)
-                return {
+                user_id = JSONEncoder().encode(a['_id'])
+                print(a['_id'])
+                print(user_id)
+                return {                 
                         'username': current_user.username,
                         'access_token': access_token,
+                        'user_id' : user_id,
                         'refresh_token': refresh_token
                     }
             else:

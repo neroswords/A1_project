@@ -103,7 +103,7 @@ function Navbar_member() {
   
         return(
             <Styles>
-                  <div className="navbar">
+                  <nav className="navbar">
                     <ul className="navbar-nav">
                       {/* <div className="logo">
                         <div href="#" className="nav-link">
@@ -149,7 +149,7 @@ function Navbar_member() {
                                 <i class="fas fa-history"></i>
                             </div>
                           </div>
-                          <span className="link-text">Histry</span>
+                          <span className="link-text">History</span>
                         </a>
                       </li>
                       <li className="nav-item">
@@ -174,7 +174,7 @@ function Navbar_member() {
                       </li>
           
                     </ul>
-                  </div>
+                  </nav>
               
           </Styles>
         )

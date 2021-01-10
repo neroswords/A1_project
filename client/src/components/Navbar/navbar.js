@@ -6,6 +6,7 @@ import {isLoggedIn, deleteTokens} from '../auth';
 
 const Styles = styled.div`
 
+
 h1 {
     font-size: 35px;
     font-weight: 700;
@@ -23,15 +24,23 @@ h1 {
 
 .btn-login {
     margin-left: 2rem;
+    margin-right: 9rem;
 }
 
 .nav {
     height:10vh;
+    // box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
 }
-.nav_bar{
+
+.navbar-brand {
+    margin-left: 1%;
+}
+.navbar{
     height:100%;
+    width: 100%;
+    padding: 0px 0px;
 }
-`;
+`
 
 const Log = () =>{
     if(isLoggedIn()){
@@ -49,14 +58,14 @@ const Log = () =>{
         )
     }else{
         return(
-            <form className="d-flex">
+            <form className="d-flex justify-content-evenly btn-navbar">
                 <Link to="/register">
                     <div className="btn-signup">
                         <a className="btn btn-outline-secondary" role="button">Register</a>
                     </div>    
                 </Link>
                 <Link to="/login">
-                    <div className="btn-login">
+                    <div className="btn-login me-5">
                         <a className="btn btn-info" role="button">Log in</a>
                     </div>
                 </Link>
@@ -68,14 +77,13 @@ const Log = () =>{
 function Navbar(){
     return (
         <Styles>
+                
                     <div className="col-sm-10 col-md-9 col-lg-12 mx-auto nav">
                         <nav className="navbar">
-                            <div className="container-fluid">
                                 <a class="navbar-brand" href="/">
-                                    <img href="/" src="/images/logo2.PNG" height="60" className="d-inline-block align-top mt-2"/>
+                                    <img href="/" src="/images/logo2.PNG" height="60" className="d-inline-block align-top "/>
                                 </a>                                
-                                <Log />   
-                            </div>
+                                <Log />
                         </nav>
                     </div>
                 
