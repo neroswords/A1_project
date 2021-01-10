@@ -1,9 +1,18 @@
 import React from 'react';
 import Table from '../components/table/Table';
 import Navbar_member from '../components/Navbar/navbar_member';
+import styled from 'styled-components';
+
+const Styles = styled.div` 
+.pop {
+    display: flex;
+}
+`
+
 function Learned(){
     return(
-        <div>
+        <Styles>
+        <div className="pop">
             <Navbar_member />
             <div className="container">
                 
@@ -16,9 +25,9 @@ function Learned(){
                 <Table />
             </div>
 
-        </div>
+            </div>
                 
-        
+        </Styles>
     );
 }
 
