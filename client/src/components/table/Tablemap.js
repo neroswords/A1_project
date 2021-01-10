@@ -8,17 +8,19 @@ const Styles = styled.div`
   font-size: 0.9em;
   border-radius: 5px 5px 0 0;
   overflow: hidden;
-  // box-shadow: 0 0 10px rgba(0, 0, 0.15);
+
 }
 
 .table thead tr{
   text-align: left;
   font-weight: bold;
+  border: none;
 }
 
 .table th,
 .table td{
   padding: 12px 15px;
+  border: none;
 }
 
 .table tbody tr{
@@ -58,12 +60,7 @@ function Tablemap() {
     <Styles>
     <div className="container">
       
-        <button
-          type="button"
-          className="btn btn-primary btn-sm float-right my-3"
-        >
-          Add
-        </button>
+      <button type="button"className="btn btn-primary Add-word btn-sm float-right my-3">Add</button>
       
       <table className="table table-bordered">
         <thead>

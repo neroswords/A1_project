@@ -12,6 +12,7 @@ import Group from './Page/Group';
 import Mapping from './Page/Mapping';
 import Train from './Page/Train';
 import Create_bot from './Page/Create_bot';
+import AddWord from './components/table/addTable/AddWord';
 
 function App() {
   const [initialData, setInitialData] = useState([{}])
@@ -33,6 +34,7 @@ function App() {
             <Route path="/learned" component={ Learned }/>
             <Route path="/group" component={ Group }/>
             <Route path="/mapping" component={ Mapping }/>
+            <Route path="/add" component={ AddWord }/>
             <Route path="/create_bot" component ={ Create_bot } />
           </Switch>
     </Router>

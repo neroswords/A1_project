@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import styled from 'styled-components';
 
 const Styles = styled.div`
@@ -9,7 +10,6 @@ const Styles = styled.div`
   font-size: 0.9em;
   border-radius: 5px 5px 0 0;
   overflow: hidden;
-  // box-shadow: 0 0 10px rgba(0, 0, 0.15);
 }
 
 .table thead tr{
@@ -28,10 +28,6 @@ const Styles = styled.div`
 
 .table tbody tr:nth-of-type(even){
   background-color: #e5e5e5;
-}
-
-.Add-word{
-  
 }
 
 `;
@@ -62,8 +58,12 @@ function Table() {
   return (
     <Styles>
       <div className="container">
-        
+
+        <Link to="/add">
+
           <button type="button"className="btn btn-primary Add-word btn-sm float-right my-3">Add</button>
+
+        </Link> 
         
         <table className="table">
           <thead>

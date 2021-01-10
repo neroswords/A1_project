@@ -12,9 +12,8 @@ function Train(){
                     <div className="p-2 bd-highlight"><button className="btn btn-success" type="button">Train</button></div>
                 </div>
                 <hr></hr>
-                    <div className="container-table">
-                        <Table />
-                    </div>
+                <Table />
+                
             </div>
 
         </div>
