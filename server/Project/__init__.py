@@ -17,9 +17,9 @@ import os
 from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
 from flask_mongoengine import MongoEngine
-from app import models #จะเรียกใช้ model
-from mongoengine import Document, connect # pip install mongoengine ก่อน
-from mongoengine import DateTimeField, StringField, ReferenceField, ListField, EmailField, FloatField 
+# from app import models #จะเรียกใช้ model
+# from mongoengine import Document, connect # pip install mongoengine ก่อน
+# from mongoengine import DateTimeField, StringField, ReferenceField, ListField, EmailField, FloatField 
 
 UPLOAD_FOLDER = './Project/static/images'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -31,7 +31,7 @@ login_manager.login_view = 'login'
 login_manager.init_app(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = './static/images'
-connect('a1', host='mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority') # connect db
+# connect('a1', host='mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority') # connect db
 
 
 

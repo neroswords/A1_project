@@ -5,11 +5,11 @@ from Project.user import User
 from Project.bot import Bot
 from Project.training import Training
 
-# client = MongoClient("mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority")
-# db_a1 = client.get_database("a1")
-# users_collection = db_a1.get_collection("users")
-# bot_collection = db_a1.get_collection("bots")
-# training_collection = db_a1.get_collection("training")
+client = MongoClient("mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority")
+db_a1 = client.get_database("a1")
+users_collection = db_a1.get_collection("users")
+bot_collection = db_a1.get_collection("bots")
+training_collection = db_a1.get_collection("training")
 def save_user(username, email, password,ft_name,la_name,birthday,address,shop_name,type_shop):  #for signup
     password_hash = generate_password_hash(password)
     info_user = {'info': {'username': username, 'email': email, 'password': password_hash, 'ft_name': ft_name, 'la_name': la_name, 'address': address, 'shop_name': shop_name, 'type_shop': type_shop, 'birthday': birthday}}
