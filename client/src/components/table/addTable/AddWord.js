@@ -14,7 +14,7 @@ function AddWord(props) {
     };
     AddWord(data);
   };
-
+  console.log(props.params)
   const AddWord = data => {
     axios
       .post("/train", data)

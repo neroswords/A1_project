@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Styles = styled.div`
@@ -25,27 +25,65 @@ const Styles = styled.div`
 }
 `
 
-export const Facebookform = () => (
-        <Styles>
+export default function Facebookform(props) {
+    const [access_token, setAccess_token] = useState('');
+    const [verify_token, setVerify_token] = useState('');
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const editData = {access_token, verify_token}
+        fetch('/', {
+            method: 'POST',
+            headers : {
+                "Access-Control-Allow-Origin": "*",
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(editData)
+        })
+        // .then( res => res.json())
+        // .then(data=>{
+        //     localStorage.setItem('access_token', data.access_token);
+        //     localStorage.setItem('username', data.username);
+        //     localStorage.setItem('user_id', data.user_id);
+        //     if (localStorage.getItem("access_token") !== null && localStorage.getItem("access_token")!=="undefined") {
+        //       window.location.replace("/")
+        //     }else{
+        //         alert(data.error);  
+        //   }
+        // }).catch(error => console.log(error));
+    }
+
+    useEffect(() => {
+        fetch('/bot/'+props.params.url).then(
+            response => response.json()
+          ).then(data =>{
+            setAccess_token(data.page_facebook_access_token);
+            setVerify_token(data.VERIFY_TOKEN);
+        })
+    }, []);
+
+        return (<Styles>
             <div className="container">
                  <div className="row my-3">
                     <div className="group facebook-card col-lg-12">
-                        <form className="facebook">
+                        <form className="facebook" onSubmit={ handleSubmit }>
                             <div className="row">
                                 <p className="col">Connect to facebook</p>
                                 {/* <i className="col fab fa-facebook"></i> */}
                             </div>
                             <div className="col-lg-12">
                                 <label  className="form-label">Page Facebook access token</label>
-                                <input type="text" className="form-control" id="inputpagefacebook"/>
+                                <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputpagefacebook"/>
                             </div>
                             <div className="col-lg-12 mt-3">
                                 <label  className="form-label">Verify token</label>
-                                <input type="text" className="form-control" id="inputverity"/>
+                                <input type="text" value={ verify_token } onChange={e => setVerify_token(e.target.value)} className="form-control" id="inputverity"/>
                             </div>
+                            <input type='submit'>Submit</input>
                         </form>
                     </div>  
                 </div>
             </div>
         </Styles>
-)
+        )
+}

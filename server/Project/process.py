@@ -7,15 +7,6 @@ import re
 #     print(sentence_get_confident(inp, "มีเสื้อแดงมั้ย"))
 
 
-def process_message(text):                      #แปลงข้อความ
-    formatted_massage = text.lower()
-    if  formatted_massage == "hi":
-        response = "Hello"
-    else:
-        response = "Sorry, I dont know what you mean"
-    return response
-
-
 def checkVariable(ss2):
     flag = []
     endflag = []

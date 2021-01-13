@@ -1,11 +1,11 @@
 
-from flask import Flask, request, abort, render_template, session,url_for,redirect,g,send_from_directory,send_file,Blueprint
+from flask import Flask, request, abort, session,send_from_directory,send_file,Blueprint,jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from pymongo import MongoClient
 from Project.models.user import User
 from Project.extensions import mongo, JSONEncoder
 from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
-from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection,check_bot,find_bot
+# from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection,check_bot,find_bot
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required,
                                 get_jwt_identity, get_raw_jwt)
 profile = Blueprint("profile",__name__)
@@ -50,10 +50,10 @@ def login():
                 login_user(user)
                 access_token = create_access_token(identity=a['username'])
                 refresh_token = create_refresh_token(identity=a['username'])
-                user_id = JSONEncoder().encode(a['_id'])
-                print(a['_id'])
-                print(user_id)
-                return {                 
+                user_id = JSONEncoder().encode(a['_id']).replace('"','')
+                # print(access_token)
+                # print(refresh_token)
+                return {
                         'username': current_user.username,
                         'access_token': access_token,
                         'user_id' : user_id,
@@ -63,3 +63,10 @@ def login():
                 return {"error":"Username or password wrong"}
         else:
             return {"error":"Username is not valid"}
+
+@profile.route('/<user_id>',methods=['GET'])
+def get_user(user_id):
+    bot_collection = mongo.db.bot
+    bot_list =  bot_collection.find({'_id': user_id})
+    print(bot_list)
+    return jsonify(bot_list)

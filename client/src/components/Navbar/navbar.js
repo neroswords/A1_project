@@ -50,8 +50,7 @@ const Log = () =>{
           onClick={() => {
             deleteTokens();
             window.location.replace("/")
-          }}
-        >
+          }}>
           Sign out
         </Button>
         </form>

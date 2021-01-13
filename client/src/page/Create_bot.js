@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import {withRouter, Redirect} from 'react-router-dom'
 
-import { Facebookform } from '../components/form/facebookform';
-import { Lineform } from '../components/form/lineform';
+import Facebookform  from '../components/form/facebookform';
+import Lineform  from '../components/form/lineform';
 
 const Styles = styled.div`
   .container {
@@ -121,6 +122,9 @@ class Create_bot extends React.Component {
     super(props);
 
     this.state = {
+      bot_name: '',
+      gender: '',
+      age: '',
       platform: 'line'
     };
     this.handlelineChange = this.handlelineChange.bind(this);
@@ -145,6 +149,28 @@ class Create_bot extends React.Component {
     evt.preventDefault() ;
     this.setState({ platform: "facebook" });
     console.log(this.state.platform)
+  }
+
+  handleSubmit (evt) {
+    evt.preventDefault();
+    const data = {
+      bot_name: this.state.bot_name,
+      gender : this.state.gender,
+      age : this.state.age,
+      creator : localStorage.getItem('user_id')
+    }
+    fetch('/bot/create',{
+      method : 'POST',
+      headers : {
+        "Access-Control-Allow-Origin": "*",
+        'Content-Type':'application/json'
+      },
+      body : JSON.stringify(data)
+    }).then( res => res.json())
+    // .then(data =>
+      // this.props.history.push('/bot/connect_platform'+ data.bot_id +'/line') 
+    // )
+    return <Redirect to={"/profile/"+localStorage.getItem('user_id')} />
   }
 
     render() {
@@ -227,4 +253,4 @@ class Create_bot extends React.Component {
     }
 }
 
-export default Create_bot;
+export default withRouter(Create_bot);

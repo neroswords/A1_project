@@ -12,23 +12,32 @@ from Project.nlp import sentence_get_confident
 bot = Blueprint("bot",__name__)
 
 
+@bot.route('/create', methods=[ 'POST'])
+def create_new_bot():
+    bot_collection = mongo.db.bot
+    if request.method == 'POST':
+        data = request.get_json()
+        bot_collection.insert({'bot_name':data['bot_name'],'genders':data['genders'],'age':data['age'],'creator':data['creator']})
+        return 200
+        
 
-@bot.route('/connect', methods=['GET', 'POST'])
+@bot.route('/connect', methods=['POST'])
 @login_required
 def connect():
+    bot_collection = mongo.db.bot
     if request.method == 'POST':
-        # print(current_user._id)
-        # username = current_user.username
-        # ch_sc = request.form.get('ch_sc')
-        # ch_ac_tk = request.form.get('ch_ac_tk')
-        # basic_id = request.form.get('basic_id')
-        # pfa_tk = request.form.get('pfa_tk')
-        # vf_tk = request.form.get('vf_tk')
-        # update_connect(username, ch_sc,ch_ac_tk,basic_id,pfa_tk,vf_tk)
+        connect_data = request.get_json()
+        if connect_data['platform'] == 'line':
+            bot_collection.update_one({'creator': connect_data['creator']},
+            {'$set':{'access_token':connect_data['access_token'],
+            'chanel_secret':connect_data['channel_secret'],
+            'basic_id':connect_data['basic_id']}})
+            return 200
+        elif  connect_data['platform'] == 'facebook':
+            bot_collection.update_one({'access_token':connect_data['access_token'],'vertify':connect_data['verify_token']})
+            return 200
         return redirect(url_for('home'))
     elif request.method == 'GET':
-        # gg = find_bot(current_user.username)
-        # print(gg[0]["name_bot"])
         return render_template('connect.html')
 
 @bot.route('/<id>/add_message',methods=["POST"])

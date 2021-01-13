@@ -3,7 +3,6 @@ import requests #
 import json #
 from Project.Config import * #
 from pymessenger import Bot #
-from Project.process import process_message
 from flask_pymongo import PyMongo
 import bcrypt
 from flask_jwt_extended import JWTManager
