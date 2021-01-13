@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
+// import './index.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 import Register from './Page/Register';
@@ -13,19 +14,13 @@ import Mapping from './Page/Mapping';
 import Train from './Page/Train';
 import Create_bot from './Page/Create_bot';
 import AddWord from './components/table/addTable/AddWord';
+import Test_facebook from './Page/test_facebook';
+import Nav from './components/Navbar/real_nav'
 
 function App() {
-  const [initialData, setInitialData] = useState([{}])
-
-  // useEffect(()=>{
-  //   fetch('/api').then(
-  //     response => response.json()
-  //   ).then(data => setInitialData(data))
-  // }, []);
-
   return (
     <Router>
-          <Navbar />
+        <Nav/>
           <Switch>
             <Route path="/" exact component= { Home } />
             <Route path="/register" component={ Register } />
@@ -36,6 +31,7 @@ function App() {
             <Route path="/mapping" component={ Mapping }/>
             <Route path="/add" component={ AddWord }/>
             <Route path="/create_bot" component ={ Create_bot } />
+            <Route path="/test" component ={ Test_facebook } />
           </Switch>
     </Router>
   );

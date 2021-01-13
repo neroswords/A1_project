@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Styles = styled.div` 
   .navbar {
     position: relative;
-    background-color: #14213d;
+    background-color: #000000;
     transition: width 600ms ease;
     overflow: hidden;
     higth: 100%;
@@ -24,6 +24,7 @@ const Styles = styled.div`
   .nav-item {
     width: 100%;
   }
+
   
   // .nav-item:last-child {
   //   margin-top: auto;
@@ -48,12 +49,14 @@ const Styles = styled.div`
   .link-text {
     display: none;
     margin-left: 1rem;
+    font weight: bolder;
   }
   
   .nav-link i {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    font-weight
     min-width: 2rem;
-    margin: 0 1rem;
+    margin: 0 1.5rem;
   }
   
   .fa-primary {
@@ -75,7 +78,7 @@ const Styles = styled.div`
     .navbar {
       top: 0;
       width: 5rem;
-      height:90vh;
+      height:92vh;
     }
   
     .navbar:hover {
@@ -96,6 +99,44 @@ const Styles = styled.div`
   .theme-icon {
     display: none;
   }
+
+  #check {
+    display: none;
+  }
+  
+  label #btn,
+  label #cancel {
+    position: absolute;
+    background: #042331;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  label #btn {
+    left: 40px;
+    top: 25px;
+    font-size: 1px;
+    color: white;
+    padding: 6px 12px;
+    transition: all 0.5s;
+  }
+  
+  label #cancel {
+    z-index: 1111;
+    left: -195px;
+    top: 17px;
+    font-size: 30px;
+    color: white;
+    padding: 4px 9px;
+    transition: all 0.5s ease;
+  }
+  
+  
+  #check:checked ~ label #btn {
+    left: 250px;
+    opacity: 0;
+    pointer-events: none;
+  }
   
 `
 
@@ -111,7 +152,7 @@ function Navbar_member() {
                         
                         </div>
                       </div> */}
-                
+
                       <li className="nav-item">
                         <a href="/train" class="nav-link">
                           <div className="fa-group">
@@ -123,7 +164,7 @@ function Navbar_member() {
                         </a>
                       </li>
                       <li className="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="/group" class="nav-link">
                           <div className="fa-group">
                               <div className="fa-secondary">
                                 <i class="fas fa-object-group"></i>
@@ -133,7 +174,7 @@ function Navbar_member() {
                         </a>
                       </li>
                       <li className="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="/mapping" class="nav-link">
                           <div className="fa-group">
                               <div className="fa-secondary">
                                 <i class="fas fa-project-diagram"></i>
@@ -177,8 +218,7 @@ function Navbar_member() {
                   </nav>
               
           </Styles>
-        )
-    
+        ) 
 }
 
 export default Navbar_member;
