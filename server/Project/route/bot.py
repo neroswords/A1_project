@@ -3,23 +3,16 @@ from flask import Flask, request, abort, render_template, session,url_for,redire
 from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
 from pymessenger import Bot
 from Project.Config import *
+from Project.models.bot import ChatBot
 import json
 import requests
 from Project.message import ReplyMessage, process_message
 from Project.extensions import mongo
 from Project.nlp import sentence_get_confident
+from bson.objectid import Objectid # find by id
 
 bot = Blueprint("bot",__name__)
 
-
-@bot.route('/create', methods=[ 'POST'])
-def create_new_bot():
-    bot_collection = mongo.db.bot
-    if request.method == 'POST':
-        data = request.get_json()
-        bot_collection.insert({'bot_name':data['bot_name'],'genders':data['genders'],'age':data['age'],'creator':data['creator']})
-        return 200
-        
 
 @bot.route('/connect', methods=['POST'])
 @login_required
@@ -39,6 +32,76 @@ def connect():
         return redirect(url_for('home'))
     elif request.method == 'GET':
         return render_template('connect.html')
+
+#create bot
+@bot.route('/create', methods=[ 'POST'])
+def create():
+    bots_collection = mongo.db.bots
+    if request.method == 'POST':
+        bot_info = request.get_json()
+            bot_name = bot_info['name_bot']
+            owner = bot_info['creator'] #ref id คนสร้างมาใส่ตัวแปรนี้
+            gender = bot_info['gender']
+            age = bot_info['age']
+            image = bot_image['image']
+            bots_collection.insert_one({'bot_name': bot_name, 'owner': owner, 'gender' : gender, 'age': age, 'image': image})
+            return "add bot successfully"
+        return "add bot unsuccessfully"
+
+#edit
+@bot.route('/edit/<id>', methods=['GET', 'POST'])
+def edit(id):
+    bots_collection = mongo.db.bots
+ 
+    if request.method == 'POST':
+
+        bot_update = request.get_json()
+
+            bot_name = bot_update['name_bot']
+            chanel_secret = bot_update['ch_sc']
+            chanel_access_token = bot_update['ch_ac_tk']
+            basic_id = bot_update['basic_id']
+            fb_access_token = bot_update['pfa_tk']
+            verify_token = bot_update['vf_tk']
+            #image = bot_update['image']
+
+            info_update = { "$set": {'bot_name': bot_name, 'chanel_secret':  chanel_secret, 'chanel_access_token': chanel_access_token, 'basic_id': basic_id, 'fb_access_token': fb_access_token , 'verify_token': verify_token, 'image' : image}}
+            # bot_id = { "_id": ObjectId (id)}
+            done = bots_collection.update_one({'_id': ObjectId (id)}, info_update)
+            if done:
+                return "Update successfully"
+            else:
+                return "Update unsuccessfully"
+
+    elif request.method == 'GET':
+       bot =  bots_collection.find_one({'_id': ObjectId (id)}) 
+        if bot:
+            bot_info = ChatBot(bot['owner'], bot['bot_name'], bot['chanel_access_token'], bot['chanel_secret'], bot['verify_token'], bot['basic_id'], bot['fb_access_token'],bot['age'],bot['gender'],bot['image'])
+       
+            return bot_info
+        else: 
+            return "Nope"
+
+
+ #delete
+@bot.route('/delete/<id>', methods=['POST'])
+def delete(id):
+    bots_collection = mongo.db.bots
+ 
+    if request.method == 'POST':
+        if  bots_collection.find_one({'_id': ObjectId(id)}):
+            result = bots_collection.delete_one({'_id': ObjectId(id)})
+            if result:
+                return "delete successfully"
+            else:
+                return "delete unsuccessfully"
+        else: 
+            return "There is no this bot in database"
+        
+
+
+
+        
 
 @bot.route('/<id>/add_message',methods=["POST"])
 def add_sentence(id):

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import styled from 'styled-components';
+import {Button} from 'react-bootstrap';
+import {AddWord} from './addTable/AddWord';
+import { AddStyle } from "./AddStyle";
 
 const Styles = styled.div`
 
@@ -30,10 +32,26 @@ const Styles = styled.div`
   background-color: #e5e5e5;
 }
 
+.buttonaddWord{
+  min-width: 30px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: none;
+  background: #ffc15e;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 `;
 
 function Table() {
   const [TableState, setTableState] = useState([]);
+  const [showWord, setShowWord] = useState(false);
+
+  const openWord = () => {
+    setShowWord(prev => !prev);
+  }
 
   useEffect(() => {
     let TableState = [
@@ -41,7 +59,8 @@ function Table() {
         { id: 2, Word: "heyy", ReplyWord: "may i help u" },
         { id: 3, Word: "hello", ReplyWord: "may i help u" }
     ];
-
+  
+    
     setTableState(
       TableState.map(d => {
         return {
@@ -58,13 +77,9 @@ function Table() {
   return (
     <Styles>
       <div className="container">
-
-        <Link to="/add">
-
-          <button type="button"className="btn btn-primary Add-word btn-sm float-right my-3">Add</button>
-
-        </Link> 
-        
+          <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
+          <AddWord showWord={showWord} setShowWord={setShowWord} />
+          <AddStyle />
         <table className="table">
           <thead>
             <tr>
