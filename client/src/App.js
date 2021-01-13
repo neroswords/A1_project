@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+// import './index.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import { PrivateRoute } from "./Private.jsx";
 import { CloseRoute } from "./closeRoute.jsx";
@@ -17,12 +18,13 @@ import Create_bot from './Page/Create_bot';
 import Connect from './Page/Connect_bot'
 import Bot_list from './Page/Bot_list';
 import AddWord from './components/table/addTable/AddWord';
+import Test_facebook from './Page/test_facebook';
+import Nav from './components/Navbar/real_nav'
 
 function App() {
-
   return (
     <Router>
-          <Navbar />
+        <Nav/>
           <Switch>
             <Route path="/" exact component= { Home } />
             <CloseRoute isLoggedIn={isLoggedIn()} path="/register" exact component={ Register } />
@@ -35,6 +37,7 @@ function App() {
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/group" component={ Group }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/mapping" component={ Mapping }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/learned/add" component={ AddWord }/>
+            <Route path="/test" component ={ Test_facebook } />
           </Switch>
     </Router>
   );

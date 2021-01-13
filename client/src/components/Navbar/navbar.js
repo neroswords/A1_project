@@ -1,9 +1,10 @@
-import React from 'react';
+
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import {Button} from "react-bootstrap";
 import {isLoggedIn, deleteTokens} from '../auth';
-
+import React, { useState, useEffect, useRef } from 'react';
+import { CSSTransition } from 'react-transition-group';
 const Styles = styled.div`
 
 
@@ -27,6 +28,10 @@ h1 {
     margin-right: 9rem;
 }
 
+.btn-sign-out {
+    margin-right: 7rem;
+}
+
 .nav {
     height:10vh;
     // box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
@@ -45,8 +50,12 @@ h1 {
 const Log = () =>{
     if(isLoggedIn()){
         return(
-            <form className="d-flex">
-            <Button className=" btn btn-danger"
+            <form className="d-flex ">
+                
+                <div className="user-profile">
+                
+            </div>
+            <Button className="btn btn-danger btn-sign-out"
           onClick={() => {
             deleteTokens();
             window.location.replace("/")

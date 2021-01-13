@@ -7,21 +7,23 @@ const Styles = styled.div`
   .jumbo {
     align-items: center;
     font-family: 'Public Sans', sans-serif;
+    
   }
 
   .container {
     // background: url(${process.env.PUBLIC_URL +'/images/Background.png'}) no-repeat fixed bottom;
     background-size: 100%;
     margin-bottom: 15%;
+    position: relative;
 }
 
-  #main {
+  #main-page {
     margin-top: 150px;
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
   
-  #main .main-text {
+  #main-page .main-text {
     font-size: 20px;
     font-weight: 500;
     line-height: 1.25;
@@ -43,7 +45,7 @@ export const Mainpage = () => (
   <Styles>
     <Container className="container">
     <Jumbo fluid className="jumbo d-flex position-relative">
-        <section id="main">
+        <section id="main-page">
           <div className="main-text">
             <h1>A1 Chatbot</h1>
             <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. <br />Inventore deleniti aliquid  et consectetur corporis eum odit.<br /> Excepturi, repellendus.</span>
