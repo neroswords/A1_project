@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
+import { Link } from "react-router-dom";
 
 const Styles = styled.div`
 .table{
@@ -58,8 +59,11 @@ function Tablecon() {
   return (
     <Styles>
     <div className="container">
-      
+      <Link to="/add">
+
       <button type="button"className="btn btn-primary Add-word btn-sm float-right my-3">Add</button>
+
+      </Link>
       
       <table className="table table-bordered">
         <thead>

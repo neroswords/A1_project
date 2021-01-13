@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import styled from 'styled-components';
 
 const Styles = styled.div`
@@ -59,9 +60,9 @@ function Tablemap() {
   return (
     <Styles>
     <div className="container">
-      
+     
       <button type="button"className="btn btn-primary Add-word btn-sm float-right my-3">Add</button>
-      
+
       <table className="table table-bordered">
         <thead>
           <tr>
