@@ -1,16 +1,33 @@
 def process_message(message,botID,min_conf):
     training_collection = mongo.db.training
+    trained_collection = mongo.db.trained
     bot_collection = mongo.db.bots
-    similar_word = training_collection.find({'botID':botID})
     max = 0
     ans = ''
+    flax = 0
+    similar_word = trained_collection.find({'botID':botID})
     for word in similar_word:
         conf = sentence_get_confident(message,word['question'])
         if conf == False : break
-        if conf > max:
+        if conf >= 1:
             max = conf
             ans = word
-    training_collection.insert_one({'question': text, 'answer': ans, 'confident': max})
+            flax = 2
+        elif conf >= max:
+            max = conf
+            ans = word 
+            flax = 1          
+    if(flax == 1):
+        similar_word = training_collection.find({'botID':botID})
+        for word in similar_word:
+            conf = sentence_get_confident(message,word['question'])
+            if conf == False : break
+            if conf > max:
+                max = conf
+                ans = word
+                flax = 2
+    if(flax == 2):
+        training_collection.insert_one({'question': text, 'answer': ans, 'confident': max})
     if (max < min_conf):
         ans = "ขอโทษครับ ผมยังไม่เข้าใจคำนี้ครับกำลังศึกษาอยู่"
     return ans,max
