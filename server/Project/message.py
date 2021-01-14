@@ -27,7 +27,7 @@ def process_message(message,botID,min_conf):
                 ans = word
                 flax = 2
     if(flax == 2):
-        training_collection.insert_one({'question': text, 'answer': ans, 'confident': max})
+        training_collection.insert_one({'question': message, 'answer': ans, 'confident': max})
     if (max < min_conf):
         ans = "ขอโทษครับ ผมยังไม่เข้าใจคำนี้ครับกำลังศึกษาอยู่"
     return ans,max
