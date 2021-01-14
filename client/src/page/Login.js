@@ -46,6 +46,54 @@ const Styles = styled.div`
     border-radius: 1rem;
   }
 
+  .btn-login .btn {
+    margin-top:15%;
+    text-align: center;
+    align-item: center;
+  }
+
+  @mixin transition($property: all, $duration: 0.5s, $ease: cubic-bezier(0.65,-0.25,0.25, 1.95)) {
+    transition: $property $duration $ease;
+  }
+  
+  .btn-login button {
+    text-align: center;
+    align-item: center;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    &.btn-inlogin {
+      @include transition(all, 0.5s, cubic-bezier(0.65,-0.25,0.25,1.95));
+      font-weight: 900;
+      color: $black;
+      padding: 1.25rem 2rem;
+      background: $white;
+      text-transform: uppercase;
+      &:hover, &:focus, &:active {
+        letter-spacing: 0.4rem;
+      }
+    }
+  }
+  
+  // @supports (display: grid) {
+  //   body {
+  //     display: grid;
+  //     grid-template-columns: repeat(4, 1fr);
+  //     grid-gap: 0.625rem;
+  //     grid-template-areas: ". main main ." ". main main .";
+  //   }
+    
+  //   .btn-login {
+  //     grid-area: main;
+  //     align-self: center;
+  //     justify-self: center;
+  //   }
+  // }
+
 `;
 class Login extends React.Component {
   constructor(props) {
@@ -108,8 +156,8 @@ class Login extends React.Component {
                                   <label for="floatingPassword">Password</label>
                                 </div>
 
-                                <div className="btn-login my-4">
-                                    <button class="btn btn-primary text-uppercase" type="submit" onClick={this.handleSignIn}>Log in</button>
+                                <div className="btn-login col-lg-9 col-md-12 col-sm-12 col-xs-12 ms-5">
+                                    <button class="btn btn-primary text-uppercase btn-inlogin " type="submit" onClick={this.handleSignIn}>Log in</button>
                                 </div>
                                 <hr className="my-4"/>
                                 

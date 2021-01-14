@@ -1,0 +1,237 @@
+ :root {
+    --bg:  white;
+     --bg-accent: #f4f4f4;
+     --text-color: #232032;
+     --nav-size: 60px;
+     --border: 1px solid ;
+     --border-radius: 8px;
+     --speed: 500ms; 
+   }
+  
+ .navbar-nav-real ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+  }
+  
+ .icon-button-real a {
+    color: var(--text-color);
+    text-decoration: none;
+  }
+  
+  /* Top Navigation Bar */
+  
+  /* <nav> */
+  .navbar-real {
+    height: 8vh;
+    background-color: white;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    
+    /* border-bottom: var(--border); */
+    /* box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1); */
+  }
+  .navbar-real ul {
+    right: auto;
+  }
+
+  .show-user {
+    width: calc(var(--nav-size) * 0.8);
+    align-items: center;
+    justify-content: center;
+    display: flex; 
+    text-align: -webkit-match-parent;
+    margin-right: 55%;
+    
+  }
+
+  .show-user:hover a{
+    background-color: #c1d7ea;
+  }
+
+  .show-user i {
+    margin-right: 15%;
+    align-items: baseline;
+  }
+
+  .show-user a{
+    /* width: auto;
+    height: auto; */
+    padding: 4px 40px;
+    margin: 2px;
+    background-color: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    border-radius: 3rem;
+    border: 1px solid #c1d7ea	;
+    text-decoration: none;
+    color: #14213d;
+  }
+
+  .nav_brand {
+    width: 40vh;
+}
+  /* <ul> */
+  .navbar-nav-real {
+    max-width: 100%;
+    height: 100%;
+    justify-content: flex-end;
+    display: flex; 
+  }
+  
+  /* <li> */
+  .nav-item-real {
+    width: calc(var(--nav-size) * 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+  }
+  
+  /* Icon Button */
+  .icon-button-real {
+    --button-size: calc(var(--nav-size) * 0.6);
+    width: var(--button-size);
+    height: var(--button-size);
+    background-color: #F2F2F0;
+    border-radius: 50%;
+    padding: 5px;
+    margin: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: filter 300ms;
+  }
+  
+  .icon-button-real:hover {
+    filter: brightness(1.2);
+  }
+  
+  .icon-button-real svg { 
+    fill: var(--text-color);
+    width: 20px;
+    height: 20px;
+  }
+  
+  .signout-icon  {
+    /* fill: var(--text-color); */
+    font-size: 20px 20px;
+    color: #f40000;
+  }
+  
+  /* Dropdown Menu */
+  
+  .dropdown-real {
+    position: absolute;
+    top: 58px;
+    width: 300px;
+    height: auto;
+    transform: translateX(-45%);
+    background-color: var(--bg);
+    /* border: var(--border); */
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    overflow: hidden;
+    transition: height var(--speed) ease;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    position: fixed;
+    z-index: 1000;
+  }
+  
+  .menu-real {
+    width: 100%;
+  }
+  
+  .menu-item-real {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    border-radius: var(--border-radius);
+    transition: background var(--speed);
+    padding: 0.5rem;
+    color: var(--text-color);
+    text-decoration: none;
+  }
+  
+  .menu-item-real .icon-button-real {
+    margin-right: 0.5rem;
+  }
+  
+  
+  .menu-item-real .icon-button-real:hover {
+    filter: none;
+  }
+  
+  .menu-item-real:hover {
+    background-color: #F4F3F3;
+    color: #232032;
+    
+  }
+  
+  .icon-right-real {
+    margin-left: auto;
+  }
+  
+  /* CSSTransition classes  */
+  .menu-primary-enter {
+    position: absolute;
+    transform: translateX(-110%);
+    
+  }
+  .menu-primary-enter-active {
+    transform: translateX(0%);
+    transition: all var(--speed) ease;
+
+  }
+  .menu-primary-exit {
+    position: absolute;
+  }
+  .menu-primary-exit-active {
+    transform: translateX(-110%);
+    transition: all var(--speed) ease;
+  }
+  
+  
+  .menu-secondary-enter {
+    transform: translateX(110%);
+  }
+  .menu-secondary-enter-active {
+    transform: translateX(0%);
+    transition: all var(--speed) ease;
+  }
+
+  .menu-secondary-exit-active {
+    transform: translateX(110%);
+    transition: all var(--speed) ease;
+  }
+
+  .btn-nav a {
+    border-radius: 3rem;
+    font-weight: bold;
+    transition: all 0.2s;
+    width: 100%;
+    text-transform : uppercase;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 10%;
+}
+
+  .btn-login {
+    margin-left: 2rem;
+    margin-right: 9rem;
+    margin-top: 1%;
+  }
+
+.btn-signup {
+  border-style: none;
+}

@@ -7,6 +7,8 @@ const Styles = styled.div`
   }
 
   .card-regis {
+    margin-top: 8%;
+    margin-bottom: 10%;
     border: 0;
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
@@ -33,19 +35,53 @@ const Styles = styled.div`
     padding: 0.5rem;
   }
 
-   .btn {
+  .form-regis .btn {
+    margin-left: 10%;
     border-radius: 1rem;
-    letter-spacing: .1rem;
+    letter-spacing: 0.1rem;
     font-weight: bold;
     padding: 0.75rem;
     transition: all 0.2s;
-    width: 100%;
+    width: 80%;
+    text-align: center;
+    align-item: center;
   }
 
+  .btn-regis .btn {
+    text-align: center;
+    align-item: center;
+  }
 
-    label {
-        font-weight: 
+  @mixin transition($property: all, $duration: 0.5s, $ease: cubic-bezier(0.65,-0.25,0.25, 1.95)) {
+    transition: $property $duration $ease;
+  }
+  
+  .btn-regis button {
+    text-align: center;
+    align-item: center;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    &.btn-inregis {
+      @include transition(all, 0.5s, cubic-bezier(0.65,-0.25,0.25,1.95));
+      font-weight: 900;
+      color: $black;
+      padding: 1rem 1rem;
+      background: $white;
+      text-transform: uppercase;
+      &:hover, &:focus, &:active {
+        letter-spacing: 0.4rem;
+      }
     }
+  }
+
+    // label {
+    //     font-weight: 
+    // }
 
   .title_part {
       margin-top: 4rem;
@@ -213,8 +249,8 @@ class Register extends React.Component {
                                   ตามที่ระบุไว้ 
                                 </label>
                               </div>                                
-                              <div className="btn-login">
-                                  <button className="btn btn-primary text-uppercase" type="submit" onClick={this.handleSubmit} >register</button>
+                              <div className="btn-regis">
+                                  <button className="btn btn-primary text-uppercase btn-inregis" type="submit" onClick={this.handleSubmit} >register</button>
                               </div>
                               <hr className="my-4"/>
                               <div align="center">

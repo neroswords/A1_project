@@ -4,7 +4,7 @@ import Navbar_member from '../components/Navbar/navbar_member';
 import styled from 'styled-components';
 
 const Styles = styled.div` 
-.pop {
+.learned-page {
     display: flex;
 }
 .container {
@@ -15,7 +15,7 @@ const Styles = styled.div`
 function Learned(){
     return(
         <Styles>
-        <div className="pop">
+        <div className="learned-page">
             <Navbar_member />
             <div className="container">
                 
