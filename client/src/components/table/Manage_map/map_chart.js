@@ -22,7 +22,7 @@ const ModalWrapper = styled.div`
   position: absolute;
   z-index: 10;
   border-radius: 10px;
-  transform: translate(30%, -10%);
+  transform: translate(-120%, -45%);
   // align-items: center;
   // grid-template-columns: 1fr 1fr;
   // position: absolute;
@@ -60,31 +60,31 @@ const CloseModalButton = styled(MdClose)`
 `;
 
 
-export const AddWord = ({ showWord, setShowWord}) => {
+export const Map_chart = ({ showMap, setShowMap}) => {
   const modalRef = useRef();
 
   const animation = useSpring({
     config: {
       duration: 250
     },
-    opacity: showWord ? 1 : 0,
-    transform: showWord ? `translateY(0%)` : `translateY(-100%)`
+    opacity: showMap ? 1 : 0,
+    // transform: showMap ? `translateY(0%)` : `translateY(-100%)`
   });
 
   const closeModal = e => {
     if (modalRef.current === e.target) {
-      setShowWord(false);
+      setShowMap(false);
     }
   };
 
   const keyPress = useCallback(
     e => {
-      if (e.key === 'Escape' && showWord) {
-        setShowWord(false);
+      if (e.key === 'Escape' && showMap) {
+        setShowMap(false);
         console.log('I pressed');
       }
     },
-    [setShowWord, showWord]
+    [setShowMap, showMap]
   );
 
   useEffect(
@@ -97,38 +97,17 @@ export const AddWord = ({ showWord, setShowWord}) => {
 
   return(
     <div>
-    {showWord ? (
+    {showMap ? (
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
             <Container className="col-sm-10 col-md-9">
-            <ModalWrapper showWord={showWord}>
+            <ModalWrapper showMap={showMap}>
               <ModalContent>
-              <Form.Group>
-                <h1>Add youe Question and Answer</h1>
-                <Form.Row>
-                <Form.Label column>
-                  Question
-                </Form.Label>
-                <Col>
-                  <Form.Control type="text" placeholder="Question" />
-                </Col>
-                </Form.Row>
-                <br />
-                <Form.Row>
-                <Form.Label column>
-                  Answer
-                </Form.Label>
-                <Col>
-                  <Form.Control type="text" placeholder="Answer" />
-                </Col>
-                </Form.Row>
-                <br />
-              </Form.Group>
-              <Button className="qa-comfirm" variant="success">Comfirm</Button>
+                  <h1>Hiiii</h1>
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"
-                onClick={() => setShowWord(prev => !prev)}
+                onClick={() => setShowMap(prev => !prev)}
               />
             </ModalWrapper>
             </Container>
@@ -141,4 +120,4 @@ export const AddWord = ({ showWord, setShowWord}) => {
   
 };
 
-export default AddWord;
+export default Map_chart;

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
-import { Link } from "react-router-dom";
+import {Button} from 'react-bootstrap';
+import {AddWord} from './addTable/AddWord';
+import { AddStyle } from "./AddStyle";
+
 
 const Styles = styled.div`
 .table{
@@ -30,10 +33,27 @@ const Styles = styled.div`
 .table tbody tr:nth-of-type(even){
   background-color: #e5e5e5;
 }
+
+.buttonaddWord{
+  min-width: 30px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: none;
+  background: #ffc15e;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
 `;
 
 function Tablecon() {
   const [TableconState, setTableconState] = useState([]);
+  const [showWord, setShowWord] = useState(false);
+
+
+ const openWord = () => {
+    setShowWord(prev => !prev);
+  }
 
   useEffect(() => {
     let TableconState = [
@@ -59,11 +79,9 @@ function Tablecon() {
   return (
     <Styles>
     <div className="container">
-      <Link to="/add">
-
-      <button type="button"className="btn btn-primary Add-word btn-sm float-right my-3">Add</button>
-
-      </Link>
+          <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
+          <AddWord showWord={showWord} setShowWord={setShowWord} />
+          <AddStyle />
       
       <table className="table table-bordered">
         <thead>
