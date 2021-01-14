@@ -48,7 +48,7 @@ export default function Lineform(props) {
     }
 
     useEffect(() => {
-        fetch('/bot/'+props.params.url).then(
+        fetch('/bot/'+localStorage.getItem('user_id')).then(
             response => response.json()
           ).then(data =>{
             setAccess_token(data.page_facebook_access_token);

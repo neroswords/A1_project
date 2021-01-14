@@ -79,8 +79,9 @@ function NavItem(props) {
 
 
 function DropdownMenu() {
-  const [activeMenu, setActiveMenu] = useState('signout');
+  const [activeMenu, setActiveMenu] = useState('profile');
   const [menuHeight, setMenuHeight] = useState(null);
+  const [username, setUsername] = useState(localStorage.getItem('user_id'));
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -135,14 +136,14 @@ function DropdownMenu() {
             goToMenu="animals">
             Animals
           </DropdownItem> */}
-          <DropdownItem 
+          {/* <DropdownItem goToMenu="profile"
             leftIcon= {<i class="fas fa-user"></i>}>
               Edit Profile
-          </DropdownItem>
-          <DropdownItem 
+          </DropdownItem> */}
+          {/* <DropdownItem 
             leftIcon= {<i class="fas fa-book-open"></i>}>        
             Manual
-          </DropdownItem>
+          </DropdownItem> */}
           <DropdownItem goToMenu="signout"
             leftIcon= {<i className="fas fa-sign-out-alt signout-icon" >
               </i>}>
@@ -151,40 +152,40 @@ function DropdownMenu() {
         </div>
       </CSSTransition>
 
-      {/* <CSSTransition
-        in={activeMenu === 'settings'}
-        timeout={500}
-        classNames="menu-secondary"
-        unmountOnExit
-        onEnter={calcHeight}>
-        <div className="menu-real">
-          <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
-            <h2>My Tutorial</h2>
-          </DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>HTML</DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>CSS</DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>JavaScript</DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>Awesome!</DropdownItem>
-        </div>
-      </CSSTransition>
-
       <CSSTransition
-        in={activeMenu === 'animals'}
+        in={activeMenu === 'profile'}
         timeout={500}
         classNames="menu-secondary"
         unmountOnExit
-        onEnter={calcHeight}>
+        onClick={() => {
+          window.location.replace('/bot_list/'+username)
+          }}>
         <div className="menu-real">
-          <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
-            <h2>Animals</h2>
+        <DropdownItem goToMenu="profile"
+            leftIcon= {<i class="fas fa-user"></i>}>
+              Edit Profile
           </DropdownItem>
-          <DropdownItem leftIcon="🦘">Kangaroo</DropdownItem>
-          <DropdownItem leftIcon="🐸">Frog</DropdownItem>
-          <DropdownItem leftIcon="🦋">Horse?</DropdownItem>
-          <DropdownItem leftIcon="🦔">Hedgehog</DropdownItem>
         </div>
-      </CSSTransition> */}
+      </CSSTransition> 
     </div>
+
+      // <CSSTransition
+      //   in={activeMenu === 'settings'}
+      //   timeout={500}
+      //   classNames="menu-secondary"
+      //   unmountOnExit
+      //   onEnter={calcHeight}>
+      //   <div className="menu-real">
+      //     <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
+      //       <h2>My Tutorial</h2>
+      //     </DropdownItem>
+      //     <DropdownItem leftIcon={<BoltIcon />}>HTML</DropdownItem>
+      //     <DropdownItem leftIcon={<BoltIcon />}>CSS</DropdownItem>
+      //     <DropdownItem leftIcon={<BoltIcon />}>JavaScript</DropdownItem>
+      //     <DropdownItem leftIcon={<BoltIcon />}>Awesome!</DropdownItem>
+      //   </div>
+      // </CSSTransition> 
+
    
   );
 }

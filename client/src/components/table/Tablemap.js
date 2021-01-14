@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
-import { Link } from "react-router-dom";
+
 const Styles = styled.div`
 .table{
   border-collapse: collapse;
@@ -50,8 +50,7 @@ function Tablemap() {
           id: d.id,
           Word: d.Word,
           ReplyWord: d.ReplyWord,
-          
-         
+        
         };
       })
     );

@@ -28,7 +28,7 @@ const Styles = styled.div`
 export default function Facebookform(props) {
     const [access_token, setAccess_token] = useState('');
     const [verify_token, setVerify_token] = useState('');
-
+    console.log(props)
     const handleSubmit = (event) => {
         event.preventDefault();
         const editData = {access_token, verify_token}

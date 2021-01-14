@@ -125,12 +125,17 @@ class Create_bot extends React.Component {
       bot_name: '',
       gender: '',
       age: '',
-      platform: 'line'
+      platform: 'line',
+      redirect: false,
+      bot_id:''
     };
     this.handlelineChange = this.handlelineChange.bind(this);
     this.handlefacebookChange = this.handlefacebookChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
-  
+
+    
+
   renderSwitch(param) {
     switch(param) {
       case 'facebook':
@@ -150,10 +155,14 @@ class Create_bot extends React.Component {
     this.setState({ platform: "facebook" });
     console.log(this.state.platform)
   }
+  handleChange (evt) {
+    this.setState({ [evt.target.name]: evt.target.value });
+    console.log(this.state)
+  }
 
-  handleSubmit (evt) {
-    evt.preventDefault();
-    const data = {
+  handleSubmit= (evt) => {
+    evt.preventDefault() ;
+    const form = {
       bot_name: this.state.bot_name,
       gender : this.state.gender,
       age : this.state.age,
@@ -165,91 +174,102 @@ class Create_bot extends React.Component {
         "Access-Control-Allow-Origin": "*",
         'Content-Type':'application/json'
       },
-      body : JSON.stringify(data)
-    }).then( res => res.json())
+      body : JSON.stringify(form)
+    }).then( res => res.json()).
+    then(data => {
+      this.setState({ bot_id : data.id})
+      this.setState({ redirect: true }) 
+    }
+    );
     // .then(data =>
       // this.props.history.push('/bot/connect_platform'+ data.bot_id +'/line') 
     // )
-    return <Redirect to={"/profile/"+localStorage.getItem('user_id')} />
+    
   }
-
+  // "/profile/"+localStorage.getItem('user_id')
     render() {
-      return(
-        <Styles>
-              <div className="container">
-                    <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
-                      <div className="card card-bot">
-                        <div className="card-body">
-                          <h5 className="card-title text-center">Create Bot form</h5>
-                          <form className="form-bot">
-                                <div className="title_part">
-                                        <p className="col">Bot infomation</p>
-                                        <div className="line"></div>
-                                </div>
-                                <div className="row">
-                                        <div className="group col-lg-6">
-                                          <div className="showimage col-lg-8">
-                                                <img src='./images/Avatar.jpg'/>                                    
-                                          </div>
-                                          <div className="mt-3">                                           
-                                              <label for="uploadimage">Upload Proflie</label>
-                                              <input type="file" className="form-control-file mt-2"name="image"/>
-                                            </div>
-                                        </div>  
-                                        <div className=" group col-lg-6">
-                                            <div className="">
-                                              <label  className="form-label">Bot Name</label>
-                                              <input type="text" className="form-control" id="inputbotname"/>
-                                            </div>
-                                            <div class="mt-3">
-                                              <label for="inputgender" class="form-label">Gender</label>
-                                              <select id="inputgender" class="form-select">
-                                                  <option selected>Choose...</option>
-                                                  <option>Male</option>
-                                                  <option>Female</option>
-                                              </select>
-                                            </div>
-                                            <div className="mt-3">
-                                                <label for="inputFirstname" className="form-label">Age</label>
-                                                <input type="Age" className="form-control" id="inputfirstname" />
-                                            </div>
-                                        </div>
-                                </div>
-                                <div className="row row-2">
-                                        
-                                </div>
-                                <div className="title_part">
-                                        <p className="col ">Connect platform</p>
-                                        <div className="line"></div>
-                                </div>
-                                <div className="connect_platform">
-                                  <div className="row col-lg-12">
-                                      <div className="col-lg-6">
-                                          <button className="btn btn-primary text-uppercase" onClick={this.handlefacebookChange} type="">facebook</button>
-                                      </div>
-                                      <div className="col-lg-6">
-                                          <button className="btn btn-success btn-line text-uppercase" onClick={this.handlelineChange} type="">line</button>
-                                      </div>
+      const { redirect,bot_id } = this.state;
+      if (redirect) {
+        return <Redirect to={"/bot/"+ bot_id +"/connect"} />
+      }
+      else {
+        return(
+          <Styles>
+                <div className="container">
+                      <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
+                        <div className="card card-bot">
+                          <div className="card-body">
+                            <h5 className="card-title text-center">Create Bot form</h5>
+                            <form className="form-bot">
+                                  <div className="title_part">
+                                          <p className="col">Bot infomation</p>
+                                          <div className="line"></div>
                                   </div>
+                                  <div className="row">
+                                          <div className="group col-lg-6">
+                                            <div className="showimage col-lg-8">
+                                                  <img src='./images/Avatar.jpg'/>                                    
+                                            </div>
+                                            <div className="mt-3">                                           
+                                                <label for="uploadimage">Upload Proflie</label>
+                                                <input type="file" className="form-control-file mt-2"name="image"/>
+                                              </div>
+                                          </div>  
+                                          <div className=" group col-lg-6">
+                                              <div className="">
+                                                <label  className="form-label">Bot Name</label>
+                                                <input type="text" name="bot_name" value={this.state.bot_name} onChange={this.handleChange} className="form-control" id="inputbotname"/>
+                                              </div>
+                                              <div class="mt-3">
+                                                <label for="inputgender" class="form-label">Gender</label>
+                                                <select id="inputgender" name="gender" value={this.state.gender} onChange={this.handleChange} class="form-select">
+                                                    <option selected>Choose...</option>
+                                                    <option>Male</option>
+                                                    <option>Female</option>
+                                                </select>
+                                              </div>
+                                              <div className="mt-3">
+                                                  <label for="inputFirstname" className="form-label">Age</label>
+                                                  <input type="integer" name="age" className="form-control" id="inputfirstname" value={this.state.age} onChange={this.handleChange} />
+                                              </div>
+                                          </div>
+                                  </div>
+                                  <div className="row row-2">
+                                          
+                                  </div>
+                                  {/* <div className="title_part">
+                                          <p className="col ">Connect platform</p>
+                                          <div className="line"></div>
+                                  </div>
+                                  <div className="connect_platform">
+                                    <div className="row col-lg-12">
+                                        <div className="col-lg-6">
+                                            <button className="btn btn-primary text-uppercase" onClick={this.handlefacebookChange} type="">facebook</button>
+                                        </div>
+                                        <div className="col-lg-6">
+                                            <button className="btn btn-success btn-line text-uppercase" onClick={this.handlelineChange} type="">line</button>
+                                        </div>
+                                    </div>
+                                  </div> */}
+
+                              {/* {this.renderSwitch(this.state.platform)} */}
+                              {/* <Lineform />                                 */}
+
+                                <div className="btn-createbot">
+                                    <button className="btn btn-success text-uppercase" onClick={this.handleSubmit} type="submit">Create ChatBot</button>
                                 </div>
 
-                            {this.renderSwitch(this.state.platform)}
-                            {/* <Lineform />                                 */}
 
-                              <div className="btn-createbot">
-                                  <button className="btn btn-success text-uppercase" type="submit">Create ChatBot</button>
-                              </div>
-
-
-                          </form>
-                          
+                            </form>
+                            
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    
-                </div>
-        </Styles>
-      )
+                      
+                  </div>
+          </Styles>
+        )
+      }
     }
 }
 
