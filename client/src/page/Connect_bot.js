@@ -27,14 +27,37 @@ const Styles = styled.div`
 }
 `
 
+                                
+export default function connectForm(props){
+    const[platform,SetPlatform] = useState('');
+    return(
+        <>
+            <div className="title_part">
+                <p className="col ">Connect platform</p>
+                    <div className="line"></div>
+            </div>
+            <div className="connect_platform">
+                <div className="row col-lg-12">
+                    <div className="col-lg-6">
+                        <button className="btn btn-primary text-uppercase" onClick={()=>SetPlatform('facebook')} >facebook</button>
+                    </div>
+                    <div className="col-lg-6">
+                        <button className="btn btn-success btn-line text-uppercase" onClick={()=>SetPlatform('line')} >line</button>
+                    </div>
+                </div>
+            </div>
+            {renderSwitch(platform)}
+        </>
+    )
+}
 
-export default function Connect(props){
-    if(props.match.params.platform == 'line'){
+function renderSwitch(props){
+    if(props == 'line'){
         return(
             Lineform(props.match.params.bot_id)
         )
     }
-    else if(props.match.params.platform == 'facebook'){
+    else if(props == 'facebook'){
         return(
             Facebookform(props.match.params.bot_id)
         )
