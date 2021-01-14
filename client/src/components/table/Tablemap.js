@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import styled from 'styled-components';
-import { Link } from "react-router-dom";
+
 const Styles = styled.div`
 .table{
   border-collapse: collapse;
@@ -35,12 +34,17 @@ const Styles = styled.div`
 
 function Tablemap() {
   const [TablemapState, setTablemapState] = useState([]);
+  const [showMap, setShowMap] = useState(false);
+
+  const openMap = () => { 
+    setShowMap(prev => !prev);
+  }
 
   useEffect(() => {
     let TablemapState = [
-        { id: 1, Word: "hiii", ReplyWord: "may i help u" },
-        { id: 2, Word: "heyy", ReplyWord: "may i help u" },
-        { id: 3, Word: "hello", ReplyWord: "may i help u" }
+        { id: 1, Word: "hiii", ReplyWord: "may i help u"},
+        { id: 2, Word: "heyy", ReplyWord: "may i help u"},
+        { id: 3, Word: "hello", ReplyWord: "may i help u"}
     ];
 
     setTablemapState(
@@ -50,7 +54,7 @@ function Tablemap() {
           id: d.id,
           Word: d.Word,
           ReplyWord: d.ReplyWord,
-          
+          Link: false,
          
         };
       })
@@ -101,7 +105,9 @@ function Tablemap() {
                 <button className="btn btn-outline-success" type="submit">Search</button>
                 </form>  
                 </td>
-                <td></td>
+                <td>
+                <i className="far fa-edit" onClick={openMap}></i>
+                </td>
                 
             </tr>
           {TablemapState.map((d, i) => (
@@ -125,7 +131,11 @@ function Tablemap() {
               </th>
               <td>{d.Word}</td>
               <td>{d.ReplyWord}</td>
-              <td></td>
+              <td>
+                {/* <Button className='buttonaddWord' onClick={openMap}>edit</Button> */}
+                <i className="far fa-edit" onClick={openMap}></i>
+                <Map_chart showMap={showMap} setShowMap={setShowMap} />
+              </td>
             </tr>
           ))}
         </tbody>
