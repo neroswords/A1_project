@@ -4,13 +4,13 @@ import styled from 'styled-components';
 // import Telephone from './images/Telephone.png';
 
 const Styles = styled.div`
-  .jumbo {
+  .home .jumbo {
     align-items: center;
     font-family: 'Public Sans', sans-serif;
     
   }
 
-  .container {
+  .home .container {
     // background: url(${process.env.PUBLIC_URL +'/images/Background.png'}) no-repeat fixed bottom;
     background-size: 100%;
     margin-bottom: 15%;
@@ -43,6 +43,7 @@ const Styles = styled.div`
 
 export const Mainpage = () => (
   <Styles>
+    <div className="home" >
     <Container className="container">
     <Jumbo fluid className="jumbo d-flex position-relative">
         <section id="main-page">
@@ -54,6 +55,7 @@ export const Mainpage = () => (
         </section>
     </Jumbo>
     </Container>
+    </div>
   </Styles>
 ) 
 

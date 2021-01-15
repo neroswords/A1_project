@@ -1,5 +1,4 @@
 import React,{ useState } from 'react';
-
 import {Button, Collapse } from 'react-bootstrap';
 import { CardList } from '../components/Landing/cardList';
 import { Mainpage } from '../components/Landing/Mainpage';
