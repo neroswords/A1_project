@@ -13,9 +13,7 @@ profile = Blueprint("profile",__name__)
 
 @profile.route('/signup', methods=[ 'POST'])
 def signup():
-    users_collection = mongo.db.users
- 
-    
+    users_collection = mongo.db.users    
     if request.method == 'POST':
         user_info = request.get_json()
         print(user_info)
@@ -66,7 +64,9 @@ def login():
 
 @profile.route('/<user_id>',methods=['GET'])
 def get_user(user_id):
+    bot_list = []
     bot_collection = mongo.db.bot
-    bot_list =  bot_collection.find({'_id': user_id})
-    print(bot_list)
+    bot_cursor =  bot_collection.find({'_id': user_id})
+    for bot in bot_cursor:
+        bot_list.append(bot)
     return jsonify(bot_list)

@@ -22,7 +22,12 @@ const ModalWrapper = styled.div`
   position: absolute;
   z-index: 10;
   border-radius: 10px;
-  transform: translate(30%, -55%);
+  transform: translate(30%, -70%);
+  // align-items: center;
+  // grid-template-columns: 1fr 1fr;
+  // position: absolute;
+  // top: 50%;
+  // left: 50%;
 `;
 
 const ModalContent = styled.div`

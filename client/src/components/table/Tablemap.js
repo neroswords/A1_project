@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import {Link} from "react-router-dom";
+import {Map_chart} from "./Manage_map/map_chart";
 import styled from 'styled-components';
 import { Mapchart } from "./Manage_map/Mapchart";
 
@@ -57,7 +59,6 @@ function Tablemap() {
           Word: d.Word,
           ReplyWord: d.ReplyWord,
           Link: false,
-         
         };
       })
     );
@@ -134,11 +135,10 @@ function Tablemap() {
               <td>
                 {/* <Button className='buttonaddWord' onClick={openMap}>edit</Button> */}
                 <i className="far fa-edit" onClick={openMap}></i>
-               
               </td>
             </tr>
           ))}
-           <Mapchart showMap={showMap} setShowMap={setShowMap} />
+          <Map_chart showMap={showMap} setShowMap={setShowMap} />
         </tbody>
       </table>
     </div>

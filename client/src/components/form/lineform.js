@@ -29,7 +29,7 @@ export default function Lineform(props) {
     const [access_token, setAccess_token] = useState('');
     const [channel_secret, setChannel_secret] = useState('');
     const [basic_id, setBasic_id] = useState('');
-
+    console.log(props)
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -48,7 +48,7 @@ export default function Lineform(props) {
     }
 
     useEffect(() => {
-        fetch('/bot/'+props.params.url).then(
+        fetch('/bot/'+localStorage.getItem('user_id')).then(
             response => response.json()
           ).then(data =>{
             setAccess_token(data.page_facebook_access_token);
@@ -79,6 +79,7 @@ export default function Lineform(props) {
                                     <label  className="form-label">Basic ID</label>
                                     <input type="text" value={basic_id} onChange={e => setBasic_id(e.target.value)} className="form-control" id="inputbotname"/>
                                 </div>
+                                <button type='submit'>Submit</button>
                             </form>
                         </div>  
                     </div>

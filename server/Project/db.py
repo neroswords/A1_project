@@ -1,14 +1,8 @@
-
 from werkzeug.security import generate_password_hash
-
-from Project.user import User
-from Project.bot import Bot
 from Project.training import Training
-=======
 from pymongo import MongoClient
-from Project.models.user import User
+# from Project.models.user import User
 from Project.models.bot import ChatBot
-from Project.models.training import Training
 
 
 client = MongoClient("mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority")

@@ -22,7 +22,7 @@ function Normal_nav(){
       <Link to="/register">
           <div className="btn-signup btn-nav">
               <a className="btn btn-outline-secondary" role="button">Register</a>
-          </div>    
+          </div>
       </Link>
       <Link to="/login">
           <div className="btn-login me-5 btn-nav">
@@ -68,7 +68,7 @@ function NavItem(props) {
   return (
     
     <li className="nav-item-real">
-      <a href="#" className="icon-button-real" onClick={() => setOpen(!open)}>
+      <a href="/#" className="icon-button-real" onClick={() => setOpen(!open)}>
         {props.icon}
       </a>
 
@@ -79,19 +79,9 @@ function NavItem(props) {
 
 
 function DropdownMenu() {
-  const [activeMenu, setActiveMenu] = useState('signout');
-  const [menuHeight, setMenuHeight] = useState(null);
+  const [activeMenu, setActiveMenu] = useState('main');
+  const [username, setUsername] = useState(localStorage.getItem('user_id'));
   const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    setMenuHeight(dropdownRef.current?.firstChild.offsetHeight)
-  }, [])
-
-  function calcHeight(el) {
-    const height = el.offsetHeight;
-    setMenuHeight(height);
-  }
-
 
   function DropdownItem(props) {
     return (
@@ -114,14 +104,11 @@ function DropdownMenu() {
         unmountOnExit
         onEnter={calcHeight}> */}
       <CSSTransition
-      in={activeMenu === 'signout'}
+      in={activeMenu === 'main'}
       timeout={500}
       classNames="menu-primary"
       unmountOnExit
-      onClick={() => {
-        deleteTokens();
-        window.location.replace("/")
-        }}>
+      >
         <div className="menu-real">
           {/* <DropdownItem
             leftIcon={<CogIcon />}
@@ -135,57 +122,36 @@ function DropdownMenu() {
             goToMenu="animals">
             Animals
           </DropdownItem> */}
-          <DropdownItem 
-            leftIcon= {<i class="fas fa-user"></i>}>
-              Edit Profile
-          </DropdownItem>
-          <DropdownItem 
-            leftIcon= {<i class="fas fa-book-open"></i>}>        
-            Manual
-          </DropdownItem>
-          <DropdownItem goToMenu="signout"
-            leftIcon= {<i className="fas fa-sign-out-alt signout-icon" >
-              </i>}>
-              SIGN OUT
-          </DropdownItem>
+          <a onClick={() => {
+            window.location.replace('/bot_list/'+username)
+          }}>
+            <DropdownItem 
+              leftIcon= {<i class="fas fa-user"></i>}>
+                Edit Profile
+            </DropdownItem>
+          </a>
+          <a onClick={() => {
+            window.location.replace('/manual')
+          }}>
+            <DropdownItem 
+              leftIcon= {<i class="fas fa-book-open"></i>}>        
+              Manual
+            </DropdownItem>
+          </a>
+          <a onClick={() => {
+            deleteTokens();
+            window.location.replace("/")
+          }}>
+            <DropdownItem 
+              leftIcon= {<i className="fas fa-sign-out-alt signout-icon" >
+                </i>}>
+                SIGN OUT
+            </DropdownItem>
+          </a>
         </div>
       </CSSTransition>
-
-      {/* <CSSTransition
-        in={activeMenu === 'settings'}
-        timeout={500}
-        classNames="menu-secondary"
-        unmountOnExit
-        onEnter={calcHeight}>
-        <div className="menu-real">
-          <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
-            <h2>My Tutorial</h2>
-          </DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>HTML</DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>CSS</DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>JavaScript</DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>Awesome!</DropdownItem>
-        </div>
-      </CSSTransition>
-
-      <CSSTransition
-        in={activeMenu === 'animals'}
-        timeout={500}
-        classNames="menu-secondary"
-        unmountOnExit
-        onEnter={calcHeight}>
-        <div className="menu-real">
-          <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
-            <h2>Animals</h2>
-          </DropdownItem>
-          <DropdownItem leftIcon="🦘">Kangaroo</DropdownItem>
-          <DropdownItem leftIcon="🐸">Frog</DropdownItem>
-          <DropdownItem leftIcon="🦋">Horse?</DropdownItem>
-          <DropdownItem leftIcon="🦔">Hedgehog</DropdownItem>
-        </div>
-      </CSSTransition> */}
     </div>
-   
+
   );
 }
 

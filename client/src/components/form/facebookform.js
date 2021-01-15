@@ -28,7 +28,7 @@ const Styles = styled.div`
 export default function Facebookform(props) {
     const [access_token, setAccess_token] = useState('');
     const [verify_token, setVerify_token] = useState('');
-
+    console.log(props)
     const handleSubmit = (event) => {
         event.preventDefault();
         const editData = {access_token, verify_token}
@@ -54,7 +54,7 @@ export default function Facebookform(props) {
     }
 
     useEffect(() => {
-        fetch('/bot/'+props.params.url).then(
+        fetch('/bot/'+localStorage.getItem('user_id')).then(
             response => response.json()
           ).then(data =>{
             setAccess_token(data.page_facebook_access_token);
@@ -62,7 +62,8 @@ export default function Facebookform(props) {
         })
     }, []);
 
-        return (<Styles>
+    return (
+        <Styles>
             <div className="container">
                  <div className="row my-3">
                     <div className="group facebook-card col-lg-12">
@@ -73,17 +74,17 @@ export default function Facebookform(props) {
                             </div>
                             <div className="col-lg-12">
                                 <label  className="form-label">Page Facebook access token</label>
-                                <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputpagefacebook"/>
+                                <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputpagefacebook" />
                             </div>
                             <div className="col-lg-12 mt-3">
                                 <label  className="form-label">Verify token</label>
-                                <input type="text" value={ verify_token } onChange={e => setVerify_token(e.target.value)} className="form-control" id="inputverity"/>
+                                <input type="text" value={ verify_token } onChange={e => setVerify_token(e.target.value)} className="form-control" id="inputverity" />
                             </div>
-                            <input type='submit'>Submit</input>
+                            <button type='submit'>Submit</button>
                         </form>
-                    </div>  
+                    </div>
                 </div>
             </div>
         </Styles>
-        )
+    )
 }

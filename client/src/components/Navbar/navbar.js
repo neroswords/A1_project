@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import {Button} from "react-bootstrap";
 import {isLoggedIn, deleteTokens} from '../auth';
-import React, { useState, useEffect, useRef } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import React from 'react';
 const Styles = styled.div`
 
 
