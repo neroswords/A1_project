@@ -9,17 +9,15 @@ import { isLoggedIn } from './components/auth.js';
 import Register from './Page/Register';
 import Login from './Page/Login';
 import Home from './Page/Home';
-// import Navbar from './components/Navbar/navbar';
 import Learned from './Page/Learned';
 import Group from './Page/Group';
 import Mapping from './Page/Mapping';
 import Train from './Page/Train';
+import Bot_list from './Page/Bot_list';
 import Create_bot from './Page/Create_bot';
 import Connect from './Page/Connect_bot'
-import Bot_list from './Page/Bot_list';
 import AddWord from './components/table/addTable/AddWord';
-import Test_facebook from './Page/test_facebook';
-import Nav from './components/Navbar/real_nav'
+import Nav from './components/Navbar/real_nav';
 
 function App() {
   return (
