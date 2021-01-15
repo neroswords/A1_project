@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
+import { Mapchart } from "./Manage_map/Mapchart";
+
 
 const Styles = styled.div`
 .table{
@@ -64,9 +66,7 @@ function Tablemap() {
   return (
     <Styles>
     <div className="container">
-    <Link to="/add">
-      <button type="button"className="btn btn-primary Add-word btn-sm float-right my-3">Add</button>
-    </Link>  
+     
       <table className="table table-bordered">
         <thead>
           <tr>
@@ -134,10 +134,11 @@ function Tablemap() {
               <td>
                 {/* <Button className='buttonaddWord' onClick={openMap}>edit</Button> */}
                 <i className="far fa-edit" onClick={openMap}></i>
-                <Map_chart showMap={showMap} setShowMap={setShowMap} />
+               
               </td>
             </tr>
           ))}
+           <Mapchart showMap={showMap} setShowMap={setShowMap} />
         </tbody>
       </table>
     </div>

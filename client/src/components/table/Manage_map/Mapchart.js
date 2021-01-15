@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { MdClose } from 'react-icons/md';
-import { Col, Form, Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 
 
 const Background = styled.div`
@@ -22,29 +22,39 @@ const ModalWrapper = styled.div`
   position: absolute;
   z-index: 10;
   border-radius: 10px;
-  transform: translate(-120%, -45%);
-  // align-items: center;
-  // grid-template-columns: 1fr 1fr;
-  // position: absolute;
-  // top: 50%;
-  // left: 50%;
+  transform: translate(30%, -55%);
 `;
 
 const ModalContent = styled.div`
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  line-height: 1.8;
-  color: #141414;
-  
-  button {
-    padding: 10px 24px;
-    background: #141414;
-    color: #fff;
-    border: none;
-  }
+// .content:after{
+//   background-color: #e17b77;
+//   content: '';
+//   position: absolute;
+//   width: 4px;
+//   height: 100%;
+//   margin-left:45%;
+// }
+
+.content{
+  margin:90px auto;
+  width: 360px;
+  border-left: 2px solit #ccc;
+  padding: 0 20px 0 30px;
+}
+
+.content div{
+  background-color: #ffc15e;
+  padding: 10px 10px;
+  font-size: 16px;
+  line-height: 1.7;
+  position: relative;
+  height: 60px;
+  width: 60px;
+  margin-bottom: 30px;
+  margin-left: 45%;
+  border-radius: 5px;
+}
 
 `;
 
@@ -60,7 +70,7 @@ const CloseModalButton = styled(MdClose)`
 `;
 
 
-export const Map_chart = ({ showMap, setShowMap}) => {
+export const Mapchart = ({ showMap, setShowMap}) => {
   const modalRef = useRef();
 
   const animation = useSpring({
@@ -68,7 +78,7 @@ export const Map_chart = ({ showMap, setShowMap}) => {
       duration: 250
     },
     opacity: showMap ? 1 : 0,
-    // transform: showMap ? `translateY(0%)` : `translateY(-100%)`
+    transform: showMap ? `translateY(0%)` : `translateY(-100%)`
   });
 
   const closeModal = e => {
@@ -103,7 +113,19 @@ export const Map_chart = ({ showMap, setShowMap}) => {
             <Container className="col-sm-10 col-md-9">
             <ModalWrapper showMap={showMap}>
               <ModalContent>
-                  <h1>Hiiii</h1>
+                  {/* <div className="container_word"> */}
+                    <div className="content">
+                      <div>
+                        <a>hiii</a>
+                      </div>
+                      <div>
+                        <a>heyy</a>
+                      </div>
+                      <div>
+                        <a>hello</a> 
+                      </div>
+                    </div>
+                  {/* </div> */}
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"
@@ -120,4 +142,4 @@ export const Map_chart = ({ showMap, setShowMap}) => {
   
 };
 
-export default Map_chart;
+export default Mapchart;
