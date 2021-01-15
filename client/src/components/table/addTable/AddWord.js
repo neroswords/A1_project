@@ -6,9 +6,6 @@ import { Col, Form, Button, Container } from "react-bootstrap";
 
 
 const Background = styled.div`
-  // width: 100%;
-  // height: 100%;
-  // background: rgba(0, 0, 0, 0.8);
   position: fixed;
   display: flex;
   justify-content: center;
@@ -25,7 +22,7 @@ const ModalWrapper = styled.div`
   position: absolute;
   z-index: 10;
   border-radius: 10px;
-  transform: translate(25%, -10%);
+  transform: translate(30%, -10%);
   // align-items: center;
   // grid-template-columns: 1fr 1fr;
   // position: absolute;

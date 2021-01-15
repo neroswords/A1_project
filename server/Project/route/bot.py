@@ -14,30 +14,37 @@ from bson.objectid import Objectid # find by id
 bot = Blueprint("bot",__name__)
 
 
+@bot.route('/connect', methods=['POST'])
+@login_required
+def connect():
+    bot_collection = mongo.db.bot
+    if request.method == 'POST':
+        connect_data = request.get_json()
+        if connect_data['platform'] == 'line':
+            bot_collection.update_one({'creator': connect_data['creator']},
+            {'$set':{'access_token':connect_data['access_token'],
+            'chanel_secret':connect_data['channel_secret'],
+            'basic_id':connect_data['basic_id']}})
+            return 200
+        elif  connect_data['platform'] == 'facebook':
+            bot_collection.update_one({'access_token':connect_data['access_token'],'vertify':connect_data['verify_token']})
+            return 200
+        return redirect(url_for('home'))
+    elif request.method == 'GET':
+        return render_template('connect.html')
+
 #create bot
 @bot.route('/create', methods=[ 'POST'])
 def create():
-   
     bots_collection = mongo.db.bots
- 
-    
     if request.method == 'POST':
         bot_info = request.get_json()
-        print(bot_info)
-        
             bot_name = bot_info['name_bot']
-            chanel_secret = bot_info['ch_sc']
-            chanel_access_token = bot_info['ch_ac_tk']
-            basic_id = bot_info['basic_id']
-            fb_access_token = bot_info['pfa_tk']
-            verify_token = bot_info['vf_tk']
-            owner = bot_info['owner'] #ref id คนสร้างมาใส่ตัวแปรนี้
+            owner = bot_info['creator'] #ref id คนสร้างมาใส่ตัวแปรนี้
             gender = bot_info['gender']
             age = bot_info['age']
-            image = bot_image['image'] # req file name มาใส่ db
-            
-            info_bot = {'bot_name': bot_name, 'chanel_secret':  chanel_secret, 'chanel_access_token': chanel_access_token, 'basic_id': basic_id, 'fb_access_token': fb_access_token , 'verify_token': verify_token, 'owner': owner, 'gender' : gender, 'age': age, 'image': image}
-            bots_collection.insert_one(info_bot)
+            image = bot_image['image']
+            bots_collection.insert_one({'bot_name': bot_name, 'owner': owner, 'gender' : gender, 'age': age, 'image': image})
             return "add bot successfully"
         return "add bot unsuccessfully"
 

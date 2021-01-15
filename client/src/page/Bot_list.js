@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useRef } from "react";
 import Navbar_member from '../components/Navbar/navbar_member';
 import '../components/botlist/Bot_list.css';
@@ -69,3 +70,25 @@ export default function Bot_list() {
         
     );
 }
+=======
+import React, { useState, useEffect }from 'react';
+
+function Bot_list (props){
+    
+    const [botData,setBotData] = useState([])
+    useEffect(()=>{
+        fetch('/profile/'+props.match.params.user_id).then(
+          response => response.json()
+        ).then(data => setBotData(data))
+      }, []);
+    
+        return(
+            <div>
+                { botData }
+                hi this is {props.match.params.user_id}
+            </div>  
+        )
+}
+
+export default Bot_list;
+>>>>>>> 0ce54616ea77dbbad8aefad742cd581b66750271
