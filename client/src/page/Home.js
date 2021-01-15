@@ -1,6 +1,5 @@
-import React,{ useState } from 'react';
+import React from 'react';
 
-import {Button, Collapse } from 'react-bootstrap';
 import { CardList } from '../components/Landing/cardList';
 import { Mainpage } from '../components/Landing/Mainpage';
 import { Endpage }  from '../components/Landing/endpage';

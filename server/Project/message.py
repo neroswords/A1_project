@@ -10,7 +10,7 @@ def process_message(message,botID,min_conf):
         if conf > max:
             max = conf
             ans = word
-    training_collection.insert_one({'question': text, 'answer': ans, 'confident': max})
+    training_collection.insert_one({'question': message, 'answer': ans, 'confident': max})
     if (max < min_conf):
         ans = "ขอโทษครับ ผมยังไม่เข้าใจคำนี้ครับกำลังศึกษาอยู่"
     return ans,max

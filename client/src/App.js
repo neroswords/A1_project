@@ -9,7 +9,7 @@ import { isLoggedIn } from './components/auth.js';
 import Register from './Page/Register';
 import Login from './Page/Login';
 import Home from './Page/Home';
-import Navbar from './components/Navbar/navbar';
+// import Navbar from './components/Navbar/navbar';
 import Learned from './Page/Learned';
 import Group from './Page/Group';
 import Mapping from './Page/Mapping';
@@ -37,7 +37,6 @@ function App() {
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/group" component={ Group }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/mapping" component={ Mapping }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/learned/add" component={ AddWord }/>
-            <Route path="/test" component ={ Test_facebook } />
           </Switch>
     </Router>
   );

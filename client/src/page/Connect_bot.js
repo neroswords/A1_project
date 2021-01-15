@@ -1,193 +1,214 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components';
-// import FacebookForm from '../components/form/facebookform';
-// import LineForm from '../components/form/lineform';
+import Facebookform from '../components/form/facebookform';
+import Lineform from '../components/form/lineform';
+import {withRouter, Redirect} from 'react-router-dom'
 
 const Styles = styled.div`
-.container {
+  .container {
+    font-family: 'Public Sans', sans-serif;
     margin-top: 2%;
-}
+  }
 
-
-.facebook-card {
+  .card-bot{
     border: 0;
     border-radius: 1rem;
-    background-color: #0078ff;
-    color: white;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-}
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-bot .card-title {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    text-transform : uppercase;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .card-bot .card-body {
+    margin: 1rem;
+  }
+  
 
-.facebook {
-    padding : 5%;
-}
+  .title_part p{
+      font-weight: bold;
+      margin-top: 9%;
 
-.facebook p{
+  }
+
+  .title_part  .line{
+    border: 10;
+    height: 4px;
+    background-color: #fca311;
+    width: 200px;
+    margin-bottom: 5%;
+  }
+
+  .form-bot .btn {
+    border-radius: 1rem;
+    letter-spacing: .1rem;
     font-weight: bold;
-    font-size: 30px;
-}
-`
+    padding: 0.75rem;
+    transition: all 0.2s;
+    width: 80%;
+    align-items: center;
+    background-color: #;
+  }
+  .btn-createbot{
+      margin-top: 3rem;
+      text-align : center;
+  }
 
-                                
-export default function connectForm(props){
-    const[platform,SetPlatform] = useState('');
-    return(
-        <>
-            <div className="title_part">
-                <p className="col ">Connect platform</p>
-                    <div className="line"></div>
-            </div>
-            <div className="connect_platform">
-                <div className="row col-lg-12">
-                    <div className="col-lg-6">
-                        <button className="btn btn-primary text-uppercase" onClick={()=>SetPlatform('facebook')} >facebook</button>
-                    </div>
-                    <div className="col-lg-6">
-                        <button className="btn btn-success btn-line text-uppercase" onClick={()=>SetPlatform('line')} >line</button>
-                    </div>
-                </div>
-            </div>
-            {renderSwitch(platform)}
-        </>
-    )
-}
 
-function renderSwitch(props){
-    if(props == 'line'){
-        return(
-            Lineform(props.match.params.bot_id)
-        )
-    }
-    else if(props == 'facebook'){
-        return(
-            Facebookform(props.match.params.bot_id)
-        )
-    }
+  .form-bot input {
+    border-radius: 0.5rem;
+  }
 
+  .form-bot select{
+    border-radius: 0.5rem;
+  }
+
+
+
+  .row-2{
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+  }
+
+  input[type=file]::-webkit-file-upload-button {
+    border: 2px;
+    padding: 0.5rem ;
+    border-radius: 0.75rem;
+    background-color: #fca311;
+    transition: 1s;
+    color: white;
+    width: 40%;
     
-}
+  }
+  
+  input[type="file"] {
+    max-width: 100%;
+  }
 
+  .showimage {
+    margin-bottom: 1%;
+    text-align: center;
+  }
 
-function Facebookform(props) {
-    const [access_token, setAccess_token] = useState('');
-    const [verify_token, setVerify_token] = useState('');
-    console.log(props)
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const editData = {access_token, verify_token}
-        fetch('/', {
-            method: 'POST',
-            headers : {
-                "Access-Control-Allow-Origin": "*",
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify(editData)
-        })
-        // .then( res => res.json())
-        // .then(data=>{
-        //     localStorage.setItem('access_token', data.access_token);
-        //     localStorage.setItem('username', data.username);
-        //     localStorage.setItem('user_id', data.user_id);
-        //     if (localStorage.getItem("access_token") !== null && localStorage.getItem("access_token")!=="undefined") {
-        //       window.location.replace("/")
-        //     }else{
-        //         alert(data.error);  
-        //   }
-        // }).catch(error => console.log(error));
+  .showimage img{
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 80%;
+    text-align: center;
+  }
+  
+  .vertical-line {
+    border-left: 1px solid black;
+
+  }
+
+  .btn-facebook {
+    background-color: #0078ff;
+  }
+
+  .btn-line {
+    background-color: #34a853 ;
+  }
+`;
+
+class Connect_bot extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      platform: 'facebook',
+      redirect: false,
+      bot_id:''
+    };
+    this.handlelineChange = this.handlelineChange.bind(this);
+    this.handlefacebookChange = this.handlefacebookChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  renderSwitch(param) {
+    switch(param) {
+      case 'facebook':
+        return <Facebookform props={this.props.match.params}/>
+      default:
+        return <Lineform props={this.props.match.params} />
     }
+  }
+  
+  handlelineChange (evt) {
+    evt.preventDefault() ;
+    this.setState({ platform: "line" });
+  }
+  handlefacebookChange (evt) {
+    evt.preventDefault() ;
+    this.setState({ platform: "facebook" });
+    console.log(this.state.platform)
+  }
+  handleChange (evt) {
+    this.setState({ [evt.target.name]: evt.target.value });
+    console.log(this.state)
+  }
 
-    useEffect(() => {
-        fetch('/bot/'+props.params.url).then(
-            response => response.json()
-          ).then(data =>{
-            setAccess_token(data.page_facebook_access_token);
-            setVerify_token(data.VERIFY_TOKEN);
-        })
-    }, []);
-
-        return (<Styles>
-            <div className="container">
-                 <div className="row my-3">
-                    <div className="group facebook-card col-lg-12">
-                        <form className="facebook" onSubmit={ handleSubmit }>
-                            <div className="row">
-                                <p className="col">Connect to facebook</p>
-                                {/* <i className="col fab fa-facebook"></i> */}
-                            </div>
-                            <div className="col-lg-12">
-                                <label  className="form-label">Page Facebook access token</label>
-                                <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputpagefacebook"/>
-                            </div>
-                            <div className="col-lg-12 mt-3">
-                                <label  className="form-label">Verify token</label>
-                                <input type="text" value={ verify_token } onChange={e => setVerify_token(e.target.value)} className="form-control" id="inputverity"/>
-                            </div>
-                            <input type='submit'>Submit</input>
-                        </form>
-                    </div>  
-                </div>
-            </div>
-        </Styles>
-        )
-}
-
-function Lineform(props) {
-    const [access_token, setAccess_token] = useState('');
-    const [channel_secret, setChannel_secret] = useState('');
-    const [basic_id, setBasic_id] = useState('');
-
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const editData = {'access_token':access_token, 
-        'channel_secret':channel_secret, 
-        'basic_id':basic_id,
-        'creator':localStorage.getItem('user_id')}
-        fetch('/', {
-            method: 'POST',
-            headers : {
-                "Access-Control-Allow-Origin": "*",
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify(editData)
-        })
-    }
-
-    useEffect(() => {
-        fetch('/bot/'+localStorage.getItem('user_id')).then(
-            response => response.json()
-          ).then(data =>{
-            setAccess_token(data.page_facebook_access_token);
-            setChannel_secret(data.Channel_secret);
-            setBasic_id(data.basic_id);
-        })
-    }, []);
-
-    return(
+  handleSubmit= (evt) => {
+    evt.preventDefault() ;
+    // const form = {
+    // }
+    // fetch('/bot/create',{
+    //   method : 'POST',
+    //   headers : {
+    //     "Access-Control-Allow-Origin": "*",
+    //     'Content-Type':'application/json'
+    //   },
+    //   body : JSON.stringify(form)
+    // }).then( res => res.json()).
+    // then(data => {
+    //   this.setState({ bot_id : data.id})
+    //   this.setState({ redirect: true }) 
+    // }
+    // );
+    // .then(data =>
+      // this.props.history.push('/bot/connect_platform'+ data.bot_id +'/line') 
+    // )
+    
+  }
+  // "/profile/"+localStorage.getItem('user_id')
+    render() {
+      const { redirect,bot_id } = this.state;
+      if (redirect) {
+        return <Redirect to={"/bot/"+ bot_id +"/connect"} />
+      }
+      else {
+        return(
             <Styles>
                 <div className="container">
-                    <div className="row my-3">
-                        <div className="group facebook-card col-lg-12">
-                            <form className="facebook" onSubmit={ handleSubmit }>
-                                <div className="row">
-                                    <p className="col">Connect to Line</p>
-                                    {/* <i class="fab fa-line"></i> */}
+                    <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
+                        <div className="card card-bot">
+                            <div className="card-body">
+                                <div className="title_part">
+                                    <p className="col ">Connect platform</p>
+                                    <div className="line"></div>
                                 </div>
-                                <div className="col-lg-12">
-                                    <label  className="form-label">Channel secret</label>
-                                    <input type="text" value={channel_secret} onChange={e => setChannel_secret(e.target.value)} className="form-control" id="inputpagefacebook"/>
+                                <div className="connect_platform">
+                                    <div className="row col-lg-12">
+                                        <div className="col-lg-6">
+                                            <button className="btn btn-primary text-uppercase" onClick={this.handlefacebookChange} type="">facebook</button>
+                                        </div>
+                                        <div className="col-lg-6">
+                                            <button className="btn btn-success btn-line text-uppercase" onClick={this.handlelineChange} type="">line</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="col-lg-12 mt-3">
-                                    <label  className="form-label">Channel access token</label>
-                                    <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputbotname"/>
-                                </div>
-                                <div className="col-lg-12 mt-3">
-                                    <label  className="form-label">Basic ID</label>
-                                    <input type="text" value={basic_id} onChange={e => setBasic_id(e.target.value)} className="form-control" id="inputbotname"/>
-                                </div>
-                            </form>
-                        </div>  
-                    </div>
+                                {this.renderSwitch(this.state.platform)}
+                            </div>
+                        </div>
+                    </div>   
                 </div>
             </Styles>
-        )   
+        )
+      }
+    }
 }
+
+export default withRouter(Connect_bot);         

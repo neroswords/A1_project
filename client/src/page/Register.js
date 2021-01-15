@@ -137,18 +137,6 @@ class Register extends React.Component {
     this.setState({ [evt.target.name]: evt.target.value });
   }
 
-  // handleEmailChange= (e) => {
-  //   this.setState({email: e.target.value});
-  // }
-
-  // handlePasswordChange= (e) => {
-  //   this.setState({password: e.target.value});
-  // }
-
-  // handleConfirmPasswordChange= (e) => {
-  //   this.setState({confirm_password: e.target.value});
-  // }
-
   handleSubmit = (e) => {
     e.preventDefault()
 
@@ -167,7 +155,7 @@ class Register extends React.Component {
         shop_type : this.state.shop_type,
         shop_address : this.state.shop_address
       }
-      const response = fetch('/profile/signup', {
+      fetch('/profile/signup', {
       method : 'POST',
       headers : {
             "Access-Control-Allow-Origin": "*",

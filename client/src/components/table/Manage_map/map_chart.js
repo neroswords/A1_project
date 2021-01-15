@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { MdClose } from 'react-icons/md';
-import { Col, Form, Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 
 
 const Background = styled.div`
@@ -22,7 +22,7 @@ const ModalWrapper = styled.div`
   position: absolute;
   z-index: 10;
   border-radius: 10px;
-  transform: translate(-120%, -45%);
+  transform: translate(30%, -70%);
   // align-items: center;
   // grid-template-columns: 1fr 1fr;
   // position: absolute;
@@ -68,7 +68,7 @@ export const Map_chart = ({ showMap, setShowMap}) => {
       duration: 250
     },
     opacity: showMap ? 1 : 0,
-    // transform: showMap ? `translateY(0%)` : `translateY(-100%)`
+    transform: showMap ? `translateY(0%)` : `translateY(-100%)`
   });
 
   const closeModal = e => {

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import {Link} from "react-router-dom";
+import {Map_chart} from "./Manage_map/map_chart";
 import styled from 'styled-components';
 
 const Styles = styled.div`
@@ -133,10 +135,10 @@ function Tablemap() {
               <td>
                 {/* <Button className='buttonaddWord' onClick={openMap}>edit</Button> */}
                 <i className="far fa-edit" onClick={openMap}></i>
-                <Map_chart showMap={showMap} setShowMap={setShowMap} />
               </td>
             </tr>
           ))}
+          <Map_chart showMap={showMap} setShowMap={setShowMap} />
         </tbody>
       </table>
     </div>
