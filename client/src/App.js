@@ -16,7 +16,6 @@ import Train from './Page/Train';
 import Bot_list from './Page/Bot_list';
 import Create_bot from './Page/Create_bot';
 import Connect from './Page/Connect_bot'
-import Bot_list from './Page/Bot_list';
 import AddWord from './components/table/addTable/AddWord';
 import Nav from './components/Navbar/real_nav';
 
