@@ -209,29 +209,53 @@
     transition: all var(--speed) ease;
   }
 
+
+
   .btn-nav a {
-    border-radius: 3rem;
+    border-radius: 1rem;
     font-weight: bold;
     transition: all 0.2s;
     width: 100%;
     text-transform : uppercase;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1); */
     align-items: center;
     justify-content: center;
     vertical-align: middle;
     text-decoration: none;
     text-align: center;
-    margin-top: 10%;
 }
 
-  .btn-login {
-    margin-left: 2rem;
-    margin-right: 9rem;
-    margin-top: 1%;
+  .btn-signup {
+    margin-left: 0.5rem;
+    margin-right: 2rem;
   }
 
-.btn-signup {
-  border-style: none;
-}
+  .btn-signup a {
+    padding: 0.5rem 1.5rem;
+    margin-top: 14px;
+    border: 1px solid #232032;
+    color: black;
+    font-family: 'Public Sans', sans-serif;
+    font-size: 13px;
+  }
+
+  .btn-signup:hover a {
+    border: 1px solid #232032;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    color: white;
+    background-color: #232032;
+  }
+
+
+  .btn-login a {
+    padding: 0.5rem 2.5rem;
+    font-size: 15px;
+    margin-top: 11px;
+    border: 2px solid #F4F3F3;
+    color: white;
+    background-color: #fca311 ;
+  }
+
+  .btn-login a:hover{
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+  }
