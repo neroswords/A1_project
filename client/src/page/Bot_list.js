@@ -5,8 +5,9 @@ import { useDetectOutsideClick } from "../components/botlist/button_nav";
 
 
 
-export default function Bot_list() {
+export default function Bot_list(props) {
     const [botlist,setBotlist] = useState([]);
+    
     const delete_bot =(id)=>{
         fetch('/bot/delete/'+id, {
         method : 'POST',
@@ -59,7 +60,7 @@ function Dropdown({botData, deleteBot}){
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
     const onClick = () => setIsActive(!isActive);
     // const forceUpdate = useForceUpdate();
-    console.log(botData)
+    // console.log(botData)
     return(
     <div class="card-box">
         <Link to={'/bot/'+botData._id.$oid+'/train'}>

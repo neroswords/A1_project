@@ -4,6 +4,7 @@ import Facebookform from '../components/form/facebookform';
 import Lineform from '../components/form/lineform';
 import {withRouter, Redirect} from 'react-router-dom'
 
+
 const Styles = styled.div`
   .container {
     font-family: 'Public Sans', sans-serif;

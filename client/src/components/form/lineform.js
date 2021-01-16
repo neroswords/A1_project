@@ -1,5 +1,6 @@
 import React, { useState, useEffect }from 'react';
 import styled from 'styled-components';
+import packageJson from '../../../package.json';
 
 const Styles = styled.div`
 .container {
@@ -48,7 +49,7 @@ export default function Lineform(props) {
     }
 
     useEffect(() => {
-        fetch('/bot/'+localStorage.getItem('user_id')).then(
+        fetch('/bot/'+localStorage.getItem('user_id')+'/connect').then(
             response => response.json()
           ).then(data =>{
             setAccess_token(data.page_facebook_access_token);
@@ -67,6 +68,7 @@ export default function Lineform(props) {
                                     <p className="col">Connect to Line</p>
                                     {/* <i class="fab fa-line"></i> */}
                                 </div>
+                                    <p>{packageJson.proxy}bot/webhook/{props.props.bot_id}/line</p>
                                 <div className="col-lg-12">
                                     <label  className="form-label">Channel secret</label>
                                     <input type="text" value={channel_secret} onChange={e => setChannel_secret(e.target.value)} className="form-control" id="inputpagefacebook"/>
