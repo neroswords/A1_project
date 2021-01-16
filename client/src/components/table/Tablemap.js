@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {Link} from "react-router-dom";
-import {Map_chart} from "./Manage_map/map_chart";
 import styled from 'styled-components';
-import { Mapchart } from "./Manage_map/Mapchart";
+import { Map_chart } from "./Manage_map/Mapchart";
 
 
 const Styles = styled.div`
