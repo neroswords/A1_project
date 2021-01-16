@@ -41,7 +41,7 @@ function Loged_in_nav(props) {
     
     <Navbar_real>
         <div className="show-user">  
-          <a href="/"><i class="fas fa-user"></i>{props}</a>
+          <a href={"/bot_list/"+ localStorage.getItem('user_id')}><i class="fas fa-user"></i>{props}</a>
         </div>
       <NavItem icon={<CaretIcon />}>
         <DropdownMenu></DropdownMenu>
@@ -122,9 +122,7 @@ function DropdownMenu() {
             goToMenu="animals">
             Animals
           </DropdownItem> */}
-          <a onClick={() => {
-            window.location.replace('/bot_list/'+username)
-          }}>
+          <a>
             <DropdownItem 
               leftIcon= {<i class="fas fa-user"></i>}>
                 Edit Profile

@@ -4,32 +4,36 @@ def process_message(message,botID,min_conf):
     bot_collection = mongo.db.bots
     max = 0
     ans = ''
-    flax = 0
-    similar_word = trained_collection.find({'botID':botID})
-    for word in similar_word:
+    flag = True
+    similar_training_word = trained_collection.find({'botID':botID})
+    for word in similar_training_word:
         conf = sentence_get_confident(message,word['question'])
-        if conf == False : break
-        if conf >= 1:
+        if conf == False : 
+            flag = False
+            break
+        elif conf == 1.0:
             max = conf
-            ans = word
-            flax = 2
-        elif conf >= max:
+            ans = word['question']
+            flag = False
+            break
+        elif conf > max:
             max = conf
-            ans = word 
-            flax = 1          
-    if(flax == 1):
-        similar_word = training_collection.find({'botID':botID})
-        for word in similar_word:
+            ans = word['question']         
+    if flag:
+        similar_trained_word = training_collection.find({'botID':botID})
+        for word in similar_trained_word:
             conf = sentence_get_confident(message,word['question'])
             if conf == False : break
-            if conf > max:
+            if conf == 1.0:
                 max = conf
-                ans = word
-                flax = 2
-    if(flax == 2):
-        training_collection.insert_one({'question': message, 'answer': ans, 'confident': max})
+                ans = word['question']
+                break
+            elif conf > max:
+                max = conf
+                ans = word['question']
     if (max < min_conf):
         ans = "ขอโทษครับ ผมยังไม่เข้าใจคำนี้ครับกำลังศึกษาอยู่"
+    training_collection.insert_one({'question': message, 'answer': ans, 'confident': max, 'botID': botID})
     return ans,max
 
 def ReplyMessage(Reply_token, TextMessage, Line_Acess_Token):

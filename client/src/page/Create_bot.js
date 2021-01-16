@@ -190,7 +190,7 @@ class Create_bot extends React.Component {
     render() {
       const { redirect,bot_id } = this.state;
       if (redirect) {
-        return <Redirect to={"/bot/"+ bot_id +"/connect"} />
+        return <Redirect to={"/bot_list/"+ localStorage.getItem('user_id')} />
       }
       else {
         return(
@@ -218,11 +218,11 @@ class Create_bot extends React.Component {
                                           <div className=" group col-lg-6">
                                               <div className="">
                                                 <label  className="form-label">Bot Name</label>
-                                                <input type="text" name="bot_name" value={this.state.bot_name} onChange={this.handleChange} className="form-control" id="inputbotname"/>
+                                                <input type="text" name="bot_name" value={this.state.bot_name} onChange={this.handleChange} required className="form-control" id="inputbotname"/>
                                               </div>
                                               <div class="mt-3">
                                                 <label for="inputgender" class="form-label">Gender</label>
-                                                <select id="inputgender" name="gender" value={this.state.gender} onChange={this.handleChange} class="form-select">
+                                                <select id="inputgender" name="gender" value={this.state.gender} onChange={this.handleChange} required class="form-select">
                                                     <option selected>Choose...</option>
                                                     <option>Male</option>
                                                     <option>Female</option>
@@ -230,7 +230,7 @@ class Create_bot extends React.Component {
                                               </div>
                                               <div className="mt-3">
                                                   <label for="inputFirstname" className="form-label">Age</label>
-                                                  <input type="integer" name="age" className="form-control" id="inputfirstname" value={this.state.age} onChange={this.handleChange} />
+                                                  <input type="integer" name="age" className="form-control" id="inputfirstname" value={this.state.age} required onChange={this.handleChange} />
                                               </div>
                                           </div>
                                   </div>

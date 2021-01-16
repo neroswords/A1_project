@@ -8,6 +8,8 @@ from flask_login import LoginManager, login_user, logout_user, login_required,cu
 # from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection,check_bot,find_bot
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required,
                                 get_jwt_identity, get_raw_jwt)
+import json
+from bson.json_util import dumps, loads 
 profile = Blueprint("profile",__name__)
 
 
@@ -64,9 +66,8 @@ def login():
 
 @profile.route('/<user_id>',methods=['GET'])
 def get_user(user_id):
-    bot_list = []
-    bot_collection = mongo.db.bot
-    bot_cursor =  bot_collection.find({'_id': user_id})
-    for bot in bot_cursor:
-        bot_list.append(bot)
-    return jsonify(bot_list)
+    bot_collection = mongo.db.bots
+    bot_cursor =  bot_collection.find({'owner': user_id})
+    list_cur = list(bot_cursor) 
+    json_data = dumps(list_cur, indent = 2) 
+    return json_data
