@@ -190,7 +190,7 @@ class Create_bot extends React.Component {
     render() {
       const { redirect,bot_id } = this.state;
       if (redirect) {
-        return <Redirect to={"/bot/"+ bot_id +"/connect"} />
+        return <Redirect to={"/bot_list/"+ localStorage.getItem('user_id')} />
       }
       else {
         return(

@@ -10,6 +10,7 @@ from Project.message import ReplyMessage, process_message
 from Project.extensions import mongo, JSONEncoder
 from Project.nlp import sentence_get_confident
 # from bson.objectid import Objectid # find by id
+from bson import ObjectId
 
 bot = Blueprint("bot",__name__)
 
@@ -86,19 +87,13 @@ def edit(id):
 @bot.route('/delete/<id>', methods=['POST'])
 def delete(id):
     bots_collection = mongo.db.bots
- 
     if request.method == 'POST':
-        if  bots_collection.find_one({'_id': ObjectId(id)}):
-            result = bots_collection.delete_one({'_id': ObjectId(id)})
-            if result:
-                return "delete successfully"
-            else:
-                return "delete unsuccessfully"
-        else: 
-            return "There is no this bot in database"
+        result = bots_collection.delete_one({'_id': ObjectId(id)})
+        if result:
+            return {"message":"delete successfully"}
+        else:
+            return {"message":"delete unsuccessfully"}
         
-
-
 
         
 
