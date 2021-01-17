@@ -23,7 +23,7 @@ const Styles = styled.div`
 
 .list-social i:hover {
     background-color: #353a44;
-    border: 1px solid white;
+    border: 1px solid #fca311;
     border-radius: 100%;
     padding: 3px 6px;
 }

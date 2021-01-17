@@ -27,7 +27,7 @@
 
    .card-box {
     background-color: white;
-    border-left: solid 20px #FECEBF;
+    border-left: solid 20px #Fca311;
     width: 293px;
     height: 170px;
     border-radius: 18px;
@@ -78,7 +78,7 @@
     margin-top: 6px;
     height: 4px;
     width: 120px;
-    background-color: #FECEBF;
+    background-color: #fca311;
   }
   
 
@@ -90,8 +90,7 @@
   } */
   
   .menu-trigger {
-    background: #ffffff;
-    border-radius: 100%;
+    position: relative;
     cursor: pointer;
     display: column;
     justify-content: space-between;
@@ -104,25 +103,28 @@
   }
   
   .menu-trigger i {
+    position: absolute;
     text-align: center;
-    font-size:large;
-    margin-left: 5%;
-    padding: 0px 10px;
+    font-size: large;
+    margin-left: -2%;
+    padding: 3px 10px;
     /* color: #c0c0c0; */
   }
 
-  .menu-trigger:hover {
-    background-color: #f2f2f2;
+  .menu-trigger i:hover {
+    background-color: #f4f4f4;
+    border-radius: 100%;
+    border: 2px solid #f4f4f4;
+    padding: 3px 10px;
     /* box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3); */
   }
 
-
-  
   .menu {
     background: #ffffff;
     border-radius: 8px;
-    position: absolute;
-    top: 200px;
+    position: relative;
+    left: -10px;
+    top: 30px;
     width: 150px;
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
     opacity: 0;
@@ -161,17 +163,18 @@
   .connect {
     grid-area: connect;
     display: flex;
-    margin-left: -100px;
+    margin-top: -50px;
+    margin-left: -220px;
     /* margin-top: -10px; */
     /* margin-top: 5%; */
   }
   
   .connect-area {
     color: #d8d8d8;
-    font-size: 35px;
+    font-size: 30px;
     /* line-height: 32px; */
-    padding-left: 8px;
-    padding-right: 8px;
+    padding-left: 6px;
+    padding-right: 2px;
     /* height: 320px; */
     /* background-color: #FECEBF; */
     /* margin-left: 4px;
@@ -186,8 +189,6 @@
   .facebook i {
     color: #0078ff;
   }
-
-
 
   .card-plus {
     background-color: white;
