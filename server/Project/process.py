@@ -55,4 +55,3 @@ def isnotSymbol(string):
         return False
 
 # print(checkVariable("ขายเสื้อ<สีแดง>มั้ย"))
-

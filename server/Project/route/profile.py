@@ -18,7 +18,6 @@ def signup():
     users_collection = mongo.db.users    
     if request.method == 'POST':
         user_info = request.get_json()
-        print(user_info)
         if  users_collection.find_one({'username': user_info['username']}):
             return {'error':'This username already exists'}
         elif not users_collection.find_one({'username': user_info['username']}):
@@ -32,10 +31,10 @@ def signup():
             shop_name = user_info['shop_name']
             type_shop = user_info['shop_type']
             password_hash = generate_password_hash(password)
-            info_user = {'username': username, 'email': email, 'password': password_hash, 'ft_name': ft_name, 'la_name': la_name, 'address': address, 'shop_name': shop_name, 'type_shop': type_shop, 'birthday': birthday}
+            info_user = {'username': username, 'email': email, 'password': password_hash, 'ft_name': ft_name, 'la_name': la_name, 'address': address, 'shop_name': shop_name, 'type_shop': type_shop, 'birthday': birthday, 'state': 'none'}
             users_collection.insert_one(info_user)
-            return "pass"
-        return "not"
+            return {"message":"register success"}
+        return {"error":"some error detect please try again later"}
 
 
 @profile.route('/login', methods=[ 'POST'])
@@ -43,16 +42,22 @@ def login():
     if request.method == 'POST':
         user_info = request.get_json()
         users_collection = mongo.db.users
-        a =  users_collection.find_one({'username': user_info['username']})
-        if a : 
-            user = User(a['username'], a['email'], a['password'], a['ft_name'], a['la_name'], a['address'], a['shop_name'], a['type_shop'], a['birthday']) 
+        user_define =  users_collection.find_one({'username': user_info['username']})
+        if user_define : 
+            user = User(user_define['username'], 
+            user_define['email'], 
+            user_define['password'], 
+            user_define['ft_name'], 
+            user_define['la_name'], 
+            user_define['address'], 
+            user_define['shop_name'], 
+            user_define['type_shop'], 
+            user_define['birthday']) 
             if user and user.check_password(user_info['password']):
                 login_user(user)
-                access_token = create_access_token(identity=a['username'])
-                refresh_token = create_refresh_token(identity=a['username'])
-                user_id = JSONEncoder().encode(a['_id']).replace('"','')
-                # print(access_token)
-                # print(refresh_token)
+                access_token = create_access_token(identity=user_define['username'])
+                refresh_token = create_refresh_token(identity=user_define['username'])
+                user_id = JSONEncoder().encode(user_define['_id']).replace('"','')
                 return {
                         'username': current_user.username,
                         'access_token': access_token,

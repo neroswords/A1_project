@@ -1,7 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+<<<<<<< HEAD
 import Facebookform from '../components/Form/facebookform';
 import Lineform from '../components/Form/lineform';
+=======
+import Facebookform from '../Components/Form/facebookform';
+import Lineform from '../Components/Form/lineform';
+>>>>>>> 93f97da5428f94557a4106c63f7c36a600fd853f
 import {withRouter, Redirect} from 'react-router-dom'
 
 

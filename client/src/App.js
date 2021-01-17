@@ -4,7 +4,7 @@ import './App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import { PrivateRoute } from "./Private.jsx";
 import { CloseRoute } from "./closeRoute.jsx";
-import { isLoggedIn } from './components/auth.js';
+import { isLoggedIn } from './Components/auth.js';
 
 import Register from './Page/Register';
 import Login from './Page/Login';

@@ -29,11 +29,12 @@ const Styles = styled.div`
 export default function Facebookform(props) {
     const [access_token, setAccess_token] = useState('');
     const [verify_token, setVerify_token] = useState('');
-    console.log(packageJson.proxy)
+    const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+props.props.bot_id+'/facebook')
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const editData = {access_token, verify_token}
-        fetch('/', {
+        fetch('/bot/'+props.props.bot_id+'/connect', {
             method: 'POST',
             headers : {
                 "Access-Control-Allow-Origin": "*",
@@ -55,9 +56,9 @@ export default function Facebookform(props) {
     }
 
     useEffect(() => {
-        fetch('/bot/'+localStorage.getItem('user_id')).then(
+        fetch('/bot/'+props.props.bot_id+'/connect').then(
             response => response.json()
-          ).then(data =>{
+          ).then(data =>{ 
             setAccess_token(data.page_facebook_access_token);
             setVerify_token(data.VERIFY_TOKEN);
         })
@@ -73,7 +74,8 @@ export default function Facebookform(props) {
                                 <p className="col">Connect to facebook</p>
                                 {/* <i className="col fab fa-facebook"></i> */}
                             </div>
-                            <p>{packageJson.proxy}bot/webhook/{props.props.bot_id}/facebook</p>
+                            <p>{webhook}</p>
+                            <button onClick={() => {navigator.clipboard.writeText(webhook)}}></button>
                             <div className="col-lg-12">
                                 <label  className="form-label">Page Facebook access token</label>
                                 <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputpagefacebook" />

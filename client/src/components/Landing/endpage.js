@@ -2,6 +2,7 @@ import React from 'react';
 import { Jumbotron as Jumbo, Container } from 'react-bootstrap';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import {isLoggedIn} from '../auth'
 
 // import Telephone from './images/Telephone.png';
 
@@ -65,6 +66,19 @@ const Styles = styled.div`
 
 `;
 
+function regisBot(){
+  if(isLoggedIn()){
+    return <h1>You already have account</h1>
+  }
+  else{
+    return(
+      <Link to = "/register">
+          <button class="btn btn-primary" type="button">Register for FREE! </button>
+      </Link>
+    )
+  }  
+} 
+
 export const Endpage = () => (
   <Styles>
     <Container className="container">
@@ -75,9 +89,7 @@ export const Endpage = () => (
             <h1>Improve at every stage <br/> of your business growth</h1>
             <span>No matter whether you’re a growing company <br/> ChatBot helps you communicate better with customers.</span>
             <div class="d-grid gap-2 col-6 mx-auto mt-5 btn-regis">
-              <Link to = "/register">
-                <button class="btn btn-primary" type="button">Register for FREE! </button>
-              </Link>
+              {regisBot()}
             </div>
           </div>
           
