@@ -210,7 +210,7 @@ def webhook(platform):
             Reply_token = payload['events'][0]['replyToken']
             # print(Reply_token)
             message = payload['events'][0]['message']['text']
-            print(message)
+            # print(message)
             if 'สวัสดี' in message :
                 Reply_messasge = 'ดี'
                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
@@ -277,60 +277,5 @@ def webhook(platform):
 
 
 
-def ReplyMessage(Reply_token, TextMessage, Line_Acess_Token):
-    LINE_API = 'https://api.line.me/v2/bot/message/reply'
-
-    Authorization = 'Bearer {}'.format(Line_Acess_Token) ##ที่ยาวๆ
-    print(Authorization)
-    headers = {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization':Authorization
-    }
-
-    data = {
-        "replyToken":Reply_token,
-        "messages":[{
-            "type":"text",
-            "text":TextMessage
-        }]
-    }
-
-    data = json.dumps(data)
-    r = requests.post(LINE_API, headers=headers, data=data) 
-    return 200
-
-# def onState(sender_id,user_id, platform, state):
-#     sentence = ["ขอชื่อ-นามสกุลด้วยครับ","ระบุที่อยู่ที่ต้องการจัดส่ง","โปรดเลือกบริการขนส่งที่ต้องการ","ยอดรายการทั้งหมด ถูกต้องใช่มั้ยครับ","จ่ายเงินได้เลย","ขอบคุณมากครับ"]
-#     if state == "order":
-#         response = sentence[0]
-#         #set state to name
-#     elif state == "name":
-#         response = sentence[1]
-#     elif state == "address":
-#         response = sentence[2]
-#     elif state == "delivery":
-#         response = sentence[3]
-#     elif state == "confirm":
-#         response = sentence[4]
-#     elif state == "payment":
-#         response = sentence[5]
-#     if platform == "facebook":
-#         bot = Bot(page_facebook_access_token)
-#         bot.send_text_message(sender_id, response)
-#         payload = request.json
-#         event = payload['entry'][0]['messaging']
-#         for msg in event:
-#             text = msg['message']['text']
-#             sender_id = msg['sender']['id']
-#         return "Message received"
-
-#     elif platform == "line":
-#         payload = request.json
-#         Reply_token = payload['events'][0]['replyToken']
-#         # print(Reply_token)
-#         message = payload['events'][0]['message']['text']
-#         ReplyMessage(Reply_token,response,Channel_access_token)
-#     else:
-#         return 200
 
 CORS(app, expose_headers='Authorization')

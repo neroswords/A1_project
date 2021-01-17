@@ -22,21 +22,19 @@ def sentence_vectorizer(ss,dim=300,use_mean=True): # ประกาศฟัง
     return vec
 
 def sentence_similarity(s1,s2):
-    return cosine_similarity(sentence_vectorizer(str(s1)),sentence_vectorizer(str(s2)))
+    return float(cosine_similarity(sentence_vectorizer(str(s1)),sentence_vectorizer(str(s2))))
 
 def sentence_sound_index(ss1,ss2,list = "none"):
     if list == "invert":
         s1 = word_tokenize(ss1)
         s2 = word_tokenize(ss2)
         if len(s1) > len(s2):
-            s1 = x
+            x = s1
             s1 = s2
             s2 = x
         catch = 0
-        print(len(s1))
-        print(len(s2))
         for i in range(len(s1)):
-            if udom83(s1[i]) == udom83(s2[i]) or (i+1<len(s2) and udom83(s1[i]) == udom83(s2[i+1])) or (i-1 >=0 and udom83(s1[i]) == udom83(s2[i-1])): 
+            if udom83(s1[i]) == udom83(s2[i]) or (i+2<len(s2) and udom83(s1[i]) == udom83(s2[i+2])) or (i+1<len(s2) and udom83(s1[i]) == udom83(s2[i+1])) or (i-1 >=0 and udom83(s1[i]) == udom83(s2[i-1])): 
                 catch += 1
         if len(s1) < len(s2):
             return catch/len(s1)
@@ -46,19 +44,17 @@ def sentence_sound_index(ss1,ss2,list = "none"):
         s1 = word_tokenize(ss1)
         s2 = word_tokenize(ss2)
         if len(s1) > len(s2):
-            s1 = x
+            x = s1
             s1 = s2
             s2 = x
         catch = 0
-        print(len(s1))
-        print(len(s2))
         for i in range(len(s1)):
-            if udom83(s1[i]) == udom83(s2[i]) or (i+1<len(s2) and udom83(s1[i]) == udom83(s2[i+1])) or (i-1 >=0 and udom83(s1[i]) == udom83(s2[i-1])): 
+            if udom83(s1[i]) == udom83(s2[i]) or (i+2<len(s2) and udom83(s1[i]) == udom83(s2[i+2])) or (i+1<len(s2) and udom83(s1[i]) == udom83(s2[i+1])) or (i-1 >=0 and udom83(s1[i]) == udom83(s2[i-1])): 
                 catch += 1
         if len(s1) > len(s2):
-            return catch/len(s1)
+            return float(catch/len(s1))
         else:
-            return catch/len(s2)
+            return float(catch/len(s2))
 
 def sentence_get_confident(ss1,ss2,list = "none"):
     if list == "none":
@@ -67,13 +63,16 @@ def sentence_get_confident(ss1,ss2,list = "none"):
         else:
             return False #"ขอโทษครับ ผมพูดได้แค่ภาษาไทย"
     elif list == "invert":
+        print('test')
         if pythainlp.util.isthai(ss1, ignore_chars="1234567890.-,$ "):
-            return (sentence_similarity(ss1,ss2)+sentence_sound_index(ss1, ss2, list=invert))/2
+            return (sentence_similarity(ss1,ss2)+sentence_sound_index(ss1, ss2, list='invert'))/2
         else:
             return False #"ขอโทษครับ ผมพูดได้แค่ภาษาไทย"
 
 # print(example[inp])
 # print(pythainlp.util.isthai(inp))
-# print(sentence_similarity("เสื้อสีแดง","เสื้อสี"))
-# print(word_tokenize("ผมเรียนที่มหาวิทยาาลัยพระจอมเกล้า"))
-# print(sentence_get_confident("มีเสื้อสีแดงมั้ย", "มีเสื้อแดงมั้ย"))
+# print(sentence_similarity("ฮัลโหล","โหล"))
+# print(word_tokenize("บายดี"))
+# print(word_tokenize("สบายดี"))
+# print(sentence_sound_index('ขายเสื้อสีแดงป่ะครับ','พี่รู้จักคนเสื้อสีแดงป่ะครับ',list='invert'))
+# print(sentence_get_confident("หวัดดี", "ดี"))

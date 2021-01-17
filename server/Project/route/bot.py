@@ -6,29 +6,32 @@ from Project.Config import *
 from Project.models.bot import ChatBot
 import json
 import requests
-from Project.message import ReplyMessage, process_message
+from Project.message import ReplyMessage, process_message, onState
 from Project.extensions import mongo, JSONEncoder
 from Project.nlp import sentence_get_confident
 # from bson.objectid import Objectid # find by id
 from bson import ObjectId
 
+
 bot = Blueprint("bot",__name__)
 
 
-@bot.route('/connect', methods=['POST'])
+@bot.route('/<id>/connect', methods=['POST'])
 @login_required
-def connect():
+def connect(id):
     bot_collection = mongo.db.bot
     if request.method == 'POST':
         connect_data = request.get_json()
         if connect_data['platform'] == 'line':
-            bot_collection.update_one({'creator': connect_data['creator']},
+            bot_collection.update_one({'_id': ObjectId(id)},
             {'$set':{'access_token':connect_data['access_token'],
-            'chanel_secret':connect_data['channel_secret'],
+            'channel_secret':connect_data['channel_secret'],
             'basic_id':connect_data['basic_id']}})
             return 200
         elif  connect_data['platform'] == 'facebook':
-            bot_collection.update_one({'access_token':connect_data['access_token'],'vertify':connect_data['verify_token']})
+            bot_collection.update_one({'_id': ObjectId(id)},
+            {'$set':{access_token:connect_data['access_token'],
+            'vertify':connect_data['verify_token']}})
             return 200
         return redirect(url_for('home'))
     elif request.method == 'GET':
@@ -54,9 +57,7 @@ def create():
 @bot.route('/edit/<id>', methods=['GET', 'POST'])
 def edit(id):
     bots_collection = mongo.db.bots
- 
     if request.method == 'POST':
-
         bot_update = request.get_json()
         bot_name = bot_update['name_bot']
         chanel_secret = bot_update['ch_sc']
@@ -108,7 +109,8 @@ def add_sentence(id):
 def webhook(platform,botID):
     training_collection = mongo.db.training
     bot_collection = mongo.db.bots
-    bot_define = bot_collection.find_one({'_id': botID})
+    customer_collection = mongo.db.customers
+    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
     if  platform == "facebook":
         if request.method == "GET":
             if  request.args.get("hub.verify_token") == VERIFY_TOKEN:
@@ -129,13 +131,22 @@ def webhook(platform,botID):
     elif platform == "line":
         if request.method == "GET":
             return "This is method get from line"
-
         elif request.method == "POST":
-            Channel_access_token = bot_define['Channel_access_token']
+            Channel_access_token = bot_define['access_token']
             payload = request.json
             Reply_token = payload['events'][0]['replyToken']
-            message = payload['events'][0]['message']['text']
-            response,conf = process_message(message,botID,bot_define['confident'])
+            sender = payload['events'][0]['source']
+            message_type = payload['events'][0]['message']['type']
+            sender_define = customer_collection.find_one({'$and':[{'userID':sender['userId']},{'botID': ObjectId(botID)}]})
+            if sender_define == None :
+                sender_define = {'userID':sender['userId'],'type':sender['type'],'state':'none','botID':bot_define['_id']}
+                customer_collection.insert_one(sender_define)
+            if message_type == 'text':
+                message = payload['events'][0]['message']['text']
+                if sender_define['state'] == 'none':
+                    response,conf = process_message(message,botID,bot_define['confident'])
+                else:
+                    response = onState(message,sender_define['state'],botID)
             ReplyMessage(Reply_token,response,Channel_access_token)
             return request.json, 200
     else:
