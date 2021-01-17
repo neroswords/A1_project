@@ -11,6 +11,7 @@ import Login from './page/Login';
 import Home from './page/Home';
 import Learned from './page/Learned';
 import Group from './page/Group';
+import Main from './components/Main';
 import Mapping from './page/Mapping';
 import Train from './page/Train';
 import Bot_list from './page/Bot_list';
@@ -25,10 +26,12 @@ function App() {
         <Nav/>
           <Switch>
             <Route path="/" exact component= { Home } />
+            <Route path="/main" exact component= { Main } />
             <CloseRoute isLoggedIn={isLoggedIn()} path="/register" exact component={ Register } />
             <CloseRoute isLoggedIn={isLoggedIn()} path="/login" exact component={ Login } />
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot_list/:user_id" component={ Bot_list }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:user_id/create_bot" exact component ={ Create_bot } />
+            <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/edit_bot" exact component ={ Create_bot } />
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/connect" exact component ={ Connect } />
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/train" component={ Train }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/learned" component={ Learned }/>

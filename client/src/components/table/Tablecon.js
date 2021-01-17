@@ -46,7 +46,7 @@ const Styles = styled.div`
 }
 `;
 
-function Tablecon() {
+function Tablecon(props) {
   const [TableconState, setTableconState] = useState([]);
   const [showWord, setShowWord] = useState(false);
 
@@ -54,8 +54,9 @@ function Tablecon() {
  const openWord = () => {
     setShowWord(prev => !prev);
   }
-
+  console.log(props)
   useEffect(() => {
+    fetch("/bot/"+props.botID+"/training")
     let TableconState = [
         { id: 1, Word: "hiii", ReplyWord: "may i help u", Confidence: "50" },
         { id: 2, Word: "heyy", ReplyWord: "may i help u", Confidence: "50"},
@@ -80,7 +81,7 @@ function Tablecon() {
     <Styles>
     <div className="container">
           <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
-          <AddWord showWord={showWord} setShowWord={setShowWord} />
+          <AddWord showWord={showWord} setShowWord={setShowWord} botID = {props.botID}/>
           <AddStyle />
       
       <table className="table table-bordered">
