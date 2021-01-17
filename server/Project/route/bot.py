@@ -43,6 +43,7 @@ def create():
     filename = ''
     
     if request.method == 'POST':
+        print("FUCKKKKKKKKKKK")
         creator = request.form['creator'] 
         bot_name = request.form['bot_name'] 
         gender = request.form['gender'] 
@@ -58,7 +59,7 @@ def create():
             session['uploadFilePath']=destination
             response="success"
        
-        print(bot_name)
+        
         #owner = bot_info['creator'] #ref id คนสร้างมาใส่ตัวแปรนี้
 
         # image = bot_image['image']

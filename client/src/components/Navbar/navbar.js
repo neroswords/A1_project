@@ -7,28 +7,37 @@ import React from 'react';
 const Styles = styled.div`
 
 
-h1 {
-    font-size: 35px;
-    font-weight: 700;
-}
+// h1 {
+//     font-size: 35px;
+//     font-weight: 700;
+// }
 
 .btn {
-    border-radius: 1rem;
-    font-weight: bold;
-    transition: all 0.2s;
-    width: 100%;
-    text-transform : uppercase;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    // border-radius: 1rem;
+    // font-weight: bold;
+    // transition: all 0.2s;
+    // width: 100%;
+    // text-transform : uppercase;
+    // padding-left: 2rem;
+    // padding-right: 2rem;
 }
 
 .btn-login {
-    margin-left: 2rem;
-    margin-right: 9rem;
+    // margin-left: 2rem;
+    // margin-right: 9rem;
+    position: relative;
+    padding: 20px 50px;
+    display: block;
+    text-decoration: none;
+    text-transform: uppercase;
+    width: 200px;
+    overflow: hidden;
+    border-radius: 40px;
+    background-color:red;
 }
 
 .btn-sign-out {
-    margin-right: 7rem;
+    // margin-right: 7rem;
 }
 
 .nav {
@@ -73,7 +82,7 @@ const Log = () =>{
                 </Link>
                 <Link to="/login">
                     <div className="btn-login me-5">
-                        <a className="btn btn-info" role="button">Log in</a>
+                        <a className="" role="button">Log in</a>
                     </div>
                 </Link>
             </form>

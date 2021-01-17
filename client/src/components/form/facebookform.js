@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import packageJson from '../../../package.json';
 
 const Styles = styled.div`
 .container {
@@ -28,7 +29,7 @@ const Styles = styled.div`
 export default function Facebookform(props) {
     const [access_token, setAccess_token] = useState('');
     const [verify_token, setVerify_token] = useState('');
-    console.log(props)
+    console.log(packageJson.proxy)
     const handleSubmit = (event) => {
         event.preventDefault();
         const editData = {access_token, verify_token}
@@ -72,6 +73,7 @@ export default function Facebookform(props) {
                                 <p className="col">Connect to facebook</p>
                                 {/* <i className="col fab fa-facebook"></i> */}
                             </div>
+                            <p>{packageJson.proxy}bot/webhook/{props.props.bot_id}/facebook</p>
                             <div className="col-lg-12">
                                 <label  className="form-label">Page Facebook access token</label>
                                 <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputpagefacebook" />

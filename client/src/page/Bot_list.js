@@ -5,8 +5,9 @@ import { useDetectOutsideClick } from "../components/botlist/button_nav";
 
 
 
-export default function Bot_list() {
+export default function Bot_list(props) {
     const [botlist,setBotlist] = useState([]);
+    
     const delete_bot =(id)=>{
         fetch('/bot/delete/'+id, {
         method : 'POST',
@@ -30,7 +31,7 @@ export default function Bot_list() {
     return(
                 <div className="botlist-page">
                     {/* <Navbar_member /> */}
-                          <div class="container col-xl-9 col-lg-9 col-md-12  col-sm-12 col-xs-12">
+                          <div class="container col-xl-9 col-lg-9 col-md-12 col-sm-12 col-xs-12">
                                     <div className="botlist-body">
                                         <Link className='link' to={'/bot/'+localStorage.getItem('user_id')+'/create_bot'}>
                                         <div className="card-plus group">
@@ -59,7 +60,7 @@ function Dropdown({botData, deleteBot}){
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
     const onClick = () => setIsActive(!isActive);
     // const forceUpdate = useForceUpdate();
-    console.log(botData)
+    // console.log(botData)
     return(
     <div class="card-box">
         <Link to={'/bot/'+botData._id.$oid+'/train' } >
@@ -90,14 +91,14 @@ function Dropdown({botData, deleteBot}){
                 >
                 <ul>
                     <li> 
-                    <a href={'/bot/'+botData._id.$oid+'/edit_bot'}><i class="fas fa-pen"></i> edit</a>
+                        <a href={'/bot/'+botData._id.$oid+'/edit_bot'}><i class="fas fa-pen"></i> edit</a>
                     </li>
                     <li>
-                    <a href={'/bot/'+botData._id.$oid+'/connect'}><i class="fas fa-link"></i> Connect</a>
+                        <a href={'/bot/'+botData._id.$oid+'/connect'}><i class="fas fa-link"></i> Connect</a>
                     </li>
                     <li>
-                    <a href="#" onClick={()=>deleteBot(botData._id.$oid)}>
-                    <i class="fas fa-trash"></i> Delete</a>
+                        <a href="#" onClick={()=>deleteBot(botData._id.$oid)}>
+                        <i class="fas fa-trash"></i> Delete</a>
                     </li>
                 </ul>
             </div>

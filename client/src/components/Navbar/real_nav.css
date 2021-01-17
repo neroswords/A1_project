@@ -24,6 +24,7 @@
   
   /* <nav> */
   .navbar-real {
+    /* position: static; */
     height: 8vh;
     background-color: white;
     padding: 0 1rem;
@@ -31,7 +32,7 @@
     justify-content: space-between;
     
     /* border-bottom: var(--border); */
-    /* box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1); */
+    /* box-shadow: 0 0.1rem 0.5rem 0 rgba(0, 0, 0, 0.1); */
   }
   .navbar-real ul {
     right: auto;
@@ -48,7 +49,8 @@
   }
 
   .show-user:hover a{
-    background-color: #c1d7ea;
+    background-color: #fca311;
+    color: white;
   }
 
   .show-user i {
@@ -67,7 +69,7 @@
     justify-content: center;
     vertical-align: middle;
     border-radius: 3rem;
-    border: 1px solid #c1d7ea	;
+    border: 1px solid #fca311	;
     text-decoration: none;
     color: #14213d;
   }
@@ -97,7 +99,8 @@
     --button-size: calc(var(--nav-size) * 0.6);
     width: var(--button-size);
     height: var(--button-size);
-    background-color: #F2F2F0;
+    /* background-color: #F2F2F0; */
+    background-color: #fdb742;
     border-radius: 50%;
     padding: 5px;
     margin: 2px;
@@ -138,7 +141,6 @@
     overflow: hidden;
     transition: height var(--speed) ease;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-    position: fixed;
     z-index: 1000;
   }
   
@@ -209,29 +211,54 @@
     transition: all var(--speed) ease;
   }
 
+
+
   .btn-nav a {
-    border-radius: 3rem;
+    border-radius: 0.5rem;
     font-weight: bold;
     transition: all 0.2s;
     width: 100%;
     text-transform : uppercase;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1); */
     align-items: center;
     justify-content: center;
     vertical-align: middle;
     text-decoration: none;
     text-align: center;
-    margin-top: 10%;
 }
 
-  .btn-login {
-    margin-left: 2rem;
-    margin-right: 9rem;
-    margin-top: 1%;
+  .btn-signup {
+    margin-left: 0.5rem;
+    margin-right: 2rem;
   }
 
-.btn-signup {
-  border-style: none;
-}
+  .btn-signup a {
+    padding: 0.5rem 1.5rem;
+    margin-top: 11px;
+    border: 1px solid #232032;
+    color: black;
+    font-family: 'Public Sans', sans-serif;
+    font-size: 13px;
+  }
+
+  .btn-signup:hover a {
+    border: 1px solid #232032;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    color: white;
+    background-color: #232032;
+  }
+
+
+  .btn-login a {
+    font-family: 'Public Sans', sans-serif;
+    padding: 0.5rem 2.5rem;
+    font-size: 13px;
+    margin-top: 10px;
+    border: 2px solid #F4F3F3;
+    color: white;
+    background-color: #fca311 ;
+  }
+
+  .btn-login a:hover{
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+  }
