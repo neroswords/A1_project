@@ -63,8 +63,9 @@ function Dropdown({botData, deleteBot}){
     // console.log(botData)
     return(
     <div class="card-box">
-        <Link to={'/bot/'+botData._id.$oid+'/train'}>
-            <img src='/images/bot/bot_pic/Avatar.jpg' class="bot-img"/>
+        <Link to={'/bot/'+botData._id.$oid+'/train' } >
+         <img src={'/images/bot/bot_pic/'+botData.Img} class="bot-img"/>
+   
         </Link>
         <div class="info-bot">
             <Link className="link" to={'/bot/'+botData._id.$oid+'/train'}>

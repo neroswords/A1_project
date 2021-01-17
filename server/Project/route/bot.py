@@ -4,17 +4,18 @@ from flask_login import LoginManager, login_user, logout_user, login_required,cu
 from pymessenger import Bot
 from Project.Config import *
 from Project.models.bot import ChatBot
+from werkzeug.utils import secure_filename
 import json
 import requests
 from Project.message import ReplyMessage, process_message, onState
 from Project.extensions import mongo, JSONEncoder
 from Project.nlp import sentence_get_confident
-# from bson.objectid import Objectid # find by id
 from bson import ObjectId
-
+import os.path
+from bson.json_util import dumps,loads
 
 bot = Blueprint("bot",__name__)
-
+UPLOAD_FOLDER = './Project/static/images/bot/bot_pic'
 
 @bot.route('/<id>/connect', methods=['POST'])
 @login_required
@@ -41,16 +42,32 @@ def connect(id):
 @bot.route('/create', methods=['POST'])
 def create():
     bots_collection = mongo.db.bots
+    filename = ''
+    
     if request.method == 'POST':
-        bot_info = request.get_json()
-        bot_name = bot_info['bot_name']
-        owner = bot_info['creator'] #ref id คนสร้างมาใส่ตัวแปรนี้
-        gender = bot_info['gender']
-        age = bot_info['age']
+        print("FUCKKKKKKKKKKK")
+        creator = request.form['creator'] 
+        bot_name = request.form['bot_name'] 
+        gender = request.form['gender'] 
+        age = request.form['age'] 
+        if  "file" not in request.files :
+            filename = "Avatar.jpg"
+        else :
+            file = request.files['file'] 
+            filename = secure_filename(file.filename)
+            filename = creator+"&"+bot_name+os.path.splitext(filename)[1]
+            destination="/".join([UPLOAD_FOLDER, filename])
+            file.save(destination)
+            session['uploadFilePath']=destination
+            response="success"
+       
+        
+        #owner = bot_info['creator'] #ref id คนสร้างมาใส่ตัวแปรนี้
+
         # image = bot_image['image']
-        new_bot = bots_collection.insert_one({'bot_name': bot_name, 'owner': owner, 'gender' : gender, 'age': age})
-        id = JSONEncoder().encode(new_bot.inserted_id).replace('"','')
-        return {"id": id}
+        new_bot = bots_collection.insert_one({'bot_name': bot_name, 'gender' : gender,'owner': creator, 'age': age,'Img': filename})
+        #id = JSONEncoder().encode(new_bot.inserted_id).replace('"','')
+        return {'message' : 'add bot successfully'}
     return "add bot unsuccessfully"
 
 #edit
@@ -151,3 +168,33 @@ def webhook(platform,botID):
             return request.json, 200
     else:
         return 200
+
+@bot.route('/<botID>/training',methods=["GET"])
+def training(botID):
+    if request.method == 'GET' :
+        training_collection = mongo.db.training
+        training_cursor = training_collection.find({"botID" : botID})
+        listcursor = list(training_cursor)
+        print(listcursor)
+        data = dumps(listcursor,indent = 2)
+        return data
+
+
+@bot.route('/<botID>/addword',methods=["POST"])
+def addword(botID):
+    if request.method == 'POST' :
+        trained_collection = mongo.db.trained
+        trained_update = request.get_json()
+        question = trained_update['question']
+        creator = trained_update['botID'] 
+        ans = trained_update['answer']
+        
+        trained_collection.insert_one({'question': question, 'botID':  ObjectId(creator), 'answer': ans})
+        return "add done"
+    return "ok"
+        #image = bot_update['image']
+
+        
+        # bot_id = { "_id": ObjectId (id)}
+
+

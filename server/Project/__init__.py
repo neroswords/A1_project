@@ -36,18 +36,17 @@ login_manager.init_app(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = './static/images'
 
+
 app.register_blueprint(profile, url_prefix='/profile')
 app.register_blueprint(bot, url_prefix='/bot')
+
 
 
 @app.route('/upload', methods=['POST'])
 def fileUpload():
     file = request.files['file'] 
     filename = secure_filename(file.filename)
-    destination="/".join([UPLOAD_FOLDER, filename])
-    file.save(destination)
-    session['uploadFilePath']=destination
-    response="success"
+    filename = images.save(form.image.data)
     print(destination)
     return response
 

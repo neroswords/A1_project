@@ -13,7 +13,7 @@ const Styles = styled.div`
 }
 ` 
 
-function Train(){
+function Train(props){
     return(
         <Styles>
         <div className="train-page">
@@ -25,7 +25,7 @@ function Train(){
                     <div className="p-2 bd-highlight"><button className="btn btn-success" type="button">Train</button></div>
                 </div>
                 <hr></hr>
-                <Table />
+                <Table botID = {props.match.params.bot_id} />
                 
             </div>
 
