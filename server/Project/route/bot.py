@@ -17,10 +17,10 @@ from bson.json_util import dumps,loads
 bot = Blueprint("bot",__name__)
 UPLOAD_FOLDER = './Project/static/images/bot/bot_pic'
 
-@bot.route('/<id>/connect', methods=['POST'])
-@login_required
+@bot.route('/<id>/connect', methods=['GET','POST'])
+# @login_required
 def connect(id):
-    bot_collection = mongo.db.bot
+    bot_collection = mongo.db.bots
     if request.method == 'POST':
         connect_data = request.get_json()
         if connect_data['platform'] == 'line':
@@ -36,7 +36,8 @@ def connect(id):
             return 200
         return redirect(url_for('home'))
     elif request.method == 'GET':
-        return render_template('connect.html')
+        bot_define = bot_collection.find_one({'_id': ObjectId(id)})
+        return dumps(bot_define, indent = 2) 
 
 #create bot
 @bot.route('/create', methods=['POST'])
@@ -45,7 +46,6 @@ def create():
     filename = ''
     
     if request.method == 'POST':
-        print("FUCKKKKKKKKKKK")
         creator = request.form['creator'] 
         bot_name = request.form['bot_name'] 
         gender = request.form['gender'] 
@@ -175,6 +175,16 @@ def training(botID):
         training_collection = mongo.db.training
         training_cursor = training_collection.find({"botID" : botID})
         listcursor = list(training_cursor)
+        print(listcursor)
+        data = dumps(listcursor,indent = 2)
+        return data
+
+@bot.route('/<botID>/trained',methods=["GET"])
+def trained(botID):
+    if request.method == 'GET' :
+        trained_collection = mongo.db.trained
+        trained_cursor = trained_collection.find({"botID" : botID})
+        listcursor = list(trained_cursor)
         print(listcursor)
         data = dumps(listcursor,indent = 2)
         return data

@@ -50,16 +50,16 @@ def fileUpload():
     print(destination)
     return response
 
-@login_manager.user_loader
-def load_user(username):
-    return get_user(username)
+# @login_manager.user_loader
+# def load_user(username):
+#     return get_user(username)
 
 
-@app.route("/logout")
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('profile.login'))
+# @app.route("/logout")
+# @login_required
+# def logout():
+#     logout_user()
+#     return redirect(url_for('profile.login'))
 
 # @app.route('/connect', methods=['GET', 'POST'])
 # @login_required
@@ -84,9 +84,8 @@ def serve_image(image_name):
     return send_from_directory(app.config['DOWNLOAD_FOLDER'],image_name)
     
 @app.route('/connect/newbot', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def newbot():
-    message = '555'
     if request.method == 'POST':
         if  not check_bot(request.form.get('name_bot')):
             message = "Bot name already exists!"

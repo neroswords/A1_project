@@ -29,11 +29,11 @@ const Styles = styled.div`
 export default function Facebookform(props) {
     const [access_token, setAccess_token] = useState('');
     const [verify_token, setVerify_token] = useState('');
-    console.log(packageJson.proxy)
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const editData = {access_token, verify_token}
-        fetch('/', {
+        fetch('/bot/'+props.props.bot_id+'/connect', {
             method: 'POST',
             headers : {
                 "Access-Control-Allow-Origin": "*",
@@ -55,9 +55,9 @@ export default function Facebookform(props) {
     }
 
     useEffect(() => {
-        fetch('/bot/'+localStorage.getItem('user_id')).then(
+        fetch('/bot/'+props.props.bot_id+'/connect').then(
             response => response.json()
-          ).then(data =>{
+          ).then(data =>{ 
             setAccess_token(data.page_facebook_access_token);
             setVerify_token(data.VERIFY_TOKEN);
         })
