@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef } from "react";
 import {Link} from "react-router-dom";
-import '../components/botlist/Bot_list.css';
-import { useDetectOutsideClick } from "../components/botlist/button_nav";
+import '../Components/Botlist/Bot_list.css';
+import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
 
 
 

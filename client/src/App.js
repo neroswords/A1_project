@@ -4,21 +4,21 @@ import './App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import { PrivateRoute } from "./Private.jsx";
 import { CloseRoute } from "./closeRoute.jsx";
-import { isLoggedIn } from './components/auth.js';
+import { isLoggedIn } from './Components/auth.js';
 
-import Register from './page/Register';
-import Login from './page/Login';
-import Home from './page/Home';
-import Learned from './page/Learned';
-import Group from './page/Group';
-import Main from './components/Main';
-import Mapping from './page/Mapping';
-import Train from './page/Train';
-import Bot_list from './page/Bot_list';
-import Create_bot from './page/Create_bot';
-import Connect from './page/Connect_bot'
-import AddWord from './components/table/addTable/AddWord';
-import Nav from './components/Navbar/real_nav';
+import Register from './Page/Register';
+import Login from './Page/Login';
+import Home from './Page/Home';
+import Learned from './Page/Learned';
+import Group from './Page/Group';
+import Main from './Components/Main';
+import Mapping from './Page/Mapping';
+import Train from './Page/Train';
+import Bot_list from './Page/Bot_list';
+import Create_bot from './Page/Create_bot';
+import Connect from './Page/Connect_bot'
+import AddWord from './Components/Table/AddTable/AddWord';
+import Nav from './Components/Navbar/real_nav';
 
 function App() {
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
-import Table from '../components/table/Table';
-import Navbar_member from '../components/Navbar/navbar_member';
+import Table from '../Components/Table/Table';
+import Navbar_member from '../Components/Navbar/navbar_member';
 import styled from 'styled-components';
 
 const Styles = styled.div` 

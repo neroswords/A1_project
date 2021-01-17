@@ -1,10 +1,10 @@
 import React,{ useState } from 'react';
 import {Button, Collapse } from 'react-bootstrap';
-import { CardList } from '../components/Landing/cardList';
-import { Mainpage } from '../components/Landing/Mainpage';
-import { Endpage }  from '../components/Landing/endpage';
+import { CardList } from '../Components/Landing/cardList';
+import { Mainpage } from '../Components/Landing/Mainpage';
+import { Endpage }  from '../Components/Landing/endpage';
 
-import Footer from '../components/footer/footer';
+import Footer from '../Components/Footer/footer';
 
 function Home(){
     return(
