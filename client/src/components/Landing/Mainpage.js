@@ -51,7 +51,7 @@ export const Mainpage = () => (
             <h1>A1 Chatbot</h1>
             <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. <br />Inventore deleniti aliquid  et consectetur corporis eum odit.<br /> Excepturi, repellendus.</span>
           </div>
-          <img src="./images/Telephone.png" width="100%"/>
+          <img src="./images/main.png" width="120%"/>
         </section>
     </Jumbo>
     </Container>

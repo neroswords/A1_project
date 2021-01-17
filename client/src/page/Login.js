@@ -1,11 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
-// import {bg-login} from './images/bg-login.png';
+// import {bglogin} from './images/bg-login.png';
 
 
 const Styles = styled.div`
   .page {
-        background: url(${process.env.PUBLIC_URL +'/images/bg-login.png'}) no-repeat fixed bottom;
+        // background: url(${process.env.PUBLIC_URL +'/images/bg-log.png'}) ;
+        // background-size: 80%;
+        // position: cover;
+        // top: 0px;
+        // left: 0;
+        // right: 0;
+        // bottom: 0;
+        // width: 100%;
+        // height: 100%;
   }
 
   .container {
