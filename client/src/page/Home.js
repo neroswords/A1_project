@@ -4,7 +4,7 @@ import { CardList } from '../components/Landing/cardList';
 import { Mainpage } from '../components/Landing/Mainpage';
 import { Endpage }  from '../components/Landing/endpage';
 
-import Footer from '../components/footer/footer';
+import Footer from '../components/Footer/footer';
 
 function Home(){
     return(

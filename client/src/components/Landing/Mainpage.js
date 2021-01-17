@@ -30,14 +30,14 @@ const Styles = styled.div`
   }
 
   h1 {
-    font-size: 40px;
+    font-size: 80px;
     font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
   }
 
   span {
     color: grey;
   }
-
 `;
 
 

@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import {withRouter, Redirect} from 'react-router-dom'
 
-import Facebookform  from '../components/form/facebookform';
-import Lineform  from '../components/form/lineform';
+import Facebookform  from '../components/Form/facebookform';
+import Lineform  from '../components/Form/lineform';
 
 const Styles = styled.div`
   .container {
