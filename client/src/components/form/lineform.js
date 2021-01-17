@@ -30,6 +30,9 @@ export default function Lineform(props) {
     const [access_token, setAccess_token] = useState('');
     const [channel_secret, setChannel_secret] = useState('');
     const [basic_id, setBasic_id] = useState('');
+    const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+props.props.bot_id+'/line');
+
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -69,7 +72,8 @@ export default function Lineform(props) {
                                     <p className="col">Connect to Line</p>
                                     {/* <i class="fab fa-line"></i> */}
                                 </div>
-                                    <p>{packageJson.proxy}bot/webhook/{props.props.bot_id}/line</p>
+                                    <p>{webhook}</p>
+                                    <button onClick={() => {navigator.clipboard.writeText(webhook)}}></button>
                                 <div className="col-lg-12">
                                     <label  className="form-label">Channel secret</label>
                                     <input type="text" value={channel_secret} onChange={e => setChannel_secret(e.target.value)} className="form-control" id="inputpagefacebook"/>
@@ -90,3 +94,4 @@ export default function Lineform(props) {
             </Styles>
         )   
 }
+
