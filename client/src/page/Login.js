@@ -1,7 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+// import {bglogin} from './images/bg-login.png';
+
 
 const Styles = styled.div`
+  .page {
+        // background: url(${process.env.PUBLIC_URL +'/images/bg-log.png'}) ;
+        // background-size: 80%;
+        // position: cover;
+        // top: 0px;
+        // left: 0;
+        // right: 0;
+        // bottom: 0;
+        // width: 100%;
+        // height: 100%;
+  }
+
   .container {
     font-family: 'Public Sans', sans-serif;
   }
@@ -140,6 +154,7 @@ class Login extends React.Component {
   render(){
       return(
           <Styles>
+            <div className="page">
                 <div class="container">
                       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                         <div class="card card-signin my-5">
@@ -169,6 +184,7 @@ class Login extends React.Component {
                           </div>
                         </div>
                       </div>
+                  </div>
                   </div>
           </Styles>
     );

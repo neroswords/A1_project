@@ -208,7 +208,7 @@ class Create_bot extends React.Component {
                                   <div className="row">
                                           <div className="group col-lg-6">
                                             <div className="showimage col-lg-8">
-                                                  <img src='./images/Avatar.jpg'/>                                    
+                                                  <img src='../../images/Avatar.jpg'/>                                    
                                             </div>
                                             <div className="mt-3">                                           
                                                 <label for="uploadimage">Upload Proflie</label>

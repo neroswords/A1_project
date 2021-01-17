@@ -19,18 +19,17 @@ function Nav(){
 function Normal_nav(){
   return(
     <Navbar_real>
-      <Link to="/register">
-          <div className="btn-signup btn-nav">
-              <a className="btn btn-outline-secondary" role="button">Register</a>
+      <Link to="/login">
+          <div className="btn-login btn-nav">
+              <a className="btn" role="button">Log in</a>
           </div>
       </Link>
-      <Link to="/login">
-          <div className="btn-login me-5 btn-nav">
-              <a className="btn btn-info" role="button">Log in</a>
+      <Link to="/register">
+          <div className="btn-signup btn-nav">
+              <a className="btn" role="button">Register</a>
           </div>
       </Link>
       </Navbar_real>
-      
     )
 }
 
