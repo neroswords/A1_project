@@ -24,7 +24,7 @@
   
   /* <nav> */
   .navbar-real {
-    /* position: fixed; */
+    /* position: static; */
     height: 8vh;
     background-color: white;
     padding: 0 1rem;
@@ -49,7 +49,8 @@
   }
 
   .show-user:hover a{
-    background-color: #c1d7ea;
+    background-color: #fca311;
+    color: white;
   }
 
   .show-user i {
@@ -68,7 +69,7 @@
     justify-content: center;
     vertical-align: middle;
     border-radius: 3rem;
-    border: 1px solid #c1d7ea	;
+    border: 1px solid #fca311	;
     text-decoration: none;
     color: #14213d;
   }
@@ -98,7 +99,8 @@
     --button-size: calc(var(--nav-size) * 0.6);
     width: var(--button-size);
     height: var(--button-size);
-    background-color: #F2F2F0;
+    /* background-color: #F2F2F0; */
+    background-color: #fdb742;
     border-radius: 50%;
     padding: 5px;
     margin: 2px;
@@ -139,7 +141,6 @@
     overflow: hidden;
     transition: height var(--speed) ease;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-    position: fixed;
     z-index: 1000;
   }
   
