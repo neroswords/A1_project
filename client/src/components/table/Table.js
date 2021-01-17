@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
 import {Button} from 'react-bootstrap';
-import {AddWord} from './addTable/AddWord';
+import {AddWord} from './AddTable/AddWord';
 import { AddStyle } from "./AddStyle";
 
 const Styles = styled.div`

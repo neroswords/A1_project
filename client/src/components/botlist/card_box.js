@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import '../botlist/Bot_list.css';
+import './Bot_list.css';
 import { useDetectOutsideClick } from "./button_nav";
 
 

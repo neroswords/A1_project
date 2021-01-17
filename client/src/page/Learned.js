@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from '../components/table/Table';
+import Table from '../components/Table/Table';
 import Navbar_member from '../components/Navbar/navbar_member';
 import styled from 'styled-components';
 

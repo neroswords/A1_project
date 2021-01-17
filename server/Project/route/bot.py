@@ -43,7 +43,6 @@ def create():
     filename = ''
     
     if request.method == 'POST':
-        print("FUCKKKKKKKKKKK")
         creator = request.form['creator'] 
         bot_name = request.form['bot_name'] 
         gender = request.form['gender'] 
@@ -69,10 +68,16 @@ def create():
     return "add bot unsuccessfully"
 
 #edit
-@bot.route('/edit/<id>', methods=['GET', 'POST'])
+@bot.route('/<id>/edit', methods=['GET', 'POST'])
 def edit(id):
     bots_collection = mongo.db.bots
- 
+    if request.method == 'GET' :
+        bots_cursor = bots_collection.find({"_id" : ObjectId(id)})
+        listcursor = list(bots_cursor)
+        # print(listcursor)
+        data = dumps(listcursor,indent = 2)
+        return data
+        
     if request.method == 'POST':
 
         bot_update = request.get_json()
@@ -165,7 +170,7 @@ def training(botID):
         training_collection = mongo.db.training
         training_cursor = training_collection.find({"botID" : botID})
         listcursor = list(training_cursor)
-        print(listcursor)
+        # print(listcursor)
         data = dumps(listcursor,indent = 2)
         return data
 
