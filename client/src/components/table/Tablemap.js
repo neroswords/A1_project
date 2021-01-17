@@ -12,25 +12,20 @@ const Styles = styled.div`
   font-size: 0.9em;
   border-radius: 5px 5px 0 0;
   overflow: hidden;
-
 }
-
 .table thead tr{
   text-align: left;
   font-weight: bold;
   border: none;
 }
-
 .table th,
 .table td{
   padding: 12px 15px;
   border: none;
 }
-
 .table tbody tr{
   border-bottom: 1px solid #dddddd;
 }
-
 .table tbody tr:nth-of-type(even){
   background-color: #e5e5e5;
 }

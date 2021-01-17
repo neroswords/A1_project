@@ -1,10 +1,14 @@
 import React,{ useState } from 'react';
 import {Button, Collapse } from 'react-bootstrap';
-import { CardList } from '../components/Landing/cardList';
-import { Mainpage } from '../components/Landing/Mainpage';
-import { Endpage }  from '../components/Landing/endpage';
+import { CardList } from '../Components/Landing/cardList';
+import { Mainpage } from '../Components/Landing/Mainpage';
+import { Endpage }  from '../Components/Landing/endpage';
 
+<<<<<<< HEAD
 import Footer from '../components/Footer/footer';
+=======
+import Footer from '../Components/Footer/footer';
+>>>>>>> 43d85da73c54fe2ad402f2b9dc5e8b44ae0d5c01
 
 function Home(){
     return(

@@ -4,59 +4,77 @@ from flask_login import LoginManager, login_user, logout_user, login_required,cu
 from pymessenger import Bot
 from Project.Config import *
 from Project.models.bot import ChatBot
+from werkzeug.utils import secure_filename
 import json
 import requests
-from Project.message import ReplyMessage, process_message
+from Project.message import ReplyMessage, process_message, onState
 from Project.extensions import mongo, JSONEncoder
 from Project.nlp import sentence_get_confident
-# from bson.objectid import Objectid # find by id
 from bson import ObjectId
+import os.path
+from bson.json_util import dumps,loads
 
 bot = Blueprint("bot",__name__)
+UPLOAD_FOLDER = './Project/static/images/bot/bot_pic'
 
-
-@bot.route('/connect', methods=['POST'])
-@login_required
-def connect():
-    bot_collection = mongo.db.bot
+@bot.route('/<id>/connect', methods=['GET','POST'])
+# @login_required
+def connect(id):
+    bot_collection = mongo.db.bots
     if request.method == 'POST':
         connect_data = request.get_json()
         if connect_data['platform'] == 'line':
-            bot_collection.update_one({'creator': connect_data['creator']},
+            bot_collection.update_one({'_id': ObjectId(id)},
             {'$set':{'access_token':connect_data['access_token'],
-            'chanel_secret':connect_data['channel_secret'],
+            'channel_secret':connect_data['channel_secret'],
             'basic_id':connect_data['basic_id']}})
             return 200
         elif  connect_data['platform'] == 'facebook':
-            bot_collection.update_one({'access_token':connect_data['access_token'],'vertify':connect_data['verify_token']})
+            bot_collection.update_one({'_id': ObjectId(id)},
+            {'$set':{access_token:connect_data['access_token'],
+            'vertify':connect_data['verify_token']}})
             return 200
         return redirect(url_for('home'))
     elif request.method == 'GET':
-        return render_template('connect.html')
+        bot_define = bot_collection.find_one({'_id': ObjectId(id)})
+        return dumps(bot_define, indent = 2) 
 
 #create bot
 @bot.route('/create', methods=['POST'])
 def create():
     bots_collection = mongo.db.bots
+    filename = ''
+    
     if request.method == 'POST':
-        bot_info = request.get_json()
-        bot_name = bot_info['bot_name']
-        owner = bot_info['creator'] #ref id คนสร้างมาใส่ตัวแปรนี้
-        gender = bot_info['gender']
-        age = bot_info['age']
+        creator = request.form['creator'] 
+        bot_name = request.form['bot_name'] 
+        gender = request.form['gender'] 
+        age = request.form['age'] 
+        if  "file" not in request.files :
+            filename = "Avatar.jpg"
+        else :
+            file = request.files['file'] 
+            filename = secure_filename(file.filename)
+            filename = creator+"&"+bot_name+os.path.splitext(filename)[1]
+            destination="/".join([UPLOAD_FOLDER, filename])
+            file.save(destination)
+            session['uploadFilePath']=destination
+            response="success"
+       
+        
+        #owner = bot_info['creator'] #ref id คนสร้างมาใส่ตัวแปรนี้
+
         # image = bot_image['image']
-        new_bot = bots_collection.insert_one({'bot_name': bot_name, 'owner': owner, 'gender' : gender, 'age': age})
-        id = JSONEncoder().encode(new_bot.inserted_id).replace('"','')
-        return {"id": id}
+        new_bot = bots_collection.insert_one({'bot_name': bot_name, 'gender' : gender,'owner': creator, 'age': age,'Img': filename})
+        #id = JSONEncoder().encode(new_bot.inserted_id).replace('"','')
+        return {'message' : 'add bot successfully'}
     return "add bot unsuccessfully"
 
 #edit
 @bot.route('/edit/<id>', methods=['GET', 'POST'])
 def edit(id):
     bots_collection = mongo.db.bots
- 
     if request.method == 'POST':
-
         bot_update = request.get_json()
         bot_name = bot_update['name_bot']
         chanel_secret = bot_update['ch_sc']
@@ -108,7 +126,8 @@ def add_sentence(id):
 def webhook(platform,botID):
     training_collection = mongo.db.training
     bot_collection = mongo.db.bots
-    bot_define = bot_collection.find_one({'_id': botID})
+    customer_collection = mongo.db.customers
+    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
     if  platform == "facebook":
         if request.method == "GET":
             if  request.args.get("hub.verify_token") == VERIFY_TOKEN:
@@ -129,14 +148,63 @@ def webhook(platform,botID):
     elif platform == "line":
         if request.method == "GET":
             return "This is method get from line"
-
         elif request.method == "POST":
-            Channel_access_token = bot_define['Channel_access_token']
+            Channel_access_token = bot_define['access_token']
             payload = request.json
             Reply_token = payload['events'][0]['replyToken']
-            message = payload['events'][0]['message']['text']
-            response,conf = process_message(message,botID,bot_define['confident'])
+            sender = payload['events'][0]['source']
+            message_type = payload['events'][0]['message']['type']
+            sender_define = customer_collection.find_one({'$and':[{'userID':sender['userId']},{'botID': ObjectId(botID)}]})
+            if sender_define == None :
+                sender_define = {'userID':sender['userId'],'type':sender['type'],'state':'none','botID':bot_define['_id']}
+                customer_collection.insert_one(sender_define)
+            if message_type == 'text':
+                message = payload['events'][0]['message']['text']
+                if sender_define['state'] == 'none':
+                    response,conf = process_message(message,botID,bot_define['confident'])
+                else:
+                    response = onState(message,sender_define['state'],botID)
             ReplyMessage(Reply_token,response,Channel_access_token)
             return request.json, 200
     else:
         return 200
+
+@bot.route('/<botID>/training',methods=["GET"])
+def training(botID):
+    if request.method == 'GET' :
+        training_collection = mongo.db.training
+        training_cursor = training_collection.find({"botID" : botID})
+        listcursor = list(training_cursor)
+        print(listcursor)
+        data = dumps(listcursor,indent = 2)
+        return data
+
+@bot.route('/<botID>/trained',methods=["GET"])
+def trained(botID):
+    if request.method == 'GET' :
+        trained_collection = mongo.db.trained
+        trained_cursor = trained_collection.find({"botID" : botID})
+        listcursor = list(trained_cursor)
+        print(listcursor)
+        data = dumps(listcursor,indent = 2)
+        return data
+
+
+@bot.route('/<botID>/addword',methods=["POST"])
+def addword(botID):
+    if request.method == 'POST' :
+        trained_collection = mongo.db.trained
+        trained_update = request.get_json()
+        question = trained_update['question']
+        creator = trained_update['botID'] 
+        ans = trained_update['answer']
+        
+        trained_collection.insert_one({'question': question, 'botID':  ObjectId(creator), 'answer': ans})
+        return "add done"
+    return "ok"
+        #image = bot_update['image']
+
+        
+        # bot_id = { "_id": ObjectId (id)}
+
+

@@ -4,20 +4,21 @@ import './App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import { PrivateRoute } from "./Private.jsx";
 import { CloseRoute } from "./closeRoute.jsx";
-import { isLoggedIn } from './components/auth.js';
+import { isLoggedIn } from './Components/auth.js';
 
 import Register from './Page/Register';
 import Login from './Page/Login';
 import Home from './Page/Home';
 import Learned from './Page/Learned';
 import Group from './Page/Group';
+import Main from './Components/Main';
 import Mapping from './Page/Mapping';
 import Train from './Page/Train';
 import Bot_list from './Page/Bot_list';
 import Create_bot from './Page/Create_bot';
 import Connect from './Page/Connect_bot'
-import AddWord from './components/Table/AddTable/AddWord';
-import Nav from './components/Navbar/real_nav';
+import AddWord from './Components/Table/AddTable/AddWord';
+import Nav from './Components/Navbar/real_nav';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Nav/>
           <Switch>
             <Route path="/" exact component= { Home } />
+            <Route path="/main" exact component= { Main } />
             <CloseRoute isLoggedIn={isLoggedIn()} path="/register" exact component={ Register } />
             <CloseRoute isLoggedIn={isLoggedIn()} path="/login" exact component={ Login } />
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot_list/:user_id" component={ Bot_list }/>

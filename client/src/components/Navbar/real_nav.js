@@ -67,7 +67,7 @@ function NavItem(props) {
   return (
     
     <li className="nav-item-real">
-      <a href="/#" className="icon-button-real" onClick={() => setOpen(!open)}>
+      <a href="#" className="icon-button-real" onClick={() => setOpen(!open)}>
         {props.icon}
       </a>
 
@@ -125,6 +125,14 @@ function DropdownMenu() {
             <DropdownItem 
               leftIcon= {<i class="fas fa-user"></i>}>
                 Edit Profile
+            </DropdownItem>
+          </a>
+          <a onClick={() => {
+            window.location.replace("/bot_list/"+ localStorage.getItem('user_id'))
+          }}>
+            <DropdownItem 
+              leftIcon= {<i class="fas fa-user"></i>}>
+                Manage Bot
             </DropdownItem>
           </a>
           <a onClick={() => {

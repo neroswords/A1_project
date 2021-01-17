@@ -1,7 +1,12 @@
 import React, {useState, useEffect, useRef } from "react";
 import {Link} from "react-router-dom";
+<<<<<<< HEAD
 import '../components/Botlist/Bot_list.css';
 import { useDetectOutsideClick } from "../components/Botlist/button_nav";
+=======
+import '../Components/Botlist/Bot_list.css';
+import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
+>>>>>>> 43d85da73c54fe2ad402f2b9dc5e8b44ae0d5c01
 
 
 
@@ -63,8 +68,9 @@ function Dropdown({botData, deleteBot}){
     // console.log(botData)
     return(
     <div class="card-box">
-        <Link to={'/bot/'+botData._id.$oid+'/train'}>
-            <img src='/images/bot/bot_pic/Avatar.jpg' class="bot-img"/>
+        <Link to={'/bot/'+botData._id.$oid+'/train' } >
+         <img src={'/images/bot/bot_pic/'+botData.Img} class="bot-img"/>
+   
         </Link>
         <div class="info-bot">
             <Link className="link" to={'/bot/'+botData._id.$oid+'/train'}>

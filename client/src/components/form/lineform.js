@@ -30,15 +30,16 @@ export default function Lineform(props) {
     const [access_token, setAccess_token] = useState('');
     const [channel_secret, setChannel_secret] = useState('');
     const [basic_id, setBasic_id] = useState('');
-    console.log(props)
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const editData = {'access_token':access_token, 
-        'channel_secret':channel_secret, 
-        'basic_id':basic_id,
-        'creator':localStorage.getItem('user_id')}
-        fetch('/', {
+        const editData = {
+            'access_token':access_token, 
+            'channel_secret':channel_secret, 
+            'basic_id':basic_id,
+            'creator':localStorage.getItem('user_id')
+            }
+        fetch('/bot/'+props.props.bot_id+'/connect', {
             method: 'POST',
             headers : {
                 "Access-Control-Allow-Origin": "*",
@@ -49,11 +50,11 @@ export default function Lineform(props) {
     }
 
     useEffect(() => {
-        fetch('/bot/'+localStorage.getItem('user_id')+'/connect').then(
+        fetch('/bot/'+props.props.bot_id+'/connect').then(
             response => response.json()
           ).then(data =>{
-            setAccess_token(data.page_facebook_access_token);
-            setChannel_secret(data.Channel_secret);
+            setAccess_token(data.access_token);
+            setChannel_secret(data.channel_secret);
             setBasic_id(data.basic_id);
         })
     }, []);

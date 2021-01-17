@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { MdClose } from 'react-icons/md';
@@ -60,8 +60,20 @@ const CloseModalButton = styled(MdClose)`
 `;
 
 
-export const AddWord = ({ showWord, setShowWord}) => {
+
+export const AddWord = ({ showWord, setShowWord,botID}) => {
   const modalRef = useRef();
+  const [question, setQuestion] = useState('')
+  const [answer, setAnswer] = useState('')
+  const addword =(id)=>{
+    const data = {'question' : question,'answer' : answer ,'botID' : botID}
+    fetch('/bot/'+id+'/addword', {
+    method : 'POST',
+    headers : {
+        "Access-Control-Allow-Origin": "*",
+        'Content-Type':'application/json'
+        },
+    body: JSON.stringify(data)})};
 
   const animation = useSpring({
     config: {
@@ -104,13 +116,13 @@ export const AddWord = ({ showWord, setShowWord}) => {
             <ModalWrapper showWord={showWord}>
               <ModalContent>
               <Form.Group>
-                <h1>Add youe Question and Answer</h1>
+                <h1>Add your Question and Answer</h1>
                 <Form.Row>
                 <Form.Label column>
                   Question
                 </Form.Label>
                 <Col>
-                  <Form.Control type="text" placeholder="Question" />
+                  <Form.Control type="text" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question" />
                 </Col>
                 </Form.Row>
                 <br />
@@ -119,12 +131,12 @@ export const AddWord = ({ showWord, setShowWord}) => {
                   Answer
                 </Form.Label>
                 <Col>
-                  <Form.Control type="text" placeholder="Answer" />
+                  <Form.Control type="text" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer" />
                 </Col>
                 </Form.Row>
                 <br />
               </Form.Group>
-              <Button className="qa-comfirm" variant="success">Comfirm</Button>
+              <Button className="qa-comfirm" variant="success" onClick = {() => addword(botID)}>Comfirm</Button>
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"
