@@ -1,11 +1,6 @@
 import React from 'react';
-<<<<<<< HEAD
-import Table from '../components/Table/Table';
-import Navbar_member from '../components/Navbar/navbar_member';
-=======
 import Table from '../Components/Table/Table';
 import Navbar_member from '../Components/Navbar/navbar_member';
->>>>>>> 43d85da73c54fe2ad402f2b9dc5e8b44ae0d5c01
 
 import styled from 'styled-components';
 
