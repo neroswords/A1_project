@@ -2,8 +2,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import {withRouter, Redirect} from 'react-router-dom'
-import Facebookform  from '../components/Form/facebookform';
-import Lineform  from '../components/Form/lineform';
+import Facebookform  from '../Components/Form/facebookform';
+import Lineform  from '../Components/Form/lineform';
 
 const Styles = styled.div`
   .container {
@@ -130,9 +130,8 @@ class Edit_bot extends React.Component {
     data.append('gender' ,this.gender.value);
     data.append('age' ,this.age.value);
     data.append('creator' , localStorage.getItem('user_id'))
-
-
-    fetch('/bot/edit_bot', {
+    data.append('Image' , this.state.Image)
+    fetch('/bot/'+this.props.match.params.bot_id+'/edit', {
       method: 'POST',
       // headers : {
       //   "Access-Control-Allow-Origin": "*",
@@ -190,7 +189,7 @@ class Edit_bot extends React.Component {
                                           </div>
                                           <div className="mt-3">                                           
                                               <label for="uploadimage">Upload Proflie</label>
-                                              <input ref={(ref) => { this.uploadInput = ref; }}  type="file" />
+                                              <input  ref={(ref) => { this.uploadInput = ref; }}  type="file"  />
                                             </div>
                                         </div>  
                                         <div className=" group col-lg-6">
@@ -234,7 +233,7 @@ class Edit_bot extends React.Component {
                             {/* <Lineform />                                 */}
 
                               <div className="btn-createbot">
-                                  <button className="btn btn-success text-uppercase" onClick={this.handleSubmit} type="submit">Create ChatBot</button>
+                                  <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Create ChatBot</button>
                               </div>
 
 

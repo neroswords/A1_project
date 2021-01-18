@@ -4,11 +4,7 @@ import { CardList } from '../Components/Landing/cardList';
 import { Mainpage } from '../Components/Landing/Mainpage';
 import { Endpage }  from '../Components/Landing/endpage';
 
-<<<<<<< HEAD
-import Footer from '../components/Footer/footer';
-=======
 import Footer from '../Components/Footer/footer';
->>>>>>> 93f97da5428f94557a4106c63f7c36a600fd853f
 
 function Home(){
     return(

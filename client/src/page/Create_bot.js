@@ -3,8 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 import {withRouter, Redirect} from 'react-router-dom'
 
-import Facebookform  from '../components/Form/facebookform';
-import Lineform  from '../components/Form/lineform';
+import Facebookform  from '../Components/Form/facebookform';
+import Lineform  from '../Components/Form/lineform';
 
 const Styles = styled.div`
   .container {
@@ -243,7 +243,7 @@ class Create_bot extends React.Component {
                             {/* <Lineform />                                 */}
 
                               <div className="btn-createbot">
-                                  <button className="btn btn-success text-uppercase" onClick={this.handleSubmit} type="submit">Create ChatBot</button>
+                                  <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Create ChatBot</button>
                               </div>
 
 

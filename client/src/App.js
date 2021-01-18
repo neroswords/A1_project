@@ -11,15 +11,15 @@ import Login from './Page/Login';
 import Home from './Page/Home';
 import Learned from './Page/Learned';
 import Group from './Page/Group';
-import Main from './components/Main';
+import Main from './Components/Main';
 import Mapping from './Page/Mapping';
 import Train from './Page/Train';
 import Bot_list from './Page/Bot_list';
 import Edit_bot from './Page/Edit_bot';
 import Create_bot from './Page/Create_bot';
 import Connect from './Page/Connect_bot'
-import AddWord from './components/Table/AddTable/AddWord';
-import Nav from './components/Navbar/real_nav';
+import AddWord from './Components/Table/AddTable/AddWord';
+import Nav from './Components/Navbar/real_nav';
 
 function App() {
   return (

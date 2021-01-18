@@ -55,7 +55,7 @@ function Table() {
 
   useEffect(() => {
     let TableState = [
-        { id: 1, Word: "hiii", ReplyWord: "may i help u" },
+        { id: 1, Word: "hiiisdsads", ReplyWord: "may i help u" },
         { id: 2, Word: "heyy", ReplyWord: "may i help u" },
         { id: 3, Word: "hello", ReplyWord: "may i help u" }
     ];
