@@ -168,14 +168,14 @@ function Navbar_member({botID}) {
                         </Link>
                       </li>
                       <li className="nav-item">
-                        <a href="/train" class="nav-link">
+                        <Link to={'/bot/'+botID+'/trained'} class="nav-link">
                           <div className="fa-group">
                               <div className="fa-secondary">
                                 <i class="fas fa-graduation-cap"></i>
                             </div>
                           </div>
                           <span className="link-text">Trained</span>
-                        </a>
+                        </Link>
                       </li>
                       <li className="nav-item">
                         <Link to={'/bot/'+botID+'/group'} class="nav-link">

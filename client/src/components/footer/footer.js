@@ -109,7 +109,7 @@ function Footer(){
                     <h4>SOCIAL MEDIA</h4>
                     <div className="border"></div>
                     <ul className="list-social list-unstyled">
-                        <i className="fab fa-facebook-square facebook"></i>
+                        <i onClick={() => window.location.replace('https://www.facebook.com/DSGas')} className="fab fa-facebook-square facebook"></i>
                         <i className="fab fa-line line" />
                         <i className="fab fa-twitter-square twitter"></i>
                     </ul>

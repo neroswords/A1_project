@@ -11,7 +11,7 @@ def process_message(message,botID,min_conf):
     flag = True
     similar_trained_word = trained_collection.find({'botID': ObjectId(botID)})
     for word in similar_trained_word:
-        conf = float(sentence_get_confident(message,word['question']))
+        conf = float("{:.2f}".format(sentence_get_confident(message,word['question'])))
         if conf == False : 
             flag = False
             break
@@ -26,7 +26,7 @@ def process_message(message,botID,min_conf):
     if flag:
         similar_training_word = training_collection.find({'botID':ObjectId(botID)})
         for word in similar_training_word:
-            conf = float(sentence_get_confident(message,word['question']))
+            conf = float("{:.2f}".format(sentence_get_confident(message,word['question'])))
             if conf == False : 
                 flag = False
                 break
@@ -72,7 +72,6 @@ def onState(sender_id,user_id, platform, state):
     elif platform == "line":
         payload = request.json
         Reply_token = payload['events'][0]['replyToken']
-        # print(Reply_token)
         message = payload['events'][0]['message']['text']
         ReplyMessage(Reply_token,response,Channel_access_token)
     else:

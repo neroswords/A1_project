@@ -66,9 +66,13 @@ const Styles = styled.div`
 
 `;
 
-function regisBot(){
+function regisBot(props){
   if(isLoggedIn()){
-    return <h1>You already have account</h1>
+    return(
+      <Link to={'/bot_list/'+localStorage.getItem('user_id')}>
+        <button className="" >Manage Bot</button>
+      </Link>
+    )
   }
   else{
     return(

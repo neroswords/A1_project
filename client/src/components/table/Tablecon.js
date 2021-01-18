@@ -64,8 +64,8 @@ function Tablecon({botID}) {
           return {
             select: false,
             id: d._id.$oid,
-            Word: d.answer,
-            ReplyWord: d.question,
+            Word: d.question,
+            ReplyWord: d.answer,
             Confidence : d.confident
           };
         })

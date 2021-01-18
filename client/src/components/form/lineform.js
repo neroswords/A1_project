@@ -1,6 +1,7 @@
 import React, { useState, useEffect }from 'react';
 import styled from 'styled-components';
 import packageJson from '../../../package.json';
+import { useHistory } from 'react-router-dom'
 
 const Styles = styled.div`
 .container {
@@ -120,8 +121,7 @@ export default function Lineform(props) {
     const [channel_secret, setChannel_secret] = useState('');
     const [basic_id, setBasic_id] = useState('');
     const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+props.props.bot_id+'/line');
-
-    
+    const history = useHistory()
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -142,15 +142,15 @@ export default function Lineform(props) {
         }).then(response => response.json().then(data => alert(data.message)))
     }
 
-    // useEffect(() => {
-    //     fetch('/bot/'+localStorage.getItem('user_id')+'/connect').then(
-    //         response => response.json()
-    //       ).then(data =>{
-    //         setAccess_token(data.page_facebook_access_token);
-    //         setChannel_secret(data.Channel_secret);
-    //         setBasic_id(data.basic_id);
-    //     })
-    // }, []);
+    useEffect(() => {
+        fetch('/bot/'+props.props.bot_id+'/connect').then(
+            response => response.json()
+          ).then(data =>{
+            setAccess_token(data.access_token);
+            setChannel_secret(data.channel_secret);
+            setBasic_id(data.basic_id);
+        })
+    }, []);
 
     return(
             <Styles>
@@ -163,7 +163,7 @@ export default function Lineform(props) {
                                 </div>
                                 <div className="link">
                                     <p>{packageJson.proxy}bot/webhook/{props.props.bot_id}/line</p>
-                                    <button className="copy-clipboard"><i className="fas fa-copy fa-xs"></i></button>
+                                    <button type='button' className="copy-clipboard" onClick={() => {navigator.clipboard.writeText(webhook)}}><i className="fas fa-copy fa-xs"></i></button>
                                 </div>
                                 <div className="input-Box">
                                 <div className="col-lg-12">
@@ -181,7 +181,7 @@ export default function Lineform(props) {
                                 </div>
                                 <div id="container-button">
                                     <button className="submit" type='submit'>Submit</button>
-                                    <button className="cancle" type='button'>Cancle</button>
+                                    <button className="cancle" type='button' onClick={() => {history.goBack()}} >Back</button>
                                 </div>
                             </form>
                         </div>  

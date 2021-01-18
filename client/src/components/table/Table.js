@@ -60,8 +60,8 @@ function Table({botID}) {
           return {
             select: false,
             id: d._id.$oid,
-            Word: d.answer,
-            ReplyWord: d.question
+            Word: d.question,
+            ReplyWord: d.answer
           };
         })
       );
@@ -73,7 +73,7 @@ function Table({botID}) {
     <Styles>
       <div className="container">
           <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
-          <AddWord showWord={showWord} setShowWord={setShowWord} />
+          <AddWord showWord={showWord} setShowWord={setShowWord} botID = {botID} />
           <AddStyle />
         <table className="table">
           <thead>

@@ -66,14 +66,14 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
   const addword =(id)=>{
-    const data = {'question' : question,'answer' : answer ,'botID' : botID}
+    const data = {'question' : question,'answer' : answer ,'botID' : id}
     fetch('/bot/'+id+'/addword', {
     method : 'POST',
     headers : {
         "Access-Control-Allow-Origin": "*",
         'Content-Type':'application/json'
         },
-    body: JSON.stringify(data)})};
+    body: JSON.stringify(data)}).then(setShowWord(prev => !prev))};
 
   const animation = useSpring({
     config: {

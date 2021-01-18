@@ -32,9 +32,9 @@ function Train(props){
                         <DeleteModal dataType={'training'} dataID={props.match.params.bot_id} />
                     </div>
                     <div className="p-2 bd-highlight">
-                        <Link to={'/bot/'+props.match.params.bot_id+'/trained'}>
+                        {/* <Link to={'/bot/'+props.match.params.bot_id+'/trained'}>
                             <button className="btn btn-success" type="button">Trained</button>
-                        </Link>
+                        </Link> */}
                     </div>
                 </div>
                 <hr></hr>

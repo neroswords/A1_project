@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import packageJson from '../../../package.json';
+import { useHistory } from 'react-router-dom'
 
 const Styles = styled.div`
 .container {
@@ -115,10 +116,16 @@ export default function Facebookform(props) {
     const [access_token, setAccess_token] = useState('');
     const [verify_token, setVerify_token] = useState('');
     const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+props.props.bot_id+'/facebook')
+    const history = useHistory()
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const editData = {access_token, verify_token,'platform':'facebook'}
+        const editData = {
+            'page_facebook_access_token':access_token, 
+            'verify_token':verify_token,
+            'creator':localStorage.getItem('user_id'),
+            'platform':'facebook'
+        }
         fetch('/bot/'+props.props.bot_id+'/connect', {
             method: 'POST',
             headers : {
@@ -140,14 +147,14 @@ export default function Facebookform(props) {
         // }).catch(error => console.log(error));
     }
 
-    // useEffect(() => {
-    //     fetch('/bot/'+localStorage.getItem('user_id')).then(
-    //         response => response.json()
-    //       ).then(data =>{
-    //         setAccess_token(data.page_facebook_access_token);
-    //         setVerify_token(data.VERIFY_TOKEN);
-    //     })
-    // }, []);
+    useEffect(() => {
+        fetch('/bot/'+props.props.bot_id+'/connect').then(
+            response => response.json()
+          ).then(data =>{
+            setAccess_token(data.page_facebook_access_token);
+            setVerify_token(data.verify_token);
+        })
+    }, []);
 
     return (
         <Styles>
@@ -161,7 +168,7 @@ export default function Facebookform(props) {
                             </div>
                             <div className="link">
                                 <p>{packageJson.proxy}bot/webhook/{props.props.bot_id}/facebook</p>
-                                <button className="copy-clipboard"><i className="fas fa-copy fa-xs"></i></button>
+                                <button type="button" className="copy-clipboard" onClick={() => {navigator.clipboard.writeText(webhook)}}><i className="fas fa-copy fa-xs"></i></button>
                             </div>
                             <div className="input-Box">
                             <div className="col-lg-12">
@@ -175,7 +182,7 @@ export default function Facebookform(props) {
                             </div>
                             <div id="container-button">
                                 <button className="submit" type='submit'>Submit</button>
-                                <button className="cancle" type='button'>Cancle</button>
+                                <button className="cancle" type='button' onClick={() => {history.goBack()}} >Back</button>
                             </div>
                         </form>
                     </div>

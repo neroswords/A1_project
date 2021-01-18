@@ -31,9 +31,9 @@ def connect(id):
             return {"message":"connect to platform successfully"}
         elif  connect_data['platform'] == 'facebook':
             bot_collection.update_one({'_id': ObjectId(id)},
-            {'$set':{access_token:connect_data['access_token'],
-            'vertify':connect_data['verify_token']}})
-            return 200
+            {'$set':{'page_facebook_access_token':connect_data['page_facebook_access_token'],
+            'verify_token':connect_data['verify_token']}})
+            return {"message":"connect to platform successfully"}
         return redirect(url_for('home'))
     elif request.method == 'GET':
         bot_define = bot_collection.find_one({'_id': ObjectId(id)})
@@ -60,12 +60,7 @@ def create():
             file.save(destination)
             session['uploadFilePath']=destination
             response="success"
-       
-        
-        #owner = bot_info['creator'] #ref id คนสร้างมาใส่ตัวแปรนี้
-
-        # image = bot_image['image']
-        new_bot = bots_collection.insert_one({'bot_name': bot_name, 'gender' : gender,'owner': creator, 'age': age,'Img': filename,'confident': 0.6})
+        new_bot = bots_collection.insert_one({'bot_name': bot_name, 'gender' : gender,'owner': ObjectId(creator), 'age': age,'Img': filename,'confident': 0.6})
         #id = JSONEncoder().encode(new_bot.inserted_id).replace('"','')
         return {'message' : 'add bot successfully'}
     return "add bot unsuccessfully"
@@ -89,22 +84,17 @@ def edit(id):
         age = request.form['age'] 
         
         if  "file" not in request.files :
-            
-            filename = "Avatar.jpg"
-            # filename = request.form['Image'] 
-            # print("222555555555555")
-            
+            info_update = { "$set": {'bot_name': bot_name, 'owner':  creator, 'gender': gender, 'age': age}}
         else :
             file = request.files['file'] 
             filename = secure_filename(file.filename)
-            filename = creator+"&"+bot_name+filename+os.path.splitext(filename)[1]
+            filename = creator+"&"+bot_name+os.path.splitext(filename)[1]
             destination="/".join([UPLOAD_FOLDER, filename])
             file.save(destination)
             session['uploadFilePath']=destination
             response="success"
-        info_update = { "$set": {'bot_name': bot_name, 'owner':  creator, 'gender': gender, 'age': age, 'Img' : filename}}
+            info_update = { "$set": {'bot_name': bot_name, 'owner':  creator, 'gender': gender, 'age': age, 'Img' : filename}}
 
-        # bot_id = { "_id": ObjectId (id)}
         done = bots_collection.update_one({'_id': ObjectId (id)}, info_update)
         return {'message' : 'add bot successfully'}
     return "add bot unsuccessfully"
@@ -159,6 +149,8 @@ def webhook(platform,botID):
         elif request.method == "POST":
             Channel_access_token = bot_define['access_token']
             payload = request.json
+            if not payload['events']:
+                return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
             Reply_token = payload['events'][0]['replyToken']
             sender = payload['events'][0]['source']
             message_type = payload['events'][0]['message']['type']
@@ -207,11 +199,5 @@ def addword(botID):
         ans = trained_update['answer']
         
         trained_collection.insert_one({'question': question, 'botID':  ObjectId(creator), 'answer': ans})
-        return "add done"
-    return "ok"
-        #image = bot_update['image']
-
-        
-        # bot_id = { "_id": ObjectId (id)}
-
-
+        return {"message":"add done"}
+    return {"message":"ok"}

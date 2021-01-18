@@ -25,11 +25,11 @@ function Learned(props){
                     <div className="p-2 bd-highlight">
                         <button className="btn btn-danger" type="button">Delete</button>
                     </div>
-                    <div className="p-2 bd-highlight">
+                    {/* <div className="p-2 bd-highlight">
                         <Link to={'/bot/'+props.match.params.bot_id+'/training'}>
                             <button className="btn btn-success" type="button">Training</button>
                         </Link>
-                    </div>
+                    </div> */}
                 </div>
                 <hr></hr>
                 <Table botID={props.match.params.bot_id} />
