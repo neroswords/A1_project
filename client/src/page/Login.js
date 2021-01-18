@@ -1,8 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
+// import {bglogin} from './images/bg-login.png';
+import FlashMessage from 'react-flash-message'
 
 const Styles = styled.div`
+  .page {
+        background: url(${process.env.PUBLIC_URL +'/images/b.png'});
+        background-size: 30%;
+        background-repeat: repeat-x;
+        background-position: right top;
+        position: cover;
+        top: 0px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+  }
+
   .container {
+    margin-top:5%;
     font-family: 'Public Sans', sans-serif;
   }
 
@@ -102,12 +119,23 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password : '',
+      showMessage: false,
+      message : ''
     };
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange (evt) {
     this.setState({ [evt.target.name]: evt.target.value });
+  }
+
+  flash = (e) =>{
+    if (this.state.flash == true){
+      return(
+        <div>
+          {e}
+        </div>)
+    }
   }
 
   handleSignIn = e =>{
@@ -132,7 +160,8 @@ class Login extends React.Component {
           if (localStorage.getItem("access_token") !== null && localStorage.getItem("access_token")!=="undefined") {
             window.location.replace("/")
           }else{
-              alert(data.error);  
+            this.setState({ showMessage: true })
+            this.setState({ message: data.error })
         }
       }).catch(error => console.log(error));
   }
@@ -140,7 +169,16 @@ class Login extends React.Component {
   render(){
       return(
           <Styles>
-                <div class="container">
+            { this.state.showMessage &&  
+                  <div className="container">
+                      <FlashMessage duration={4000}>
+                          <strong>Login Error : {this.state.message}</strong>
+                      </FlashMessage>
+                  </div>
+            }
+            <div className="page">
+              {this.flash}
+                <div className="container">
                       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                         <div class="card card-signin my-5">
                           <div class="card-body">
@@ -169,6 +207,7 @@ class Login extends React.Component {
                           </div>
                         </div>
                       </div>
+                  </div>
                   </div>
           </Styles>
     );

@@ -30,14 +30,14 @@ const Styles = styled.div`
   }
 
   h1 {
-    font-size: 40px;
+    font-size: 80px;
     font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
   }
 
   span {
     color: grey;
   }
-
 `;
 
 
@@ -51,7 +51,9 @@ export const Mainpage = () => (
             <h1>A1 Chatbot</h1>
             <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. <br />Inventore deleniti aliquid  et consectetur corporis eum odit.<br /> Excepturi, repellendus.</span>
           </div>
-          <img src="./images/Telephone.png" width="100%"/>
+          <div className="img-main">
+            <img src="./images/Telephone.png" width="110%"/>
+          </div>
         </section>
     </Jumbo>
     </Container>

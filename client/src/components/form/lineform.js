@@ -119,22 +119,27 @@ export default function Lineform(props) {
     const [access_token, setAccess_token] = useState('');
     const [channel_secret, setChannel_secret] = useState('');
     const [basic_id, setBasic_id] = useState('');
-    console.log(props)
+    const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+props.props.bot_id+'/line');
+
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const editData = {'access_token':access_token, 
-        'channel_secret':channel_secret, 
-        'basic_id':basic_id,
-        'creator':localStorage.getItem('user_id')}
-        fetch('/', {
+        const editData = {
+            'access_token':access_token, 
+            'channel_secret':channel_secret, 
+            'basic_id':basic_id,
+            'creator':localStorage.getItem('user_id'),
+            'platform': 'line'
+            }
+        fetch('/bot/'+props.props.bot_id+'/connect', {
             method: 'POST',
             headers : {
                 "Access-Control-Allow-Origin": "*",
                 'Content-Type':'application/json'
             },
             body: JSON.stringify(editData)
-        })
+        }).then(response => response.json().then(data => alert(data.message)))
     }
 
     // useEffect(() => {
@@ -185,3 +190,4 @@ export default function Lineform(props) {
             </Styles>
         )   
 }
+

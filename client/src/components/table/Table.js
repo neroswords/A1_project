@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
 import {Button} from 'react-bootstrap';
-import {AddWord} from './addTable/AddWord';
+import {AddWord} from './AddTable/AddWord';
 import { AddStyle } from "./AddStyle";
 
 const Styles = styled.div`
@@ -45,33 +45,28 @@ const Styles = styled.div`
 
 `;
 
-function Table() {
+function Table({botID}) {
   const [TableState, setTableState] = useState([]);
   const [showWord, setShowWord] = useState(false);
-
   const openWord = () => {
     setShowWord(prev => !prev);
   }
-
   useEffect(() => {
-    let TableState = [
-        { id: 1, Word: "hiii", ReplyWord: "may i help u" },
-        { id: 2, Word: "heyy", ReplyWord: "may i help u" },
-        { id: 3, Word: "hello", ReplyWord: "may i help u" }
-    ];
-  
+    fetch('/bot/'+botID+'/trained')
+    .then(res => res.json().then(data => {
+      setTableState(
+        data.map(d => {
+          console.log(d)
+          return {
+            select: false,
+            id: d._id.$oid,
+            Word: d.answer,
+            ReplyWord: d.question
+          };
+        })
+      );
+    }))
     
-    setTableState(
-      TableState.map(d => {
-        return {
-          select: false,
-          id: d.id,
-          Word: d.Word,
-          ReplyWord: d.ReplyWord
-         
-        };
-      })
-    );
   }, []);
 
   return (

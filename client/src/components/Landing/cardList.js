@@ -7,12 +7,13 @@ import { Container, Jumbotron as Jumbo } from 'react-bootstrap';
 const Styles = styled.div`
 .jumbo {
     align-items: center;
+    margin: 5% 0;
 }
 
 .container {
-    // background: url(${process.env.PUBLIC_URL +'/images/Background.png'}) no-repeat fixed bottom;
+    // background: url(${process.env.PUBLIC_URL +'/images/bg-home.png'}) no-repeat fixed bottom;
     background-size: 100%;
-    margin-bottom: 10%;
+    margin-bottom: 20%;
 }
 
 .line {
@@ -27,11 +28,12 @@ const Styles = styled.div`
 .card {
   width: 20rem;
   margin-bottom: 5%;
-  border-radius: 5px;
+  border-radius: 10px;
+  border: 0 solid #fca311;
   background: #fff;
-  padding: 1%;
-//   box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
-//   transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+  padding: 3%;
+  box-shadow: 0 9px 15px rgba(0,0,0,.08), 0 9px 10px rgba(0,0,0,.05);
+  transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
 //   cursor: pointer;
 }
 
@@ -47,8 +49,10 @@ h1 {
     font-family: 'Roboto', sans-serif;
   }
 
-h5 {
-    margin: 2%;
+.card h5 {
+    margin-top: 2%;
+    font-weight: bold;
+
 }
 
 p {
@@ -57,7 +61,7 @@ p {
 
 ul { 	
     list-style: none; 	 	
-    font-size: 15px; 	
+    font-size: 18px; 	
     letter-spacing: 0.5px;
     line-height: 50px; 
 } 
@@ -67,6 +71,19 @@ li i {
     margin-right: 5%;
     
 } 
+
+.img-card img {
+    width: 80%;
+    text-align: center;
+    align-item: center;
+    // background-color: black;
+    margin-bottom:10%;
+}
+
+.img-card {
+    margin-left: 20%;
+}
+
 
 `;
 
@@ -79,11 +96,12 @@ export const CardList = () => (
         <Jumbo className="jumbo col-lg-12">
             <div className="row col-lg-12 justify-content-around">
                 <div className="card col-lg-6">
-                    {/* <div className="col-lg-12">
-                        <img src="./images/chat.png" width="80%"/>
-                    </div> */}
-                    
-                    <h5 className="card-title">Group Feature1</h5>
+                    <div className="img-card">
+                        <img src="./images/chat.svg" />
+                    </div>
+                    <h5 className="card-title">Chat Features
+                        <hr />
+                    </h5>
                     <ul> 					
                         <li><i class="fas fa-check"></i>List Features</li> 					
                         <li><i class="fas fa-check"></i>List Features</li> 					
@@ -92,18 +110,26 @@ export const CardList = () => (
                 </div>
 
                 <div className="card col-lg-6">
-                    {/* <img src="./images/parcel.png" width="100%"/> */}
-                    <h5 className="card-title">Group Feature2</h5>
+                    <div className="img-card">
+                        <img src="./images/delivery-truck.svg" />
+                    </div>
+                    <h5 className="card-title">Parcel Features
+                        <hr />
+                    </h5>
                     <ul> 					
-                        <li><i class="fas fa-check"></i>List Features</li> 					
+                        <li><i class="fas fa-check"></i>1</li> 					
                         <li><i class="fas fa-check"></i>List Features</li> 					
                         <li><i class="fas fa-check"></i>List Features</li> 				
                     </ul>
                 </div>
 
                 <div className="card col-lg-6">
-                    {/* <img src="./images/data-analytics.png" width="100%"/> */}
-                    <h5 className="card-title">Group Feature3</h5>
+                    <div className="img-card">
+                        <img src="./images/statistics.svg"/>
+                    </div>
+                    <h5 className="card-title">Visualization Feature
+                    <hr />
+                    </h5>
                     <ul> 					
                         <li><i class="fas fa-check"></i>List Features</li> 					
                         <li><i class="fas fa-check"></i>List Features</li> 					

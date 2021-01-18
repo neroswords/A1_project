@@ -114,18 +114,19 @@ const Styles = styled.div`
 export default function Facebookform(props) {
     const [access_token, setAccess_token] = useState('');
     const [verify_token, setVerify_token] = useState('');
-    console.log(packageJson.proxy)
+    const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+props.props.bot_id+'/facebook')
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        const editData = {access_token, verify_token}
-        fetch('/', {
+        const editData = {access_token, verify_token,'platform':'facebook'}
+        fetch('/bot/'+props.props.bot_id+'/connect', {
             method: 'POST',
             headers : {
                 "Access-Control-Allow-Origin": "*",
                 'Content-Type':'application/json'
             },
             body: JSON.stringify(editData)
-        })
+        }).then(response => response.json().then(data => alert(data.message)))
         // .then( res => res.json())
         // .then(data=>{
         //     localStorage.setItem('access_token', data.access_token);

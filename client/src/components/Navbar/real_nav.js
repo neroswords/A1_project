@@ -19,18 +19,17 @@ function Nav(){
 function Normal_nav(){
   return(
     <Navbar_real>
-      <Link to="/register">
-          <div className="btn-signup btn-nav">
-              <a className="btn btn-outline-secondary" role="button">Register</a>
+      <Link to="/login">
+          <div className="btn-login btn-nav">
+              <a className="btn" role="button">Log in</a>
           </div>
       </Link>
-      <Link to="/login">
-          <div className="btn-login me-5 btn-nav">
-              <a className="btn btn-info" role="button">Log in</a>
+      <Link to="/register">
+          <div className="btn-signup btn-nav">
+              <a className="btn" role="button">Register</a>
           </div>
       </Link>
       </Navbar_real>
-      
     )
 }
 
@@ -68,7 +67,7 @@ function NavItem(props) {
   return (
     
     <li className="nav-item-real">
-      <a href="/#" className="icon-button-real" onClick={() => setOpen(!open)}>
+      <a href="#" className="icon-button-real" onClick={() => setOpen(!open)}>
         {props.icon}
       </a>
 
@@ -122,10 +121,20 @@ function DropdownMenu() {
             goToMenu="animals">
             Animals
           </DropdownItem> */}
-          <a>
+           <a onClick={() => {
+            window.location.replace("/profile/"+ localStorage.getItem('user_id')+"/edit")
+          }}>
             <DropdownItem 
               leftIcon= {<i class="fas fa-user"></i>}>
                 Edit Profile
+            </DropdownItem>
+          </a>
+          <a onClick={() => {
+            window.location.replace("/bot_list/"+ localStorage.getItem('user_id'))
+          }}>
+            <DropdownItem 
+              leftIcon= {<i class="fas fa-user"></i>}>
+                Manage Bot
             </DropdownItem>
           </a>
           <a onClick={() => {

@@ -1,9 +1,8 @@
 import React, {useState, useEffect, useRef } from "react";
 import {Link} from "react-router-dom";
-import '../components/botlist/Bot_list.css';
-import { useDetectOutsideClick } from "../components/botlist/button_nav";
-// import { Connect } from "../components/botlist/Connent";
-
+import '../Components/Botlist/Bot_list.css';
+import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
+import DeleteModal from '../Components/delete_modal'
 
 
 export default function Bot_list(props) {
@@ -32,7 +31,7 @@ export default function Bot_list(props) {
     return(
                 <div className="botlist-page">
                     {/* <Navbar_member /> */}
-                          <div class="container col-xl-9 col-lg-9 col-md-12  col-sm-12 col-xs-12">
+                          <div class="container col-xl-9 col-lg-9 col-md-12 col-sm-12 col-xs-12">
                                     <div className="botlist-body">
                                         <Link className='link' to={'/bot/'+localStorage.getItem('user_id')+'/create_bot'}>
                                         <div className="card-plus group">
@@ -70,11 +69,11 @@ function Dropdown({botData, deleteBot}){
 
     return(
     <div class="card-box">
-        <Link to={'/bot/'+botData._id.$oid+'/train'}>
-            <img src='/images/bot/bot_pic/Avatar.jpg' class="bot-img"/>
+        <Link to={'/bot/'+botData._id.$oid+'/training' } >
+            <img src={'/images/bot/bot_pic/'+botData.Img} class="bot-img"/>
         </Link>
         <div class="info-bot">
-            <Link className="link" to={'/bot/'+botData._id.$oid+'/train'}>
+            <Link className="link" to={'/bot/'+botData._id.$oid+'/training'}>
                 <p class="Bot-name">{botData.bot_name}</p>
             </Link>
             <div class="divider"></div>
@@ -97,15 +96,15 @@ function Dropdown({botData, deleteBot}){
                 >
                 <ul>
                     <li> 
-                    <a href={'/bot/'+botData._id.$oid+'/edit_bot'}><i class="fas fa-pen"></i> edit</a>
+                        <a href={'/bot/'+botData._id.$oid+'/edit_bot'}><i class="fas fa-pen"></i> edit</a>
                     </li>
                     <li>
                     <a href={'/bot/'+botData._id.$oid+'/connect'}><i class="fas fa-link"></i> Connect</a>
                     {/* <Connect showConnect={showConnect} setShowConnect={setShowConnect} /> */}
                     </li>
                     <li>
-                    <a href="#" onClick={()=>deleteBot(botData._id.$oid)}>
-                    <i class="fas fa-trash"></i> Delete</a>
+                        <a href="#" onClick={()=>deleteBot(botData._id.$oid)}>
+                        <i class="fas fa-trash"></i> Delete</a>
                     </li>
                 </ul>
             </div>
