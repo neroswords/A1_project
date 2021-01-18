@@ -97,7 +97,16 @@ const Styles = styled.div`
   .btn-line {
     background-color: #34a853 ;
   }
+
+  .upload-img input{
+    cursor: pointer;
+  }
+
+  .upload-img label{
+    cursor: pointer;
+  }
 `;
+
 
 class Create_bot extends React.Component {
   constructor(props) {
@@ -197,7 +206,7 @@ class Create_bot extends React.Component {
                                           <div className="showimage col-lg-8">
                                                 <img src='../../images/Avatar.jpg'/>                                    
                                           </div>
-                                          <div className="mt-3">                                           
+                                          <div className="mt-3 upload-img">                                           
                                               <label for="uploadimage">Upload Proflie</label>
                                               <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
                                             </div>

@@ -4,7 +4,6 @@ import '../Components/Botlist/Bot_list.css';
 import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
 
 
-
 export default function Bot_list(props) {
     const [botlist,setBotlist] = useState([]);
     

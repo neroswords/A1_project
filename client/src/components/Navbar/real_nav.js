@@ -133,7 +133,7 @@ function DropdownMenu() {
             window.location.replace("/bot_list/"+ localStorage.getItem('user_id'))
           }}>
             <DropdownItem 
-              leftIcon= {<i class="fas fa-user"></i>}>
+              leftIcon= {<i class="fas fa-robot"></i>}>
                 Manage Bot
             </DropdownItem>
           </a>
