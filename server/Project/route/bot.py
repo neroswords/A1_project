@@ -44,7 +44,6 @@ def connect(id):
 def create():
     bots_collection = mongo.db.bots
     filename = ''
-    
     if request.method == 'POST':
         creator = request.form['creator'] 
         bot_name = request.form['bot_name'] 

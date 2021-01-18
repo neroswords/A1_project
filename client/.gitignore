@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+client/.eslintcache
+server/__pycache__
+server/Project/__pycache__
+client/package.json
