@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef } from "react";
 import {Link} from "react-router-dom";
 import '../Components/Botlist/Bot_list.css';
 import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
-
+import DeleteModal from '../Components/delete_modal'
 
 
 export default function Bot_list(props) {
@@ -63,12 +63,11 @@ function Dropdown({botData, deleteBot}){
     // console.log(botData)
     return(
     <div class="card-box">
-        <Link to={'/bot/'+botData._id.$oid+'/train' } >
-         <img src={'/images/bot/bot_pic/'+botData.Img} class="bot-img"/>
-   
+        <Link to={'/bot/'+botData._id.$oid+'/training' } >
+            <img src={'/images/bot/bot_pic/'+botData.Img} class="bot-img"/>
         </Link>
         <div class="info-bot">
-            <Link className="link" to={'/bot/'+botData._id.$oid+'/train'}>
+            <Link className="link" to={'/bot/'+botData._id.$oid+'/training'}>
                 <p class="Bot-name">{botData.bot_name}</p>
             </Link>
             <div class="divider"></div>

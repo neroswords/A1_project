@@ -140,7 +140,7 @@ const Styles = styled.div`
   
 `
 
-function Navbar_member() {
+function Navbar_member({botID}) {
   
         return(
             <Styles>
@@ -154,7 +154,7 @@ function Navbar_member() {
                       </div> */}
 
                       <li className="nav-item">
-                        <a href="/train" class="nav-link">
+                        <a href={'/bot/'+botID+'/training'} class="nav-link">
                           <div className="fa-group">
                               <div className="fa-secondary">
                                 <i className="fas fa-robot"></i>

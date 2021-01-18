@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import {Redirect} from 'react-router-dom';
+import FlashMessage from 'react-flash-message'
 
 const Styles = styled.div`
   .container {
@@ -118,16 +120,19 @@ class Register extends React.Component {
     super(props);
     
     this.state = {
-      email: '',
-      username: '',
-      password : '',
-      confirm_password : '',
-      firstname : '',
-      lastname : '',
-      birthday : '',
-      shop_name : '',
-      shop_type : '',
-      shop_address : ''
+      email: null,
+      username: null,
+      password : null,
+      confirm_password : null,
+      firstname : null,
+      lastname : null,
+      birthday : null,
+      shop_name : null,
+      shop_type : null,
+      shop_address : null,
+      redirect : false,
+      message : '',
+      showMessage: false,
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -162,99 +167,130 @@ class Register extends React.Component {
             'Content-Type':'application/json'
       },
       body: JSON.stringify(profile)
+    }).then((res)=>res.json()).then(data=>{
+      
+      if(data.message){
+        this.setState({redirect:true})
+      }
+      else if(data.error){
+        this.setState({message:data.error})
+        this.setState({showMessage: true})
+      }
     })
+  }
+}
+flash = (e) =>{
+  if (this.state.flash == true){
+    return(
+      <div>
+        {e}
+      </div>)
   }
 }
 
   render() {
-    return(
-        <Styles>
-              <div className="container">
-                    <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
-                      <div className="card card-regis">
-                        <div className="card-body">
-                          <h5 className="card-title text-center">Register</h5>
-                          <form className="form-regis">
-                          <div className="title_part">
-                                <p className="col">Account infomation</p>
-                                <div className="line"></div>
-                          </div>
-                              <div className="my-3">
-                              <label for="exampleInputEmail1" className="form-label">Email address</label>
-                              <input type="email" className="form-control " id="inputemail" name='email' required value={this.state.email} onChange={this.handleChange} />
-                              </div>
-                              <div className="my-3">
-                                <label for="exampleInputEmail1" className="form-label">Username</label>
-                                <input type="text" className="form-control" id="inputusername" name='username' required value={this.state.username} onChange={this.handleChange}/>
-                              </div>
-                              <div className="row">
-                                <div className="col ">
-                                  <label for="exampleInputPassword1" className="form-label">Password</label>
-                                  <input type="password" className="form-control" id="inputpassword" name='password'  value={this.state.password} onChange={this.handleChange} /> 
-                                </div>
-                                <div className="col">
-                                  <label for="exampleInputPassword1" className="form-label">Comfirm Password</label>
-                                  <input type="password" className="form-control" id="confirmpassword" name='confirm_password' value={this.state.confirm_password} onChange={this.handleChange} />  
-                                </div>
-                              </div>
-                              <div className="title_part">
-                                <p className="col">Personal infomation</p>
-                                <div className="line"></div>
-                              </div>
-                                <div className="row my-3">
-                                    <div className="col">
-                                        <label for="inputFirstname" className="form-label">Firstname</label>
-                                        <input type="text" className="form-control" id="inputfirstname"  name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
-                                    </div>
-                                    <div className="col">
-                                    <label for="inputLastname" className="form-label">Last name</label>
-                                        <input type="text" className="form-control" id="inputlastname"  name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
-                                    </div>
-                                    <div className="col">
-                                      <label for="exampleInputEmail1" className="form-label">Birthday</label>
-                                      <input type="date" className="form-control" id="inputdate" name='birthday' value={this.state.birthday} onChange={this.handleChange} />
-                                     </div> 
-                                </div>
-                                <div className="row">
-                                  <div className="col my-3">
-                                    <label for="exampleInputEmail1" className="form-label">Shop name</label>
-                                    <input type="text" className="form-control" id="inputshopname" value={this.state.shop_name} name='shop_name' onChange={this.handleChange} />
-                                  </div>
-                                  <div className="col my-3">
-                                    <label for="exampleInputEmail1" className="form-label">Type of sale</label>
-                                    <input type="text" className="form-control" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' onChange={this.handleChange} />
-                                  </div>
+    const { redirect } = this.state;
+      if (redirect) {
+        return <Redirect to={"/login"} />
+      }
+      else {
+        return(
+          <Styles>
+            { this.state.showMessage &&  
+                  <div className="container">
+                      <FlashMessage duration={4000}>
+                          <strong>Register Error : {this.state.message}</strong>
+                      </FlashMessage>
+                  </div>
+            }
+                <div className="container">
+                      <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
+                        <div className="card card-regis">
+                          <div className="card-body">
+                            <h5 className="card-title text-center">Register</h5>
+                            <form className="form-regis" onSubmit={this.handleSubmit}>
+                            <div className="title_part">
+                                  <p className="col">Account infomation</p>
+                                  <div className="line"></div>
+                            </div>
+                                <div className="my-3">
+                                <label for="exampleInputEmail1" className="form-label">Email address</label>
+                                <input type="email" className="form-control " id="inputemail" name='email' required value={this.state.email} onChange={this.handleChange} />
                                 </div>
                                 <div className="my-3">
-                                  <label for="exampleFormControlTextarea1" className="form-label">Shop Address</label>
-                                  <textarea className="form-control" id="inputshopaddress" rows="2" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
+                                  <label for="exampleInputEmail1" className="form-label">Username</label>
+                                  <input type="text" className="form-control" id="inputusername" name='username' required value={this.state.username} onChange={this.handleChange}/>
                                 </div>
-                              <div class="form-check">
-                                <input className="form-check-input" type="checkbox" value="" id="chaeckvalidate" required/>
-                                <label className="form-check-label" for="flexCheckDefault">
-                                  ยินยอมตามข้อกำหนด
-                                  <a  href="/Login"> ข้อกำหนดการใช้บริการ </a>
-                                  ตามที่ระบุไว้ 
-                                </label>
-                              </div>                                
-                              <div className="btn-regis">
-                                  <button className="btn btn-primary text-uppercase btn-inregis" type="submit" onClick={this.handleSubmit} >register</button>
-                              </div>
-                              <hr className="my-4"/>
-                              <div align="center">
-                                <span> Already have an account ? </span>
-                                <a  href="/Login" >Log in</a> 
-                              </div>
-                          </form>
-                          
+                                <div className="row">
+                                  <div className="col ">
+                                    <label for="exampleInputPassword1" className="form-label">Password</label>
+                                    <input type="password" className="form-control" id="inputpassword" name='password' required  value={this.state.password} onChange={this.handleChange} /> 
+                                  </div>
+                                  <div className="col">
+                                    <label for="exampleInputPassword1" className="form-label">Comfirm Password</label>
+                                    <input type="password" className="form-control" id="confirmpassword" name='confirm_password' value={this.state.confirm_password} onChange={this.handleChange} />  
+                                  </div>
+                                </div>
+                                <div className="title_part">
+                                  <p className="col">Personal infomation</p>
+                                  <div className="line"></div>
+                                </div>
+                                  <div className="row my-3">
+                                      <div className="col">
+                                          <label for="inputFirstname" className="form-label">Firstname</label>
+                                          <input type="text" className="form-control" id="inputfirstname" required  name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
+                                      </div>
+                                      <div className="col">
+                                      <label for="inputLastname" className="form-label">Last name</label>
+                                          <input type="text" className="form-control" id="inputlastname" required name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
+                                      </div>
+                                      <div className="col">
+                                        <label for="exampleInputEmail1" className="form-label">Birthday</label>
+                                        <input type="date" className="form-control" id="inputdate" required name='birthday' value={this.state.birthday} onChange={this.handleChange} />
+                                       </div> 
+                                  </div>
+                                  <div className="row">
+                                    <div className="col my-3">
+                                      <label for="exampleInputEmail1" className="form-label">Shop name</label>
+                                      <input type="text" className="form-control" id="inputshopname" required value={this.state.shop_name} name='shop_name' onChange={this.handleChange} />
+                                    </div>
+                                    <div className="col my-3">
+                                      <label for="exampleInputEmail1" className="form-label">Type of sale</label>
+                                      <input type="text" className="form-control" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' onChange={this.handleChange} />
+                                    </div>
+                                  </div>
+                                  <div className="my-3">
+                                    <label for="exampleFormControlTextarea1" className="form-label">Shop Address</label>
+                                    <textarea className="form-control" id="inputshopaddress" rows="2" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
+                                  </div>
+                                <div class="form-check">
+                                  <input className="form-check-input" type="checkbox" value="" id="chaeckvalidate" required/>
+                                  <label className="form-check-label" for="flexCheckDefault">
+                                    ยินยอมตามข้อกำหนด
+                                    <a  href="/Login"> ข้อกำหนดการใช้บริการ </a>
+                                    ตามที่ระบุไว้ 
+                                  </label>
+                                </div>                                
+                                <div className="btn-regis">
+                                    <button className="btn btn-primary text-uppercase btn-inregis" type="submit" >register</button>
+                                </div>
+                                <hr className="my-4"/>
+                                <div align="center">
+                                  <span> Already have an account ? </span>
+                                  <a  href="/Login" >Log in</a> 
+                                </div>
+                            </form>
+                            
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    
-                </div>
-        </Styles>
-        
-    );
+                      
+                  </div>
+          </Styles>
+          
+      );
+      }
+   
   }
 }
 

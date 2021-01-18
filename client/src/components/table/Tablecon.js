@@ -46,7 +46,7 @@ const Styles = styled.div`
 }
 `;
 
-function Tablecon(props) {
+function Tablecon({botID}) {
   const [TableconState, setTableconState] = useState([]);
   const [showWord, setShowWord] = useState(false);
 
@@ -54,34 +54,31 @@ function Tablecon(props) {
  const openWord = () => {
     setShowWord(prev => !prev);
   }
-  console.log(props)
-  useEffect(() => {
-    fetch("/bot/"+props.botID+"/training")
-    let TableconState = [
-        { id: 1, Word: "hiii", ReplyWord: "may i help u", Confidence: "50" },
-        { id: 2, Word: "heyy", ReplyWord: "may i help u", Confidence: "50"},
-        { id: 3, Word: "hello", ReplyWord: "may i help u", Confidence: "50" }
-    ];
 
-    setTableconState(
-      TableconState.map(d => {
-        return {
-          select: false,
-          id: d.id,
-          Word: d.Word,
-          ReplyWord: d.ReplyWord,
-          Confidence: d.Confidence
-         
-        };
-      })
-    );
+  useEffect(() => {
+    fetch('/bot/'+botID+'/training')
+    .then(res => res.json().then(data => {
+      setTableconState(
+        data.map(d => {
+          console.log(d)
+          return {
+            select: false,
+            id: d._id.$oid,
+            Word: d.answer,
+            ReplyWord: d.question,
+            Confidence : d.confident
+          };
+        })
+      );
+    }))
+    
   }, []);
 
   return (
     <Styles>
     <div className="container">
           <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
-          <AddWord showWord={showWord} setShowWord={setShowWord} botID = {props.botID}/>
+          <AddWord showWord={showWord} setShowWord={setShowWord} botID = {botID}/>
           <AddStyle />
       
       <table className="table table-bordered">

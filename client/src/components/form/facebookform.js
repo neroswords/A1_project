@@ -33,7 +33,7 @@ export default function Facebookform(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const editData = {access_token, verify_token}
+        const editData = {access_token, verify_token,'platform':'facebook'}
         fetch('/bot/'+props.props.bot_id+'/connect', {
             method: 'POST',
             headers : {
@@ -41,7 +41,7 @@ export default function Facebookform(props) {
                 'Content-Type':'application/json'
             },
             body: JSON.stringify(editData)
-        })
+        }).then(response => response.json().then(data => alert(data.message)))
         // .then( res => res.json())
         // .then(data=>{
         //     localStorage.setItem('access_token', data.access_token);
