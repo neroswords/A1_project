@@ -113,6 +113,14 @@ const Styles = styled.div`
   .btn-line {
     background-color: #34a853 ;
   }
+  
+.con-line {
+    margin-left: 50px;
+  }
+
+.connect_platform {
+  display:inline;
+}
 `;
 
 class Connect_bot extends React.Component {
@@ -192,14 +200,8 @@ class Connect_bot extends React.Component {
                                     <div className="line"></div>
                                 </div>
                                 <div className="connect_platform">
-                                    <div className="row col-lg-12">
-                                        <div className="col-lg-6">
-                                            <button className="btn btn-primary text-uppercase" onClick={this.handlefacebookChange} type="">facebook</button>
-                                        </div>
-                                        <div className="col-lg-6">
-                                            <button className="btn btn-success btn-line text-uppercase" onClick={this.handlelineChange} type="">line</button>
-                                        </div>
-                                    </div>
+                                      <button className="btn btn-primary text-uppercase con-facebook" onClick={this.handlefacebookChange} type="">facebook</button>
+                                      <button className="btn btn-success btn-line text-uppercase con-line" onClick={this.handlelineChange} type="">line</button>
                                 </div>
                                 {this.renderSwitch(this.state.platform)}
                             </div>

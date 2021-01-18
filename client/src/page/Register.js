@@ -6,6 +6,11 @@ import FlashMessage from 'react-flash-message'
 const Styles = styled.div`
   .container {
     font-family: 'Public Sans', sans-serif;
+    background: url(${process.env.PUBLIC_URL +'/images/b.png'}) ;
+    filter: gray;
+    background-size: 40%;
+    background-repeat: repeat;
+    position: cover;
   }
 
   .card-regis {
@@ -177,6 +182,7 @@ class Register extends React.Component {
         this.setState({showMessage: true})
       }
     })
+    window.location.replace("/login")
   }
 }
 flash = (e) =>{

@@ -2,7 +2,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import {withRouter, Redirect} from 'react-router-dom'
-
 import Facebookform  from '../Components/Form/facebookform';
 import Lineform  from '../Components/Form/lineform';
 
@@ -99,43 +98,23 @@ const Styles = styled.div`
   }
 `;
 
-class Create_bot extends React.Component {
+class Edit_bot extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      bot_name: null,
-      gender: null,
-      age: null,
-      platform: 'line',
-      redirect: false,
+      bot_name: '',
+      gender: '',
+      age: '',
       bot_id:'',
-      imageURL: ''
+      imageURL: '',
+      Image: ''
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
-    this.handlelineChange = this.handlelineChange.bind(this);
-    this.handlefacebookChange = this.handlefacebookChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
-  renderSwitch(param) {
-    switch(param) {
-      case 'facebook':
-        return <Facebookform />
-      default:
-        return <Lineform />
-    }
-  }
   
-  handlelineChange (evt) {
-    evt.preventDefault() ;
-    this.setState({ platform: "line" });
-    console.log(this.state.platform)
-  }
-  handlefacebookChange (evt) {
-    evt.preventDefault() ;
-    this.setState({ platform: "facebook" });
-    console.log(this.state.platform)
-  }
+ 
   handleChange (evt) {
     this.setState({ [evt.target.name]: evt.target.value });
     console.log(this.state)
@@ -143,6 +122,7 @@ class Create_bot extends React.Component {
 
   handleUploadImage(ev) {
     ev.preventDefault();
+    
 
     const data = new FormData();
     data.append('file', this.uploadInput.files[0]);
@@ -150,9 +130,8 @@ class Create_bot extends React.Component {
     data.append('gender' ,this.gender.value);
     data.append('age' ,this.age.value);
     data.append('creator' , localStorage.getItem('user_id'))
-
-
-    fetch('/bot/create', {
+    data.append('Image' , this.state.Image)
+    fetch('/bot/'+this.props.match.params.bot_id+'/edit', {
       method: 'POST',
       // headers : {
       //   "Access-Control-Allow-Origin": "*",
@@ -168,12 +147,23 @@ class Create_bot extends React.Component {
       });
     });
   }
+     componentDidMount ()  {
+    fetch('/bot/'+this.props.match.params.bot_id+'/edit').then((response) => {
+        response.json().then((data) => {
+          this.setState({ bot_name: data[0].bot_name });
+          this.setState({ gender : data[0].gender});
+          this.setState({ age: data[0].age }) ;
+          this.setState({ Image: data[0].Img }); 
+          console.log(data)
+        });
+      });
+        
+        }
+      
+     
+    
 
-  // componentDidMount(){
-  //   fetch('/bot/'+user_id)
-  // }
-
-  render() {
+    render() {
     const { redirect,bot_id } = this.state;
     if (redirect) {
       return <Redirect to={"/bot_list/"+ localStorage.getItem('user_id')} />
@@ -195,29 +185,29 @@ class Create_bot extends React.Component {
                                 <div className="row">
                                         <div className="group col-lg-6">
                                           <div className="showimage col-lg-8">
-                                                <img src='../../images/Avatar.jpg'/>                                    
+                                                <img src={'/images/bot/bot_pic/'+this.state.Image}/>                                    
                                           </div>
                                           <div className="mt-3">                                           
                                               <label for="uploadimage">Upload Proflie</label>
-                                              <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
+                                              <input  ref={(ref) => { this.uploadInput = ref; }}  type="file"  />
                                             </div>
                                         </div>  
                                         <div className=" group col-lg-6">
                                             <div className="">
                                               <label  className="form-label">Bot Name</label>
-                                              <input type="text"  name="bot_name" required  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
+                                              <input type="text"  name="bot_name" value = {this.state.bot_name}  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
                                             </div>
                                             <div class="mt-3">
                                               <label for="inputgender" class="form-label">Gender</label>
-                                              <select id="inputgender" name="gender" required  ref={(ref) => { this.gender = ref; }} onChange={this.handleChange} class="form-select">
-                                                  <option disabled selected>Select your option</option>
+                                              <select id="inputgender" name="gender" value = {this.state.gender}  ref={(ref) => { this.gender = ref; }} onChange={this.handleChange} class="form-select">
+                                                  <option selected>Choose...</option>
                                                   <option>Male </option>
                                                   <option>Female</option>
                                               </select>
                                             </div>
                                             <div className="mt-3">
                                                 <label for="inputFirstname" className="form-label">Age</label>
-                                                <input type="integer" name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
+                                                <input type="integer" name="age" className="form-control" id="inputfirstname" value = {this.state.age}   ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
                                             </div>
                                         </div>
                                 </div>
@@ -257,6 +247,8 @@ class Create_bot extends React.Component {
         </Styles>
       )
     }
-  }
+  
 }
-export default Create_bot;
+}
+
+export default Edit_bot;

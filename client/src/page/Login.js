@@ -5,18 +5,21 @@ import FlashMessage from 'react-flash-message'
 
 const Styles = styled.div`
   .page {
-        // background: url(${process.env.PUBLIC_URL +'/images/bg-log.png'}) ;
-        // background-size: 80%;
-        // position: cover;
-        // top: 0px;
-        // left: 0;
-        // right: 0;
-        // bottom: 0;
-        // width: 100%;
-        // height: 100%;
+        background: url(${process.env.PUBLIC_URL +'/images/b.png'});
+        background-size: 30%;
+        background-repeat: repeat-x;
+        background-position: right top;
+        position: cover;
+        top: 0px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
   }
 
   .container {
+    margin-top:5%;
     font-family: 'Public Sans', sans-serif;
   }
 
