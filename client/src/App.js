@@ -15,6 +15,7 @@ import Main from './Components/Main';
 import Mapping from './Page/Mapping';
 import Train from './Page/Train';
 import Bot_list from './Page/Bot_list';
+import Profile_edit from './Page/Profile_edit';
 import Edit_bot from './Page/Edit_bot';
 import Create_bot from './Page/Create_bot';
 import Connect from './Page/Connect_bot'
@@ -30,6 +31,7 @@ function App() {
             <Route path="/main" exact component= { Main } />
             <CloseRoute isLoggedIn={isLoggedIn()} path="/register" exact component={ Register } />
             <CloseRoute isLoggedIn={isLoggedIn()} path="/login" exact component={ Login } />
+            <PrivateRoute isloggedin={isLoggedIn()} exact path="/profile/:user_id/edit" component={ Profile_edit }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot_list/:user_id" component={ Bot_list }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:user_id/create_bot" exact component ={ Create_bot } />
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/edit_bot" exact component ={ Edit_bot } />

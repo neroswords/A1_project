@@ -77,8 +77,9 @@ def edit(id):
     if request.method == 'GET' :
         bots_cursor = bots_collection.find({"_id" : ObjectId(id)})
         listcursor = list(bots_cursor)
-        # print(listcursor)
+        print(listcursor)
         data = dumps(listcursor,indent = 2)
+        print(data)
         return data
         
     if request.method == 'POST':
@@ -95,20 +96,14 @@ def edit(id):
             
         else :
             file = request.files['file'] 
-            
-            print("elseeee")
-            
             filename = secure_filename(file.filename)
-            print(filename)
             filename = creator+"&"+bot_name+filename+os.path.splitext(filename)[1]
-            print(filename)
             destination="/".join([UPLOAD_FOLDER, filename])
             file.save(destination)
-            
             session['uploadFilePath']=destination
             response="success"
         info_update = { "$set": {'bot_name': bot_name, 'owner':  creator, 'gender': gender, 'age': age, 'Img' : filename}}
-        print(info_update)
+
         # bot_id = { "_id": ObjectId (id)}
         done = bots_collection.update_one({'_id': ObjectId (id)}, info_update)
         return {'message' : 'add bot successfully'}
@@ -188,7 +183,7 @@ def training(botID):
         training_collection = mongo.db.training
         training_cursor = training_collection.find({"botID" : botID})
         listcursor = list(training_cursor)
-        # print(listcursor)
+        print(listcursor)
         data = dumps(listcursor,indent = 2)
         return data
 
@@ -198,7 +193,6 @@ def trained(botID):
         trained_collection = mongo.db.trained
         trained_cursor = trained_collection.find({"botID" : botID})
         listcursor = list(trained_cursor)
-        print(listcursor)
         data = dumps(listcursor,indent = 2)
         return data
 

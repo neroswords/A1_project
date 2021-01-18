@@ -10,6 +10,7 @@ from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_r
                                 get_jwt_identity, get_raw_jwt)
 import json
 from bson.json_util import dumps, loads 
+from bson import ObjectId
 profile = Blueprint("profile",__name__)
 
 
@@ -68,6 +69,34 @@ def login():
                 return {"error":"Username or password wrong"}
         else:
             return {"error":"Username is not valid"}
+
+@profile.route('/<id>/edit', methods=['GET','POST'])
+def Profile_edit2(id):
+    users_collection = mongo.db.users
+    if request.method == 'GET':
+        userinfo_cursor =  users_collection.find({"_id" : ObjectId(id)})
+        userinfo_cur = list(userinfo_cursor) 
+        data_info = dumps(userinfo_cur, indent = 2) 
+        return data_info
+    if request.method == 'POST':
+        user_info = request.get_json()
+        print(user_info)
+        # user_info['email'], 
+        # user_info['ft_name'], 
+        # user_info['la_name'], 
+        # user_info['address'], 
+        # user_info['shop_name'], 
+        # user_info['type_shop'], 
+        # user_info['birthday']
+
+        info_update = { "$set": {'email': user_info['email'], 'ft_name':  user_info['firstname'],'la_name':  user_info['lastname'],
+        'address':  user_info['shop_address'], 'shop_name':  user_info['shop_name'], 'type_shop':  user_info['shop_type'], 'birthday':  user_info['birthday']}}
+
+        # bot_id = { "_id": ObjectId (id)}
+        done = users_collection.update_one({'_id': ObjectId (id)}, info_update)
+        return {'message' : 'add bot successfully'}
+
+
 
 @profile.route('/<user_id>',methods=['GET'])
 def get_user(user_id):

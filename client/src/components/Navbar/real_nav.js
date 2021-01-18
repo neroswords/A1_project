@@ -121,7 +121,9 @@ function DropdownMenu() {
             goToMenu="animals">
             Animals
           </DropdownItem> */}
-          <a>
+           <a onClick={() => {
+            window.location.replace("/profile/"+ localStorage.getItem('user_id')+"/edit")
+          }}>
             <DropdownItem 
               leftIcon= {<i class="fas fa-user"></i>}>
                 Edit Profile

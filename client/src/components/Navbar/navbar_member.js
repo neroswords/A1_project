@@ -104,40 +104,43 @@ const Styles = styled.div`
     display: none;
   }
   
-  label #btn,
-  label #cancel {
-    position: absolute;
-    background: #042331;
-    border-radius: 3px;
-    cursor: pointer;
+  // label #btn{
+  //   position: absolute;
+  //   background: #042331;
+  //   border-radius: 3px;
+  //   cursor: pointer;
+  // }
+  
+  // label #btn {
+  //   left: 40px;
+  //   top: 25px;
+  //   font-size: 1px;
+  //   color: white;
+  //   padding: 6px 12px;
+  //   transition: all 0.5s;
+  // }
+  
+  // label #cancel {
+  //   z-index: 1111;
+  //   left: -195px;
+  //   top: 17px;
+  //   font-size: 30px;
+  //   color: white;
+  //   padding: 4px 9px;
+  //   transition: all 0.5s ease;
+  // }
+  
+  // #check:checked ~ label #btn {
+  //   left: 250px;
+  //   opacity: 0;
+  //   pointer-events: none;
+  // }
+  
+  .navbar span{
+    font-weight: bold;
+    // margin-left: 15%;
   }
-  
-  label #btn {
-    left: 40px;
-    top: 25px;
-    font-size: 1px;
-    color: white;
-    padding: 6px 12px;
-    transition: all 0.5s;
-  }
-  
-  label #cancel {
-    z-index: 1111;
-    left: -195px;
-    top: 17px;
-    font-size: 30px;
-    color: white;
-    padding: 4px 9px;
-    transition: all 0.5s ease;
-  }
-  
-  
-  #check:checked ~ label #btn {
-    left: 250px;
-    opacity: 0;
-    pointer-events: none;
-  }
-  
+
 `
 
 function Navbar_member() {
@@ -160,7 +163,17 @@ function Navbar_member() {
                                 <i className="fas fa-robot"></i>
                             </div>
                           </div>
-                          <span className="link-text">Trainbot</span>
+                          <span className="link-text">Training bot</span>
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a href="/train" class="nav-link">
+                          <div className="fa-group">
+                              <div className="fa-secondary">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                          </div>
+                          <span className="link-text">Trained</span>
                         </a>
                       </li>
                       <li className="nav-item">

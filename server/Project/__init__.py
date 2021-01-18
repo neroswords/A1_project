@@ -50,119 +50,14 @@ def fileUpload():
     print(destination)
     return response
 
-# @login_manager.user_loader
-# def load_user(username):
-#     return get_user(username)
 
-
-# @app.route("/logout")
-# @login_required
-# def logout():
-#     logout_user()
-#     return redirect(url_for('profile.login'))
-
-# @app.route('/connect', methods=['GET', 'POST'])
-# @login_required
-# def connect():
-#     if request.method == 'POST':
-#         # print(current_user._id)
-#         # username = current_user.username
-#         # ch_sc = request.form.get('ch_sc')
-#         # ch_ac_tk = request.form.get('ch_ac_tk')
-#         # basic_id = request.form.get('basic_id')
-#         # pfa_tk = request.form.get('pfa_tk')
-#         # vf_tk = request.form.get('vf_tk')
-#         # update_connect(username, ch_sc,ch_ac_tk,basic_id,pfa_tk,vf_tk)
-#         return redirect(url_for('home'))
-#     elif request.method == 'GET':
-#         gg = find_bot(current_user.username)
-#         return render_template('connect.html',username = gg)
 
 
 @app.route('/images/<path:image_name>')
 def serve_image(image_name):
     return send_from_directory(app.config['DOWNLOAD_FOLDER'],image_name)
     
-@app.route('/connect/newbot', methods=['GET', 'POST'])
-# @login_required
-def newbot():
-    if request.method == 'POST':
-        if  not check_bot(request.form.get('name_bot')):
-            message = "Bot name already exists!"
-        elif  check_bot(request.form.get('name_bot')):
-            username = current_user.username
-            name_bot = request.form.get('name_bot')
-            ch_sc = request.form.get('ch_sc')
-            ch_ac_tk = request.form.get('ch_ac_tk')
-            basic_id = request.form.get('basic_id')
-            pfa_tk = request.form.get('pfa_tk')
-            vf_tk = request.form.get('vf_tk')
-            new_bot(username,name_bot, ch_sc,ch_ac_tk,basic_id,pfa_tk,vf_tk)
-            return redirect(url_for('connect'))
 
-    # elif request.method == 'GET':
-    a = get_connection(current_user.username)
-    return render_template('newbot.html',username=current_user.username,message=message)
-
-
-
-# class Anonymous(AnonymousUserMixin):
-#   def __init__(self):
-#     self.name = 'Guest'
-
-# def load_user(user_id):  #ยังไม่รู้ใช้ทำไร
-#     return User.query.filter_by(user_id=user_id).first()
-# @app.route('/')
-# # @login_manager.user_loader
-# def home():
-#     # return render_template('home.html',users={ "name": current_user.name, "password":current_user.password})
-#     session.pop('user',None)
-#     print(current_user.is_authenticated)
-#     return render_template('home.html')
-# @app.route('/login', methods=['POST','GET'])
-# def login():
-#         print(current_user.is_authenticated)
-#         if request.method == 'POST':
-#             users = mongo.db.users
-#             login_user = users.find_one({'name' : request.form['username']})
-        
-#             if login_user:
-#                 if bcrypt.hashpw(request.form['password'].encode('utf-8'), login_user['password']) == login_user['password']:
-#                     session['username'] = request.form['username']
-#                     return redirect(url_for('home'))
-#             return 'Invalid username/password '
-#         elif request.method == 'GET':
-#             return render_template('login.html')
-
-
-
-# @app.route('/signup', methods=['POST', 'GET'])
-# def signup():
-    
-#     if request.method == 'POST':
-#         users = mongo.db.users
-#         existing_user = users.find_one({'username' : request.form['username']})
-
-#         if existing_user is None:
-#             hashpass = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
-#             users.insert({'username' : request.form['username'], 'password' : hashpass,'email' : request.form['email']
-#             ,'ft_name' : request.form['ft_name'],'la_name' : request.form['la_name']
-#             ,'address' : request.form['address'],'type_shop' : request.form['type_shop'],'birthday' : request.form['birthday']})
-#             session['username'] = request.form['username']
-#             return render_template('home.html')      
-#         return 'That username already exists!'
-#     return render_template('signup.html')
-
-
-# @app.route('/connect', methods=['POST', 'GET'])
-# def connect():
- 
-#     if g.user:
-#         print()
-#         print(current_user.is_authenticated)
-#         return render_template('connect.html',user=session['username'])
-#     return redirect(url_for('home')) 
-        
 # @app.before_request
 # def before_request():
 #     g.user = None
