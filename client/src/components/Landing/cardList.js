@@ -117,7 +117,7 @@ export const CardList = () => (
                         <hr />
                     </h5>
                     <ul> 					
-                        <li><i class="fas fa-check"></i>List Features</li> 					
+                        <li><i class="fas fa-check"></i>1</li> 					
                         <li><i class="fas fa-check"></i>List Features</li> 					
                         <li><i class="fas fa-check"></i>List Features</li> 				
                     </ul>
