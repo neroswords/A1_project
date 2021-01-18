@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const Styles = styled.div`
 .main-footer{
+    font-family: 'Athiti', sans-serif;
     color:white;
     background-color: #353a44;
     padding-top: 3em;
@@ -45,11 +46,16 @@ const Styles = styled.div`
     margin: 10px 0px;
     height: 5px; 	
     width: 70px; 	
-    background-color: #fca311; 
+    background-color: #fca311;
+    border: 2px solid #fca311; 
 }
 
  h4 {
     font-weight: bold;
+}
+
+.powered {
+    margin-bottom:15%;
 }
 
 .powered i {
@@ -58,8 +64,12 @@ const Styles = styled.div`
     margin-top: 10px;
 }
 
+.help li {
+    margin-top:4%;
+}
 .help a {
     color : #fca311;
+
 }
 
 .help a:hover {
