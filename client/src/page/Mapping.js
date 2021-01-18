@@ -12,11 +12,11 @@ const Styles = styled.div`
     margin-top:2%
 }
 ` 
-function Mapping(){
+function Mapping(props){
     return(
         <Styles>
         <div className="mapping-page">
-            <Navbar_member/>
+            <Navbar_member botID = {props.match.params.bot_id}/>
             <div className="container">
                 <div className="container-top d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight'>Mapping</h2>

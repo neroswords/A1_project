@@ -3,6 +3,7 @@ import Table from '../Components/Table/Tablecon';
 import Navbar_member from '../Components/Navbar/navbar_member';
 import {Link} from 'react-router-dom';
 import DeleteModal from '../Components/delete_modal'
+import { useHistory } from "react-router-dom";
 
 import styled from 'styled-components';
 
@@ -16,6 +17,7 @@ const Styles = styled.div`
 ` 
 
 function Train(props){
+    let history = useHistory();
     return(
         <Styles>
         <div className="train-page">

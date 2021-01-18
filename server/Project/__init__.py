@@ -96,7 +96,7 @@ def webhook(platform):
 
     elif platform == "line":
         if request.method == "GET":
-            return "This is method get from line"
+            return {"message":"This is method get from line"}
 
         elif request.method == "POST":
             payload = request.json

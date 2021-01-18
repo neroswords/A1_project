@@ -65,7 +65,7 @@ def create():
         #owner = bot_info['creator'] #ref id คนสร้างมาใส่ตัวแปรนี้
 
         # image = bot_image['image']
-        new_bot = bots_collection.insert_one({'bot_name': bot_name, 'gender' : gender,'owner': creator, 'age': age,'Img': filename})
+        new_bot = bots_collection.insert_one({'bot_name': bot_name, 'gender' : gender,'owner': creator, 'age': age,'Img': filename,'confident': 0.6})
         #id = JSONEncoder().encode(new_bot.inserted_id).replace('"','')
         return {'message' : 'add bot successfully'}
     return "add bot unsuccessfully"
@@ -170,6 +170,7 @@ def webhook(platform,botID):
                 message = payload['events'][0]['message']['text']
                 if sender_define['state'] == 'none':
                     response,conf = process_message(message,botID,bot_define['confident'])
+                    print(response)
                 else:
                     response = onState(message,sender_define['state'],botID)
             ReplyMessage(Reply_token,response,Channel_access_token)

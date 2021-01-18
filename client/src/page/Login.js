@@ -73,6 +73,14 @@ const Styles = styled.div`
     transition: $property $duration $ease;
   }
   
+  .detect-message{
+    color : red;
+  }
+
+  .alert-message{
+    margin-top: 10%;
+  }
+
   .btn-login button {
     text-align: center;
     align-item: center;
@@ -163,21 +171,20 @@ class Login extends React.Component {
             this.setState({ showMessage: true })
             this.setState({ message: data.error })
         }
-      }).catch(error => console.log(error));
+      }).catch(error => console.log(error)).then(this.setState({ showMessage: false }))
   }
 
   render(){
       return(
           <Styles>
             { this.state.showMessage &&  
-                  <div className="container">
+                  // <div className="alert-message">
                       <FlashMessage duration={4000}>
-                          <strong>Login Error : {this.state.message}</strong>
+                          <p className="detect-message">Login Error : {this.state.message}</p>
                       </FlashMessage>
-                  </div>
+                  // </div>
             }
             <div className="page">
-              {this.flash}
                 <div className="container">
                       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                         <div class="card card-signin my-5">

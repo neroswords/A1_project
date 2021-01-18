@@ -181,16 +181,7 @@ class Register extends React.Component {
         this.setState({message:data.error})
         this.setState({showMessage: true})
       }
-    })
-    window.location.replace("/login")
-  }
-}
-flash = (e) =>{
-  if (this.state.flash == true){
-    return(
-      <div>
-        {e}
-      </div>)
+    }).then(this.setState({ showMessage: false }))
   }
 }
 

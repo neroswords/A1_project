@@ -13,11 +13,11 @@ const Styles = styled.div`
 }
 ` 
 
-function Group(){
+function Group(props){
     return(
         <Styles>
         <div className="group-page">
-            <Navbar_member />
+            <Navbar_member botID = {props.match.params.bot_id} />
             <div className="container">
                 <div className="container-top d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight'>Group</h2>

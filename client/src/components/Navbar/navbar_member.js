@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {Link} from 'react-router-dom';
 
 const Styles = styled.div` 
   .navbar {
@@ -157,14 +158,14 @@ function Navbar_member({botID}) {
                       </div> */}
 
                       <li className="nav-item">
-                        <a href={'/bot/'+botID+'/training'} class="nav-link">
+                        <Link to={'/bot/'+botID+'/training'} class="nav-link">
                           <div className="fa-group">
                               <div className="fa-secondary">
                                 <i className="fas fa-robot"></i>
                             </div>
                           </div>
                           <span className="link-text">Training bot</span>
-                        </a>
+                        </Link>
                       </li>
                       <li className="nav-item">
                         <a href="/train" class="nav-link">
@@ -177,24 +178,24 @@ function Navbar_member({botID}) {
                         </a>
                       </li>
                       <li className="nav-item">
-                        <a href="/group" class="nav-link">
+                        <Link to={'/bot/'+botID+'/group'} class="nav-link">
                           <div className="fa-group">
                               <div className="fa-secondary">
                                 <i class="fas fa-object-group"></i>
                             </div>
                           </div>
                           <span className="link-text">Group</span>
-                        </a>
+                        </Link>
                       </li>
                       <li className="nav-item">
-                        <a href="/mapping" class="nav-link">
+                        <Link to={'/bot/'+botID+'/mapping'} class="nav-link">
                           <div className="fa-group">
                               <div className="fa-secondary">
                                 <i class="fas fa-project-diagram"></i>
                             </div>
                           </div>
                           <span className="link-text">Mapping</span>
-                        </a>
+                        </Link>
                       </li>
                       <li className="nav-item">
                         <a href="#" class="nav-link">
