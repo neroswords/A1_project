@@ -71,35 +71,48 @@ def create():
     return "add bot unsuccessfully"
 
 #edit
-@bot.route('/edit/<id>', methods=['GET', 'POST'])
+@bot.route('/<id>/edit', methods=['GET', 'POST'])
 def edit(id):
     bots_collection = mongo.db.bots
+    if request.method == 'GET' :
+        bots_cursor = bots_collection.find({"_id" : ObjectId(id)})
+        listcursor = list(bots_cursor)
+        # print(listcursor)
+        data = dumps(listcursor,indent = 2)
+        return data
+        
     if request.method == 'POST':
-        bot_update = request.get_json()
-        bot_name = bot_update['name_bot']
-        chanel_secret = bot_update['ch_sc']
-        chanel_access_token = bot_update['ch_ac_tk']
-        basic_id = bot_update['basic_id']
-        fb_access_token = bot_update['pfa_tk']
-        verify_token = bot_update['vf_tk']
-        #image = bot_update['image']
-
-        info_update = { "$set": {'bot_name': bot_name, 'chanel_secret':  chanel_secret, 'chanel_access_token': chanel_access_token, 'basic_id': basic_id, 'fb_access_token': fb_access_token , 'verify_token': verify_token, 'image' : image}}
+        creator = request.form['creator'] 
+        bot_name = request.form['bot_name'] 
+        gender = request.form['gender'] 
+        age = request.form['age'] 
+        
+        if  "file" not in request.files :
+            
+            filename = "Avatar.jpg"
+            # filename = request.form['Image'] 
+            # print("222555555555555")
+            
+        else :
+            file = request.files['file'] 
+            
+            print("elseeee")
+            
+            filename = secure_filename(file.filename)
+            print(filename)
+            filename = creator+"&"+bot_name+filename+os.path.splitext(filename)[1]
+            print(filename)
+            destination="/".join([UPLOAD_FOLDER, filename])
+            file.save(destination)
+            
+            session['uploadFilePath']=destination
+            response="success"
+        info_update = { "$set": {'bot_name': bot_name, 'owner':  creator, 'gender': gender, 'age': age, 'Img' : filename}}
+        print(info_update)
         # bot_id = { "_id": ObjectId (id)}
         done = bots_collection.update_one({'_id': ObjectId (id)}, info_update)
-        if done:
-            return "Update successfully"
-        else:
-            return "Update unsuccessfully"
-
-    elif request.method == 'GET':
-        bot =  bots_collection.find_one({'_id': id}) 
-        if bot:
-            bot_info = ChatBot(bot['owner'], bot['bot_name'], bot['chanel_access_token'], bot['chanel_secret'], bot['verify_token'], bot['basic_id'], bot['fb_access_token'],bot['age'],bot['gender'],bot['image'])
-            return bot_info
-        else: 
-            return "Nope"
-
+        return {'message' : 'add bot successfully'}
+    return "add bot unsuccessfully"
 
  #delete
 @bot.route('/delete/<id>', methods=['POST'])
@@ -175,7 +188,7 @@ def training(botID):
         training_collection = mongo.db.training
         training_cursor = training_collection.find({"botID" : botID})
         listcursor = list(training_cursor)
-        print(listcursor)
+        # print(listcursor)
         data = dumps(listcursor,indent = 2)
         return data
 

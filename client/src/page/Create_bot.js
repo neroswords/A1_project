@@ -243,7 +243,7 @@ class Create_bot extends React.Component {
                             {/* <Lineform />                                 */}
 
                               <div className="btn-createbot">
-                                  <button className="btn btn-success text-uppercase" onClick={this.handleSubmit} type="submit">Create ChatBot</button>
+                                  <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Create ChatBot</button>
                               </div>
 
 
