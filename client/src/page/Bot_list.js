@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef } from "react";
 import {Link} from "react-router-dom";
 import '../components/botlist/Bot_list.css';
 import { useDetectOutsideClick } from "../components/botlist/button_nav";
+// import { Connect } from "../components/botlist/Connent";
 
 
 
@@ -61,6 +62,12 @@ function Dropdown({botData, deleteBot}){
     const onClick = () => setIsActive(!isActive);
     // const forceUpdate = useForceUpdate();
     // console.log(botData)
+    
+    // const [showConnect, setShowConnect] = useState(false);
+    // const openConnect = () => {
+    //     setShowConnect(prev => !prev);
+    //   }
+
     return(
     <div class="card-box">
         <Link to={'/bot/'+botData._id.$oid+'/train'}>
@@ -94,6 +101,7 @@ function Dropdown({botData, deleteBot}){
                     </li>
                     <li>
                     <a href={'/bot/'+botData._id.$oid+'/connect'}><i class="fas fa-link"></i> Connect</a>
+                    {/* <Connect showConnect={showConnect} setShowConnect={setShowConnect} /> */}
                     </li>
                     <li>
                     <a href="#" onClick={()=>deleteBot(botData._id.$oid)}>

@@ -30,13 +30,14 @@ const Styles = styled.div`
   
 
   .title_part p{
-      font-weight: bold;
-      margin-top: 9%;
+    font-weight: bold;
+    margin-top: 5%;
+    font-size: 23px;
 
   }
 
   .title_part  .line{
-    border: 10;
+    border: 10px;
     height: 4px;
     background-color: #fca311;
     width: 200px;
@@ -66,8 +67,6 @@ const Styles = styled.div`
   .form-bot select{
     border-radius: 0.5rem;
   }
-
-
 
   .row-2{
     margin-bottom: 2rem;
@@ -113,6 +112,22 @@ const Styles = styled.div`
   .btn-line {
     background-color: #34a853 ;
   }
+  
+  .con-line{
+    margin-left: 50px;
+  }
+
+  .connect_platform{
+    text-aling: center;
+  }
+
+  .connect_platform button{
+    padding: 7px 10px;
+    border-radius: 40px;
+    
+  }
+  
+
 `;
 
 class Connect_bot extends React.Component {
@@ -192,14 +207,8 @@ class Connect_bot extends React.Component {
                                     <div className="line"></div>
                                 </div>
                                 <div className="connect_platform">
-                                    <div className="row col-lg-12">
-                                        <div className="col-lg-6">
-                                            <button className="btn btn-primary text-uppercase" onClick={this.handlefacebookChange} type="">facebook</button>
-                                        </div>
-                                        <div className="col-lg-6">
-                                            <button className="btn btn-success btn-line text-uppercase" onClick={this.handlelineChange} type="">line</button>
-                                        </div>
-                                    </div>
+                                  <button className="con-facebook btn btn-primary text-uppercase" onClick={this.handlefacebookChange} type=""><i class="icon-facebook fab fa-facebook fa-2x"></i></button>
+                                  <button className="con-line btn btn-success btn-line text-uppercase" onClick={this.handlelineChange} type=""><i class="icon-line fab fa-line fa-2x"></i></button>
                                 </div>
                                 {this.renderSwitch(this.state.platform)}
                             </div>

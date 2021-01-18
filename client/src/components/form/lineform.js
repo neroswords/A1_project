@@ -7,13 +7,14 @@ const Styles = styled.div`
     margin-top: 2%;
 }
 
-
 .facebook-card {
     border: 0;
     border-radius: 1rem;
-    background-color: #34a853;
-    color: white;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    color: black;
+    // box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    // border: 1px solid rgba(0,0,0,.1);
+    border: 5px solid #34a853;
 }
 
 .facebook {
@@ -22,9 +23,97 @@ const Styles = styled.div`
 
 .facebook p{
     font-weight: bold;
-    font-size: 30px;
+    font-size: 23px;
+    margin: 0 0 25px;
 }
-`
+
+.link i{
+    color: #34a853;
+}
+
+.link p{
+    font-size: 11px;
+    color: black;
+}
+
+.copy-clipboard {
+    color: #34a853;
+    position: absolute;
+    top: 275px;
+    right: 70px;
+}
+
+.link button{
+    background: white;
+    padding: 5px 12px;
+    margin-top: 15px;
+    font-size: 19px;
+    border-radius: 25px;
+    border: 3px solid #34a853;
+    transition: 0.5s;
+}
+
+.facebook .input-Box label{
+    font-size: 18px;
+}
+
+.facebook .input-Box input{
+    box-shadow: none;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #000;
+    outline: none;
+    margit-bottom: 30px;
+    margin-top: 1px;
+    font-size: 16px;
+    padding: 5px 0;
+}
+
+.all-button{
+    display: inline;
+}
+
+#container-button{
+    text-align: center;
+}
+
+#container-button{
+    text-align: center;
+}
+
+#container-button .submit{
+    padding: 5px 12px;
+    margin-top: 15px;
+    font-size: 19px;
+    border-radius: 25px;
+    border: 3px solid #34a853;
+    transition: 0.5s;
+    margin: 10px;
+    background-color: #34a853;
+    color: #fff;
+}
+
+#container-button .submit:hover{
+    color: #000;
+}
+
+#container-button .cancle{
+    padding: 5px 12px;
+    margin-top: 15px;
+    font-size: 19px;
+    border-radius: 25px;
+    border: 3px solid #CD5C5C;
+    transition: 0.5s;
+    margin: 10px;
+    background-color: #CD5C5C;
+    color: #fff;
+}
+
+#container-button .cancle:hover{
+    color: #000;
+}
+
+`;
 
 export default function Lineform(props) {
     const [access_token, setAccess_token] = useState('');
@@ -48,15 +137,15 @@ export default function Lineform(props) {
         })
     }
 
-    useEffect(() => {
-        fetch('/bot/'+localStorage.getItem('user_id')+'/connect').then(
-            response => response.json()
-          ).then(data =>{
-            setAccess_token(data.page_facebook_access_token);
-            setChannel_secret(data.Channel_secret);
-            setBasic_id(data.basic_id);
-        })
-    }, []);
+    // useEffect(() => {
+    //     fetch('/bot/'+localStorage.getItem('user_id')+'/connect').then(
+    //         response => response.json()
+    //       ).then(data =>{
+    //         setAccess_token(data.page_facebook_access_token);
+    //         setChannel_secret(data.Channel_secret);
+    //         setBasic_id(data.basic_id);
+    //     })
+    // }, []);
 
     return(
             <Styles>
@@ -66,9 +155,12 @@ export default function Lineform(props) {
                             <form className="facebook" onSubmit={ handleSubmit }>
                                 <div className="row">
                                     <p className="col">Connect to Line</p>
-                                    {/* <i class="fab fa-line"></i> */}
                                 </div>
+                                <div className="link">
                                     <p>{packageJson.proxy}bot/webhook/{props.props.bot_id}/line</p>
+                                    <button className="copy-clipboard"><i className="fas fa-copy fa-xs"></i></button>
+                                </div>
+                                <div className="input-Box">
                                 <div className="col-lg-12">
                                     <label  className="form-label">Channel secret</label>
                                     <input type="text" value={channel_secret} onChange={e => setChannel_secret(e.target.value)} className="form-control" id="inputpagefacebook"/>
@@ -81,7 +173,11 @@ export default function Lineform(props) {
                                     <label  className="form-label">Basic ID</label>
                                     <input type="text" value={basic_id} onChange={e => setBasic_id(e.target.value)} className="form-control" id="inputbotname"/>
                                 </div>
-                                <button type='submit'>Submit</button>
+                                </div>
+                                <div id="container-button">
+                                    <button className="submit" type='submit'>Submit</button>
+                                    <button className="cancle" type='button'>Cancle</button>
+                                </div>
                             </form>
                         </div>  
                     </div>
