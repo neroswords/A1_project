@@ -60,6 +60,12 @@ function Dropdown({botData, deleteBot}){
     const onClick = () => setIsActive(!isActive);
     // const forceUpdate = useForceUpdate();
     // console.log(botData)
+    
+    // const [showConnect, setShowConnect] = useState(false);
+    // const openConnect = () => {
+    //     setShowConnect(prev => !prev);
+    //   }
+
     return(
     <div class="card-box">
         <Link to={'/bot/'+botData._id.$oid+'/training' } >
@@ -92,7 +98,8 @@ function Dropdown({botData, deleteBot}){
                         <a href={'/bot/'+botData._id.$oid+'/edit_bot'}><i class="fas fa-pen"></i> edit</a>
                     </li>
                     <li>
-                        <a href={'/bot/'+botData._id.$oid+'/connect'}><i class="fas fa-link"></i> Connect</a>
+                    <a href={'/bot/'+botData._id.$oid+'/connect'}><i class="fas fa-link"></i> Connect</a>
+                    {/* <Connect showConnect={showConnect} setShowConnect={setShowConnect} /> */}
                     </li>
                     <li>
                         <a href="#" onClick={()=>deleteBot(botData._id.$oid)}>
