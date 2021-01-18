@@ -35,8 +35,10 @@ const Styles = styled.div`
     text-transform: uppercase;
   }
 
-  span {
+  .main-text span {
+    font-size: 20px;
     color: grey;
+    line-height: 1.7;
   }
 `;
 
@@ -49,7 +51,7 @@ export const Mainpage = () => (
         <section id="main-page">
           <div className="main-text">
             <h1>A1 Chatbot</h1>
-            <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. <br />Inventore deleniti aliquid  et consectetur corporis eum odit.<br /> Excepturi, repellendus.</span>
+            <span>A1 chatbot is a web-application that can help manage online purchasing and selling. It also includes automated reply message, order management, and online shop system administration via bot which you can create by your own.  Excepturi, repellendus.</span>
           </div>
           <div className="img-main">
             <img src="./images/Telephone.png" width="110%"/>

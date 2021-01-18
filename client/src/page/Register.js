@@ -117,6 +117,10 @@ const Styles = styled.div`
     margin-bottom: 3%;
   }
   
+  .error {
+    background-color: white;
+    color: red;
+  }
 `;
 
 
@@ -137,11 +141,18 @@ class Register extends React.Component {
       shop_address : null,
       redirect : false,
       message : '',
-      showMessage: false,
+      showMessageUsername: false,
+      showMessagePassword: false
     };
     this.handleChange = this.handleChange.bind(this);
   }
   
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "auto"
+    });
+  }
 
   handleChange (evt) {
     this.setState({ [evt.target.name]: evt.target.value });
@@ -151,7 +162,9 @@ class Register extends React.Component {
     e.preventDefault()
 
     if(this.state.password !== this.state.confirm_password){
-      console.log('errors');
+      this.setState({message:'your password and confirm was not match'})
+      this.setState({showMessagePassword: true})
+      this.scrollToTop()
   }
   else{
     const profile = {
@@ -173,16 +186,16 @@ class Register extends React.Component {
       },
       body: JSON.stringify(profile)
     }).then((res)=>res.json()).then(data=>{
-      
+      console.log(data)
       if(data.message){
         this.setState({redirect:true})
       }
       else if(data.error){
         this.setState({message:data.error})
-        this.setState({showMessage: true})
+        this.setState({showMessageUsername: true})
+        this.scrollToTop()
       }
-    })
-    window.location.replace("/login")
+    }).then(this.setState({showMessageUsername: false})).then(this.setState({showMessagePassword: false}))
   }
 }
 flash = (e) =>{
@@ -202,13 +215,7 @@ flash = (e) =>{
       else {
         return(
           <Styles>
-            { this.state.showMessage &&  
-                  <div className="container">
-                      <FlashMessage duration={4000}>
-                          <strong>Register Error : {this.state.message}</strong>
-                      </FlashMessage>
-                  </div>
-            }
+
                 <div className="container">
                       <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
                         <div className="card card-regis">
@@ -220,22 +227,40 @@ flash = (e) =>{
                                   <div className="line"></div>
                             </div>
                                 <div className="my-3">
-                                <label for="exampleInputEmail1" className="form-label">Email address</label>
-                                <input type="email" className="form-control " id="inputemail" name='email' required value={this.state.email} onChange={this.handleChange} />
+                                  <label for="exampleInputEmail1" className="form-label">Email address</label>
+                                  <input type="email" className="form-control " id="inputemail" name='email' required value={this.state.email} onChange={this.handleChange} />
                                 </div>
                                 <div className="my-3">
                                   <label for="exampleInputEmail1" className="form-label">Username</label>
-                                  <input type="text" className="form-control" id="inputusername" name='username' required value={this.state.username} onChange={this.handleChange}/>
+                                  <input type="text" className="form-control" id="inputusername" name='username' minLength={5} maxLength={16} required value={this.state.username} onChange={this.handleChange}/>
+                                  { this.state.showMessageUsername &&  
+                                        <div className="container">
+                                            <FlashMessage duration={4000}>
+                                              <div className="error">
+                                                <strong>Error : {this.state.message}</strong>
+                                              </div>  
+                                            </FlashMessage>
+                                        </div>
+                                  }
                                 </div>
                                 <div className="row">
                                   <div className="col ">
                                     <label for="exampleInputPassword1" className="form-label">Password</label>
-                                    <input type="password" className="form-control" id="inputpassword" name='password' required  value={this.state.password} onChange={this.handleChange} /> 
+                                    <input type="password" className="form-control" id="inputpassword" name='password' required  minLength={6} value={this.state.password} onChange={this.handleChange} /> 
                                   </div>
                                   <div className="col">
                                     <label for="exampleInputPassword1" className="form-label">Comfirm Password</label>
-                                    <input type="password" className="form-control" id="confirmpassword" name='confirm_password' value={this.state.confirm_password} onChange={this.handleChange} />  
+                                    <input type="password" className="form-control" id="confirmpassword" name='confirm_password' minLength={6} value={this.state.confirm_password} onChange={this.handleChange} />  
                                   </div>
+                                  { this.state.showMessagePassword &&  
+                                      <div className="container">
+                                          <FlashMessage duration={4000}>
+                                            <div className="error">
+                                              <strong>Error : {this.state.message}</strong>
+                                            </div>  
+                                          </FlashMessage>
+                                      </div>
+                                }
                                 </div>
                                 <div className="title_part">
                                   <p className="col">Personal infomation</p>

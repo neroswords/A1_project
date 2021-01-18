@@ -111,6 +111,12 @@ const Styles = styled.div`
   //   }
   // }
 
+  .detect {
+    background-color: white;
+    color: red;
+  }
+
+
 `;
 class Login extends React.Component {
   constructor(props) {
@@ -127,15 +133,6 @@ class Login extends React.Component {
 
   handleChange (evt) {
     this.setState({ [evt.target.name]: evt.target.value });
-  }
-
-  flash = (e) =>{
-    if (this.state.flash == true){
-      return(
-        <div>
-          {e}
-        </div>)
-    }
   }
 
   handleSignIn = e =>{
@@ -163,21 +160,14 @@ class Login extends React.Component {
             this.setState({ showMessage: true })
             this.setState({ message: data.error })
         }
-      }).catch(error => console.log(error));
+      }).catch(error => console.log(error)).then(this.setState({ showMessage: false }))
   }
 
   render(){
       return(
           <Styles>
-            { this.state.showMessage &&  
-                  <div className="container">
-                      <FlashMessage duration={4000}>
-                          <strong>Login Error : {this.state.message}</strong>
-                      </FlashMessage>
-                  </div>
-            }
+
             <div className="page">
-              {this.flash}
                 <div className="container">
                       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                         <div class="card card-signin my-5">
@@ -193,7 +183,15 @@ class Login extends React.Component {
                                   <input type="password" class="form-control" name="password" id="floatingPassword" value={this.state.password} onChange={this.handleChange} placeholder="Password" required />
                                   <label for="floatingPassword">Password</label>
                                 </div>
-
+                                { this.state.showMessage &&  
+                                  <div className="container">
+                                      <FlashMessage duration={4000}>
+                                        <div className="detect">
+                                          <strong>Login Error : {this.state.message}</strong>
+                                        </div>  
+                                      </FlashMessage>
+                                  </div>
+                                }
                                 <div className="btn-login col-lg-9 col-md-12 col-sm-12 col-xs-12 ms-5">
                                     <button class="btn btn-primary text-uppercase btn-inlogin " type="submit" onClick={this.handleSignIn}>Log in</button>
                                 </div>
