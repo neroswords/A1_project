@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 const Styles = styled.div`
   .container {
     font-family: 'Public Sans', sans-serif;
-    background: url(${process.env.PUBLIC_URL +'/images/b.png'}) ;
+    // background: url(${process.env.PUBLIC_URL +'/images/b.png'}) ;
     filter: gray;
     background-size: 40%;
     background-repeat: repeat;
@@ -209,7 +209,7 @@ componentDidMount ()  {
                               </div>
                               <div className="my-3">
                                 <label for="exampleInputEmail1" className="form-label">Username</label>
-                                <input type="text" className="form-control" value = {this.state.username} id="inputusername" name='username' required value={this.state.username} onChange={this.handleChange}/>
+                                <input type="text" className="form-control" value = {this.state.username} id="inputusername" name='username' disabled value={this.state.username} onChange={this.handleChange}/>
                               </div>
                               <div className="row">
                                 {/* <div className="col ">
@@ -252,15 +252,16 @@ componentDidMount ()  {
                                 <div className="my-3">
                                   <label for="exampleFormControlTextarea1" className="form-label">Shop Address</label>
                                   <textarea className="form-control" id="inputshopaddress" value = {this.state.shop_address} rows="2" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
-                                </div>                           
-                              <div className="btn-regis">
-                                  <button className="btn btn-primary text-uppercase btn-inregis" type="submit" onClick={this.handleSubmit} >Edit </button>
+                                </div>
+                                {/* <hr className="my-4"/>                            */}
+                              <div className="btn-regis mt-5">
+                                  <button className="btn btn-primary text-uppercase btn-inregis" type="submit" onClick={this.handleSubmit} >Submit</button>
                               </div>
-                              <hr className="my-4"/>
+                              {/* <hr className="my-4"/>
                               <div align="center">
                                 <span> Already have an account ? </span>
                                 <a  href="/Login" >Log in</a> 
-                              </div>
+                              </div> */}
                           </form>
                           
                         </div>

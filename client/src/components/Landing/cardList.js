@@ -27,6 +27,7 @@ const Styles = styled.div`
 
 .card {
   width: 20rem;
+  height: 35rem;
   margin-bottom: 5%;
   border-radius: 10px;
   border: 0 solid #fca311;
@@ -55,22 +56,34 @@ h1 {
 
 }
 
-p {
-    color: grey;
-  }
+.card p {
+    color: black;
+}
 
 ul { 	
     list-style: none; 	 	
     font-size: 18px; 	
     letter-spacing: 0.5px;
-    line-height: 50px; 
+    display: inline;
+    // padding: none;
+    // line-height: 50px; 
 } 
 
 li i {
+    margin-left: -30px;
     color: #5BB30A;
     margin-right: 5%;
-    
+    display: inline;
+    margin-bottom: 5px;
 } 
+
+li p {
+    display: inline;
+}
+
+.select {
+    margin-button: 15px;
+}
 
 .img-card img {
     width: 80%;
@@ -93,19 +106,21 @@ export const CardList = () => (
         <div className="title">
             <h1>About Features</h1>
         </div>
-        <Jumbo className="jumbo col-lg-12">
-            <div className="row col-lg-12 justify-content-around">
+        <Jumbo className="jumbo col-lg-12 row justify-content-around">
                 <div className="card col-lg-6">
                     <div className="img-card">
                         <img src="./images/chat.svg" />
                     </div>
-                    <h5 className="card-title">Chat Features
+                    <h5 className="card-title">Bot Features
                         <hr />
                     </h5>
                     <ul> 					
-                        <li><i class="fas fa-check"></i>List Features</li> 					
-                        <li><i class="fas fa-check"></i>List Features</li> 					
-                        <li><i class="fas fa-check"></i>List Features</li> 				
+                        <li><i class="fas fa-check select"></i><p>Can get ordering from customer</p></li>
+                        <div className="mt-3"></div>					
+                        <li><i class="fas fa-check select"></i><p>Can understand and answer customer as what we teach</p></li>
+                        <div className="mt-3"></div> 					
+                        <li> <i class="fas fa-check select"></i><p>Can do dealing by itself</p></li>
+                        			
                     </ul>
                 </div>
 
@@ -117,9 +132,12 @@ export const CardList = () => (
                         <hr />
                     </h5>
                     <ul> 					
-                        <li><i class="fas fa-check"></i>1</li> 					
-                        <li><i class="fas fa-check"></i>List Features</li> 					
-                        <li><i class="fas fa-check"></i>List Features</li> 				
+                        <li><i class="fas fa-check"></i><p>Can issue a cover sheet for the parcel</p></li>
+                        <div className="mt-4"></div> 
+                        <li><i class="fas fa-check"></i><p>Can issue tracking number</p></li>
+                        <div className="mt-4"></div>  					
+                        <li><i class="fas fa-check"></i><p>Can keep the address</p></li> 					
+                         				
                     </ul>
                 </div>
 
@@ -131,12 +149,13 @@ export const CardList = () => (
                     <hr />
                     </h5>
                     <ul> 					
-                        <li><i class="fas fa-check"></i>List Features</li> 					
-                        <li><i class="fas fa-check"></i>List Features</li> 					
-                        <li><i class="fas fa-check"></i>List Features</li> 				
+                        <li><i class="fas fa-check"></i><p>Able to check sales on time</p></li>
+                        <div className="mt-4"></div>  					
+                        <li><i class="fas fa-check"></i><p>Able to check product balances</p></li>
+									
                     </ul>
                 </div>
-            </div>
+            
         </Jumbo>
         </Container>
     </Styles>
