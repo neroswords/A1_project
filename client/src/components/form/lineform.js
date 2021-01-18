@@ -40,7 +40,8 @@ export default function Lineform(props) {
             'access_token':access_token, 
             'channel_secret':channel_secret, 
             'basic_id':basic_id,
-            'creator':localStorage.getItem('user_id')
+            'creator':localStorage.getItem('user_id'),
+            'platform': 'line'
             }
         fetch('/bot/'+props.props.bot_id+'/connect', {
             method: 'POST',
@@ -49,7 +50,7 @@ export default function Lineform(props) {
                 'Content-Type':'application/json'
             },
             body: JSON.stringify(editData)
-        })
+        }).then(response => response.json().then(data => alert(data.message)))
     }
 
     useEffect(() => {

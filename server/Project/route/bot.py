@@ -28,7 +28,7 @@ def connect(id):
             {'$set':{'access_token':connect_data['access_token'],
             'channel_secret':connect_data['channel_secret'],
             'basic_id':connect_data['basic_id']}})
-            return 200
+            return {"message":"connect to platform successfully"}
         elif  connect_data['platform'] == 'facebook':
             bot_collection.update_one({'_id': ObjectId(id)},
             {'$set':{access_token:connect_data['access_token'],
@@ -181,9 +181,8 @@ def webhook(platform,botID):
 def training(botID):
     if request.method == 'GET' :
         training_collection = mongo.db.training
-        training_cursor = training_collection.find({"botID" : botID})
+        training_cursor = training_collection.find({"botID" : ObjectId(botID)})
         listcursor = list(training_cursor)
-        print(listcursor)
         data = dumps(listcursor,indent = 2)
         return data
 
@@ -191,7 +190,7 @@ def training(botID):
 def trained(botID):
     if request.method == 'GET' :
         trained_collection = mongo.db.trained
-        trained_cursor = trained_collection.find({"botID" : botID})
+        trained_cursor = trained_collection.find({"botID" : ObjectId(botID)})
         listcursor = list(trained_cursor)
         data = dumps(listcursor,indent = 2)
         return data

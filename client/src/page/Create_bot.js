@@ -113,9 +113,9 @@ class Create_bot extends React.Component {
     super(props);
 
     this.state = {
-      bot_name: '',
-      gender: '',
-      age: '',
+      bot_name: null,
+      gender: null,
+      age: null,
       platform: 'line',
       redirect: false,
       bot_id:'',
@@ -214,19 +214,19 @@ class Create_bot extends React.Component {
                                         <div className=" group col-lg-6">
                                             <div className="">
                                               <label  className="form-label">Bot Name</label>
-                                              <input type="text"  name="bot_name"  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
+                                              <input type="text"  name="bot_name" required  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
                                             </div>
                                             <div class="mt-3">
                                               <label for="inputgender" class="form-label">Gender</label>
-                                              <select id="inputgender" name="gender"  ref={(ref) => { this.gender = ref; }} onChange={this.handleChange} class="form-select">
-                                                  <option selected>Choose...</option>
+                                              <select id="inputgender" name="gender" required  ref={(ref) => { this.gender = ref; }} onChange={this.handleChange} class="form-select">
+                                                  <option disabled selected>Select your option</option>
                                                   <option>Male </option>
                                                   <option>Female</option>
                                               </select>
                                             </div>
                                             <div className="mt-3">
                                                 <label for="inputFirstname" className="form-label">Age</label>
-                                                <input type="integer" name="age" className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
+                                                <input type="integer" name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
                                             </div>
                                         </div>
                                 </div>

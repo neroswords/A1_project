@@ -36,8 +36,8 @@ function App() {
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:user_id/create_bot" exact component ={ Create_bot } />
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/edit_bot" exact component ={ Edit_bot } />
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/connect" exact component ={ Connect } />
-            <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/train" component={ Train }/>
-            <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/learned" component={ Learned }/>
+            <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/training" component={ Train }/>
+            <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/trained" component={ Learned }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/group" component={ Group }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/mapping" component={ Mapping }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/learned/add" component={ AddWord }/>
