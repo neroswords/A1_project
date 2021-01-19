@@ -101,7 +101,7 @@ def Profile_edit2(id):
 @profile.route('/<user_id>',methods=['GET'])
 def get_user(user_id):
     bot_collection = mongo.db.bots
-    bot_cursor =  bot_collection.find({'owner': user_id})
+    bot_cursor =  bot_collection.find({'owner': ObjectId(user_id)})
     list_cur = list(bot_cursor) 
     json_data = dumps(list_cur, indent = 2) 
     return json_data
