@@ -4,59 +4,405 @@ import {Button} from 'react-bootstrap';
 import {AddWord} from './AddTable/AddWord';
 import { AddStyle } from "./AddStyle";
 
+import { useTable,useFilters, useGlobalFilter, useAsyncDebounce, usePagination,useRowSelect   } from 'react-table'
+import {matchSorter} from 'match-sorter'
+
+
 const Styles = styled.div`
 
-.table{
-  border-collapse: collapse;
-  margin: 10px 0;
-  font-size: 0.9em;
-  border-radius: 5px 5px 0 0;
-  overflow: hidden;
-}
+padding: 1rem;
 
-.table thead tr{
-  text-align: left;
-  font-weight: bold;
-}
+  table {
+    border-spacing: 0;
+    border: 1px solid black;
 
-.table th,
-.table td{
-  padding: 12px 15px;
-}
+    tr {
+      :last-child {
+        td {
+          border-bottom: 0;
+        }
+      }
+    }
 
-.table tbody tr{
-  border-bottom: 1px solid #dddddd;
-}
+    th,
+    td {
+      margin: 0;
+      padding: 0.5rem;
+      border-bottom: 1px solid black;
+      border-right: 1px solid black;
 
-.table tbody tr:nth-of-type(even){
-  background-color: #e5e5e5;
-}
+      :last-child {
+        border-right: 0;
+      }
 
-.buttonaddWord{
-  min-width: 30px;
-  padding: 5px 10px;
-  border-radius: 4px;
-  border: none;
-  background: #ffc15e;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-}
+      input {
+        font-size: 1rem;
+        padding: 0;
+        margin: 0;
+        border: 0;
+      }
+    }
+  }
+
+  .pagination {
+    padding: 0.5rem;
+  }
 
 `;
 
+const IndeterminateCheckbox = React.forwardRef(
+  ({ indeterminate, ...rest }, ref) => {
+    const defaultRef = React.useRef()
+    const resolvedRef = ref || defaultRef
+
+    React.useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate
+    }, [resolvedRef, indeterminate])
+
+    return (
+      <>
+        <input type="checkbox" ref={resolvedRef} {...rest} /> 
+      </>
+    )
+  }
+)
+
+function GlobalFilter({
+  preGlobalFilteredRows,
+  globalFilter,
+  setGlobalFilter,
+}) {
+  const count = preGlobalFilteredRows.length
+  const [value, setValue] = React.useState(globalFilter)
+  const onChange = useAsyncDebounce(value => {
+    setGlobalFilter(value || undefined)
+  }, 200)
+
+  return (
+    <span>
+      Search:{' '}
+      <input
+        value={value || ""}
+        onChange={e => {
+          setValue(e.target.value);
+          onChange(e.target.value);
+        }}
+        placeholder={`${count} records...`}
+        style={{
+          fontSize: '1.1rem',
+          border: '0',
+        }}
+      />
+    </span>
+  )
+}
+
+// Define a default UI for filtering
+function DefaultColumnFilter({
+  column: { filterValue, preFilteredRows, setFilter },
+}) {
+  const count = preFilteredRows.length
+
+  return (
+    <input
+      value={filterValue || ''}
+      onChange={e => {
+        setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+      }}
+      placeholder={`Search ${count} records...`}
+    />
+  )
+}
+
+function fuzzyTextFilterFn(rows, id, filterValue) {
+  return matchSorter(rows, filterValue, { keys: [row => row.values[id]] })
+}
+
+// Let the table remove the filter if the string is empty
+fuzzyTextFilterFn.autoRemove = val => !val
+
+const EditableCell = ({
+  value: initialValue,
+  row: { index },
+  column: { id },
+  updateMyData, // This is a custom function that we supplied to our table instance
+}) => {
+  // We need to keep and update the state of the cell normally
+  const [value, setValue] = React.useState(initialValue)
+
+  const onChange = e => {
+    setValue(e.target.value)
+  }
+
+  // We'll only update the external data when the input is blurred
+  const onBlur = () => {
+    updateMyData(index, id, value)
+  }
+
+  // If the initialValue is changed external, sync it up with our state
+  React.useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  
+
+  return <input value={value} onChange={onChange} onBlur={onBlur} />
+}
+
+// Set our editable cell renderer as the default Cell renderer
+const defaultColumn = {
+  Cell: EditableCell,
+}
+
+
+function T({ columns, data, updateMyData, skipPageReset }) {
+  // For this example, we're using pagination to illustrate how to stop
+  // the current page from resetting when our data changes
+  // Otherwise, nothing is different here.
+
+  const filterTypes = React.useMemo(
+    () => ({
+      // Add a new fuzzyTextFilterFn filter type.
+      fuzzyText: fuzzyTextFilterFn,
+      // Or, override the default text filter to use
+      // "startWith"
+      text: (rows, id, filterValue) => {
+        return rows.filter(row => {
+          const rowValue = row.values[id]
+          return rowValue !== undefined
+            ? String(rowValue)
+                .toLowerCase()
+                .startsWith(String(filterValue).toLowerCase())
+            : true
+        })
+      },
+    }),
+    []
+  )
+
+  const defaultColumnFilter = React.useMemo(
+    () => ({
+      // Let's set up our default Filter UI
+      Filter: DefaultColumnFilter,
+    }),
+    []
+  )
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state,
+    visibleColumns,
+    preGlobalFilteredRows,
+    setGlobalFilter,
+    selectedFlatRows,
+    state: { pageIndex, pageSize, selectedRowIds },
+  } = useTable(
+    {
+      columns,
+      data,
+      defaultColumn,
+      defaultColumnFilter, // Be sure to pass the defaultColumn option
+      filterTypes,
+      // use the skipPageReset option to disable page resetting temporarily
+      autoResetPage: !skipPageReset,
+      // updateMyData isn't part of the API, but
+      // anything we put into these options will
+      // automatically be available on the instance.
+      // That way we can call this function from our
+      // cell renderer!
+      updateMyData,
+    },
+    
+    useFilters, // useFilters!
+    useGlobalFilter,
+    usePagination,
+    useRowSelect,
+    hooks => {
+      hooks.visibleColumns.push(columns => [
+        // Let's make a column for selection
+        {
+          id: 'selection',
+          // The header can use the table's getToggleAllRowsSelectedProps method
+          // to render a checkbox
+          Header: ({ getToggleAllPageRowsSelectedProps }) => (
+            <div>
+              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+            </div>
+          ),
+          // The cell can use the individual row's getToggleRowSelectedProps method
+          // to the render a checkbox
+          Cell: ({ row }) => (
+            <div>
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+            </div>
+          ),
+        },
+        ...columns,
+      ])
+    }
+  )
+
+ 
+  // Render the UI for your table
+  return (
+    <>
+      <table {...getTableProps()} className="table">
+        <thead>
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th {...column.getHeaderProps()}>
+                  {column.render('Header')}
+                 
+                 </th>
+              ))}
+            </tr>
+            
+          ))}
+          <tr>
+            <th
+              colSpan={visibleColumns.length}
+              style={{
+                textAlign: 'right',
+              }}
+            >
+              <GlobalFilter
+                preGlobalFilteredRows={preGlobalFilteredRows}
+                globalFilter={state.globalFilter}
+                setGlobalFilter={setGlobalFilter}
+              />
+            </th>
+          </tr>
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {page.map((row, i) => {
+            prepareRow(row)
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                })}
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+      <div className="pagination">
+        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          {'<<'}
+        </button>{' '}
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {'<'}
+        </button>{' '}
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          {'>'}
+        </button>{' '}
+        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+          {'>>'}
+        </button>{' '}
+        <span>
+          Page{' '}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{' '}
+        </span>
+        <span>
+         {' '}
+          
+        </span>{' '}
+        <select
+          value={pageSize}
+          onChange={e => {
+            setPageSize(Number(e.target.value))
+          }}
+        >
+          {[10, 25, 50].map(pageSize => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+    </>
+  )
+}
+
+
 function Table({botID}) {
   const [TableState, setTableState] = useState([]);
+  
+  
+ 
   const [showWord, setShowWord] = useState(false);
+  
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Word',
+        accessor: 'Word', // accessor is the "key" in the data
+      },
+      {
+        Header: 'ReplyWord',
+        accessor: 'ReplyWord',
+        filter: 'fuzzyText',
+      },
+    ],
+    []
+  )
+ 
+
+  
+
+  
+  // const data = React.useMemo(
+  //   () => TableState
+  // )
+  // const [data, setData] = TableState
+  const [originalData] = React.useState(TableState)
+  const [skipPageReset, setSkipPageReset] = React.useState(false)
+
+  const updateMyData = (rowIndex, columnId, value) => {
+    // We also turn on the flag to not reset the page
+    setSkipPageReset(true)
+    setTableState(old =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          return {
+            ...old[rowIndex],
+            [columnId]: value,
+          }
+        }
+        return row
+      })
+    )
+  }
+
+
+
   const openWord = () => {
     setShowWord(prev => !prev);
+  
   }
   useEffect(() => {
+    setSkipPageReset(false)
     fetch('/bot/'+botID+'/trained')
     .then(res => res.json().then(data => {
       setTableState(
         data.map(d => {
-          console.log(d)
+          
           return {
             select: false,
             id: d._id.$oid,
@@ -69,77 +415,19 @@ function Table({botID}) {
     
   }, []);
 
+  const resetData = () => setTableState(originalData)
+
   return (
+    
+    
     <Styles>
-      <div className="container">
-          <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
-          <AddWord showWord={showWord} setShowWord={setShowWord} botID = {botID} />
-          <AddStyle />
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">
-                <input
-                  type="checkbox"
-                  onChange={e => {
-                    let checked = e.target.checked;
-                    setTableState(
-                      TableState.map(d => {
-                        d.select = checked;
-                        return d;
-                      })
-                    );
-                  }}
-                ></input>
-              </th>
-              <th scope="col">Word</th>
-              <th scope="col">Reply Word</th>
-            </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <th scope="row">Search</th>
-                  <td>
-                  <form className="d-flex">
-                  <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"></input>
-                  <button className="search-word btn btn-outline-success" type="submit">Search</button>
-                  </form>
-                  </td>
-                  <td>
-                  <form className="d-flex">
-                  <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"></input>
-                  <button className="search-reply btn btn-outline-success" type="submit">Search</button>
-                  </form>  
-                  </td>
-                  
-              </tr>
-            {TableState.map((d, i) => (
-              <tr key={d.id}>
-                <th scope="row">
-                  <input
-                    onChange={event => {
-                      let checked = event.target.checked;
-                      setTableState(
-                        TableState.map(data => {
-                          if (d.id === data.id) {
-                            data.select = checked;
-                          }
-                          return data;
-                        })
-                      );
-                    }}
-                    type="checkbox"
-                    checked={d.select}
-                  ></input>
-                </th>
-                <td>{d.Word}</td>
-                <td>{d.ReplyWord}</td>
-                
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {/* <button onClick={resetData}>Reset Data</button> */}
+      <T
+        columns={columns}
+        data={TableState}
+        updateMyData={updateMyData}
+        skipPageReset={skipPageReset}
+      />
     </Styles>
   );
 }
