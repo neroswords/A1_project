@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Table from '../Components/Table/Table';
 import Navbar_member from '../Components/Navbar/navbar_member';
 import styled from 'styled-components';
-import {Link} from 'react-router-dom'
 
 const Styles = styled.div` 
 .learned-page {
@@ -38,7 +37,6 @@ function Learned(props){
         console.log(deleteState)
     }
     const id = (data) =>{
-        console.log("ASDSADASDSAD")
         console.log(id.botID)
     }
 

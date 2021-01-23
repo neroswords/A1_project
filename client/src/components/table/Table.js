@@ -132,6 +132,7 @@ const EditableCell = ({
 
   const onChange = e => {
     setValue(e.target.value)
+    console.log(value)
   }
 
   // We'll only update the external data when the input is blurred
@@ -434,92 +435,12 @@ function Table({botID,delete_trained,add_data}) {
   , []);
   
 
-<<<<<<< HEAD
-    
-=======
   const resetData = () => setTableState(originalData)
 
->>>>>>> 86679944a663bf962c4e6c5cd945bf5045899f5a
   return (
     
     
     <Styles>
-<<<<<<< HEAD
-      <div className="container">
-          <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
-          <AddWord showWord={showWord} setShowWord={setShowWord} botID = {botID} />
-          <AddStyle />
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">
-                <input
-                  type="checkbox"
-                  onChange={e => {
-                    let checked = e.target.checked;
-                    setTableState(
-                      TableState.map(d => {
-                        d.select = checked;
-                        return d;
-                      })
-                    );
-                  }}
-                ></input>
-              </th>
-              <th scope="col">Word</th>
-              <th scope="col">Reply Word</th>
-            </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <th scope="row">Search</th>
-                  <td>
-                  <form className="d-flex">
-                  <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"></input>
-                  <button className="search-word btn btn-outline-success" type="submit">Search</button>
-                  </form>
-                  </td>
-                  <td>
-                  <form className="d-flex">
-                  <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"></input>
-                  <button className="search-reply btn btn-outline-success" type="submit">Search</button>
-                  </form>  
-                  </td>
-                  
-              </tr>
-            {TableState.map((d, i) => (
-              <tr key={d.id}>
-                <th scope="row">
-                  <input
-                    onChange={event => {
-                      let checked = event.target.checked;
-                      setTableState(
-                        TableState.map(data => {
-                          if (d.id === data.id) {
-                            
-                            data.select = checked
-                            add_data(data)
-                            
-                          }
-                          
-                          return data;
-                        })
-
-                      );
-                    }}
-                    type="checkbox"
-                    checked={d.select}
-                  ></input>
-                </th>
-                <td>{d.Word}</td>
-                <td>{d.ReplyWord}</td>
-                
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-=======
       {/* <button onClick={resetData}>Reset Data</button> */}
       <T
         columns={columns}
@@ -527,7 +448,6 @@ function Table({botID,delete_trained,add_data}) {
         updateMyData={updateMyData}
         skipPageReset={skipPageReset}
       />
->>>>>>> 86679944a663bf962c4e6c5cd945bf5045899f5a
     </Styles>
   );
 }
