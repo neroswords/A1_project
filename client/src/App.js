@@ -27,7 +27,7 @@ function App() {
         <Nav/>
           <Switch>
             <Route path="/" exact component= { Home } />
-            <Route path="/DatatablePage" exact component= { DatatablePage } />
+            {/* <Route path="/DatatablePage" exact component= { DatatablePage } /> */}
             <CloseRoute isLoggedIn={isLoggedIn()} path="/register" exact component={ Register } />
             <CloseRoute isLoggedIn={isLoggedIn()} path="/login" exact component={ Login } />
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/profile/:user_id/edit" component={ Profile_edit }/>
