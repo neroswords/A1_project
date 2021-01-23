@@ -46,11 +46,22 @@ const Styles = styled.div`
 }
 `;
 
-function Tablecon({botID}) {
+function Tablecon({botID,add_data}) {
   const [TableconState, setTableconState] = useState([]);
+  const [newState, setnewState] = useState([]);
   const [showWord, setShowWord] = useState(false);
+  console.log(newState)
+  let x = 0;
+  
+  // for (newst in TableconState)
+  // {
+    
 
-
+  //   x++;
+  // }
+  console.log(TableconState.AddWord)
+  // setnewState({Word : TableconState.AddWord})
+  console.log(newState)
  const openWord = () => {
     setShowWord(prev => !prev);
   }
@@ -69,7 +80,10 @@ function Tablecon({botID}) {
             Confidence : d.confident
           };
         })
+    
+
       );
+      
     }))
     
   }, []);
@@ -132,8 +146,10 @@ function Tablecon({botID}) {
                       TableconState.map(data => {
                         if (d.id === data.id) {
                           data.select = checked;
+                          add_data(data)
                         }
                         return data;
+                        
                       })
                     );
                   }}

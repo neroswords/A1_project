@@ -2,7 +2,7 @@ from flask import Flask, request, abort, render_template, session,url_for,redire
 import requests #
 import json #
 from Project.Config import * #
-from pymessenger import Bot #
+# from pymessenger import Bot #
 from flask_pymongo import PyMongo
 import bcrypt
 from flask_jwt_extended import JWTManager
@@ -16,6 +16,7 @@ from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
 from Project.route.profile import profile
 from Project.route.bot import bot
+from Project.route.train_bot import train_bot
 from .extensions import mongo
 
 
@@ -39,6 +40,7 @@ app.config['DOWNLOAD_FOLDER'] = './static/images'
 
 app.register_blueprint(profile, url_prefix='/profile')
 app.register_blueprint(bot, url_prefix='/bot')
+app.register_blueprint(train_bot, url_prefix='/train_bot')
 
 
 
