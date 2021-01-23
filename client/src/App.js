@@ -5,13 +5,12 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import { PrivateRoute } from "./Private.jsx";
 import { CloseRoute } from "./closeRoute.jsx";
 import { isLoggedIn } from './Components/auth.js';
-
 import Register from './Page/Register';
 import Login from './Page/Login';
 import Home from './Page/Home';
 import Learned from './Page/Learned';
 import Group from './Page/Group';
-import Main from './Components/Main';
+// import DatatablePage from './Components/DatatablePage';
 import Mapping from './Page/Mapping';
 import Train from './Page/Train';
 import Bot_list from './Page/Bot_list';
@@ -28,7 +27,7 @@ function App() {
         <Nav/>
           <Switch>
             <Route path="/" exact component= { Home } />
-            <Route path="/main" exact component= { Main } />
+            <Route path="/DatatablePage" exact component= { DatatablePage } />
             <CloseRoute isLoggedIn={isLoggedIn()} path="/register" exact component={ Register } />
             <CloseRoute isLoggedIn={isLoggedIn()} path="/login" exact component={ Login } />
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/profile/:user_id/edit" component={ Profile_edit }/>

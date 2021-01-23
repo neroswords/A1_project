@@ -3,7 +3,7 @@ from pythainlp.tokenize import word_tokenize
 import pythainlp.util
 from pythainlp.word_vector import *
 from sklearn.metrics.pairwise import cosine_similarity  # ใช้หาค่าความคล้ายคลึง
-from pythainlp.soundex import udom83
+from pythainlp.soundex import udom83,lk82
 import numpy as np
 
 warnings.filterwarnings('ignore')
@@ -71,9 +71,11 @@ def sentence_get_confident(ss1,ss2,list = "none"):
 # print(example[inp])
 # print(pythainlp.util.isthai(inp))
 # print(sentence_similarity("ฮัลโหล","โหล"))
-# print(word_tokenize("บายดี"))
+
+# print(word_tokenize("ตากลม"))
 # print(word_tokenize("สบายดี"))
 # print(sentence_sound_index('ครับ','คับ',list='invert'))
-# print(udom83('สรา')[0])
-# print(udom83('สา'))
+# print(lk82('ตากลม'))
+# print(lk82('ตากลม'))
+# print(lk82('ตากลม') == lk82('ตากลม'))
 # print(sentence_get_confident("หวัดดี", "ดี"))

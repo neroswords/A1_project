@@ -83,6 +83,8 @@ def edit(id):
         age = request.form['age'] 
         
         if  "file" not in request.files :
+            filename = "Avatar.jpg"
+            filename = request.form['Image'] 
             info_update = { "$set": {'bot_name': bot_name, 'owner':  creator, 'gender': gender, 'age': age}}
         else :
             file = request.files['file'] 
@@ -99,6 +101,8 @@ def edit(id):
     return "add bot unsuccessfully"
 
  #delete
+
+
 @bot.route('/delete/<id>', methods=['POST'])
 def delete(id):
     bots_collection = mongo.db.bots
@@ -127,12 +131,13 @@ def webhook(platform,botID):
     bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
     if  platform == "facebook":
         if request.method == "GET":
-            if  request.args.get("hub.verify_token") == VERIFY_TOKEN:
+            print(bot_define)
+            if  request.args.get("hub.verify_token") == bot_define["verify_token"]:
                 return request.args.get("hub.challenge")
             else:
                 return "This is method get from facebook"
         elif request.method == "POST":
-            bot = Bot(page_facebook_access_token)
+            bot = Bot(bot_define["page_facebook_access_token"])
             payload = request.json
             event = payload['entry'][0]['messaging']
             for msg in event:
@@ -184,6 +189,7 @@ def trained(botID):
         trained_collection = mongo.db.trained
         trained_cursor = trained_collection.find({"botID" : ObjectId(botID)})
         listcursor = list(trained_cursor)
+        listcursor.reverse()
         data = dumps(listcursor,indent = 2)
         return data
 

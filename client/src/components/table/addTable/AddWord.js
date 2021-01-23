@@ -73,7 +73,9 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
         "Access-Control-Allow-Origin": "*",
         'Content-Type':'application/json'
         },
-    body: JSON.stringify(data)}).then(setShowWord(prev => !prev))};
+    body: JSON.stringify(data)}).then(setShowWord(prev => !prev))
+    window.location.reload("bot/"+id+'/trained');
+  };
 
   const animation = useSpring({
     config: {
@@ -86,6 +88,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
   const closeModal = e => {
     if (modalRef.current === e.target) {
       setShowWord(false);
+      window.location.replace("/login")
     }
   };
 
@@ -97,6 +100,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
       }
     },
     [setShowWord, showWord]
+    
   );
 
   useEffect(
@@ -106,7 +110,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
     },
     [keyPress]
   );
-
+  
   return(
     <div>
     {showWord ? (
@@ -136,7 +140,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
                 </Form.Row>
                 <br />
               </Form.Group>
-              <Button className="qa-comfirm" variant="success" onClick = {() => addword(botID)}>Comfirm</Button>
+              <Button className="qa-comfirm" variant="success" onClick = {() => addword(botID)   }>Comfirm</Button>
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"

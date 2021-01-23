@@ -45,12 +45,28 @@ const Styles = styled.div`
 
 `;
 
-function Table({botID}) {
+
+
+function Table({botID,delete_trained,add_data}) {
   const [TableState, setTableState] = useState([]);
   const [showWord, setShowWord] = useState(false);
   const openWord = () => {
     setShowWord(prev => !prev);
   }
+//   const delete_trained =(data)=>{
+//     const delete_data = deleteState
+//     fetch('/bot/delete/'+data, {
+//     method : 'POST',
+//     headers : {
+//         "Access-Control-Allow-Origin": "*",
+//         'Content-Type':'application/json'
+//         },
+//         body : JSON.stringify(delete_data),
+//     });
+//     console.log(data)
+// }
+ 
+
   useEffect(() => {
     fetch('/bot/'+botID+'/trained')
     .then(res => res.json().then(data => {
@@ -67,8 +83,12 @@ function Table({botID}) {
       );
     }))
     
-  }, []);
+  }
+  
+  , []);
+  
 
+    
   return (
     <Styles>
       <div className="container">
@@ -122,10 +142,15 @@ function Table({botID}) {
                       setTableState(
                         TableState.map(data => {
                           if (d.id === data.id) {
-                            data.select = checked;
+                            
+                            data.select = checked
+                            add_data(data)
+                            
                           }
+                          
                           return data;
                         })
+
                       );
                     }}
                     type="checkbox"

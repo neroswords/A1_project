@@ -93,7 +93,7 @@ def Profile_edit2(id):
         'address':  user_info['shop_address'], 'shop_name':  user_info['shop_name'], 'type_shop':  user_info['shop_type'], 'birthday':  user_info['birthday']}}
 
         # bot_id = { "_id": ObjectId (id)}
-        done = users_collection.update_one({'_id': ObjectId (id)}, info_update)
+        done = users_collection.update_one({'_id': ObjectId(id)}, info_update)
         return {'message' : 'add bot successfully'}
 
 
