@@ -14,7 +14,7 @@ padding: 1rem;
 
   table {
     border-spacing: 0;
-    border: 1px solid black;
+    
 
     tr {
       :last-child {
@@ -155,7 +155,7 @@ const defaultColumn = {
 }
 
 
-function T({ columns, data, updateMyData, skipPageReset }) {
+function TableShow({ columns, data, updateMyData, skipPageReset }) {
   // For this example, we're using pagination to illustrate how to stop
   // the current page from resetting when our data changes
   // Otherwise, nothing is different here.
@@ -441,7 +441,7 @@ function Table({botID,delete_trained,add_data}) {
     
     <Styles>
       {/* <button onClick={resetData}>Reset Data</button> */}
-      <T
+      <TableShow
         columns={columns}
         data={TableState}
         updateMyData={updateMyData}
