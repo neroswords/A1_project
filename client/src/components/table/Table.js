@@ -14,7 +14,7 @@ padding: 1rem;
 
   table {
     border-spacing: 0;
-    border: 1px solid black;
+    
 
     tr {
       :last-child {
