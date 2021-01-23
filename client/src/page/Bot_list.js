@@ -77,13 +77,22 @@ function Dropdown({botData, deleteBot}){
             </Link>
             <div class="divider"></div>
         </div>
+        
         <div className="connect">
-            <div className="connect-area line">
+        {botData.access_token ? <div className="connect-area line">
                 <i class="fab fa-line"></i>
-            </div>
-            <div className="connect-area facebook">
+            </div> : <div className="connect-area lineblack">
+                 <i class="fab fa-line"></i>
+            </div>}
+
+            {botData.page_facebook_access_token ? <div className="connect-area facebook">
                 <i class="fab fa-facebook-square"></i>
             </div>
+             : <div className="connect-area facebookblack">
+             <i class="fab fa-facebook-square"></i>
+         </div>
+         }
+            
         </div>
         <div className="menu-continer">
             <div onClick={onClick} className="menu-trigger">
