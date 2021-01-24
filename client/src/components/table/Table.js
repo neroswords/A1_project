@@ -458,7 +458,6 @@ function Table({botID,delete_trained,add_data}) {
     
     
     <Styles>
-      <button onClick={defaultColumn}>Lock</button>
       <TableShow
         columns={columns}
         data={TableState}

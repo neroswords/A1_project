@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {withRouter, Redirect} from 'react-router-dom'
-
+import ReactFileReader from 'react-file-reader';
 import Facebookform  from '../Components/Form/facebookform';
 import Lineform  from '../Components/Form/lineform';
 
@@ -119,8 +119,10 @@ class Create_bot extends React.Component {
       platform: 'line',
       redirect: false,
       bot_id:'',
-      imageURL: ''
+      imageURL: '',
+      file:''
     };
+    
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handlelineChange = this.handlelineChange.bind(this);
     this.handlefacebookChange = this.handlefacebookChange.bind(this);
@@ -149,7 +151,32 @@ class Create_bot extends React.Component {
     this.setState({ [evt.target.name]: evt.target.value });
     console.log(this.state)
   }
+  handleFile = (e) => {
+  const content = e.target.result;
+  console.log('file content',  content)
+  // You can set content in state and show it in render.
+}
+// _handleSubmit(e) {
+//   e.preventDefault();
+//   // TODO: do something with -> this.state.file
+//   console.log('handle uploading-', this.state.file);
+// }
 
+_handleImageChange(e) {
+  e.preventDefault();
+
+  let reader = new FileReader();
+  let file = e.target.files[0];
+
+  reader.onloadend = () => {
+    this.setState({
+      file: file,
+      imagePreviewUrl: reader.result
+    });
+  }
+
+  reader.readAsDataURL(file)
+}
   handleUploadImage(ev) {
     ev.preventDefault();
 
@@ -177,7 +204,6 @@ class Create_bot extends React.Component {
       });
     });
   }
-
   // componentDidMount(){
   //   fetch('/bot/'+user_id)
   // }
@@ -188,7 +214,12 @@ class Create_bot extends React.Component {
       return <Redirect to={"/bot_list/"+ localStorage.getItem('user_id')} />
     }
     else {
-      return(
+        let {imagePreviewUrl} = this.state;
+        let $imagePreview = null;
+        if (imagePreviewUrl) {
+          $imagePreview = (<img src={imagePreviewUrl} />);
+        } 
+        return(
         <Styles>
           
               <div className="container">
@@ -204,11 +235,12 @@ class Create_bot extends React.Component {
                                 <div className="row">
                                         <div className="group col-lg-6">
                                           <div className="showimage col-lg-8">
-                                                <img src='../../images/Avatar.jpg'/>                                    
+                                         { imagePreviewUrl ?   $imagePreview :<img src={'/images/bot/bot_pic/Avatar.jpg'}/>}
+                                              
                                           </div>
                                           <div className="mt-3 upload-img">                                           
                                               <label for="uploadimage">Upload Proflie</label>
-                                              <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
+                                              <input ref={(ref) => { this.uploadInput = ref; }} onChange={(e)=>this._handleImageChange(e)} type="file" />
                                             </div>
                                         </div>  
                                         <div className=" group col-lg-6">

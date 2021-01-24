@@ -285,6 +285,7 @@ const Styles = styled.div`
 
 
 function Navbar_member({botID}) {
+  const [change, setchange] = useState(false)
   const Change = () => {
     if(change == true )
     {
@@ -293,15 +294,14 @@ function Navbar_member({botID}) {
     else setchange(true)
    
   }
-  const [change, setchange] = useState(
-    false
-  );
+  
 
         return(
-            <Styles>
-              <botton onClick={Change} > X </botton>
-              {change ?               <nav className="navbar">
+            <Styles><botton onClick={Change} > X </botton>
+             
+              {change ?        <nav className="navbar">
                     <ul className="navbar-nav">
+                    
                       {/* <div className="logo">
                         <div href="#" className="nav-link">
                           <span className="link-text logo-text">A1 Chatbot</span>
@@ -381,7 +381,8 @@ function Navbar_member({botID}) {
                       </li>
           
                     </ul>
-                  </nav>:              <nav className="navbar2"> 
+                  </nav>:      
+                          <nav className="navbar2"> 
                     <ul className="navbar-nav">
                       {/* <div className="logo">
                         <div href="#" className="nav-link">

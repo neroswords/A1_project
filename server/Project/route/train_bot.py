@@ -4,6 +4,7 @@ import json
 import requests
 from Project.extensions import mongo, JSONEncoder
 
+
 train_bot = Blueprint("train_bot",__name__)
 
 @train_bot.route('/delete/<id>', methods=['POST'])
