@@ -38,7 +38,6 @@ function Learned(props){
         console.log(deleteState)
     }
     const id = (data) =>{
-        console.log("ASDSADASDSAD")
         console.log(id.botID)
     }
 

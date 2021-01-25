@@ -132,11 +132,14 @@ const EditableCell = ({
 
   const onChange = e => {
     setValue(e.target.value)
+    
   }
+
 
   // We'll only update the external data when the input is blurred
   const onBlur = () => {
     updateMyData(index, id, value)
+    console.log("test")
   }
 
   // If the initialValue is changed external, sync it up with our state
@@ -146,12 +149,12 @@ const EditableCell = ({
 
   
 
-  return <input value={value} onChange={onChange} onBlur={onBlur} />
+  return <input value={value} onChange={onChange} onBlur={onBlur}  />
 }
-
 // Set our editable cell renderer as the default Cell renderer
+
 const defaultColumn = {
-  Cell: EditableCell,
+   Cell: EditableCell
 }
 
 
@@ -378,10 +381,24 @@ function Table({botID,delete_trained,add_data}) {
 
   const updateMyData = (rowIndex, columnId, value) => {
     // We also turn on the flag to not reset the page
-    setSkipPageReset(true)
     setTableState(old =>
       old.map((row, index) => {
         if (index === rowIndex) {
+          const editData = {
+            "value" : value,
+            "type" : columnId,
+            "data" : row
+          }
+          if(row.Word != value && row.ReplyWord != value)
+          {
+          fetch('/train_bot/edit/trained/', {
+            method : 'POST',
+            headers : {
+                  "Access-Control-Allow-Origin": "*",
+                  'Content-Type':'application/json'
+            },
+            body: JSON.stringify(editData)})
+          }
           return {
             ...old[rowIndex],
             [columnId]: value,
@@ -391,8 +408,9 @@ function Table({botID,delete_trained,add_data}) {
       })
     )
   }
-
-
+  // const submitEdit = () =>{
+  //   fetch
+  // }
 
   const openWord = () => {
     setShowWord(prev => !prev);
@@ -440,13 +458,13 @@ function Table({botID,delete_trained,add_data}) {
     
     
     <Styles>
-      {/* <button onClick={resetData}>Reset Data</button> */}
       <TableShow
         columns={columns}
         data={TableState}
         updateMyData={updateMyData}
         skipPageReset={skipPageReset}
       />
+     
     </Styles>
   );
 }
