@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
+import Leftnav_open  from './leftnav_open';
 
 const Styles = styled.div` 
   .navbar {
@@ -75,27 +76,7 @@ const Styles = styled.div`
   
   
   /* Large screens */
-  @media only screen and (min-width: 600px) {
-    .navbar {
-      top: 0;
-      width: 5rem;
-      height:92vh;
-    }
   
-    .navbar5:hover {
-      width: 14rem;
-    }
-  
-    .navbar:hover .link-text {
-      display: inline;
-    }
-  
-  
-    .navbar:hover .logo-text
-    {
-      left: 0px;
-    }
-  }
   
   .theme-icon {
     display: none;
@@ -214,27 +195,27 @@ const Styles = styled.div`
   
   
   /* Large screens */
-  @media only screen and (min-width: 600px) {
-    .navbar2 {
-      top: 0;
-      width: 5rem;
-      height:92vh;
-    }
+  // @media only screen and (min-width: 600px) {
+  //   .navbar2 {
+  //     top: 0;
+  //     width: 5rem;
+  //     height:92vh;
+  //   }
   
-    .navbar2:hover {
-      width: 14rem;
-    }
+  //   .navbar2:hover {
+  //     width: 14rem;
+  //   }
   
-    .navbar2:hover .link-text {
-      display: inline;
-    }
+  //   .navbar2:hover .link-text {
+  //     display: inline;
+  //   }
   
   
-    .navbar2:hover .logo-text
-    {
-      left: 0px;
-    }
-  }
+  //   .navbar2:hover .logo-text
+  //   {
+  //     left: 0px;
+  //   }
+  // }
   
   .theme-icon2 {
     display: none;
@@ -285,187 +266,179 @@ const Styles = styled.div`
 
 
 function Navbar_member({botID}) {
-  const Change = () => {
-    if(change == true )
-    {
-      setchange(false)
-    }
-    else setchange(true)
+  return(
+  // const Change = () => {
+  //   if(change == true )
+  //   {
+  //     setchange(false)
+  //   }
+  //   else setchange(true)
    
-  }
-  const [change, setchange] = useState(
-    false
-  );
+  // }
+  // const [change, setchange] = useState(
+  //   false
+  // );
 
-        return(
-            <Styles>
-              <botton onClick={Change} > X </botton>
-              {change ?               <nav className="navbar">
-                    <ul className="navbar-nav">
-                      {/* <div className="logo">
-                        <div href="#" className="nav-link">
-                          <span className="link-text logo-text">A1 Chatbot</span>
-                        
-                        </div>
-                      </div> */}
-
-                      <li className="nav-item">
-                        <Link to={'/bot/'+botID+'/training'} class="nav-link">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                                <i className="fas fa-robot"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">Training bot</span>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to={'/bot/'+botID+'/trained'} class="nav-link">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                                <i class="fas fa-graduation-cap"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">Trained</span>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to={'/bot/'+botID+'/group'} class="nav-link">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                                <i class="fas fa-object-group"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">Group</span>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to={'/bot/'+botID+'/mapping'} class="nav-link">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                                <i class="fas fa-project-diagram"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">Mapping</span>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <a href="#" class="nav-link">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                                <i class="fas fa-history"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">History</span>
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a href="#" class="nav-link">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                              <i class="fad fa-boxes"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">Inventory</span>
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a href="#" class="nav-link">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                                <i class="far fa-address-book"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">Customer infomation</span>
-                        </a>
-                      </li>
+  //       return(
+  //           <Styles>
+  //             <botton onClick={Change} > X </botton>
+  //             {change ? <nav className="navbar">
+  //                   <ul className="navbar-nav">
+  //                     <li className="nav-item">
+  //                       <Link to={'/bot/'+botID+'/training'} class="nav-link">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                               <i className="fas fa-robot"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">Training bot</span>
+  //                       </Link>
+  //                     </li>
+  //                     <li className="nav-item">
+  //                       <Link to={'/bot/'+botID+'/trained'} class="nav-link">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                               <i class="fas fa-graduation-cap"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">Trained</span>
+  //                       </Link>
+  //                     </li>
+  //                     <li className="nav-item">
+  //                       <Link to={'/bot/'+botID+'/group'} class="nav-link">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                               <i class="fas fa-object-group"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">Group</span>
+  //                       </Link>
+  //                     </li>
+  //                     <li className="nav-item">
+  //                       <Link to={'/bot/'+botID+'/mapping'} class="nav-link">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                               <i class="fas fa-project-diagram"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">Mapping</span>
+  //                       </Link>
+  //                     </li>
+  //                     <li className="nav-item">
+  //                       <a href="#" class="nav-link">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                               <i class="fas fa-history"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">History</span>
+  //                       </a>
+  //                     </li>
+  //                     <li className="nav-item">
+  //                       <a href="#" class="nav-link">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                             <i class="fad fa-boxes"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">Inventory</span>
+  //                       </a>
+  //                     </li>
+  //                     <li className="nav-item">
+  //                       <a href="#" class="nav-link">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                               <i class="far fa-address-book"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">Customer infomation</span>
+  //                       </a>
+  //                     </li>
           
-                    </ul>
-                  </nav>:              <nav className="navbar2"> 
-                    <ul className="navbar-nav">
-                      {/* <div className="logo">
-                        <div href="#" className="nav-link">
-                          <span className="link-text logo-text">A1 Chatbot</span>
+  //                   </ul>
+  //                 </nav>:              <nav className="navbar2"> 
+  //                   <ul className="navbar-nav">
+  //                     {/* <div className="logo">
+  //                       <div href="#" className="nav-link">
+  //                         <span className="link-text logo-text">A1 Chatbot</span>
                         
-                        </div>
-                      </div> */}
-
-                      <li className="nav-item">
-                        <Link to={'/bot/'+botID+'/training'} class="nav-link2">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                                <i className="fas fa-robot"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">Training bot</span>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to={'/bot/'+botID+'/trained'} class="nav-link2">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                                <i class="fas fa-graduation-cap"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">Trained</span>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to={'/bot/'+botID+'/group'} class="nav-link2">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                                <i class="fas fa-object-group"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">Group</span>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to={'/bot/'+botID+'/mapping'} class="nav-link2">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                                <i class="fas fa-project-diagram"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">Mapping</span>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <a href="#" class="nav-link2">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                                <i class="fas fa-history"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">History</span>
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a href="#" class="nav-link2">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                              <i class="fad fa-boxes"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">Inventory</span>
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a href="#" class="nav-link">
-                          <div className="fa-group">
-                              <div className="fa-secondary">
-                                <i class="far fa-address-book"></i>
-                            </div>
-                          </div>
-                          <span className="link-text">Customer infomation</span>
-                        </a>
-                      </li>
+  //                       </div>
+  //                     </div> */}
+  //                     <li className="nav-item">
+  //                       <Link to={'/bot/'+botID+'/training'} class="nav-link2">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                               <i className="fas fa-robot"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">Training bot</span>
+  //                       </Link>
+  //                     </li>
+  //                     <li className="nav-item">
+  //                       <Link to={'/bot/'+botID+'/trained'} class="nav-link2">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                               <i class="fas fa-graduation-cap"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">Trained</span>
+  //                       </Link>
+  //                     </li>
+  //                     <li className="nav-item">
+  //                       <Link to={'/bot/'+botID+'/group'} class="nav-link2">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                               <i class="fas fa-object-group"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">Group</span>
+  //                       </Link>
+  //                     </li>
+  //                     <li className="nav-item">
+  //                       <Link to={'/bot/'+botID+'/mapping'} class="nav-link2">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                               <i class="fas fa-project-diagram"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">Mapping</span>
+  //                       </Link>
+  //                     </li>
+  //                     <li className="nav-item">
+  //                       <a href="#" class="nav-link2">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                               <i class="fas fa-history"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">History</span>
+  //                       </a>
+  //                     </li>
+  //                     <li className="nav-item">
+  //                       <a href="#" class="nav-link2">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                             <i class="fad fa-boxes"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">Inventory</span>
+  //                       </a>
+  //                     </li>
+  //                     <li className="nav-item">
+  //                       <a href="#" class="nav-link">
+  //                         <div className="fa-group">
+  //                             <div className="fa-secondary">
+  //                               <i class="far fa-address-book"></i>
+  //                           </div>
+  //                         </div>
+  //                         <span className="link-text">Customer infomation</span>
+  //                       </a>
+  //                     </li>
           
-                    </ul>
-                  </nav>}
-    
-              
-          </Styles>
+  //                   </ul>
+  //                 </nav>}
+  //         </Styles>
+    <Leftnav_open/>
         ) 
 }
 
