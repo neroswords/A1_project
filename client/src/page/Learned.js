@@ -3,6 +3,8 @@ import Table from '../Components/Table/Table';
 import Navbar_member from '../Components/Navbar/navbar_member';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom'
+import {connect,useSelector} from "react-redux"
+import tReducer from "../Reducers/tReducers";
 
 const Styles = styled.div` 
 .learned-page {
@@ -12,7 +14,11 @@ const Styles = styled.div`
     margin-top:2%
 }
 `
-
+// const mapStateToProps = (state) =>{
+//     return {
+//         ichange : state
+//     }
+// }
 function Learned(props){
     const [deleteState,setdeleteState] = useState([]);
     const delete_trained =(data)=>{
@@ -41,14 +47,15 @@ function Learned(props){
         console.log(id.botID)
     }
 
+    
 
       
     return(
         <Styles>
         <div className="learned-page">
-            <Navbar_member botID = {props.match.params.bot_id} />
+            <Navbar_member botID = {props.match.params.bot_id}  />
             <div className="container">
-                
+              
                 <div className="container-top d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight'>Trained</h2>
                     <div className="p-2 bd-highlight">
@@ -68,6 +75,7 @@ function Learned(props){
                 
         </Styles>
     );
+
 }
 
 export default Learned;
