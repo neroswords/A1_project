@@ -50,7 +50,7 @@ function Tablecon({botID,add_data}) {
   const [TableconState, setTableconState] = useState([]);
   const [newState, setnewState] = useState([]);
   const [showWord, setShowWord] = useState(false);
-  console.log(newState)
+
   let x = 0;
   
   // for (newst in TableconState)
@@ -61,7 +61,7 @@ function Tablecon({botID,add_data}) {
   // }
   console.log(TableconState.AddWord)
   // setnewState({Word : TableconState.AddWord})
-  console.log(newState)
+
  const openWord = () => {
     setShowWord(prev => !prev);
   }
