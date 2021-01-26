@@ -6,11 +6,13 @@ import { Col, Form, Button, Container } from "react-bootstrap";
 
 
 const Background = styled.div`
-  position: fixed;
+  // position: fixed;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
+
 
 const ModalWrapper = styled.div`
   width: 800px;
@@ -19,15 +21,14 @@ const ModalWrapper = styled.div`
   background: #fff;
   color: #000;
   display: grid;
-  position: absolute;
   z-index: 10;
   border-radius: 10px;
-  transform: translate(30%, -10%);
-  // align-items: center;
-  // grid-template-columns: 1fr 1fr;
-  // position: absolute;
-  // top: 50%;
-  // left: 50%;
+  position: absolute;
+  // transform: translate(30%, -10%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 200px;
 `;
 
 const ModalContent = styled.div`
@@ -37,13 +38,28 @@ const ModalContent = styled.div`
   justify-content: center;
   align-items: center;
   line-height: 1.8;
-  color: #141414;
+  // color: #141414;
   
   button {
-    padding: 10px 24px;
-    background: #141414;
+    // padding: 10px 24px;
+    // color: #fff;
+    // border: none;
+    // border-radius: 25px;
+    // border: 3px solid #0078ff;
+    // transition: 0.5s;
+    padding: 5px 12px;
+    margin-top: 15px;
+    font-size: 19px;
+    border-radius: 25px;
+    border: 3px solid #ffc15e;
+    transition: 0.5s;
+    margin: 10px;
+    background-color: #ffc15e;
     color: #fff;
-    border: none;
+  }
+
+  button:hover{
+    color: #000;
   }
 
 `;
@@ -57,6 +73,19 @@ const CloseModalButton = styled(MdClose)`
   height: 32px;
   padding: 0;
   z-index: 10;
+`;
+
+const FormControl = styled.div`
+  box-shadow: none;
+  outline: none;
+  border: none;
+  border-bottom: 2px solid #000;
+  outline: none;
+  margit-bottom: 30px;
+  margin-top: 1px;
+  font-size: 16px;
+  padding: 5px 0;
+
 `;
 
 
@@ -112,7 +141,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
     {showWord ? (
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
-            <Container className="col-sm-10 col-md-9">
+            
             <ModalWrapper showWord={showWord}>
               <ModalContent>
               <Form.Group>
@@ -122,7 +151,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
                   Question
                 </Form.Label>
                 <Col>
-                  <Form.Control type="text" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question" />
+                  <FormControl type="text" className="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question" />
                 </Col>
                 </Form.Row>
                 <br />
@@ -131,7 +160,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
                   Answer
                 </Form.Label>
                 <Col>
-                  <Form.Control type="text" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer" />
+                  <FormControl type="text" className="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer" />
                 </Col>
                 </Form.Row>
                 <br />
@@ -143,7 +172,6 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
                 onClick={() => setShowWord(prev => !prev)}
               />
             </ModalWrapper>
-            </Container>
           </animated.div>
         </Background>
       ) : null}

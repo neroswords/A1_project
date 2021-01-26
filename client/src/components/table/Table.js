@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
-import {Button} from 'react-bootstrap';
+import {Button, Container} from 'react-bootstrap';
 import {AddWord} from './AddTable/AddWord';
 import { AddStyle } from "./AddStyle";
 
@@ -51,6 +51,7 @@ function Table({botID}) {
   const openWord = () => {
     setShowWord(prev => !prev);
   }
+
   useEffect(() => {
     fetch('/bot/'+botID+'/trained')
     .then(res => res.json().then(data => {
@@ -139,6 +140,9 @@ function Table({botID}) {
             ))}
           </tbody>
         </table>
+        <Container>
+          <Button></Button>
+        </Container>
       </div>
     </Styles>
   );

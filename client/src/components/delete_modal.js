@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
   }
 
   function getModalStyle() {
-    const top = 50 + rand();
-    const left = 50 + rand();
+    const top = 50;
+    const left = 50;
   
     return {
       top: `${top}%`,
@@ -37,9 +37,9 @@ export default function DeleteModal({dataID, dataType}){
         setOpen(true);
       };
 
-      const handleClose = () => {
+    const handleClose = () => {
         setOpen(false);
-      };
+    };
     
     const deleteData = (ID, dataType) => {
         fetch('/'+dataType+'/'+ID+'/delete')

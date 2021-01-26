@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import '../Components/Botlist/Bot_list.css';
 import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
 import DeleteModal from '../Components/delete_modal'
+import Delete_pop from "../Components/Delete_pop";
 
 export default function Bot_list(props) {
     const [botlist,setBotlist] = useState([]);
@@ -18,6 +19,7 @@ export default function Bot_list(props) {
         const newList = botlist.filter((bot) => bot._id.$oid !== id);
         setBotlist(newList);
     }
+    
 
     useEffect(async () => {
         fetch('/profile/'+localStorage.getItem('user_id')).then(res => res.json().then(data => setBotlist(data)))
@@ -57,7 +59,10 @@ export default function Bot_list(props) {
 function Dropdown({botData, deleteBot}){
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
-    const onClick = () => setIsActive(!isActive);
+    const onClick = () => {setIsActive(prev => !prev)
+    console.log(isActive);
+    };
+
     // const forceUpdate = useForceUpdate();
     // console.log(botData)
     
@@ -66,7 +71,13 @@ function Dropdown({botData, deleteBot}){
     //     setShowConnect(prev => !prev);
     //   }
 
+    const [showDelete_pop, setShowDelete_pop] = useState(false);
+    const openDelete_pop = () => {
+    setShowDelete_pop(prev => !prev);
+    }
+
     return(
+    <div>
     <div class="card-box">
         <Link to={'/bot/'+botData._id.$oid+'/training' } >
             <img src={'/images/bot/bot_pic/'+botData.Img} class="bot-img"/>
@@ -102,15 +113,21 @@ function Dropdown({botData, deleteBot}){
                     {/* <Connect showConnect={showConnect} setShowConnect={setShowConnect} /> */}
                     </li>
                     <li>
-                        <a href="#" onClick={()=>deleteBot(botData._id.$oid)}>
+                        <a href="#" onClick={openDelete_pop}>
                         <i class="fas fa-trash"></i> Delete</a>
                     </li>
                 </ul>
+               
             </div>
-        </div>
+        </div> 
+        {/* <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop}></Delete_pop> */}
+    </div>
+    <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop}></Delete_pop>
     </div>
     )
 }
+
+
 
 // function useForceUpdate(){
 //     const [value, setValue] = useState(0); // integer state
