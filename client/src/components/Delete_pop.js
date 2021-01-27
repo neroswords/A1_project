@@ -12,19 +12,18 @@ const Background = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-  width: 800px;
-  height: 500px;
+  width: 300px;
+  height: 200px;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: #fff;
   color: #000;
   display: grid;
   z-index: 10;
   border-radius: 10px;
-  position: sticky;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  margin-top: 200px;
 `;
 
 const CloseModalButton = styled(MdClose)`
@@ -102,10 +101,10 @@ function Delete_pop({showDelete_pop, setShowDelete_pop}){
         {showDelete_pop ? (
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
-            <Container className="col-sm-10 col-md-9">
+            <Container>
             <ModalWrapper showDelete_pop={showDelete_pop}>
               <ModalContent>
-            
+                  
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"

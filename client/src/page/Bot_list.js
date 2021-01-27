@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef } from "react";
 import {Link} from "react-router-dom";
 import '../Components/Botlist/Bot_list.css';
 import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
-import DeleteModal from '../Components/delete_modal'
+// import DeleteModal from '../Components/delete_modal'
 import Delete_pop from "../Components/Delete_pop";
 
 export default function Bot_list(props) {
@@ -19,6 +19,13 @@ export default function Bot_list(props) {
         const newList = botlist.filter((bot) => bot._id.$oid !== id);
         setBotlist(newList);
     }
+
+    const [showDelete_pop, setShowDelete_pop] = useState(false);
+    const openDelete_pop = () => {
+    setShowDelete_pop(prev => !prev);
+    console.log(showDelete_pop);
+
+    }
     
 
     useEffect(async () => {
@@ -26,7 +33,7 @@ export default function Bot_list(props) {
     },[])
 
     const card = botlist.map((bot) => 
-        <Dropdown botData={bot} deleteBot={delete_bot} />
+        <Dropdown botData={bot} deleteBot={delete_bot} openDelete_pop={openDelete_pop} />
     );
 
     return(
@@ -49,6 +56,7 @@ export default function Bot_list(props) {
                                         {/* </div> */}
 
                                     </div> 
+                                    <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop}></Delete_pop>
                         </div>
                 </div>    
                
@@ -56,7 +64,7 @@ export default function Bot_list(props) {
     );
 }
 
-function Dropdown({botData, deleteBot}){
+function Dropdown({botData, deleteBot, openDelete_pop}){
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
     const onClick = () => {setIsActive(prev => !prev)
@@ -71,11 +79,6 @@ function Dropdown({botData, deleteBot}){
     //     setShowConnect(prev => !prev);
     //   }
 
-    const [showDelete_pop, setShowDelete_pop] = useState(false);
-    const openDelete_pop = () => {
-    setShowDelete_pop(prev => !prev);
-    }
-
     return(
     <div>
     <div class="card-box">
@@ -88,13 +91,22 @@ function Dropdown({botData, deleteBot}){
             </Link>
             <div class="divider"></div>
         </div>
+        
         <div className="connect">
-            <div className="connect-area line">
+        {botData.access_token ? <div className="connect-area line">
                 <i class="fab fa-line"></i>
-            </div>
-            <div className="connect-area facebook">
+            </div> : <div className="connect-area lineblack">
+                 <i class="fab fa-line"></i>
+            </div>}
+
+            {botData.page_facebook_access_token ? <div className="connect-area facebook">
                 <i class="fab fa-facebook-square"></i>
             </div>
+             : <div className="connect-area facebookblack">
+             <i class="fab fa-facebook-square"></i>
+         </div>
+         }
+            
         </div>
         <div className="menu-continer">
             <div onClick={onClick} className="menu-trigger">
@@ -122,7 +134,7 @@ function Dropdown({botData, deleteBot}){
         </div> 
         {/* <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop}></Delete_pop> */}
     </div>
-    <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop}></Delete_pop>
+    {/* <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop}></Delete_pop> */}
     </div>
     )
 }

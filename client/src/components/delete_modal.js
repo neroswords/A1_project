@@ -2,6 +2,7 @@ import React,{ useState } from 'react';
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 
+
 const useStyles = makeStyles((theme) => ({
     paper: {
       position: 'absolute',
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     };
   }
 
-export default function DeleteModal({dataID, dataType}){
+export default function DeleteModal({dataID,delete_trained,add_data, dataType}){
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
     const [modalStyle] = React.useState(getModalStyle);
@@ -44,6 +45,7 @@ export default function DeleteModal({dataID, dataType}){
     const deleteData = (ID, dataType) => {
         fetch('/'+dataType+'/'+ID+'/delete')
     }
+    
 
     const button = (dataType) =>{
         if(dataType == 'bot'){
@@ -61,11 +63,17 @@ export default function DeleteModal({dataID, dataType}){
         
     }
 
+    function onKeyDown(event) {
+      if (event.key === 'Enter' ) {
+        delete_trained(dataID)
+      }
+    }
+
     const body = (
         <div style={modalStyle} className={classes.paper}>
             Do you want to delete this data?
             <div>
-                <button className="btn btn-success" onClick={()=>deleteData(dataID, dataType)} type="button">
+                <button className="btn btn-success" onKeyDown={onKeyDown} onClick={()=>delete_trained(dataID)} type="button">
                     Yes
                 </button>
                 <button className="btn btn-danger" onClick={handleClose} type="button">
