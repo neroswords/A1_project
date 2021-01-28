@@ -21,12 +21,13 @@ export default function Bot_list(props) {
     }
 
     const [showDelete_pop, setShowDelete_pop] = useState(false);
-    const openDelete_pop = () => {
+    const [showBotId, setShowBotId] = useState();
+    const openDelete_pop = (a) => {
+    setShowBotId(a)
     setShowDelete_pop(prev => !prev);
-    console.log(showDelete_pop);
-
     }
-    
+
+
 
     useEffect(async () => {
         fetch('/profile/'+localStorage.getItem('user_id')).then(res => res.json().then(data => setBotlist(data)))
@@ -56,7 +57,7 @@ export default function Bot_list(props) {
                                         {/* </div> */}
 
                                     </div> 
-                                    <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop}></Delete_pop>
+                                    <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop} Delete_bot ={delete_bot} bot={showBotId}></Delete_pop>
                         </div>
                 </div>    
                
@@ -68,7 +69,7 @@ function Dropdown({botData, deleteBot, openDelete_pop}){
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
     const onClick = () => {setIsActive(prev => !prev)
-    console.log(isActive);
+    // console.log(isActive);
     };
 
     // const forceUpdate = useForceUpdate();
@@ -78,7 +79,11 @@ function Dropdown({botData, deleteBot, openDelete_pop}){
     // const openConnect = () => {
     //     setShowConnect(prev => !prev);
     //   }
-
+    const OnDelete = () => {
+        openDelete_pop(botData._id.$oid)
+        onClick()
+    }
+    
     return(
     <div>
     <div class="card-box">
@@ -122,19 +127,16 @@ function Dropdown({botData, deleteBot, openDelete_pop}){
                     </li>
                     <li>
                     <a href={'/bot/'+botData._id.$oid+'/connect'}><i class="fas fa-link"></i> Connect</a>
-                    {/* <Connect showConnect={showConnect} setShowConnect={setShowConnect} /> */}
                     </li>
                     <li>
-                        <a href="#" onClick={openDelete_pop}>
+                        <a href="#" onClick={OnDelete}>
                         <i class="fas fa-trash"></i> Delete</a>
                     </li>
                 </ul>
                
             </div>
         </div> 
-        {/* <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop}></Delete_pop> */}
     </div>
-    {/* <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop}></Delete_pop> */}
     </div>
     )
 }

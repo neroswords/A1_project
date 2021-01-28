@@ -50,6 +50,7 @@ function Train(props) {
                             Delete
                         </button> */}
               <DeleteModal
+                className="button_delete_table"
                 dataType={"training"}
                 dataID={props.match.params.bot_id}
                 delete_trained={delete_trained}

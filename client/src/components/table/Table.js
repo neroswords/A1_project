@@ -14,6 +14,7 @@ padding: 1rem;
 
   table {
     border-spacing: 0;
+    text-align:center;
     
 
     tr {
@@ -46,6 +47,14 @@ padding: 1rem;
 
   .pagination {
     padding: 0.5rem;
+    display: inline-block;
+  }
+
+  .pagination .button{
+    /* color: black;
+    float: left; */
+    padding: 8px 16px;
+    text-decoration: none;
   }
 
 `;

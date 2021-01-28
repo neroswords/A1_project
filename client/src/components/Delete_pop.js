@@ -26,6 +26,7 @@ const ModalWrapper = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(90%, -140%);
+  margin-top: 250px;
 `;
 
 const CloseModalButton = styled(MdClose)`
@@ -51,14 +52,14 @@ const ModalContent = styled.div`
 }
 
 .button-delete-bot .cancle-delete-bot{
-    padding: 7px 15px;
-    font-size: 12px;
-    border-radius: 25px;
-    border: 1px solid #0078ff;
-    transition: 0.5s;
-    margin: 10px;
-    background-color: #fff;
-    color: #0078ff;
+  padding: 7px 15px;
+  font-size: 12px;
+  border-radius: 25px;
+  border: 1px solid #0078ff;
+  transition: 0.5s;
+  margin: 10px;
+  background-color: #fff;
+  color: #0078ff;
 
 }
 
@@ -88,67 +89,73 @@ img{
 }
 `;
 
-function Delete_pop({showDelete_pop, setShowDelete_pop}){
-    const modalRef = useRef();
-    const animation = useSpring({
-        config: {
-          duration: 250
-        },
-        opacity: showDelete_pop ? 1 : 0,
-        transform: showDelete_pop ? `translateY(0%)` : `translateY(-100%)`
-      });
-    
-      const closeModal = e => {
-        if (modalRef.current === e.target) {
-          setShowDelete_pop(false);
-        }
-      };
-    
-      const keyPress = useCallback(
-        e => {
-          if (e.key === 'Escape' && showDelete_pop) {
-            setShowDelete_pop(false);
-            console.log('I pressed');
-          }
-        },
-        [setShowDelete_pop, showDelete_pop]
-      );
-    
-      useEffect(
-        () => {
-          document.addEventListener('keydown', keyPress);
-          return () => document.removeEventListener('keydown', keyPress);
-        },
-        [keyPress]
-      );
-    return(
-        <div>
-        {showDelete_pop ? (
+function Delete_pop({ showDelete_pop, setShowDelete_pop, Delete_bot, bot }) {
+
+  const ConfirmDelete = (bot) => {
+    Delete_bot(bot)
+    setShowDelete_pop(prev => !prev)
+  }
+  const modalRef = useRef();
+  const animation = useSpring({
+    config: {
+      duration: 250
+    },
+    opacity: showDelete_pop ? 1 : 0,
+    transform: showDelete_pop ? `translateY(0%)` : `translateY(-100%)`
+  });
+
+  const closeModal = e => {
+    if (modalRef.current === e.target) {
+      setShowDelete_pop(false);
+    }
+  };
+
+  const keyPress = useCallback(
+    e => {
+      if (e.key === 'Escape' && showDelete_pop) {
+        setShowDelete_pop(false);
+        console.log('I pressed');
+      }
+    },
+    [setShowDelete_pop, showDelete_pop]
+  );
+
+  useEffect(
+    () => {
+      document.addEventListener('keydown', keyPress);
+      return () => document.removeEventListener('keydown', keyPress);
+    },
+    [keyPress]
+  );
+
+  return (
+    <div>
+      {showDelete_pop ? (
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
             <Container>
-            <ModalWrapper showDelete_pop={showDelete_pop}>
-              <ModalContent>
-                <div>
-                  <img src={ImageWarnning} alt="warnning" className="warnning_img" />
-                </div>
+              <ModalWrapper showDelete_pop={showDelete_pop}>
+                <ModalContent>
+                  <div>
+                    <img src={ImageWarnning} alt="warnning" className="warnning_img" />
+                  </div>
                   you want to delete this bot?
                 <Container className="button-delete-bot">
-                  <Button className="cancle-delete-bot">cancle</Button>
-                  <Button className="delete-bot">delete</Button>
-                </Container>
-              </ModalContent>
-              <CloseModalButton
-                aria-label="Close modal"
-                onClick={() => setShowDelete_pop(prev => !prev)}
-              />
-            </ModalWrapper>
+                    <Button className="cancle-delete-bot">cancle</Button>
+                    <Button className="delete-bot" onClick={() => { ConfirmDelete(bot) }}>delete</Button>
+                  </Container>
+                </ModalContent>
+                <CloseModalButton
+                  aria-label="Close modal"
+                  onClick={() => setShowDelete_pop(prev => !prev)}
+                />
+              </ModalWrapper>
             </Container>
           </animated.div>
         </Background>
       ) : null}
-        </div>
-    );
+    </div>
+  );
 
 };
 
