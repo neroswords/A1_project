@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
-import {Button} from 'react-bootstrap';
+import {Button, Container} from 'react-bootstrap';
 import {AddWord} from './AddTable/AddWord';
 import { AddStyle } from "./AddStyle";
 

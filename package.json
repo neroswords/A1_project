@@ -2,7 +2,7 @@
     "name": "app",
     "version": "0.1.0",
     "private": true,
-    "proxy": "https://fcd620857826.ngrok.io",
+    "proxy": "https://cd30b0f44c2e.ngrok.io",
     "dependencies": {
       "axios": "^0.21.1",
       "bootstrap": "^4.5.3",

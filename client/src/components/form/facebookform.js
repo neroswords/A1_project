@@ -67,7 +67,7 @@ const Styles = styled.div`
     border: none;
     border-bottom: 2px solid #000;
     outline: none;
-    margit-bottom: 30px;
+    /* margin-bottom: 30px; */
     margin-top: 1px;
     font-size: 16px;
     padding: 5px 0;

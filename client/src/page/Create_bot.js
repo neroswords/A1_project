@@ -63,6 +63,7 @@ const Styles = styled.div`
     margin-bottom: 2rem;
     margin-top: 1rem;
   }
+  
   input[type=file]::-webkit-file-upload-button {
     border: 2px;
     padding: 0.5rem ;
