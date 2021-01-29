@@ -35,14 +35,17 @@ const Styles = styled.div`
 }
 
 .buttonaddWord{
-  min-width: 30px;
-  padding: 5px 10px;
-  border-radius: 4px;
-  border: none;
-  background: #ffc15e;
+  padding: 7px 15px;
+  font-size: 12px;
+  border-radius: 25px;
+  border: 1px solid #0078ff;
+  transition: 0.5s;
+  background-color: #0078ff;
   color: #fff;
-  font-size: 16px;
-  cursor: pointer;
+}
+
+.buttonaddWord:hover{
+  color: #000;
 }
 `;
 

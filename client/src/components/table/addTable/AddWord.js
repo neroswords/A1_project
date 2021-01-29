@@ -6,7 +6,7 @@ import { Col, Form, Button, Container } from "react-bootstrap";
 
 
 const Background = styled.div`
-  // position: fixed;
+
   position: relative;
   display: flex;
   justify-content: center;
@@ -37,15 +37,9 @@ const ModalContent = styled.div`
   justify-content: center;
   align-items: center;
   line-height: 1.8;
-  // color: #141414;
+
   
-  button {
-    // padding: 10px 24px;
-    // color: #fff;
-    // border: none;
-    // border-radius: 25px;
-    // border: 3px solid #0078ff;
-    // transition: 0.5s;
+  .qa-comfirm {
     padding: 5px 12px;
     margin-top: 15px;
     font-size: 19px;
@@ -57,7 +51,7 @@ const ModalContent = styled.div`
     color: #fff;
   }
 
-  button:hover{
+ .qa-comfirm:hover{
     color: #000;
   }
 
@@ -74,18 +68,17 @@ const CloseModalButton = styled(MdClose)`
   z-index: 10;
 `;
 
-const FormControl = styled.div`
-  box-shadow: none;
-  outline: none;
-  border: none;
-  border-bottom: 2px solid #000;
-  outline: none;
-  margit-bottom: 30px;
-  margin-top: 1px;
-  font-size: 16px;
-  padding: 5px 0;
-
-`;
+// const Form.Control = styled.div`
+//   box-shadow: none;
+//   outline: none;
+//   border: none;
+//   border-bottom: 2px solid #000;
+//   outline: none;
+//   margin-bottom: 20px;
+//   margin-top: 20px;
+//   font-size: 16px;
+//   padding: 5px 0;
+// `;
 
 
 
@@ -154,7 +147,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
                   Question
                 </Form.Label>
                 <Col>
-                  <FormControl type="text" className="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question" />
+                  <Form.Control type="text" className="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question" />
                 </Col>
                 </Form.Row>
                 <br />
@@ -163,7 +156,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
                   Answer
                 </Form.Label>
                 <Col>
-                  <FormControl type="text" className="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer" />
+                  <Form.Control type="text" className="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer" />
                 </Col>
                 </Form.Row>
                 <br />
