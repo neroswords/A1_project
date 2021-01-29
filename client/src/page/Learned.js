@@ -53,7 +53,7 @@ function Learned(props){
     return(
         <Styles>
         <div className="learned-page">
-            <Navbar_member botID = {props.match.params.bot_id}  />
+            <Navbar_member botID = {props.match.params.bot_id} path={"trained"}  />
             <div className="container">
               
                 <div className="container-top d-flex bd-highlight">

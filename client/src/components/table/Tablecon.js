@@ -59,7 +59,7 @@ function Tablecon({botID,add_data}) {
 
   //   x++;
   // }
-  console.log(TableconState.AddWord)
+  // console.log(TableconState.AddWord)
   // setnewState({Word : TableconState.AddWord})
 
  const openWord = () => {
