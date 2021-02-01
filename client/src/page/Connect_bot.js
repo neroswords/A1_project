@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useCallback } from 'react';
 import styled from 'styled-components';
 import Facebookform from '../Components/Form/facebookform';
 import Lineform from '../Components/Form/lineform';
@@ -142,6 +142,8 @@ class Connect_bot extends React.Component {
     this.handlelineChange = this.handlelineChange.bind(this);
     this.handlefacebookChange = this.handlefacebookChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this)
+   
   }
 
   renderSwitch(param) {
@@ -166,6 +168,7 @@ class Connect_bot extends React.Component {
     this.setState({ [evt.target.name]: evt.target.value });
     console.log(this.state)
   }
+
 
   handleSubmit= (evt) => {
     evt.preventDefault() ;

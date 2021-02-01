@@ -96,17 +96,18 @@ const Styles = styled.div`
   }
 `;
 
-class Edit_bot extends React.Component {
+export default class Add_item extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      bot_name: '',
-      gender: '',
-      age: '',
+      item_name: '',
+      type: '',
+      amount: '',
       bot_id:'',
       imageURL: '',
       Image: '',
+      des:'',
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -140,12 +141,14 @@ class Edit_bot extends React.Component {
 
     const data = new FormData();
     data.append('file', this.uploadInput.files[0]);
-    data.append('bot_name',this.bot_name.value);
-    data.append('gender' ,this.gender.value);
-    data.append('age' ,this.age.value);
+    data.append('item_name',this.item_name.value);
+    data.append('type' ,this.type.value);
+    data.append('amount' ,this.amount.value);
     data.append('creator' , localStorage.getItem('user_id'))
     data.append('Image' , this.state.Image)
-    fetch('/bot/'+this.props.match.params.bot_id+'/edit', {
+    data.append('des' ,this.des.value);
+    console.log(data)
+    fetch('/bot/'+this.props.match.params.bot_id+'/additem', {
       method: 'POST',
       // headers : {
       //   "Access-Control-Allow-Origin": "*",
@@ -159,19 +162,21 @@ class Edit_bot extends React.Component {
         this.setState({ bot_id : data.id})
         this.setState({ redirect: true }) 
       });
+      console.log("DDD")
     });
+  
   }
-     componentDidMount ()  {
-    fetch('/bot/'+this.props.match.params.bot_id+'/edit').then((response) => {
-        response.json().then((data) => {
-          this.setState({ bot_name: data[0].bot_name });
-          this.setState({ gender : data[0].gender});
-          this.setState({ age: data[0].age }) ;
-          this.setState({ Image: data[0].Img }); 
-        });
-      });
+    //  componentDidMount ()  {
+    // fetch('/bot/'+this.props.match.params.bot_id+'/edit').then((response) => {
+    //     response.json().then((data) => {
+    //       this.setState({ bot_name: data[0].bot_name });
+    //       this.setState({ gender : data[0].gender});
+    //       this.setState({ age: data[0].age }) ;
+    //       this.setState({ Image: data[0].Img }); 
+    //     });
+    //   });
         
-        }
+    //     }
       
     render() {
     const { redirect,bot_id } = this.state;
@@ -210,20 +215,24 @@ class Edit_bot extends React.Component {
                                         </div>  
                                         <div className=" group col-lg-6">
                                             <div className="">
-                                              <label  className="form-label">Bot Name</label>
-                                              <input type="text"  name="bot_name" value = {this.state.bot_name}  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
+                                              <label  className="form-label">item name</label>
+                                              <input type="text"  name="item_name" value = {this.state.item_name}  ref={(ref) => { this.item_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
                                             </div>
                                             <div class="mt-3">
-                                              <label for="inputgender" class="form-label">Gender</label>
-                                              <select id="inputgender" name="gender" value = {this.state.gender}  ref={(ref) => { this.gender = ref; }} onChange={this.handleChange} class="form-select">
+                                              <label for="inputgender" class="form-label">type</label>
+                                              <select id="inputgender" name="type" value = {this.state.type}  ref={(ref) => { this.type = ref; }} onChange={this.handleChange} class="form-select">
                                                   <option selected>Choose...</option>
                                                   <option>Male </option>
                                                   <option>Female</option>
                                               </select>
                                             </div>
                                             <div className="mt-3">
-                                                <label for="inputFirstname" className="form-label">Age</label>
-                                                <input type="integer" name="age" className="form-control" id="inputfirstname" value = {this.state.age}   ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
+                                                <label for="inputFirstname" className="form-label">amount</label>
+                                                <input type="integer" name="amount" className="form-control" id="inputfirstname" value = {this.state.amount}   ref={(ref) => { this.amount = ref; }} onChange={this.handleChange} />
+                                            </div>
+                                            <div className="mt-3">
+                                                <label for="inputFirstname" className="form-label">Desciption</label>
+                                                <input type="integer" name="des" className="form-control" id="inputfirstname" value = {this.state.des}   ref={(ref) => { this.des = ref; }} onChange={this.handleChange} />
                                             </div>
                                         </div>
                                 </div>
@@ -266,4 +275,4 @@ class Edit_bot extends React.Component {
 }
 }
 
-export default Edit_bot;
+ 

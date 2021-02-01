@@ -22,6 +22,7 @@ const Styles = styled.div`
 function Learned(props){
     const [deleteState,setdeleteState] = useState([]);
     const delete_trained =(data)=>{
+    
         const delete_data = deleteState
         if (deleteState[0]){
             fetch('/train_bot/delete/'+data, {
@@ -47,6 +48,7 @@ function Learned(props){
         console.log(id.botID)
     }
 
+ 
     
 
       

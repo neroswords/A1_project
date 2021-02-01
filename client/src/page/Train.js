@@ -12,14 +12,15 @@ const Styles = styled.div`
   }
   .container {
     margin-top: 2%;
+    overflow:hidden;
   }
+
 `;
 
 function Train(props) {
   let history = useHistory();
-
+  console.log(props)
   const [deleteState, setdeleteState] = useState([]);
-
   const delete_trained = (data) => {
     const delete_data = deleteState;
     if (deleteState[0]) {

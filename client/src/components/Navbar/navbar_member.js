@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import {connect} from 'react-redux'
+
 import {createStore} from 'redux'
 import tReducers from '../../Reducers/tReducers'
+import {connect} from 'react-redux'
 import { Provider,useSelector,useDispatch} from 'react-redux'
 // const store = createStore(tReducers,+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 const Styles = styled.div` 
@@ -14,6 +15,7 @@ const Styles = styled.div`
     overflow: hidden;
     higth: 100%;
     width: 100%;
+    
   }
   
   .navbar-nav {
@@ -69,6 +71,7 @@ const Styles = styled.div`
   .fa-primary {
     color: #000000;
   }
+
   
   .fa-secondary {
     color: #fca311;
@@ -294,6 +297,7 @@ const Styles = styled.div`
     hight : 100px
     background-color: #92a8d1;
     border: 1px solid red;
+    float : right;
   }
 
 `;
@@ -329,7 +333,7 @@ function Navbar_member({ botID  }) {
 
   return (
     <Styles>
-      <button onClick={Change} className="btn-cp" > X </button>
+      
       {console.log("tt"+change)}
       {change ? (
         <nav className="navbar">
@@ -340,14 +344,16 @@ function Navbar_member({ botID  }) {
                         
                         </div>
                       </div> */}
+                       
             <li className="nav-item">
             <Link to={"/bot/" + botID + "/training"}  onClick={onSubmit} class="nav-link">
-            
+           
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i className="fas fa-robot"></i>
                   </div>
                 </div>
+                
                 <span className="link-text">Training bot</span>
                     </Link>
             </li>
@@ -362,6 +368,7 @@ function Navbar_member({ botID  }) {
               </Link>
             </li>
             <li className="nav-item">
+            <i onClick={Change} className="btn-cp" > >>>>>>>>>>>>>>>> </i>
               <Link to={"/bot/" + botID + "/group"} onClick={onSubmit} class="nav-link">
                 <div className="fa-group">
                   <div className="fa-secondary">
@@ -426,6 +433,7 @@ function Navbar_member({ botID  }) {
             <li className="nav-item2">
               <Link to={"/bot/" + botID + "/training"} onClick={onSubmit} class="nav-link2">
                 <div className="fa-group">
+                <i onClick={Change} className="btn-cp" > X </i>
                   <div className="fa-secondary">
                     <i className="fas fa-robot"></i>
                   </div>
@@ -496,6 +504,8 @@ function Navbar_member({ botID  }) {
           </ul>
         </nav>
       )}
+
+
     </Styles>
   );
 }

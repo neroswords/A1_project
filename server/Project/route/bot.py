@@ -16,7 +16,7 @@ from bson.json_util import dumps,loads
 
 bot = Blueprint("bot",__name__)
 UPLOAD_FOLDER = './Project/static/images/bot/bot_pic'
-
+UPLOAD_FOLDER_ITEMS = './Project/static/images/bucket'
 @bot.route('/<id>/connect', methods=['GET','POST'])
 # @login_required
 def connect(id):
@@ -128,7 +128,9 @@ def webhook(platform,botID):
     training_collection = mongo.db.training
     bot_collection = mongo.db.bots
     customer_collection = mongo.db.customers
+    template_collection = mongo.db.template
     bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
+    template_collection_define = template_collection.find({'bot': ObjectId(botID)})
     if  platform == "facebook":
         if request.method == "GET":
             print(bot_define)
@@ -139,12 +141,24 @@ def webhook(platform,botID):
         elif request.method == "POST":
             bot = Bot(bot_define["page_facebook_access_token"])
             payload = request.json
+            print("payload = ")
+            print(payload)
             event = payload['entry'][0]['messaging']
+            print(event)
             for msg in event:
+                print("meg = ")
+                print(msg)
                 text = msg['message']['text']
-                sender_id = msg['sender']['id']
-                response,conf = process_message(text,botID,bot_define['confident'])
-                bot.send_text_message(sender_id, response)
+                for i in template_collection_define:
+                    if(text == i['type']):
+                        template("facebook",botID)
+                        break
+                    else: 
+                        sender_id = msg['sender']['id']
+                        response,conf = process_message(text,botID,bot_define['confident'])
+                        bot.send_text_message(sender_id, response)
+                        break
+                
             return "Message received"
 
     elif platform == "line":
@@ -206,3 +220,84 @@ def addword(botID):
         trained_collection.insert_one({'question': question, 'botID':  ObjectId(creator), 'answer': ans})
         return {"message":"add done"}
     return {"message":"ok"}
+
+
+
+def template(platform,botID):
+    training_collection = mongo.db.training
+    bot_collection = mongo.db.bots
+    customer_collection = mongo.db.customers
+    template_collection = mongo.db.template
+    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
+    if  platform == "facebook":
+        if request.method == "POST":
+            bot = Bot(bot_define["page_facebook_access_token"])
+            payload = request.json
+            template_collection_define = template_collection.find({'bot': ObjectId(botID)})
+            # # print(template_collection_define["title"])
+            event = payload['entry'][0]['messaging']
+            # # print(event)
+            for msg in event:
+                # print("meg = ")
+                # print(msg)
+                text = msg['message']['text']
+                sender_id = msg['sender']['id']
+                # response,conf = process_message(text,botID,bot_define['confident'])
+                con_box = {
+                     "attachment": {
+                        "type": "template",
+                        "payload":{
+                            "template_type": "generic",
+                            "elements" : [
+                              
+                            ]
+                        }
+                     }
+                }
+                for i in template_collection_define:
+                    element =  {"title":i["title"],"image_url":i["img"],
+                    "subtitle":"subtitle",
+                    "default_action": {"type": "web_url","url": "https://petersfancybrownhats.com/view?item=103",
+                    "webview_height_ratio": "tall",},"buttons":[{"type":"web_url","url":"https://petersfancybrownhats.com","title":i["btn_title"]},
+                    {"type":"postback","title":"Start Chatting","payload":"DEVELOPER_DEFINED_PAYLOAD"}]}
+                    con_box["attachment"]["payload"]["elements"].append(element)
+               
+                print("_________________________________________________")
+                # print(con_box)
+                bot.send_message(sender_id,con_box )
+                break
+            return "Message received"
+
+
+
+@bot.route('/<botID>/additem',methods=["POST"])
+def additem(botID):
+    bucket_collection = mongo.db.bucket
+    template_collection = mongo.db.template
+    if request.method == 'POST':
+        creator = request.form['creator'] 
+        item_name = request.form['item_name'] 
+        item_type = request.form['type'] 
+        amount = request.form['amount'] 
+        des = request.form['des'] 
+        if  "file" not in request.files :
+            filename = "Avatar.jpg"
+            filename = request.form['Image'] 
+            info_update =  {'item_name': item_name, 'owner':  creator, 'type': item_type, 'amount': amount, 'des': des}
+        else :
+            file = request.files['file'] 
+            filename = secure_filename(file.filename)
+            filename = creator+"&"+item_name+os.path.splitext(filename)[1]
+            destination="/".join([UPLOAD_FOLDER_ITEMS, filename])
+            file.save(destination)
+            session['uploadFilePath']=destination
+            response="success"
+            info_update = {'item_name': item_name, 'owner':  creator, 'type': item_type, 'amount': amount, 'des': des, 'Img' : filename}
+
+        done = bucket_collection.insert_one(info_update)
+        info_update = {'item_name': item_name, 'owner':  creator, 'type': item_type, 'amount': amount, 'des': des, 'Img' : filename}
+        template_collection.insert_one(info_update)
+
+
+        return {'message' : 'add bot successfully'}
+    return "add bot unsuccessfully"
