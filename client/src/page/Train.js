@@ -42,7 +42,7 @@ function Train(props) {
   return (
     <Styles>
       <div className="train-page">
-        <Navbar_member botID={props.match.params.bot_id} />
+        <Navbar_member botID={props.match.params.bot_id} path={"training"} />
         <div className="container">
           <div className="container-top d-flex bd-highlight">
             <h2 className="p-2 flex-grow-1 bd-highlight">Trainning</h2>
@@ -51,6 +51,7 @@ function Train(props) {
                             Delete
                         </button> */}
               <DeleteModal
+                className="button_delete_table"
                 dataType={"training"}
                 dataID={props.match.params.bot_id}
                 delete_trained={delete_trained}

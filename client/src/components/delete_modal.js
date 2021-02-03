@@ -38,9 +38,9 @@ export default function DeleteModal({dataID,delete_trained,add_data, dataType}){
         setOpen(true);
       };
 
-      const handleClose = () => {
+    const handleClose = () => {
         setOpen(false);
-      };
+    };
     
     const deleteData = (ID, dataType) => {
         fetch('/'+dataType+'/'+ID+'/delete')

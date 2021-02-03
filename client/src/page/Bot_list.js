@@ -2,7 +2,8 @@ import React, {useState, useEffect, useRef } from "react";
 import {Link} from "react-router-dom";
 import '../Components/Botlist/Bot_list.css';
 import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
-import DeleteModal from '../Components/delete_modal'
+// import DeleteModal from '../Components/delete_modal'
+import Delete_pop from "../Components/Delete_pop";
 
 export default function Bot_list(props) {
     const [botlist,setBotlist] = useState([]);
@@ -19,6 +20,15 @@ export default function Bot_list(props) {
         setBotlist(newList);
     }
 
+    const [showDelete_pop, setShowDelete_pop] = useState(false);
+    const [showBotId, setShowBotId] = useState();
+    const openDelete_pop = (a) => {
+    setShowBotId(a)
+    setShowDelete_pop(prev => !prev);
+    }
+
+
+
     useEffect(async () => {
         fetch('/profile/'+localStorage.getItem('user_id')).then(res => res.json().then(data => setBotlist(data)))
         console.log(localStorage.getItem("access_token") )
@@ -26,8 +36,7 @@ export default function Bot_list(props) {
 
 
     const card = botlist.map((bot) => 
-        <Dropdown botData={bot} deleteBot={delete_bot} />
-        
+        <Dropdown botData={bot} deleteBot={delete_bot} openDelete_pop={openDelete_pop} />
     );
 
     return(
@@ -50,6 +59,7 @@ export default function Bot_list(props) {
                                         {/* </div> */}
 
                                     </div> 
+                                    <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop} Delete_bot ={delete_bot} bot={showBotId}></Delete_pop>
                         </div>
                 </div>    
                
@@ -57,10 +67,13 @@ export default function Bot_list(props) {
     );
 }
 
-function Dropdown({botData, deleteBot}){
+function Dropdown({botData, deleteBot, openDelete_pop}){
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
-    const onClick = () => setIsActive(!isActive);
+    const onClick = () => {setIsActive(prev => !prev)
+    // console.log(isActive);
+    };
+
     // const forceUpdate = useForceUpdate();
     // console.log(botData)
     
@@ -68,8 +81,13 @@ function Dropdown({botData, deleteBot}){
     // const openConnect = () => {
     //     setShowConnect(prev => !prev);
     //   }
-
+    const OnDelete = () => {
+        openDelete_pop(botData._id.$oid)
+        onClick()
+    }
+    
     return(
+    <div>
     <div class="card-box">
         <Link to={'/bot/'+botData._id.$oid+'/training' } >
             <img src={'/images/bot/bot_pic/'+botData.Img} class="bot-img"/>
@@ -111,18 +129,21 @@ function Dropdown({botData, deleteBot}){
                     </li>
                     <li>
                     <a href={'/bot/'+botData._id.$oid+'/connect'}><i class="fas fa-link"></i> Connect</a>
-                    {/* <Connect showConnect={showConnect} setShowConnect={setShowConnect} /> */}
                     </li>
                     <li>
-                        <a href="#" onClick={()=>deleteBot(botData._id.$oid)}>
+                        <a href="#" onClick={OnDelete}>
                         <i class="fas fa-trash"></i> Delete</a>
                     </li>
                 </ul>
+               
             </div>
-        </div>
+        </div> 
+    </div>
     </div>
     )
 }
+
+
 
 // function useForceUpdate(){
 //     const [value, setValue] = useState(0); // integer state

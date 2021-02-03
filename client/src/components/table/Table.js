@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
-import {Button} from 'react-bootstrap';
+import {Button, Container} from 'react-bootstrap';
 import {AddWord} from './AddTable/AddWord';
 import { AddStyle } from "./AddStyle";
 
@@ -14,6 +14,7 @@ padding: 1rem;
 
   table {
     border-spacing: 0;
+    text-align:center;
     
 
     tr {
@@ -46,6 +47,14 @@ padding: 1rem;
 
   .pagination {
     padding: 0.5rem;
+    display: inline-block;
+  }
+
+  .pagination .button{
+    /* color: black;
+    float: left; */
+    padding: 8px 16px;
+    text-decoration: none;
   }
 
 `;
