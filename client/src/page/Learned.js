@@ -47,17 +47,11 @@ function Learned(props){
                     },
                     body : JSON.stringify(newdata),
                 });
-<<<<<<< HEAD
                 window.location.reload("bot/"+deleteState.bot_id+'/trained');
         }
      
       
         
-=======
-                console.log(data)
-                window.location.reload("bot/"+deleteState.bot_id+'/trained');
-        }    
->>>>>>> 52e311a932d5823f21aee0ad94cec113e0026d05
     }
     const add_data = (data) =>{
         deleteState.push(data)
