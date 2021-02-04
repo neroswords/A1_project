@@ -4,6 +4,8 @@ import '../Components/Botlist/Bot_list.css';
 import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
 // import DeleteModal from '../Components/delete_modal'
 import Delete_pop from "../Components/Delete_pop";
+// import Facebookform from "../Components/Form/facebookform";
+import Connect_bot from "../Page/Connect_bot";
 
 export default function Bot_list(props) {
     const [botlist,setBotlist] = useState([]);
@@ -27,14 +29,18 @@ export default function Bot_list(props) {
     setShowDelete_pop(prev => !prev);
     }
 
-
-
+    const [showForm, setShowForm] = useState(false);
+    const openForm = (b) => {
+    setShowBotId(b)
+    setShowForm(prev => !prev);
+    }
+  
     useEffect(async () => {
         fetch('/profile/'+localStorage.getItem('user_id')).then(res => res.json().then(data => setBotlist(data)))
     },[])
 
     const card = botlist.map((bot) => 
-        <Dropdown botData={bot} deleteBot={delete_bot} openDelete_pop={openDelete_pop} />
+        <Dropdown botData={bot} deleteBot={delete_bot} openDelete_pop={openDelete_pop} openForm={openForm}/>
     );
 
     return(
@@ -57,7 +63,12 @@ export default function Bot_list(props) {
                                         {/* </div> */}
 
                                     </div> 
+                                    <div className="popup-del-connect">
                                     <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop} Delete_bot ={delete_bot} bot={showBotId}></Delete_pop>
+                                    <Connect_bot showForm={showForm} setShowForm={setShowForm} botID={showBotId} ></Connect_bot>
+                                    </div>
+
+
                         </div>
                 </div>    
                
@@ -65,10 +76,11 @@ export default function Bot_list(props) {
     );
 }
 
-function Dropdown({botData, deleteBot, openDelete_pop}){
+function Dropdown({botData, deleteBot, openDelete_pop, openForm}){
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
     const onClick = () => {setIsActive(prev => !prev)
+    // const [showIdbot, setshowIdbot] = useState(botData._id.$oid);
     // console.log(isActive);
     };
 
@@ -80,10 +92,18 @@ function Dropdown({botData, deleteBot, openDelete_pop}){
     //     setShowConnect(prev => !prev);
     //   }
     const OnDelete = () => {
-        openDelete_pop(botData._id.$oid)
-        onClick()
+    openDelete_pop(botData._id.$oid)
+    onClick()
+    }
+
+    // const [showForm, setShowForm] = useState(false);
+    // const [showIdbot, setshowIdbot] = useState(botData._id.$oid);
+    const OnopenForm = () => {
+    openForm(botData._id.$oid)
+    onClick()
     }
     
+
     return(
     <div>
     <div class="card-box">
@@ -126,7 +146,9 @@ function Dropdown({botData, deleteBot, openDelete_pop}){
                         <a href={'/bot/'+botData._id.$oid+'/edit_bot'}><i class="fas fa-pen"></i> edit</a>
                     </li>
                     <li>
-                    <a href={'/bot/'+botData._id.$oid+'/connect'}><i class="fas fa-link"></i> Connect</a>
+                    <button onClick={OnopenForm}><i class="fas fa-link"></i> Connect</button>
+                    {/* <a href={'/bot/'+botData._id.$oid+'/connect'} ><i class="fas fa-link"></i> Connect</a> */}
+                    {/* <Facebookform showForm={showForm} setShowForm={setShowForm} showIdbot={showIdbot}></Facebookform> */}
                     </li>
                     <li>
                         <a href="#" onClick={OnDelete}>

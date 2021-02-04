@@ -7,8 +7,6 @@ const Styles = styled.div`
 .container {
     margin-top: 2%;
 }
-
-
 .facebook-card {
     border: 0;
     border-radius: 1rem;
@@ -17,34 +15,27 @@ const Styles = styled.div`
     // box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
     border: 5px solid #0078ff;
 }
-
 .facebook {
     padding : 5%;
 }
-
 .facebook p{
     font-weight: bold;
     font-size: 23px;
     color: black;
 }
-
-
 .link p{
     font-size: 11px;
     color: black;
 }
-
 .link i{
     color: #0078ff;
 }
-
 .copy-clipboard {
     color: #34a853;
     position: absolute;
     top: 275px;
     right: 70px;
 }
-
 .link button{
     background: white;
     padding: 5px 12px;
@@ -55,12 +46,10 @@ const Styles = styled.div`
     transition: 0.5s;
     margin: 10px;
 } 
-
 .facebook .input-Box label{
     font-size: 18px;
     color: black;
 }
-
 .facebook .input-Box input{
     box-shadow: none;
     outline: none;
@@ -72,11 +61,9 @@ const Styles = styled.div`
     font-size: 16px;
     padding: 5px 0;
 }
-
 #container-button{
     text-align: center;
 }
-
 #container-button .submit{
     padding: 5px 12px;
     margin-top: 15px;
@@ -88,11 +75,9 @@ const Styles = styled.div`
     background-color: #0078ff;
     color: #fff;
 }
-
 #container-button .submit:hover{
     color: #000;
 }
-
 #container-button .cancle{
     padding: 5px 12px;
     margin-top: 15px;
@@ -104,12 +89,9 @@ const Styles = styled.div`
     background-color: #CD5C5C;
     color: #fff;
 }
-
 #container-button .cancle:hover{
     color: #000;
 }
-
-
 `;
 
 export default function Facebookform(props) {

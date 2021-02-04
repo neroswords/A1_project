@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
-import {Button, Container} from 'react-bootstrap';
-import {AddWord} from './AddTable/AddWord';
-import { AddStyle } from "./AddStyle";
+// import {Button, Container} from 'react-bootstrap';
+// import {AddWord} from './AddTable/AddWord';
+// import { AddStyle } from "./AddStyle";
 
 import { useTable,useFilters, useGlobalFilter, useAsyncDebounce, usePagination,useRowSelect   } from 'react-table'
 import {matchSorter} from 'match-sorter'
@@ -14,9 +14,8 @@ padding: 1rem;
 
   table {
     border-spacing: 0;
-    text-align:center;
-    
-
+    text-align: center;
+    min-width: 400px;
     tr {
       :last-child {
         td {
@@ -29,15 +28,15 @@ padding: 1rem;
     td {
       margin: 0;
       padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
+      border-bottom: 1px solid #DADADA;
+      border-right: 1px solid #DADADA;
 
       :last-child {
         border-right: 0;
       }
 
       input {
-        font-size: 1rem;
+        font-size: 0.9rem;
         padding: 0;
         margin: 0;
         border: 0;
@@ -45,16 +44,14 @@ padding: 1rem;
     }
   }
 
+  
   .pagination {
     padding: 0.5rem;
     display: inline-block;
   }
 
   .pagination .button{
-    /* color: black;
-    float: left; */
-    padding: 8px 16px;
-    text-decoration: none;
+    
   }
 
 `;
@@ -347,6 +344,21 @@ function TableShow({ columns, data, updateMyData, skipPageReset }) {
           ))}
         </select>
       </div>
+
+      <pre >
+          <code>
+            {JSON.stringify(
+              {
+                selectedRowIds: selectedRowIds,
+                'selectedFlatRows[].original': selectedFlatRows.map(
+                  c => c.original
+                ),
+              },
+              null,
+              2
+            )}
+          </code>
+        </pre>
     </>
   )
 }
