@@ -46,6 +46,7 @@ export default function DeleteModal({dataID,delete_trained,add_data, dataType}){
         fetch('/'+dataType+'/'+ID+'/delete')
     }
     
+    
 
     const button = (dataType) =>{
         if(dataType == 'bot'){

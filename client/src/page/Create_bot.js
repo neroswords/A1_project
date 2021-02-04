@@ -188,7 +188,6 @@ _handleImageChange(e) {
     data.append('age' ,this.age.value);
     data.append('creator' , localStorage.getItem('user_id'))
 
-
     fetch('/bot/create', {
       method: 'POST',
       // headers : {

@@ -19,7 +19,6 @@ const Styles = styled.div`
 
 function Train(props) {
   let history = useHistory();
-  console.log(props)
   const [deleteState, setdeleteState] = useState([]);
   const delete_trained = (data) => {
     const delete_data = deleteState;

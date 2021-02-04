@@ -95,7 +95,7 @@ const Styles = styled.div`
     background-color: #34a853 ;
   }
 `;
-
+let file = {}
 export default class Add_item extends React.Component {
   constructor(props) {
     super(props);
@@ -108,6 +108,7 @@ export default class Add_item extends React.Component {
       imageURL: '',
       Image: '',
       des:'',
+      imagesPreviewUrl: []
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -118,36 +119,49 @@ export default class Add_item extends React.Component {
     this.setState({ [evt.target.name]: evt.target.value });
     console.log(this.state)
   }
+  
   _handleImageChange(e) {
     e.preventDefault();
 
-    let reader = new FileReader();
-    let file = e.target.files[0];
-    console.log("File = "+JSON.stringify(file))
-    if (!file){
-      return
-    }
-    reader.onloadend = () => {
-      this.setState({
-        file: file,
-        imagePreviewUrl: reader.result
-        });      
-    }
-    reader.readAsDataURL(file)
+
+    let i
+    for (i = 0; i < e.target.files.length; i++)
+
+      {
+        let reader = new FileReader();
+        file[i] = this.uploadInput.files[i]
+        if (!file){
+          return
+        }
+        reader.onloadend = () => {
+          this.setState({
+            file: file[i],
+            imagesPreviewUrl: [...this.state.imagesPreviewUrl, reader.result]
+            });      
+        }
+        console.log(reader.result)
+        reader.readAsDataURL(file[i])
+
+      }
+
+    
   }
   handleUploadImage(ev) {
     ev.preventDefault();
     
-
+    console.log(file)
+    var i
     const data = new FormData();
-    data.append('file', this.uploadInput.files[0]);
+    for ( i = 0; i < this.uploadInput.files.length; i++)
+    {
+    data.append('file'+[i], this.uploadInput.files[i]);
+    }
     data.append('item_name',this.item_name.value);
     data.append('type' ,this.type.value);
     data.append('amount' ,this.amount.value);
     data.append('creator' , localStorage.getItem('user_id'))
     data.append('Image' , this.state.Image)
     data.append('des' ,this.des.value);
-    console.log(data)
     fetch('/bot/'+this.props.match.params.bot_id+'/additem', {
       method: 'POST',
       // headers : {
@@ -205,14 +219,21 @@ export default class Add_item extends React.Component {
                                 </div>
                                 <div className="row">
                                         <div className="group col-lg-6">
+                                          {/* <div className="showimage col-lg-8">
+                                          { imagePreviewUrl ?   $imagePreview :<img src={'/images/bot/bot_pic/Avatar.jpg'}/>}            
+                                          </div> */}
                                           <div className="showimage col-lg-8">
-                                          { imagePreviewUrl ?   $imagePreview :  <img src={'/images/bot/bot_pic/'+this.state.Image}/> }            
-                                          </div>
+                                          {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
+                                          return <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl}  />
+                                                })}
+        
+                                          </div> 
                                           <div className="mt-3">                                           
                                               <label for="uploadimage">Upload Proflie</label>
-                                              <input  ref={(ref) => { this.uploadInput = ref; }} onChange={(e)=>this._handleImageChange(e)} type="file"  />
+                                              <input  ref={(ref) => { this.uploadInput = ref; }} onChange={(e)=>this._handleImageChange(e)} type="file" multiple />
                                             </div>
                                         </div>  
+                                        
                                         <div className=" group col-lg-6">
                                             <div className="">
                                               <label  className="form-label">item name</label>

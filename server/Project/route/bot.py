@@ -275,25 +275,30 @@ def additem(botID):
     bucket_collection = mongo.db.bucket
     template_collection = mongo.db.template
     if request.method == 'POST':
+
         creator = request.form['creator'] 
         item_name = request.form['item_name'] 
         item_type = request.form['type'] 
         amount = request.form['amount'] 
         des = request.form['des'] 
-        if  "file" not in request.files :
-            filename = "Avatar.jpg"
-            filename = request.form['Image'] 
-            info_update =  {'item_name': item_name, 'owner':  creator, 'type': item_type, 'amount': amount, 'des': des}
-        else :
-            file = request.files['file'] 
+        count = 0
+        info_update = {'item_name': item_name, 'owner':  creator, 'type': item_type, 'amount': amount, 'des': des}
+        for i in request.files:
+            print(i)
+            file = request.files[i] 
+            print(file)
             filename = secure_filename(file.filename)
-            filename = creator+"&"+item_name+os.path.splitext(filename)[1]
+            filename = item_name+"&"+str(count)+creator+os.path.splitext(filename)[1]
             destination="/".join([UPLOAD_FOLDER_ITEMS, filename])
             file.save(destination)
             session['uploadFilePath']=destination
             response="success"
-            info_update = {'item_name': item_name, 'owner':  creator, 'type': item_type, 'amount': amount, 'des': des, 'Img' : filename}
-
+            info_pic = {'img'+str(count) : filename}
+            print(info_pic)
+            info_update.update(info_pic)
+            count = count+1
+            print(count)
+        print(info_update)
         done = bucket_collection.insert_one(info_update)
         info_update = {'item_name': item_name, 'owner':  creator, 'type': item_type, 'amount': amount, 'des': des, 'Img' : filename}
         template_collection.insert_one(info_update)

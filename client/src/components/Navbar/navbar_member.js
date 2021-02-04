@@ -404,7 +404,6 @@ function Navbar_member({ botID, path  }) {
             { path=="training" ? (
               <Link to={"/bot/" + botID + "/training"} onClick={onSubmit} class="nav-check-open">
                 <div className="fa-group">
-                <i onClick={Change} className="btn-cp" > X </i>
                   <div className="fa-secondary">
                     <i className="fas fa-robot"></i>
                   </div>
