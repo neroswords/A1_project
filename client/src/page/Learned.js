@@ -47,7 +47,7 @@ function Learned(props){
                     },
                     body : JSON.stringify(newdata),
                 });
-                //window.location.reload("bot/"+deleteState.bot_id+'/trained');
+                window.location.reload("bot/"+deleteState.bot_id+'/trained');
         }
      
       
