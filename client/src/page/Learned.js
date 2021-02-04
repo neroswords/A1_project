@@ -21,16 +21,31 @@ const Styles = styled.div`
 // }
 function Learned(props){
     const [deleteState,setdeleteState] = useState([]);
+    const  [Info,setInfo] = useState([]);
     const delete_trained =(data)=>{
-        const delete_data = deleteState
-        if (deleteState[0]){
-            fetch('/train_bot/delete/'+data, {
+        var newdata = []
+        var i = 0
+
+        // var a = []
+        for (i = 0; i < data.length; i++){
+            newdata.push(data[i].original)
+        }
+        // console.log(data)
+        console.log(newdata)
+        // console.log(data[0].original.ReplyWord)
+        // const newdata = new FormData();
+        // newdata.append('id', data);
+        // newdata.append('gender' ,this.gender.value);
+        // newdata.append('age' ,this.age.value);
+
+        if (data[0]){
+            fetch('/train_bot/delete/'+data[0].original.id, {
                 method : 'POST',
                 headers : {
                     "Access-Control-Allow-Origin": "*",
                     'Content-Type':'application/json'
                     },
-                    body : JSON.stringify(delete_data),
+                    body : JSON.stringify(newdata),
                 });
                 console.log(data)
                 window.location.reload("bot/"+deleteState.bot_id+'/trained');
@@ -44,13 +59,14 @@ function Learned(props){
         console.log(id.botID)
     }
 
+ 
     
 
       
     return(
         <Styles>
         <div className="learned-page">
-            <Navbar_member botID = {props.match.params.bot_id}  />
+            <Navbar_member botID = {props.match.params.bot_id} path={"trained"}  />
             <div className="container">
               
                 <div className="container-top d-flex bd-highlight">
@@ -65,7 +81,7 @@ function Learned(props){
                     </div> */}
                 </div>
                 <hr></hr>
-                <Table botID={props.match.params.bot_id} delete_trained={delete_trained} add_data={add_data}  />
+                <Table botID={props.match.params.bot_id} delete_trained={delete_trained}  />
             </div>
 
             </div>

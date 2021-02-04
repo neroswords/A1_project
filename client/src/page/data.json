@@ -1,0 +1,44 @@
+[{
+    "name": "Root",
+    "children": [
+      {
+        "id" : "15151ad",
+        "name": "Child 1",
+        "test": "red",
+        "children": [
+          {
+            "name": "Grand Child"
+          } 
+        ]
+      },
+      {
+        "name": "Child 2",
+        "children": [
+          {
+            "name": "Grand Child",
+            "children": [
+              {
+                "name": "Great Grand Child 1"
+              },
+              {
+                "name": "Grand Grand Child 2"
+              }
+            ]
+          }
+          
+        ]
+      },
+      {
+        "name": "Child 3",
+        "children":[
+            {
+                "name": "Child 1"
+            },
+            {
+                "name":"Child 2"
+            }
+        ]
+      }
+    ]
+  }
+  ]

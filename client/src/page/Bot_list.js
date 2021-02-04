@@ -37,7 +37,9 @@ export default function Bot_list(props) {
   
     useEffect(async () => {
         fetch('/profile/'+localStorage.getItem('user_id')).then(res => res.json().then(data => setBotlist(data)))
+        console.log(localStorage.getItem("access_token") )
     },[])
+
 
     const card = botlist.map((bot) => 
         <Dropdown botData={bot} deleteBot={delete_bot} openDelete_pop={openDelete_pop} openForm={openForm}/>

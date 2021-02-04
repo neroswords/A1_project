@@ -2,9 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {withRouter, Redirect} from 'react-router-dom'
-import ReactFileReader from 'react-file-reader';
-import Facebookform  from '../Components/Form/facebookform';
-import Lineform  from '../Components/Form/lineform';
+import { Multiselect } from 'multiselect-react-dropdown';
 
 const Styles = styled.div`
   .container {
@@ -47,7 +45,7 @@ const Styles = styled.div`
     transition: all 0.2s;
     width: 80%;
     align-items: center;
-    background-color: #;
+    /* background-color: #; */
   }
   .btn-createbot{
       margin-top: 3rem;
@@ -63,7 +61,6 @@ const Styles = styled.div`
     margin-bottom: 2rem;
     margin-top: 1rem;
   }
-  
   input[type=file]::-webkit-file-upload-button {
     border: 2px;
     padding: 0.5rem ;
@@ -98,97 +95,75 @@ const Styles = styled.div`
   .btn-line {
     background-color: #34a853 ;
   }
-
-  .upload-img input{
-    cursor: pointer;
-  }
-
-  .upload-img label{
-    cursor: pointer;
-  }
 `;
-
-
-class Create_bot extends React.Component {
+let file = {}
+export default class Add_item extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      bot_name: null,
-      gender: null,
-      age: null,
-      platform: 'line',
-      redirect: false,
+      item_name: '',
+      type: '',
+      amount: '',
       bot_id:'',
       imageURL: '',
-      file:''
+      Image: '',
+      des:'',
+      imagesPreviewUrl: []
     };
-    
     this.handleUploadImage = this.handleUploadImage.bind(this);
-    this.handlelineChange = this.handlelineChange.bind(this);
-    this.handlefacebookChange = this.handlefacebookChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
-  renderSwitch(param) {
-    switch(param) {
-      case 'facebook':
-        return <Facebookform />
-      default:
-        return <Lineform />
-    }
-  }
   
-  handlelineChange (evt) {
-    evt.preventDefault() ;
-    this.setState({ platform: "line" });
-    console.log(this.state.platform)
-  }
-  handlefacebookChange (evt) {
-    evt.preventDefault() ;
-    this.setState({ platform: "facebook" });
-    console.log(this.state.platform)
-  }
+ 
   handleChange (evt) {
     this.setState({ [evt.target.name]: evt.target.value });
     console.log(this.state)
   }
-  handleFile = (e) => {
-  const content = e.target.result;
-  console.log('file content',  content)
-  // You can set content in state and show it in render.
-}
-// _handleSubmit(e) {
-//   e.preventDefault();
-//   // TODO: do something with -> this.state.file
-//   console.log('handle uploading-', this.state.file);
-// }
+  
+  _handleImageChange(e) {
+    e.preventDefault();
 
-_handleImageChange(e) {
-  e.preventDefault();
 
-  let reader = new FileReader();
-  let file = e.target.files[0];
+    let i
+    for (i = 0; i < e.target.files.length; i++)
 
-  reader.onloadend = () => {
-    this.setState({
-      file: file,
-      imagePreviewUrl: reader.result
-    });
+      {
+        let reader = new FileReader();
+        file[i] = this.uploadInput.files[i]
+        if (!file){
+          return
+        }
+        reader.onloadend = () => {
+          this.setState({
+            file: file[i],
+            imagesPreviewUrl: [...this.state.imagesPreviewUrl, reader.result]
+            });      
+        }
+        console.log(reader.result)
+        reader.readAsDataURL(file[i])
+
+      }
+
+    
   }
-
-  reader.readAsDataURL(file)
-}
   handleUploadImage(ev) {
     ev.preventDefault();
-
+    
+    console.log(file)
+    var i
     const data = new FormData();
-    data.append('file', this.uploadInput.files[0]);
-    data.append('bot_name',this.bot_name.value);
-    data.append('gender' ,this.gender.value);
-    data.append('age' ,this.age.value);
+    for ( i = 0; i < this.uploadInput.files.length; i++)
+    {
+    data.append('file'+[i], this.uploadInput.files[i]);
+    }
+    data.append('item_name',this.item_name.value);
+    data.append('type' ,this.type.value);
+    data.append('amount' ,this.amount.value);
     data.append('creator' , localStorage.getItem('user_id'))
-
-    fetch('/bot/create', {
+    data.append('Image' , this.state.Image)
+    data.append('des' ,this.des.value);
+    fetch('/bot/'+this.props.match.params.bot_id+'/additem', {
       method: 'POST',
       // headers : {
       //   "Access-Control-Allow-Origin": "*",
@@ -202,24 +177,35 @@ _handleImageChange(e) {
         this.setState({ bot_id : data.id})
         this.setState({ redirect: true }) 
       });
+      console.log("DDD")
     });
+  
   }
-  // componentDidMount(){
-  //   fetch('/bot/'+user_id)
-  // }
-
-  render() {
+    //  componentDidMount ()  {
+    // fetch('/bot/'+this.props.match.params.bot_id+'/edit').then((response) => {
+    //     response.json().then((data) => {
+    //       this.setState({ bot_name: data[0].bot_name });
+    //       this.setState({ gender : data[0].gender});
+    //       this.setState({ age: data[0].age }) ;
+    //       this.setState({ Image: data[0].Img }); 
+    //     });
+    //   });
+        
+    //     }
+      
+    render() {
     const { redirect,bot_id } = this.state;
     if (redirect) {
       return <Redirect to={"/bot_list/"+ localStorage.getItem('user_id')} />
     }
     else {
-        let {imagePreviewUrl} = this.state;
-        let $imagePreview = null;
-        if (imagePreviewUrl) {
-          $imagePreview = (<img src={imagePreviewUrl} />);
-        } 
-        return(
+      let {imagePreviewUrl} = this.state;
+      let $imagePreview = null;
+      if (imagePreviewUrl) {
+        
+        $imagePreview = (<img src={imagePreviewUrl} />);
+      }
+      return(
         <Styles>
           
               <div className="container">
@@ -234,31 +220,41 @@ _handleImageChange(e) {
                                 </div>
                                 <div className="row">
                                         <div className="group col-lg-6">
+                                          {/* <div className="showimage col-lg-8">
+                                          { imagePreviewUrl ?   $imagePreview :<img src={'/images/bot/bot_pic/Avatar.jpg'}/>}            
+                                          </div> */}
                                           <div className="showimage col-lg-8">
-                                         { imagePreviewUrl ?   $imagePreview :<img src={'/images/bot/bot_pic/Avatar.jpg'}/>}
-                                              
-                                          </div>
-                                          <div className="mt-3 upload-img">                                           
+                                          {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
+                                          return <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl}  />
+                                                })}
+        
+                                          </div> 
+                                          <div className="mt-3">                                           
                                               <label for="uploadimage">Upload Proflie</label>
-                                              <input ref={(ref) => { this.uploadInput = ref; }} onChange={(e)=>this._handleImageChange(e)} type="file" />
+                                              <input  ref={(ref) => { this.uploadInput = ref; }} onChange={(e)=>this._handleImageChange(e)} type="file" multiple />
                                             </div>
                                         </div>  
+                                        
                                         <div className=" group col-lg-6">
                                             <div className="">
-                                              <label  className="form-label">Bot Name</label>
-                                              <input type="text"  name="bot_name" required  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
+                                              <label  className="form-label">item name</label>
+                                              <input type="text"  name="item_name" value = {this.state.item_name}  ref={(ref) => { this.item_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
                                             </div>
                                             <div class="mt-3">
-                                              <label for="inputgender" class="form-label">Gender</label>
-                                              <select id="inputgender" name="gender" required  ref={(ref) => { this.gender = ref; }} onChange={this.handleChange} class="form-select">
-                                                  <option disabled selected>Select your option</option>
+                                              <label for="inputgender" class="form-label">type</label>
+                                              <select id="inputgender" name="type" value = {this.state.type}  ref={(ref) => { this.type = ref; }} onChange={this.handleChange} class="form-select">
+                                                  <option selected>Choose...</option>
                                                   <option>Male </option>
                                                   <option>Female</option>
                                               </select>
                                             </div>
                                             <div className="mt-3">
-                                                <label for="inputFirstname" className="form-label">Age</label>
-                                                <input type="integer" name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
+                                                <label for="inputFirstname" className="form-label">amount</label>
+                                                <input type="integer" name="amount" className="form-control" id="inputfirstname" value = {this.state.amount}   ref={(ref) => { this.amount = ref; }} onChange={this.handleChange} />
+                                            </div>
+                                            <div className="mt-3">
+                                                <label for="inputFirstname" className="form-label">Desciption</label>
+                                                <input type="integer" name="des" className="form-control" id="inputfirstname" value = {this.state.des}   ref={(ref) => { this.des = ref; }} onChange={this.handleChange} />
                                             </div>
                                         </div>
                                 </div>
@@ -298,6 +294,7 @@ _handleImageChange(e) {
         </Styles>
       )
     }
-  }
 }
-export default Create_bot;
+}
+
+ 

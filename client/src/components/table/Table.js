@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
-// import {Button, Container} from 'react-bootstrap';
-// import {AddWord} from './AddTable/AddWord';
-// import { AddStyle } from "./AddStyle";
+import {Button, Container, Row} from 'react-bootstrap';
+import {AddWord} from './AddTable/AddWord';
+import { AddStyle } from "./AddStyle";
 
 import { useTable,useFilters, useGlobalFilter, useAsyncDebounce, usePagination,useRowSelect   } from 'react-table'
 import {matchSorter} from 'match-sorter'
@@ -57,6 +57,7 @@ padding: 1rem;
 `;
 
 const IndeterminateCheckbox = React.forwardRef(
+  
   ({ indeterminate, ...rest }, ref) => {
     const defaultRef = React.useRef()
     const resolvedRef = ref || defaultRef
@@ -78,7 +79,9 @@ function GlobalFilter({
   globalFilter,
   setGlobalFilter,
 }) {
+  
   const count = preGlobalFilteredRows.length
+  
   const [value, setValue] = React.useState(globalFilter)
   const onChange = useAsyncDebounce(value => {
     setGlobalFilter(value || undefined)
@@ -142,6 +145,7 @@ const EditableCell = ({
   }
 
 
+
   // We'll only update the external data when the input is blurred
   const onBlur = () => {
     updateMyData(index, id, value)
@@ -164,10 +168,14 @@ const defaultColumn = {
 }
 
 
-function TableShow({ columns, data, updateMyData, skipPageReset }) {
+function TableShow({ columns, data, updateMyData, skipPageReset ,delete_trained}) {
   // For this example, we're using pagination to illustrate how to stop
   // the current page from resetting when our data changes
   // Otherwise, nothing is different here.
+
+  const Ondelete = (e) =>{
+    delete_trained(e)
+  }
 
   const filterTypes = React.useMemo(
     () => ({
@@ -232,41 +240,55 @@ function TableShow({ columns, data, updateMyData, skipPageReset }) {
       // That way we can call this function from our
       // cell renderer!
       updateMyData,
+      
     },
     
     useFilters, // useFilters!
     useGlobalFilter,
     usePagination,
     useRowSelect,
+
     hooks => {
       hooks.visibleColumns.push(columns => [
+        
         // Let's make a column for selection
         {
           id: 'selection',
+          
           // The header can use the table's getToggleAllRowsSelectedProps method
           // to render a checkbox
           Header: ({ getToggleAllPageRowsSelectedProps }) => (
             <div>
-              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps() } />
+              
             </div>
           ),
           // The cell can use the individual row's getToggleRowSelectedProps method
           // to the render a checkbox
+          
           Cell: ({ row }) => (
-            <div>
+          
+            <div >
+                
               <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+              
+              
             </div>
           ),
+
         },
         ...columns,
+       
       ])
     }
+    
   )
-
- 
+// console.log(selectedFlatRows)
+  
   // Render the UI for your table
   return (
     <>
+    <button onClick={()=> Ondelete(selectedFlatRows)}>delete</button>
       <table {...getTableProps()} className="table">
         <thead>
           {headerGroups.map(headerGroup => (
@@ -343,22 +365,9 @@ function TableShow({ columns, data, updateMyData, skipPageReset }) {
             </option>
           ))}
         </select>
+        
       </div>
 
-      <pre >
-          <code>
-            {JSON.stringify(
-              {
-                selectedRowIds: selectedRowIds,
-                'selectedFlatRows[].original': selectedFlatRows.map(
-                  c => c.original
-                ),
-              },
-              null,
-              2
-            )}
-          </code>
-        </pre>
     </>
   )
 }
@@ -453,7 +462,7 @@ function Table({botID,delete_trained,add_data}) {
 
   useEffect(() => {
     setSkipPageReset(false)
-    fetch('/bot/'+botID+'/trained')
+    fetch('/train_bot/'+botID+'/trained')
     .then(res => res.json().then(data => {
       setTableState(
         data.map(d => {
@@ -484,6 +493,7 @@ function Table({botID,delete_trained,add_data}) {
         data={TableState}
         updateMyData={updateMyData}
         skipPageReset={skipPageReset}
+        delete_trained={delete_trained}
       />
      
     </Styles>

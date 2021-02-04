@@ -106,7 +106,7 @@ class Edit_bot extends React.Component {
       age: '',
       bot_id:'',
       imageURL: '',
-      Image: ''
+      Image: '',
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -122,17 +122,18 @@ class Edit_bot extends React.Component {
 
     let reader = new FileReader();
     let file = e.target.files[0];
-  
+    console.log("File = "+JSON.stringify(file))
+    if (!file){
+      return
+    }
     reader.onloadend = () => {
       this.setState({
         file: file,
         imagePreviewUrl: reader.result
-      });
+        });      
     }
-  
     reader.readAsDataURL(file)
   }
-
   handleUploadImage(ev) {
     ev.preventDefault();
     
@@ -167,15 +168,11 @@ class Edit_bot extends React.Component {
           this.setState({ gender : data[0].gender});
           this.setState({ age: data[0].age }) ;
           this.setState({ Image: data[0].Img }); 
-          console.log(data)
         });
       });
         
         }
       
-     
-    
-
     render() {
     const { redirect,bot_id } = this.state;
     if (redirect) {
@@ -185,7 +182,9 @@ class Edit_bot extends React.Component {
       let {imagePreviewUrl} = this.state;
       let $imagePreview = null;
       if (imagePreviewUrl) {
-        $imagePreview = (<img src={imagePreviewUrl} />);}
+        
+        $imagePreview = (<img src={imagePreviewUrl} />);
+      }
       return(
         <Styles>
           
@@ -202,8 +201,7 @@ class Edit_bot extends React.Component {
                                 <div className="row">
                                         <div className="group col-lg-6">
                                           <div className="showimage col-lg-8">
-                                          { imagePreviewUrl ?   $imagePreview :  <img src={'/images/bot/bot_pic/'+this.state.Image}/>     }
-                                                                             
+                                          { imagePreviewUrl ?   $imagePreview :  <img src={'/images/bot/bot_pic/'+this.state.Image}/> }            
                                           </div>
                                           <div className="mt-3">                                           
                                               <label for="uploadimage">Upload Proflie</label>
@@ -265,7 +263,6 @@ class Edit_bot extends React.Component {
         </Styles>
       )
     }
-  
 }
 }
 

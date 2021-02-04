@@ -12,14 +12,14 @@ const Styles = styled.div`
   }
   .container {
     margin-top: 2%;
+    overflow:hidden;
   }
+
 `;
 
 function Train(props) {
   let history = useHistory();
-
   const [deleteState, setdeleteState] = useState([]);
-
   const delete_trained = (data) => {
     const delete_data = deleteState;
     if (deleteState[0]) {
@@ -41,7 +41,7 @@ function Train(props) {
   return (
     <Styles>
       <div className="train-page">
-        <Navbar_member botID={props.match.params.bot_id} />
+        <Navbar_member botID={props.match.params.bot_id} path={"training"} />
         <div className="container">
           <div className="container-top d-flex bd-highlight">
             <h2 className="p-2 flex-grow-1 bd-highlight">Trainning</h2>

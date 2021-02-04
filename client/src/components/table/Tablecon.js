@@ -62,7 +62,7 @@ function Tablecon({botID,add_data}) {
 
   //   x++;
   // }
-  console.log(TableconState.AddWord)
+  // console.log(TableconState.AddWord)
   // setnewState({Word : TableconState.AddWord})
 
  const openWord = () => {
@@ -70,7 +70,7 @@ function Tablecon({botID,add_data}) {
   }
 
   useEffect(() => {
-    fetch('/bot/'+botID+'/training')
+    fetch('/train_bot/'+botID+'/training')
     .then(res => res.json().then(data => {
       setTableconState(
         data.map(d => {
