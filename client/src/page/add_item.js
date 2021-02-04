@@ -1,7 +1,7 @@
-  
+
 import React from 'react';
 import styled from 'styled-components';
-import {withRouter, Redirect} from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 import { Multiselect } from 'multiselect-react-dropdown';
 
 const Styles = styled.div`
@@ -105,65 +105,63 @@ export default class Add_item extends React.Component {
       item_name: '',
       type: '',
       amount: '',
-      bot_id:'',
+      bot_id: '',
       imageURL: '',
       Image: '',
-      des:'',
-      imagesPreviewUrl: []
+      des: '',
+      imagesPreviewUrl: [],
+      options: [{ name: 'Srigar', id: 1 }, { name: 'Sam', id: 2 }]
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
-  
- 
-  handleChange (evt) {
+
+
+  handleChange(evt) {
     this.setState({ [evt.target.name]: evt.target.value });
     console.log(this.state)
   }
-  
+
   _handleImageChange(e) {
     e.preventDefault();
 
 
     let i
-    for (i = 0; i < e.target.files.length; i++)
-
-      {
-        let reader = new FileReader();
-        file[i] = this.uploadInput.files[i]
-        if (!file){
-          return
-        }
-        reader.onloadend = () => {
-          this.setState({
-            file: file[i],
-            imagesPreviewUrl: [...this.state.imagesPreviewUrl, reader.result]
-            });      
-        }
-        console.log(reader.result)
-        reader.readAsDataURL(file[i])
-
+    for (i = 0; i < e.target.files.length; i++) {
+      let reader = new FileReader();
+      file[i] = this.uploadInput.files[i]
+      if (!file) {
+        return
       }
+      reader.onloadend = () => {
+        this.setState({
+          file: file[i],
+          imagesPreviewUrl: [...this.state.imagesPreviewUrl, reader.result]
+        });
+      }
+      console.log(reader.result)
+      reader.readAsDataURL(file[i])
 
-    
+    }
+
+
   }
   handleUploadImage(ev) {
     ev.preventDefault();
-    
+
     console.log(file)
     var i
     const data = new FormData();
-    for ( i = 0; i < this.uploadInput.files.length; i++)
-    {
-    data.append('file'+[i], this.uploadInput.files[i]);
+    for (i = 0; i < this.uploadInput.files.length; i++) {
+      data.append('file' + [i], this.uploadInput.files[i]);
     }
-    data.append('item_name',this.item_name.value);
-    data.append('type' ,this.type.value);
-    data.append('amount' ,this.amount.value);
-    data.append('creator' , localStorage.getItem('user_id'))
-    data.append('Image' , this.state.Image)
-    data.append('des' ,this.des.value);
-    fetch('/bot/'+this.props.match.params.bot_id+'/additem', {
+    data.append('item_name', this.item_name.value);
+    data.append('type', this.type.value);
+    data.append('amount', this.amount.value);
+    data.append('creator', localStorage.getItem('user_id'))
+    data.append('Image', this.state.Image)
+    data.append('des', this.des.value);
+    fetch('/bot/' + this.props.match.params.bot_id + '/additem', {
       method: 'POST',
       // headers : {
       //   "Access-Control-Allow-Origin": "*",
@@ -174,94 +172,102 @@ export default class Add_item extends React.Component {
     }).then((response) => {
       response.json().then((body) => {
         this.setState({ imageURL: `/${body.file}` });
-        this.setState({ bot_id : data.id})
-        this.setState({ redirect: true }) 
+        this.setState({ bot_id: data.id })
+        this.setState({ redirect: true })
       });
       console.log("DDD")
     });
-  
+
   }
-    //  componentDidMount ()  {
-    // fetch('/bot/'+this.props.match.params.bot_id+'/edit').then((response) => {
-    //     response.json().then((data) => {
-    //       this.setState({ bot_name: data[0].bot_name });
-    //       this.setState({ gender : data[0].gender});
-    //       this.setState({ age: data[0].age }) ;
-    //       this.setState({ Image: data[0].Img }); 
-    //     });
-    //   });
-        
-    //     }
-      
-    render() {
-    const { redirect,bot_id } = this.state;
+  //  componentDidMount ()  {
+  // fetch('/bot/'+this.props.match.params.bot_id+'/edit').then((response) => {
+  //     response.json().then((data) => {
+  //       this.setState({ bot_name: data[0].bot_name });
+  //       this.setState({ gender : data[0].gender});
+  //       this.setState({ age: data[0].age }) ;
+  //       this.setState({ Image: data[0].Img }); 
+  //     });
+  //   });
+
+  //     }
+
+  render() {
+    const { redirect, bot_id } = this.state;
     if (redirect) {
-      return <Redirect to={"/bot_list/"+ localStorage.getItem('user_id')} />
+      return <Redirect to={"/bot_list/" + localStorage.getItem('user_id')} />
     }
     else {
-      let {imagePreviewUrl} = this.state;
+      let { imagePreviewUrl } = this.state;
       let $imagePreview = null;
       if (imagePreviewUrl) {
-        
+
         $imagePreview = (<img src={imagePreviewUrl} />);
       }
-      return(
+      return (
         <Styles>
-          
-              <div className="container">
-                    <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
-                      <div className="card card-bot">
-                        <div className="card-body">
-                          <h5 className="card-title text-center">Create Bot form</h5>
-                          <form className="form-bot" onSubmit={this.handleUploadImage}>
-                                <div className="title_part">
-                                        <p className="col">Bot infomation</p>
-                                        <div className="line"></div>
-                                </div>
-                                <div className="row">
-                                        <div className="group col-lg-6">
-                                          {/* <div className="showimage col-lg-8">
+          <Multiselect
+            options={this.state.options} // Options to display in the dropdown
+            selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+            onSelect={this.onSelect} // Function will trigger on select event
+            onRemove={this.onRemove} // Function will trigger on remove event
+            displayValue="name" // Property name to display in the dropdown options
+          />
+
+
+          <div className="container">
+            <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
+              <div className="card card-bot">
+                <div className="card-body">
+                  <h5 className="card-title text-center">Create Bot form</h5>
+                  <form className="form-bot" onSubmit={this.handleUploadImage}>
+                    <div className="title_part">
+                      <p className="col">Bot infomation</p>
+                      <div className="line"></div>
+                    </div>
+                    <div className="row">
+                      <div className="group col-lg-6">
+                        {/* <div className="showimage col-lg-8">
                                           { imagePreviewUrl ?   $imagePreview :<img src={'/images/bot/bot_pic/Avatar.jpg'}/>}            
                                           </div> */}
-                                          <div className="showimage col-lg-8">
-                                          {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
-                                          return <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl}  />
-                                                })}
-        
-                                          </div> 
-                                          <div className="mt-3">                                           
-                                              <label for="uploadimage">Upload Proflie</label>
-                                              <input  ref={(ref) => { this.uploadInput = ref; }} onChange={(e)=>this._handleImageChange(e)} type="file" multiple />
-                                            </div>
-                                        </div>  
-                                        
-                                        <div className=" group col-lg-6">
-                                            <div className="">
-                                              <label  className="form-label">item name</label>
-                                              <input type="text"  name="item_name" value = {this.state.item_name}  ref={(ref) => { this.item_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
-                                            </div>
-                                            <div class="mt-3">
-                                              <label for="inputgender" class="form-label">type</label>
-                                              <select id="inputgender" name="type" value = {this.state.type}  ref={(ref) => { this.type = ref; }} onChange={this.handleChange} class="form-select">
-                                                  <option selected>Choose...</option>
-                                                  <option>Male </option>
-                                                  <option>Female</option>
-                                              </select>
-                                            </div>
-                                            <div className="mt-3">
-                                                <label for="inputFirstname" className="form-label">amount</label>
-                                                <input type="integer" name="amount" className="form-control" id="inputfirstname" value = {this.state.amount}   ref={(ref) => { this.amount = ref; }} onChange={this.handleChange} />
-                                            </div>
-                                            <div className="mt-3">
-                                                <label for="inputFirstname" className="form-label">Desciption</label>
-                                                <input type="integer" name="des" className="form-control" id="inputfirstname" value = {this.state.des}   ref={(ref) => { this.des = ref; }} onChange={this.handleChange} />
-                                            </div>
-                                        </div>
-                                </div>
-                                <div className="row row-2">
-                                        
-                                </div>
-                                {/* <div className="title_part">
+                        <div className="showimage col-lg-8">
+                          {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
+                            return <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
+                          })}
+
+                        </div>
+                        <div className="mt-3">
+                          <label for="uploadimage">Upload Proflie</label>
+                          <input ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
+                        </div>
+                      </div>
+
+                      <div className=" group col-lg-6">
+                        <div className="">
+                          <label className="form-label">item name</label>
+                          <input type="text" name="item_name" value={this.state.item_name} ref={(ref) => { this.item_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname" />
+                        </div>
+                        <div class="mt-3">
+                          <label for="inputgender" class="form-label">type</label>
+                          <select id="inputgender" name="type" value={this.state.type} ref={(ref) => { this.type = ref; }} onChange={this.handleChange} class="form-select">
+                            <option selected>Choose...</option>
+                            <option>Male </option>
+                            <option>Female</option>
+                          </select>
+                        </div>
+                        <div className="mt-3">
+                          <label for="inputFirstname" className="form-label">amount</label>
+                          <input type="integer" name="amount" className="form-control" id="inputfirstname" value={this.state.amount} ref={(ref) => { this.amount = ref; }} onChange={this.handleChange} />
+                        </div>
+                        <div className="mt-3">
+                          <label for="inputFirstname" className="form-label">Desciption</label>
+                          <input type="integer" name="des" className="form-control" id="inputfirstname" value={this.state.des} ref={(ref) => { this.des = ref; }} onChange={this.handleChange} />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row row-2">
+
+                    </div>
+                    {/* <div className="title_part">
                                         <p className="col ">Connect platform</p>
                                         <div className="line"></div>
                                 </div>
@@ -276,25 +282,24 @@ export default class Add_item extends React.Component {
                                   </div>
                                 </div> */}
 
-                            {/* {this.renderSwitch(this.state.platform)} */}
-                            {/* <Lineform />                                 */}
+                    {/* {this.renderSwitch(this.state.platform)} */}
+                    {/* <Lineform />                                 */}
 
-                              <div className="btn-createbot">
-                                  <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Create ChatBot</button>
-                              </div>
-
-
-                          </form>
-                          
-                        </div>
-                      </div>
+                    <div className="btn-createbot">
+                      <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Create ChatBot</button>
                     </div>
-                    
+
+
+                  </form>
+
                 </div>
+              </div>
+            </div>
+
+          </div>
         </Styles>
       )
     }
-}
+  }
 }
 
- 
