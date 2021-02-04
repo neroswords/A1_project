@@ -95,6 +95,8 @@ function Delete_pop({ showDelete_pop, setShowDelete_pop, Delete_bot, bot }) {
     Delete_bot(bot)
     setShowDelete_pop(prev => !prev)
   }
+  console.log(showDelete_pop);
+
   const modalRef = useRef();
   const animation = useSpring({
     config: {
@@ -141,8 +143,8 @@ function Delete_pop({ showDelete_pop, setShowDelete_pop, Delete_bot, bot }) {
                   </div>
                   you want to delete this bot?
                 <Container className="button-delete-bot">
-                    <Button className="cancle-delete-bot">cancle</Button>
-                    <Button className="delete-bot" onClick={() => { ConfirmDelete(bot) }}>delete</Button>
+                    <Button className="cancle-delete-bot" onClick={() => setShowDelete_pop(prev => !prev)}>cancle</Button>
+                    <Button className="delete-bot" onClick={() => { ConfirmDelete(bot)}}>delete</Button>
                   </Container>
                 </ModalContent>
                 <CloseModalButton

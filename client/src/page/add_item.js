@@ -2,6 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {withRouter, Redirect} from 'react-router-dom'
+import { Multiselect } from 'multiselect-react-dropdown';
 
 const Styles = styled.div`
   .container {
@@ -44,7 +45,7 @@ const Styles = styled.div`
     transition: all 0.2s;
     width: 80%;
     align-items: center;
-    background-color: #;
+    /* background-color: #; */
   }
   .btn-createbot{
       margin-top: 3rem;
