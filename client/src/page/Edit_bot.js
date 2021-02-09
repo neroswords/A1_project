@@ -169,6 +169,7 @@ class Edit_bot extends React.Component {
           this.setState({ age: data[0].age }) ;
           this.setState({ Image: data[0].Img }); 
         });
+        
       });
         
         }

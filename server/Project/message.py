@@ -11,6 +11,8 @@ def process_message(message,botID,min_conf):
     flag = True
     similar_trained_word = trained_collection.find({'botID': ObjectId(botID)})
     for word in similar_trained_word:
+        print("word =")
+        print(word)
         conf = float("{:.2f}".format(sentence_get_confident(message,word['question'])))
         if conf == False : 
             flag = False

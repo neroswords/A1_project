@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import {Button, Container, Row} from 'react-bootstrap';
 import {AddWord} from './AddTable/AddWord';
 import { AddStyle } from "./AddStyle";
-
 import { useTable,useFilters, useGlobalFilter, useAsyncDebounce, usePagination,useRowSelect   } from 'react-table'
+import ReactTable from 'react-table-6';
 import {matchSorter} from 'match-sorter'
-
+import 'react-table-6/react-table.css'
 
 const Styles = styled.div`
 
@@ -30,6 +30,7 @@ padding: 1rem;
       padding: 0.5rem;
       border-bottom: 1px solid #DADADA;
       border-right: 1px solid #DADADA;
+      
 
       :last-child {
         border-right: 0;
@@ -53,6 +54,13 @@ padding: 1rem;
   .pagination .button{
     
   }
+  .test-class{
+  position: relative;
+  float:right;
+  background:red;
+  }
+
+
 
 `;
 
@@ -113,7 +121,7 @@ function DefaultColumnFilter({
   const count = preFilteredRows.length
 
   return (
-    <input
+    <input 
       value={filterValue || ''}
       onChange={e => {
         setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
@@ -159,7 +167,7 @@ const EditableCell = ({
 
   
 
-  return <input value={value} onChange={onChange} onBlur={onBlur}  />
+  return <input  value={value} onChange={onChange} onBlur={onBlur}  />
 }
 // Set our editable cell renderer as the default Cell renderer
 
@@ -288,8 +296,17 @@ function TableShow({ columns, data, updateMyData, skipPageReset ,delete_trained}
   // Render the UI for your table
   return (
     <>
+
     <button onClick={()=> Ondelete(selectedFlatRows)}>delete</button>
+    <div className='test-class'>
+    <GlobalFilter 
+                preGlobalFilteredRows={preGlobalFilteredRows}
+                globalFilter={state.globalFilter}
+                setGlobalFilter={setGlobalFilter}
+              />
+      </div>
       <table {...getTableProps()} className="table">
+        
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -309,11 +326,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset ,delete_trained}
                 textAlign: 'right',
               }}
             >
-              <GlobalFilter
-                preGlobalFilteredRows={preGlobalFilteredRows}
-                globalFilter={state.globalFilter}
-                setGlobalFilter={setGlobalFilter}
-              />
+              
             </th>
           </tr>
         </thead>

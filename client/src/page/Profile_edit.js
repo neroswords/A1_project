@@ -184,9 +184,11 @@ componentDidMount ()  {
         this.setState({ shop_address: data[0].address });
         this.setState({ birthday: data[0].birthday });
         this.setState({ email: data[0].email });
+        console.log(data)
       });
-    });
       
+    });
+  
       }
     
 

@@ -128,6 +128,7 @@ def Profile_edit2(id):
         userinfo_cursor =  users_collection.find({"_id" : ObjectId(id)})
         userinfo_cur = list(userinfo_cursor) 
         data_info = dumps(userinfo_cur, indent = 2) 
+        print(data_info)
         return data_info
     if request.method == 'POST':
         user_info = request.get_json()

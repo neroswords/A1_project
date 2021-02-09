@@ -40,8 +40,8 @@ const Styles = styled.div`
   border-radius: 25px;
   border: 1px solid #0078ff;
   transition: 0.5s;
-  background-color: #0078ff;
-  color: #fff;
+  background-color: Blue;
+  color: green;
 }
 
 .buttonaddWord:hover{
@@ -55,7 +55,6 @@ function Tablecon({botID,add_data}) {
   const [showWord, setShowWord] = useState(false);
 
   let x = 0;
-  
   // for (newst in TableconState)
   // {
     
@@ -68,6 +67,7 @@ function Tablecon({botID,add_data}) {
  const openWord = () => {
     setShowWord(prev => !prev);
   }
+  
 
   useEffect(() => {
     fetch('/train_bot/'+botID+'/training')

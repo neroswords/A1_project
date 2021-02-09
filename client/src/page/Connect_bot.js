@@ -148,11 +148,23 @@ const ModalWrapper = styled.div`
   height: 550px;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  background: #fff;
+  background: red;
   z-index: -10 !important;
   grid-template-columns: 1fr 1fr;
   position: absolute;
   margin-top: 20%;
+  @media (max-width: 1986px) {
+    align-items : center;
+    z-index : 5000;
+    position: absolute;
+    left: 500px;
+    top: 50px;
+    display: flex;
+    background: black;
+    justify-content: space-around;
+    /* justify-content : center; */
+    min-width: max-content;
+  }
   /* display: grid; */
   /* position: absolute;
   /* top: 50%;
@@ -169,6 +181,7 @@ const CloseModalButton = styled(MdClose)`
   height: 25px;
   padding: 0;
   z-index: 10;
+  
 `;
 
 const ModalContent = styled.div`
@@ -177,6 +190,7 @@ const ModalContent = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 20%;
+
 `;
 
 
@@ -238,7 +252,6 @@ export function Connect_bot({ setShowForm, showForm, botID }) {
                       <button className="con-line btn btn-success btn-line text-uppercase" onClick={() => setplatform("line")} type=""><i class="icon-line fab fa-line fa-2x"></i></button>
                     </div>
                     {renderSwitch(platform, botID)}
-
                   </ModalContent>
                   <CloseModalButton
                     aria-label="Close modal"
