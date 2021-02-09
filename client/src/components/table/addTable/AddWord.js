@@ -2,21 +2,19 @@ import React, { useRef, useEffect, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { MdClose } from 'react-icons/md';
-import { Col, Form, Button, Container } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 
 
 const Background = styled.div`
-
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-
 const ModalWrapper = styled.div`
   width: 800px;
-  height: 500px;
+  height: 500px !important;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: #fff;
   color: #000;
@@ -55,6 +53,42 @@ const ModalContent = styled.div`
     color: #000;
   }
 
+
+  .input-question{
+    box-shadow: none;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #000;
+    outline: none;
+    margin-bottom: 10px;
+    font-size: 16px;
+    padding: 5px 0;
+
+  }
+
+  .input-answer{
+    box-shadow: none;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #000;
+    outline: none;
+    margin-bottom: 20px;
+    font-size: 16px;
+    padding: 5px 0;
+  }
+
+  form input{
+    width: 100%;
+  }
+
+  .group-Question{
+    margin-top: 5%;
+  }
+
+  .group-Answer{
+    margin-top: 2%;
+  }
+
 `;
 
 const CloseModalButton = styled(MdClose)`
@@ -68,17 +102,8 @@ const CloseModalButton = styled(MdClose)`
   z-index: 10;
 `;
 
-// const Form.Control = styled.div`
-//   box-shadow: none;
-//   outline: none;
-//   border: none;
-//   border-bottom: 2px solid #000;
-//   outline: none;
-//   margin-bottom: 20px;
-//   margin-top: 20px;
-//   font-size: 16px;
-//   padding: 5px 0;
-// `;
+
+
 
 
 
@@ -137,10 +162,43 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
     {showWord ? (
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
-            
+            <Container>
             <ModalWrapper showWord={showWord}>
               <ModalContent>
-              <Form.Group>
+                <article className="part Addword">
+                  <h1>
+                    Add your Question and Answer
+                  </h1>
+                  <form>
+                    <div className="group-Question">
+                      <label for="AddQuestion">Question</label>
+                      <input type="text" className="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question"></input>
+                    </div>
+                    <div className="group-Answer">
+                      <label for="AddAnswer">Answer</label>
+                      <input type="text" className="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer"></input>
+                    </div>
+                  </form>
+                </article>
+              <Button className="qa-comfirm" variant="success" onClick = {() => addword(botID) }>Comfirm</Button>
+              </ModalContent>
+              <CloseModalButton
+                aria-label="Close modal"
+                onClick={() => setShowWord(prev => !prev)}
+              />
+            </ModalWrapper>
+            </Container>
+          </animated.div>
+        </Background>
+      ) : null}
+    </div>
+    );  
+};
+
+export default AddWord;
+
+
+{/* <Form.Group>
                 <h1>Add your Question and Answer</h1>
                 <Form.Row>
                 <Form.Label column>
@@ -160,21 +218,4 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
                 </Col>
                 </Form.Row>
                 <br />
-              </Form.Group>
-              <Button className="qa-comfirm" variant="success" onClick = {() => addword(botID)   }>Comfirm</Button>
-              </ModalContent>
-              <CloseModalButton
-                aria-label="Close modal"
-                onClick={() => setShowWord(prev => !prev)}
-              />
-            </ModalWrapper>
-          </animated.div>
-        </Background>
-      ) : null}
-    </div>
-    );
-    
-  
-};
-
-export default AddWord;
+              </Form.Group> */}
