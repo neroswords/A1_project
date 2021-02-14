@@ -11,9 +11,9 @@ const Styles = styled.div`
   }
 
   .home .container {
-    // background: url(${process.env.PUBLIC_URL +'/images/Background.png'}) no-repeat fixed bottom;
-    background-size: 100%;
-    margin-bottom: 15%;
+    // background: url(${process.env.PUBLIC_URL +'/images/Background.png'});
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     position: relative;
 }
 
@@ -35,10 +35,11 @@ const Styles = styled.div`
     text-transform: uppercase;
   }
 
-  .main-text span {
-    font-size: 20px;
+  .main-text p {
+    font-size: 18px;
     color: grey;
     line-height: 1.7;
+    width: 21rem;
   }
 `;
 
@@ -51,7 +52,9 @@ export const Mainpage = () => (
         <section id="main-page">
           <div className="main-text">
             <h1>A1 Chatbot</h1>
-            <span>A1 chatbot is a web-application that can help manage online purchasing and selling. It also includes automated reply message, order management, and online shop system administration via bot which you can create by your own.</span>
+            <div className="text">
+              <p>A1 chatbot is a web-application that can help manage  online purchasing and selling. It also includes automated reply message, order management, and online shop system administration via bot which you can create by your own. </p>
+            </div>
           </div>
           <div className="img-main">
             <img src="./images/Telephone.png" width="110%"/>

@@ -2,11 +2,11 @@ import React, { useRef, useEffect, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { MdClose } from 'react-icons/md';
-import { Col, Form, Button, Container } from "react-bootstrap";
-import {Redirect} from 'react-router-dom';
+import { Button, Container } from "react-bootstrap";
+
 
 const Background = styled.div`
-  position: fixed;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,20 +14,18 @@ const Background = styled.div`
 
 const ModalWrapper = styled.div`
   width: 800px;
-  height: 500px;
+  height: 500px !important;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: #fff;
   color: #000;
   display: grid;
-  position: absolute;
   z-index: 10;
   border-radius: 10px;
-  transform: translate(30%, -10%);
-  // align-items: center;
-  // grid-template-columns: 1fr 1fr;
-  // position: absolute;
-  // top: 50%;
-  // left: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 200px;
 `;
 
 const ModalContent = styled.div`
@@ -37,13 +35,58 @@ const ModalContent = styled.div`
   justify-content: center;
   align-items: center;
   line-height: 1.8;
-  color: #141414;
+
   
-  button {
-    padding: 10px 24px;
-    background: #141414;
+  .qa-comfirm {
+    padding: 5px 12px;
+    margin-top: 15px;
+    font-size: 19px;
+    border-radius: 25px;
+    border: 3px solid #ffc15e;
+    transition: 0.5s;
+    margin: 10px;
+    background-color: #ffc15e;
     color: #fff;
+  }
+
+ .qa-comfirm:hover{
+    color: #000;
+  }
+
+
+  .input-question{
+    box-shadow: none;
+    outline: none;
     border: none;
+    border-bottom: 2px solid #000;
+    outline: none;
+    margin-bottom: 10px;
+    font-size: 16px;
+    padding: 5px 0;
+
+  }
+
+  .input-answer{
+    box-shadow: none;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #000;
+    outline: none;
+    margin-bottom: 20px;
+    font-size: 16px;
+    padding: 5px 0;
+  }
+
+  form input{
+    width: 100%;
+  }
+
+  .group-Question{
+    margin-top: 5%;
+  }
+
+  .group-Answer{
+    margin-top: 2%;
   }
 
 `;
@@ -60,7 +103,11 @@ const CloseModalButton = styled(MdClose)`
 `;
 
 
-export const AddWord = ({ showWord, setShowWord,botID, handleClick}) => {
+
+
+
+
+export const AddWord = ({ showWord, setShowWord,botID}) => {
   const modalRef = useRef();
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
@@ -73,7 +120,8 @@ export const AddWord = ({ showWord, setShowWord,botID, handleClick}) => {
         "Access-Control-Allow-Origin": "*",
         'Content-Type':'application/json'
         },
-    body: JSON.stringify(data)}).then(setShowWord(prev => !prev)).then(()=>handleClick())
+    body: JSON.stringify(data)}).then(setShowWord(prev => !prev))
+    window.location.reload("bot/"+id+'/trained');
   };
 
   const animation = useSpring({
@@ -87,6 +135,7 @@ export const AddWord = ({ showWord, setShowWord,botID, handleClick}) => {
   const closeModal = e => {
     if (modalRef.current === e.target) {
       setShowWord(false);
+      window.location.replace("/login")
     }
   };
 
@@ -98,6 +147,7 @@ export const AddWord = ({ showWord, setShowWord,botID, handleClick}) => {
       }
     },
     [setShowWord, showWord]
+    
   );
 
   useEffect(
@@ -107,37 +157,31 @@ export const AddWord = ({ showWord, setShowWord,botID, handleClick}) => {
     },
     [keyPress]
   );
-
+  
   return(
     <div>
     {showWord ? (
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
-            <Container className="col-sm-10 col-md-9">
+            <Container>
             <ModalWrapper showWord={showWord}>
               <ModalContent>
-              <Form.Group>
-                <h1>Add your Question and Answer</h1>
-                <Form.Row>
-                <Form.Label column>
-                  Question
-                </Form.Label>
-                <Col>
-                  <Form.Control type="text" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question" />
-                </Col>
-                </Form.Row>
-                <br />
-                <Form.Row>
-                <Form.Label column>
-                  Answer
-                </Form.Label>
-                <Col>
-                  <Form.Control type="text" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer" />
-                </Col>
-                </Form.Row>
-                <br />
-              </Form.Group>
-              <Button className="qa-comfirm" variant="success" onClick = {() => addword(botID)}>Comfirm</Button>
+                <article className="part Addword">
+                  <h1>
+                    Add your Question and Answer
+                  </h1>
+                  <form>
+                    <div className="group-Question">
+                      <label for="AddQuestion">Question</label>
+                      <input type="text" className="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question"></input>
+                    </div>
+                    <div className="group-Answer">
+                      <label for="AddAnswer">Answer</label>
+                      <input type="text" className="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer"></input>
+                    </div>
+                  </form>
+                </article>
+              <Button className="qa-comfirm" variant="success" onClick = {() => addword(botID) }>Comfirm</Button>
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"
@@ -149,9 +193,30 @@ export const AddWord = ({ showWord, setShowWord,botID, handleClick}) => {
         </Background>
       ) : null}
     </div>
-    );
-    
-  
+    );  
 };
 
 export default AddWord;
+
+
+{/* <Form.Group>
+                <h1>Add your Question and Answer</h1>
+                <Form.Row>
+                <Form.Label column>
+                  Question
+                </Form.Label>
+                <Col>
+                  <Form.Control type="text" className="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question" />
+                </Col>
+                </Form.Row>
+                <br />
+                <Form.Row>
+                <Form.Label column>
+                  Answer
+                </Form.Label>
+                <Col>
+                  <Form.Control type="text" className="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer" />
+                </Col>
+                </Form.Row>
+                <br />
+              </Form.Group> */}
