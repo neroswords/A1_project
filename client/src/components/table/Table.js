@@ -48,6 +48,9 @@ const Styles = styled.div`
 
 }
 
+.table tbody tr:nth-of-type(even){
+        background-color: #e5e5e5;
+    }
 
 .button-trained-word .buttondeleteWord{
     padding: 7px 15px !important;
@@ -237,7 +240,6 @@ const defaultColumn = {
 
 
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained ,botID }) {
-
   const Ondelete = (e) => {
     delete_trained(e)
   }
