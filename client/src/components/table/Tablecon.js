@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {Button} from 'react-bootstrap';
 import {AddWord} from './AddTable/AddWord';
 import { AddStyle } from "./AddStyle";
-
+import { useHistory } from "react-router-dom";
 
 const Styles = styled.div`
 .table{
@@ -49,9 +49,8 @@ const Styles = styled.div`
 function Tablecon({botID}) {
   const [TableconState, setTableconState] = useState([]);
   const [showWord, setShowWord] = useState(false);
-
-
- const openWord = () => {
+  let history = useHistory();
+  const openWord = () => {
     setShowWord(prev => !prev);
   }
 
@@ -74,11 +73,15 @@ function Tablecon({botID}) {
     
   }, []);
 
+  const handleClick =()=> {
+    history.push('/bot/'+botID+'/trained');
+  }
+
   return (
     <Styles>
     <div className="container">
           <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
-          <AddWord showWord={showWord} setShowWord={setShowWord} botID = {botID}/>
+          <AddWord showWord={showWord} setShowWord={setShowWord} botID = {botID} handleClick={handleClick}/>
           <AddStyle />
       
       <table className="table table-bordered">

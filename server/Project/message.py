@@ -1,11 +1,17 @@
 from Project.extensions import mongo
 from bson import ObjectId
 from Project.nlp import sentence_get_confident
+from pythainlp.tokenize import word_tokenize
 import json
 import requests
+import re
 def process_message(message,botID,min_conf):
     training_collection = mongo.db.training
     trained_collection = mongo.db.trained
+    msg_token = word_tokenize(message)
+    if msg_token == 'ค้นหา':
+      ans = json.loads(item_list_flexmessage(botID = botID))
+      return ans
     max = 0
     ans = ''
     flag = True
@@ -22,66 +28,19 @@ def process_message(message,botID,min_conf):
             break
         elif conf > max:
             max = conf
-            ans = word['answer']         
-    if flag:
-        similar_training_word = training_collection.find({'botID':ObjectId(botID)})
-        for word in similar_training_word:
-            conf = float("{:.2f}".format(sentence_get_confident(message,word['question'])))
-            if conf == False : 
-                flag = False
-                break
-            if conf == 1.0:
-                max = conf
-                ans = word['answer']
-                flag=False
-                break
-            elif conf > max:
-                max = conf
-                ans = word['answer']
+            ans = word['answer']
     if (max < min_conf):
         ans = "ขอโทษครับ ผมยังไม่เข้าใจคำนี้ครับกำลังศึกษาอยู่"
     if flag:
-        training_collection.insert_one({'question': message, 'answer': ans, 'confident': max, 'botID': ObjectId(botID)})
-    return ans,max
-
-def onState(sender_id,user_id, platform, state):
-    sentence = ["ขอชื่อ-นามสกุลด้วยครับ","ระบุที่อยู่ที่ต้องการจัดส่ง","โปรดเลือกบริการขนส่งที่ต้องการ","ยอดรายการทั้งหมด ถูกต้องใช่มั้ยครับ","จ่ายเงินได้เลย","ขอบคุณมากครับ"]
-    if state == "order":
-        response = sentence[0]
-        #set state to name
-    elif state == "name":
-        response = sentence[1]
-    elif state == "address":
-        response = sentence[2]
-    elif state == "delivery":
-        response = sentence[3]
-    elif state == "confirm":
-        response = sentence[4]
-    elif state == "payment":
-        response = sentence[5]
-    if platform == "facebook":
-        bot = Bot(page_facebook_access_token)
-        bot.send_text_message(sender_id, response)
-        payload = request.json
-        event = payload['entry'][0]['messaging']
-        for msg in event:
-            text = msg['message']['text']
-            sender_id = msg['sender']['id']
-        return "Message received"
-
-    elif platform == "line":
-        payload = request.json
-        Reply_token = payload['events'][0]['replyToken']
-        message = payload['events'][0]['message']['text']
-        ReplyMessage(Reply_token,response,Channel_access_token)
-    else:
-        return 200
+        similar_training_word = training_collection.find_one({'question':message,'botID': ObjectId(botID)})
+        if similar_training_word == None :
+            training_collection.insert_one({'question': message, 'answer': ans, 'confident': max, 'botID': ObjectId(botID)})
+    return {'message':ans }
 
 def ReplyMessage(Reply_token, TextMessage, Line_Acess_Token):
     LINE_API = 'https://api.line.me/v2/bot/message/reply'
 
     Authorization = 'Bearer {}'.format(Line_Acess_Token) ##ที่ยาวๆ
-    # print(Authorization)
     headers = {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization':Authorization
@@ -101,169 +60,202 @@ def ReplyMessage(Reply_token, TextMessage, Line_Acess_Token):
 
 
 
-def flexmassage(query) :
-    res = getdata(query)
+def item_list_flexmessage(**kwargs):
+    inventory_collection = mongo.db.inventory
+    search = "เสื้อ"
+    search_request = {'$and':[{'$or':
+        [
+            {'author': {'$regex': f".*{search}.*", '$options': 'i'}},
+            {'header': {'$regex': f".*{search}.*", '$options': 'i'}}
+        ]
+        },{'botID': ObjectId(kwargs['botID'])}
+        ]
+    }
+    data = inventory_collection.find(search_request).limit(10)
+    data_list = list(data) 
+    if len(data_list) == 0:
+        return '''{"message":"nodata"}'''
+    else:
+      contents ='''
+        {
+          "type": "bubble",
+          "body": {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+              {
+                "type": "text",
+                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                "wrap": true
+              }
+            ]
+          },
+          "footer": {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+              {
+                "type": "button",
+                "style": "primary",
+                "action": {
+                  "type":"postback",
+                  "label":"Buy",
+                  "data":"action=buy&itemid=111"
+                }
+              },
+              {
+                "type": "button",
+                "style": "primary",
+                "action": {
+                  "type": "uri",
+                  "label": "Set",
+                  "uri": "https://liff.line.me/1655652942-JB5revQV"
+                }
+              }
+            ]
+          }
+        }
+        '''
+      contents_block = ''''''
+      for index in data:
+        print(index)
+        if contents_block == '':
+          contents_block = contents
+        else:
+          contents_block = contents_block+','+contents
+    flex = '''
+    {
+      "type": "carousel",
+      "contents": [
+        %s
+      ]
+    }'''%(contents_block)
+    return flex
+
+def invoice_flexmessage(data):
+    res = "test"
     if res == 'nodata':
         return 'nodata'
     else:
-        productName,imgUrl,desc,cont = res
-    flex = '''
+      contents ='''
         {
-            "type": "bubble",
-            "direction": "ltr",
-            "hero": {
-                "type": "image",
-                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
-                "size": "full",
-                "aspectRatio": "20:13",
-                "aspectMode": "cover",
+          "type": "bubble",
+          "body": {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+              {
+                "type": "text",
+                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                "wrap": true
+              }
+            ]
+          },
+          "footer": {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+              {
+                "type": "button",
+                "style": "primary",
                 "action": {
+                  "type":"postback",
+                  "label":"Buy",
+                  "data":"action=buy&itemid=111"
+                }
+              },
+              {
+                "type": "button",
+                "style": "primary",
+                "action": {
+                  "type":"postback",
+                  "label":"More info",
+                  "data":"action=info&itemid=111"
+                },
+                {
                 "type": "uri",
-                "label": "Line",
-                "uri": "https://linecorp.com/"
-                }
+                "label": "Action 1",
+                "uri": "https://www.set.or.th/set/mainpage.do?language=th&country=TH"
+              }
+              }
+            ]
+          }
+        }
+        '''
+      contents_block = ''''''
+      for i in range(10):
+        if contents_block == '':
+          contents_block = contents
+        else:
+          contents_block = contents_block+','+contents
+      productName,imgUrl,desc,cont = res
+    flex = '''
+    {
+      "type": "carousel",
+      "contents": [
+        %s
+      ]
+    }'''%(contents_block)
+    return flex
+
+
+def confirm_flexmessage(sender_id):
+    customer_collection = mongo.db.customers
+    sender_define = customer_collection.find_one({"userID":sender_id})
+    flex = '''
+    {
+      "type": "bubble",
+      "direction": "ltr",
+      "header": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "ยืนยันชื่อ-นามสกุล",
+            "align": "center",
+            "contents": []
+          }
+        ]
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "%s %s",
+            "size": "xl",
+            "align": "start",
+            "contents": []
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "horizontal",
+        "position": "default",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "postback",
+              "label": "ยกเลิก",
+              "data": "confirm=cancle"
             },
-            "body": {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                {
-                    "type": "text",
-                    "text": "Brown Cafe",
-                    "weight": "bold",
-                    "size": "xl",
-                    "contents": []
-                },
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "margin": "md",
-                    "contents": [
-                    {
-                        "type": "icon",
-                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                        "size": "sm"
-                    },
-                    {
-                        "type": "icon",
-                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                        "size": "sm"
-                    },
-                    {
-                        "type": "icon",
-                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                        "size": "sm"
-                    },
-                    {
-                        "type": "icon",
-                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                        "size": "sm"
-                    },
-                    {
-                        "type": "icon",
-                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png",
-                        "size": "sm"
-                    },
-                    {
-                        "type": "text",
-                        "text": "4.0",
-                        "size": "sm",
-                        "color": "#999999",
-                        "flex": 0,
-                        "margin": "md",
-                        "contents": []
-                    }
-                    ]
-                },
-                {
-                    "type": "box",
-                    "layout": "vertical",
-                    "spacing": "sm",
-                    "margin": "lg",
-                    "contents": [
-                    {
-                        "type": "box",
-                        "layout": "baseline",
-                        "spacing": "sm",
-                        "contents": [
-                        {
-                            "type": "text",
-                            "text": "Place",
-                            "size": "sm",
-                            "color": "#AAAAAA",
-                            "flex": 1,
-                            "contents": []
-                        },
-                        {
-                            "type": "text",
-                            "text": "Miraina Tower, 4-1-6 Shinjuku, Tokyo",
-                            "size": "sm",
-                            "color": "#666666",
-                            "flex": 5,
-                            "wrap": true,
-                            "contents": []
-                        }
-                        ]
-                    },
-                    {
-                        "type": "box",
-                        "layout": "baseline",
-                        "spacing": "sm",
-                        "contents": [
-                        {
-                            "type": "text",
-                            "text": "Time",
-                            "size": "sm",
-                            "color": "#AAAAAA",
-                            "flex": 1,
-                            "contents": []
-                        },
-                        {
-                            "type": "text",
-                            "text": "10:00 - 23:00",
-                            "size": "sm",
-                            "color": "#666666",
-                            "flex": 5,
-                            "wrap": true,
-                            "contents": []
-                        }
-                        ]
-                    }
-                    ]
-                }
-                ]
+            "color": "#E74F4FFF",
+            "style": "primary"
+          },
+          {
+            "type": "button",
+            "action": {
+              "type": "postback",
+              "label": "ยืนยัน",
+              "data": "confirm=true"
             },
-            "footer": {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 0,
-                "spacing": "sm",
-                "contents": [
-                {
-                    "type": "button",
-                    "action": {
-                    "type": "uri",
-                    "label": "CALL",
-                    "uri": "https://linecorp.com"
-                    },
-                    "height": "sm",
-                    "style": "link"
-                },
-                {
-                    "type": "button",
-                    "action": {
-                    "type": "uri",
-                    "label": "WEBSITE",
-                    "uri": "https://linecorp.com"
-                    },
-                    "height": "sm",
-                    "style": "link"
-                },
-                {
-                    "type": "spacer",
-                    "size": "sm"
-                }
-                ]
-            }
-        }'''%(imgUrl,productName,desc,cont)
+            "style": "primary"
+          }
+        ]
+      }
+    }'''%(sender_define['name'], sender_define['surname'])
     return flex

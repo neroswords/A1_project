@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { MdClose } from 'react-icons/md';
 import { Col, Form, Button, Container } from "react-bootstrap";
-
+import {Redirect} from 'react-router-dom';
 
 const Background = styled.div`
   position: fixed;
@@ -60,11 +60,11 @@ const CloseModalButton = styled(MdClose)`
 `;
 
 
-
-export const AddWord = ({ showWord, setShowWord,botID}) => {
+export const AddWord = ({ showWord, setShowWord,botID, handleClick}) => {
   const modalRef = useRef();
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
+
   const addword =(id)=>{
     const data = {'question' : question,'answer' : answer ,'botID' : id}
     fetch('/bot/'+id+'/addword', {
@@ -73,7 +73,8 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
         "Access-Control-Allow-Origin": "*",
         'Content-Type':'application/json'
         },
-    body: JSON.stringify(data)}).then(setShowWord(prev => !prev))};
+    body: JSON.stringify(data)}).then(setShowWord(prev => !prev)).then(()=>handleClick())
+  };
 
   const animation = useSpring({
     config: {
