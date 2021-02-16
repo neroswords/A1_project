@@ -17,6 +17,7 @@ from flask_cors import CORS, cross_origin
 from Project.route.profile import profile
 from Project.route.bot import bot
 from Project.route.train_bot import train_bot
+from Project.route.merchant import merchant
 from .extensions import mongo
 
 
@@ -41,6 +42,7 @@ app.config['DOWNLOAD_FOLDER'] = './static/images'
 app.register_blueprint(profile, url_prefix='/profile')
 app.register_blueprint(bot, url_prefix='/bot')
 app.register_blueprint(train_bot, url_prefix='/train_bot')
+app.register_blueprint(merchant, url_prefix='/merchant')
 
 
 
@@ -58,69 +60,22 @@ def fileUpload():
 @app.route('/images/<path:image_name>')
 def serve_image(image_name):
     return send_from_directory(app.config['DOWNLOAD_FOLDER'],image_name)
-    
+
+
 
 # @app.before_request
 # def before_request():
 #     g.user = None
-
 #     if 'username' in session:
 #         g.user = session['username']
 
 
-#route start order state
-# @app.route('/webhook/<botid>/<platform>/order',methods=["POST"])
-# def getinfo():
 
 # @app.route('/logout')
 # def logout():
 #     session.pop('username',None)
 #     return render_template('home.html')
 
-# check state for keep data
-# @app.route('/webhook/<botid>/<platform>/<state>',methods=["POST"])
-# def getrequest():
-#     sentence = ["ขอชื่อ-นามสกุลด้วยครับ","โปรดระบุที่อยู่ที่ต้องการจัดส่ง","จ่ายเงิน"]
-#     if  platform == "facebook":
-#         elif request.method == "POST":
-#             if state == "none":
-#             elif state == "address":
-#             bot = Bot(page_facebook_access_token)
-#             payload = request.json
-#             event = payload['entry'][0]['messaging']
-#             print(event)
-#             for msg in event:
-#                 text = msg['message']['text']
-#                 sender_id = msg['sender']['id']
-#                 response = process_message(text)
-#                 bot.send_text_message(sender_id, response)
-#             return "Message received"
-
-#     elif platform == "line":
-#         elif request.method == "POST":
-#             payload = request.json
-#             Reply_token = payload['events'][0]['replyToken']
-#             # print(Reply_token)
-#             message = payload['events'][0]['message']['text']
-#             print(message)
-#             if 'สวัสดี' in message :
-#                 Reply_messasge = 'ดี'
-#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-            
-#             elif "เป็นไงบ้าง" in message :
-#                 Reply_messasge = 'สบายดี'
-#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-#                 # Reply_messasge = 'ราคา BITCOIN ขณะนี้ : {}'.format(GET_BTC_PRICE())
-#                 # ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-#             elif "ไอเหี้ยซัน" in message :
-#                 Reply_messasge = 'จริง'
-#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-#             else:
-#                 Reply_messasge = 'ขอโทษค่ะ ชั้นไม่เข้าใจที่คุณพูด'
-#                 ReplyMessage(Reply_token,Reply_messasge,Channel_access_token)
-#             return request.json, 200
-#     else:
-#         return 200
 
 
 

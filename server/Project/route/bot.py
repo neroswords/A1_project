@@ -1,5 +1,5 @@
 
-from flask import Flask, request, abort, render_template, session,url_for,redirect,g,send_from_directory,send_file,Blueprint
+from flask import Flask, request, abort, render_template, session,url_for,redirect,send_from_directory,send_file,Blueprint
 from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
 from pymessenger import Bot
 from Project.Config import *
@@ -142,13 +142,8 @@ def webhook(platform,botID):
         elif request.method == "POST":
             bot = Bot(bot_define["page_facebook_access_token"])
             payload = request.json
-            print("payload = ")
-            print(payload)
             event = payload['entry'][0]['messaging']
-            print(event)
             for msg in event:
-                print("meg = ")
-                print(msg)
                 text = msg['message']['text']
                 for i in template_collection_define:
                     if(text == i['type']):
@@ -202,7 +197,17 @@ def webhook(platform,botID):
                         if "message" in res.keys():
                             response = TextSendMessage(text = res['message'])
                         elif 'postback' in res.keys():
-                            response = FlexSendMessage(contents = res)   
+                            response = FlexSendMessage(contents = res)
+                        elif 'image' in res.keys():
+                            response = ImageSendMessage(
+                                original_content_url=res['image'],
+                                preview_image_url=res['image']'
+                            )
+                        elif 'sticker' in res.keys():
+                            response = sticker_message = StickerSendMessage(
+                                package_id=res['sticker'],
+                                sticker_id=res['sticker']
+                            )
                 line_bot_api.reply_message(Reply_token, response)
                 return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
             else:
@@ -243,6 +248,10 @@ def addword(botID):
         return {"message":"add done"}
     return {"message":"ok"}
 
+
+@bot.route('/item',methods=["GET"])
+def item():
+    return render_template('item_desc.html')
 
 # response = FlexSendMessage(
                         #     alt_text='hello',
@@ -305,8 +314,6 @@ def template(platform,botID):
                     "webview_height_ratio": "tall",},"buttons":[{"type":"web_url","url":"https://petersfancybrownhats.com","title":i["btn_title"]},
                     {"type":"postback","title":"Start Chatting","payload":"DEVELOPER_DEFINED_PAYLOAD"}]}
                     con_box["attachment"]["payload"]["elements"].append(element)
-               
-                print("_________________________________________________")
                 # print(con_box)
                 bot.send_message(sender_id,con_box )
                 break
