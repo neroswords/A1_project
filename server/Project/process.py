@@ -69,7 +69,7 @@ def isnotSymbol(string):
         return True
     else:
         return False
-
+#2
 def commandsHandler(**kwargs):
     cart_collection = mongo.db.carts
     customer_collection = mongo.db.customers
@@ -78,7 +78,7 @@ def commandsHandler(**kwargs):
     define_cart = cart_collection.find_one({'$and':[{'userID':ObjectId(kwargs['sender_id'])},{'botID':ObjectId(kwargs['botID'])}]})
     if commands[0] == "action=buy":
         if customer_define['state'] == 'none' or customer_define['state'] == 'inCart':
-        commd = commands[1].split('=')
+            commd = commands[1].split('=')
         if commd[0] == "itemid":
             if commd[1].isnumeric():
                 itemid = str(commd[1])
@@ -89,12 +89,12 @@ def commandsHandler(**kwargs):
                     myquery = {"userID": ObjectId(kwargs['sender_id'])}
                     newvalues = {"$push":{'cart':{'itemid': ObjectId(itemid), 'numbers': 1}}}
                     cart_collection.update_one(myquery,newvalues)
-                    customer_collection.update_one({'$and':[{"userID": ObjectId(kwargs['sender_id'])},{'botID':ObjectId(kwargs['botID'])}],{"$set": {"state":"inCart"}}})
+                    customer_collection.update_one({'$and':[{"userID": ObjectId(kwargs['sender_id'])},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
     elif commands[0] == "action=name":
         if customer_define['state'] == 'name':
             commd = commands[1].split('=')
             if commd[1] == "true":
-                customer_collection.update_one({'$and':[{"userID": ObjectId(kwargs['sender_id'])},{'botID':ObjectId(kwargs['botID'])}],{"$set": {"state":"address"}}})
+                customer_collection.update_one({'$and':[{"userID": ObjectId(kwargs['sender_id'])},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"address"}})
                 return {'message':'ระบุที่อยู่ที่ต้องการจัดส่ง'}
             elif commd[1] == "false":
                 return {'message':'ขอชื่อ-นามสกุลหน่อยครับ'}
@@ -102,7 +102,7 @@ def commandsHandler(**kwargs):
         if customer_define['state'] == 'address':
             commd = commands[1].split('=')
             if commd[1] == "true":
-                customer_collection.update_one({'$and':[{"userID": ObjectId(kwargs['sender_id'])},{'botID':ObjectId(kwargs['botID'])}],{"$set": {"state":"payment"}}})
+                customer_collection.update_one({'$and':[{"userID": ObjectId(kwargs['sender_id'])},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"payment"}})
                 return {'flex':'payment'}
             elif commd[1] == "false":
                 return {'message':'ขอชื่อ-นามสกุลหน่อยครับ'}
@@ -110,7 +110,7 @@ def commandsHandler(**kwargs):
         if customer_define['state'] == 'payment':
             commd = commands[1].split('=')
             if commd[1] == "true":
-                customer_collection.update_one({'$and':[{"userID": ObjectId(kwargs['sender_id'])},{'botID':ObjectId(kwargs['botID'])}],{"$set": {"state":"payment"}}})
+                customer_collection.update_one({'$and':[{"userID": ObjectId(kwargs['sender_id'])},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"payment"}})
                 return {'message':'tracking number'}
             elif commd[1] == "false":
                 return {'message':'โปรดจ่ายเงินด้วยครับ'}
@@ -118,9 +118,9 @@ def commandsHandler(**kwargs):
 
 def stateHandler(**kwargs):
     customer_collection = mongo.db.customers
-    customer_define = customer_collection.find_one('$and':[{"userID": ObjectId(kwargs['sender_id'])},{"botID": ObjectId(kwargs['botID'])}])
+    customer_define = customer_collection.find_one({'$and':[{"userID": ObjectId(kwargs['sender_id'])},{"botID": ObjectId(kwargs['botID'])}]})
     if 'msg' in kwargs.keys():
-        elif customer_define['state'] == "name":
+        if customer_define['state'] == "name":
             myquery = { '$and': [{"userID": ObjectId(kwargs['sender_id'])}, {"botID": ObjectId(kwargs['botID'])}]}
             newvalues = { "$set": {"fullname": kwargs['msg']}}
             customer_define.update_one(myquery,newvalues)
