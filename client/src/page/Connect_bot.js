@@ -215,6 +215,7 @@ class Connect_bot extends React.Component {
                         </div>
                     </div>   
                 </div>
+                <svg height="100%" width="100%" id="bg-svg" viewBox="0 0 1440 500" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150"><defs><linearGradient id="gradient"><stop offset="5%" stop-color="#fcb90088"></stop><stop offset="95%" stop-color="#f78da788"></stop></linearGradient></defs><path d="M 0,500 C 0,500 0,166 0,166 C 116.57142857142858,188.10714285714286 233.14285714285717,210.21428571428572 349,202 C 464.85714285714283,193.78571428571428 580,155.25 705,149 C 830,142.75 964.8571428571429,168.7857142857143 1089,177 C 1213.142857142857,185.2142857142857 1326.5714285714284,175.60714285714283 1440,166 C 1440,166 1440,500 1440,500 Z" stroke="none" stroke-width="0" fill="url(#gradient)" class="transition-all duration-300 ease-in-out delay-150"></path><defs><linearGradient id="gradient"><stop offset="5%" stop-color="#fcb900ff"></stop><stop offset="95%" stop-color="#f78da7ff"></stop></linearGradient></defs><path d="M 0,500 C 0,500 0,333 0,333 C 118.10714285714286,294.5 236.21428571428572,256 349,280 C 461.7857142857143,304 569.2500000000001,390.5 683,392 C 796.7499999999999,393.5 916.7857142857142,310 1044,286 C 1171.2142857142858,262 1305.607142857143,297.5 1440,333 C 1440,333 1440,500 1440,500 Z" stroke="none" stroke-width="0" fill="url(#gradient)" class="transition-all duration-300 ease-in-out delay-150"></path></svg>
             </Styles>
         )
       }

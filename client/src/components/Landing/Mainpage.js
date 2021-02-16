@@ -1,17 +1,23 @@
 import React from 'react';
 import { Jumbotron as Jumbo, Container } from 'react-bootstrap';
 import styled from 'styled-components';
+
 // import Telephone from './images/Telephone.png';
 
 const Styles = styled.div`
+
+  
   .home .jumbo {
     align-items: center;
     font-family: 'Public Sans', sans-serif;
     
+      
+    
+    
   }
 
   .home .container {
-    // background: url(${process.env.PUBLIC_URL +'/images/Background.png'}) no-repeat fixed bottom;
+   
     background-size: 100%;
     margin-bottom: 15%;
     position: relative;
@@ -33,29 +39,55 @@ const Styles = styled.div`
     font-size: 80px;
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
+    color: #14213d;
   }
 
-  .main-text span {
-    font-size: 20px;
-    color: grey;
+  .main-text p {
+    font-size: 18px;
+    color: #14213d;
     line-height: 1.7;
+    width: 21rem;
+    margin-top: 15%;
+  }
+
+  .img-main .img-phone {
+    width: 40%;
+    position: absolute;
+    margin-left: 45%;
+    margin-top: 3%;
+  }
+
+   .img-bg {
+    top: 0px;
+    position: absolute;
+    z-index: -1;
+    right:0px;
   }
 `;
 
 
 export const Mainpage = () => (
   <Styles>
+     
+            
+        
     <div className="home" >
+    
+    <div className="img-main" >
+            <img className="img-phone" src="./images/tel.png" width="40%" />
+
+          </div>
+          <img className="img-bg" src="./images/page.png" width="100%" />
     <Container className="container">
     <Jumbo fluid className="jumbo d-flex position-relative">
         <section id="main-page">
+        
           <div className="main-text">
             <h1>A1 Chatbot</h1>
-            <span>A1 chatbot is a web-application that can help manage online purchasing and selling. It also includes automated reply message, order management, and online shop system administration via bot which you can create by your own. </span>
+            <p>A1 chatbot is a web-application that can help manage online purchasing and selling. It also includes automated reply message, order management, and online shop system administration via bot which you can create by your own. </p>
           </div>
-          <div className="img-main">
-            <img src="./images/Telephone.png" width="110%"/>
-          </div>
+          
+          
         </section>
     </Jumbo>
     </Container>

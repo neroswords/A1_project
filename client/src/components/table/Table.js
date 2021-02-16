@@ -334,7 +334,21 @@ function TableShow({ columns, data, updateMyData, skipPageReset }) {
             </option>
           ))}
         </select>
-      </div>
+        
+      </div><pre hidden >
+          <code>
+            {JSON.stringify(
+              {
+                selectedRowIds: selectedRowIds,
+                'selectedFlatRows[].original': selectedFlatRows.map(
+                  c => c.original
+                ),
+              },
+              null,
+              2
+            )}
+          </code>
+        </pre>
     </>
   )
 }
