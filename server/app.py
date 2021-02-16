@@ -5,8 +5,10 @@ $ export MONGO_URI='mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.
 $ flask run
 """
 from  Project import app
-
+from gevent.pywsgi import WSGIServer
 
 if __name__ == '__main__':
+    # http_server = WSGIServer(('',200), app)
+    # http_server.serve_forever()
     app.secret_key = 'mysecret'
     app.run(port= 200,debug=True)

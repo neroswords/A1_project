@@ -2,7 +2,10 @@ import React, {useState, useEffect, useRef } from "react";
 import {Link} from "react-router-dom";
 import '../Components/Botlist/Bot_list.css';
 import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
-import DeleteModal from '../Components/delete_modal'
+// import DeleteModal from '../Components/delete_modal'
+import Delete_pop from "../Components/Delete_pop";
+// import Facebookform from "../Components/Form/facebookform";
+import Connect_bot from "../Page/Connect_bot";
 
 export default function Bot_list(props) {
     const [botlist,setBotlist] = useState([]);
@@ -19,16 +22,36 @@ export default function Bot_list(props) {
         setBotlist(newList);
     }
 
+    const [showDelete_pop, setShowDelete_pop] = useState(false);
+    const [showBotId, setShowBotId] = useState();
+    const openDelete_pop = (a) => {
+    setShowBotId(a)
+    setShowDelete_pop(prev => !prev);
+    }
+
+    const [showForm, setShowForm] = useState(false);
+    const openForm = (b) => {
+    setShowBotId(b)
+    setShowForm(prev => !prev);
+    }
+  
     useEffect(async () => {
         fetch('/profile/'+localStorage.getItem('user_id')).then(res => res.json().then(data => setBotlist(data)))
+        console.log(localStorage.getItem("access_token") )
     },[])
 
+
     const card = botlist.map((bot) => 
-        <Dropdown botData={bot} deleteBot={delete_bot} />
+        <Dropdown botData={bot} deleteBot={delete_bot} openDelete_pop={openDelete_pop} openForm={openForm}/>
     );
 
     return(
                 <div className="botlist-page">
+                    <div className="popup-del-connect">
+                        <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop} Delete_bot ={delete_bot} bot={showBotId}></Delete_pop>
+                        <Connect_bot showForm={showForm} setShowForm={setShowForm} botID={showBotId} ></Connect_bot>
+                    </div>
+
                     {/* <Navbar_member /> */}
                           <div class="container col-xl-9 col-lg-9 col-md-12 col-sm-12 col-xs-12">
                                     <div className="botlist-body">
@@ -47,6 +70,7 @@ export default function Bot_list(props) {
                                         {/* </div> */}
 
                                     </div> 
+
                         </div>
                 </div>    
                
@@ -54,10 +78,14 @@ export default function Bot_list(props) {
     );
 }
 
-function Dropdown({botData, deleteBot}){
+function Dropdown({botData, deleteBot, openDelete_pop, openForm}){
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
-    const onClick = () => setIsActive(!isActive);
+    const onClick = () => {setIsActive(prev => !prev)
+    // const [showIdbot, setshowIdbot] = useState(botData._id.$oid);
+    // console.log(isActive);
+    };
+
     // const forceUpdate = useForceUpdate();
     // console.log(botData)
     
@@ -65,8 +93,21 @@ function Dropdown({botData, deleteBot}){
     // const openConnect = () => {
     //     setShowConnect(prev => !prev);
     //   }
+    const OnDelete = () => {
+    openDelete_pop(botData._id.$oid)
+    onClick()
+    }
+
+    // const [showForm, setShowForm] = useState(false);
+    // const [showIdbot, setshowIdbot] = useState(botData._id.$oid);
+    const OnopenForm = () => {
+    openForm(botData._id.$oid)
+    onClick()
+    }
+    
 
     return(
+    <div>
     <div class="card-box">
         <Link to={'/bot/'+botData._id.$oid+'/training' } >
             <img src={'/images/bot/bot_pic/'+botData.Img} class="bot-img"/>
@@ -107,19 +148,24 @@ function Dropdown({botData, deleteBot}){
                         <a href={'/bot/'+botData._id.$oid+'/edit_bot'}><i class="fas fa-pen"></i> edit</a>
                     </li>
                     <li>
-                    <a href={'/bot/'+botData._id.$oid+'/connect'}><i class="fas fa-link"></i> Connect</a>
-                    {/* <Connect showConnect={showConnect} setShowConnect={setShowConnect} /> */}
+                    <button onClick={OnopenForm}><i class="fas fa-link"></i> Connect</button>
+                    {/* <a href={'/bot/'+botData._id.$oid+'/connect'} ><i class="fas fa-link"></i> Connect</a> */}
+                    {/* <Facebookform showForm={showForm} setShowForm={setShowForm} showIdbot={showIdbot}></Facebookform> */}
                     </li>
                     <li>
-                        <a href="#" onClick={()=>deleteBot(botData._id.$oid)}>
+                        <a href="#" onClick={OnDelete}>
                         <i class="fas fa-trash"></i> Delete</a>
                     </li>
                 </ul>
+               
             </div>
-        </div>
+        </div> 
+    </div>
     </div>
     )
 }
+
+
 
 // function useForceUpdate(){
 //     const [value, setValue] = useState(0); // integer state

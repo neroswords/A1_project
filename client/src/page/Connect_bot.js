@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import Facebookform from '../Components/Form/facebookform';
 import Lineform from '../Components/Form/lineform';
-import {withRouter, Redirect} from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 
+import { useSpring, animated } from 'react-spring';
+import { MdClose } from 'react-icons/md';
+import { Container } from "react-bootstrap";
 
 const Styles = styled.div`
   .container {
@@ -52,13 +55,12 @@ const Styles = styled.div`
     transition: all 0.2s;
     width: 80%;
     align-items: center;
-    background-color: #;
+    /* background-color: #; */
   }
   .btn-createbot{
       margin-top: 3rem;
       text-align : center;
   }
-
 
   .form-bot input {
     border-radius: 0.5rem;
@@ -118,7 +120,7 @@ const Styles = styled.div`
   }
 
   .connect_platform{
-    text-aling: center;
+    text-align: center;
   }
 
   .connect_platform button{
@@ -130,75 +132,130 @@ const Styles = styled.div`
 
 `;
 
-class Connect_bot extends React.Component {
-  constructor(props) {
-    super(props);
+const Background = styled.div`
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  /* position: absolute; */
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  
+`;
 
-    this.state = {
-      platform: 'facebook',
-      redirect: false,
-      bot_id:''
-    };
-    this.handlelineChange = this.handlelineChange.bind(this);
-    this.handlefacebookChange = this.handlefacebookChange.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
+const ModalWrapper = styled.div`
+  width: 400px;
+  height: 550px;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background: #fff;
+  z-index: -10 !important;
+  grid-template-columns: 1fr 1fr;
+  position: absolute;
+  margin-top: 20%;
+  /* display: grid; */
+  /* position: absolute;
+  /* top: 50%;
+  /* left: 50%; */
+  /* transform: translate(0%, -180%); */
+`;
 
-  renderSwitch(param) {
-    switch(param) {
+const CloseModalButton = styled(MdClose)`
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  z-index: 10;
+`;
+
+const ModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20%;
+`;
+
+
+export function Connect_bot({ setShowForm, showForm, botID }) {
+  const [platform, setplatform] = useState("facebook")
+  const renderSwitch = (platform, bot_id) => {
+    switch (platform) {
       case 'facebook':
-        return <Facebookform props={this.props.match.params}/>
+        return <Facebookform props={bot_id} />
       default:
-        return <Lineform props={this.props.match.params} />
+        return <Lineform props={bot_id} />
     }
   }
-  
-  handlelineChange (evt) {
-    evt.preventDefault() ;
-    this.setState({ platform: "line" });
-  }
-  handlefacebookChange (evt) {
-    evt.preventDefault() ;
-    this.setState({ platform: "facebook" });
-    console.log(this.state.platform)
-  }
-  handleChange (evt) {
-    this.setState({ [evt.target.name]: evt.target.value });
-    console.log(this.state)
-  }
 
-  handleSubmit= (evt) => {
-    evt.preventDefault() ;
-    // const form = {
-    // }
-    // fetch('/bot/create',{
-    //   method : 'POST',
-    //   headers : {
-    //     "Access-Control-Allow-Origin": "*",
-    //     'Content-Type':'application/json'
-    //   },
-    //   body : JSON.stringify(form)
-    // }).then( res => res.json()).
-    // then(data => {
-    //   this.setState({ bot_id : data.id})
-    //   this.setState({ redirect: true }) 
-    // }
-    // );
-    // .then(data =>
-      // this.props.history.push('/bot/connect_platform'+ data.bot_id +'/line') 
-    // )
-    
-  }
-  // "/profile/"+localStorage.getItem('user_id')
-    render() {
-      const { redirect,bot_id } = this.state;
-      if (redirect) {
-        return <Redirect to={"/bot/"+ bot_id +"/connect"} />
+  const modalRef = useRef();
+  const animation = useSpring({
+    config: {
+      duration: 250
+    },
+    opacity: showForm ? 1 : 0,
+    transform: showForm ? `translateY(0%)` : `translateY(-100%)`
+  });
+
+  const closeModal = e => {
+    if (modalRef.current === e.target) {
+      setShowForm(false);
+    }
+  };
+
+  const keyPress = useCallback(
+    e => {
+      if (e.key === 'Escape' && showForm) {
+        setShowForm(false);
+        console.log('I pressed');
       }
-      else {
-        return(
-            <Styles>
-                <div className="container">
+    },
+    [setShowForm, showForm]
+  );
+
+  useEffect(
+    () => {
+      document.addEventListener('keydown', keyPress);
+      return () => document.removeEventListener('keydown', keyPress);
+    },
+    [keyPress]
+  );
+
+  return (
+    <Styles>
+      <div>
+        {showForm ? (
+          <Background onClick={closeModal} ref={modalRef}>
+            <animated.div style={animation}>
+              {/* <Container> */}
+                <ModalWrapper showForm={showForm}>
+                  <ModalContent>
+                    <div>
+                      <button className="con-facebook btn btn-primary text-uppercase" onClick={() => setplatform("facebook")} type=""><i class="icon-facebook fab fa-facebook fa-2x"></i></button>
+                      <button className="con-line btn btn-success btn-line text-uppercase" onClick={() => setplatform("line")} type=""><i class="icon-line fab fa-line fa-2x"></i></button>
+                    </div>
+                    {renderSwitch(platform, botID)}
+
+                  </ModalContent>
+                  <CloseModalButton
+                    aria-label="Close modal"
+                    onClick={() => setShowForm(prev => !prev)}
+                  />
+                </ModalWrapper>
+              {/* </Container> */}
+            </animated.div>
+          </Background>
+        ) : null}
+      </div>
+
+    </Styles>
+  )
+}
+
+{/* <div className="container">
                     <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
                         <div className="card card-bot">
                             <div className="card-body">
@@ -214,12 +271,148 @@ class Connect_bot extends React.Component {
                             </div>
                         </div>
                     </div>   
-                </div>
-                <svg height="100%" width="100%" id="bg-svg" viewBox="0 0 1440 500" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150"><defs><linearGradient id="gradient"><stop offset="5%" stop-color="#fcb90088"></stop><stop offset="95%" stop-color="#f78da788"></stop></linearGradient></defs><path d="M 0,500 C 0,500 0,166 0,166 C 116.57142857142858,188.10714285714286 233.14285714285717,210.21428571428572 349,202 C 464.85714285714283,193.78571428571428 580,155.25 705,149 C 830,142.75 964.8571428571429,168.7857142857143 1089,177 C 1213.142857142857,185.2142857142857 1326.5714285714284,175.60714285714283 1440,166 C 1440,166 1440,500 1440,500 Z" stroke="none" stroke-width="0" fill="url(#gradient)" class="transition-all duration-300 ease-in-out delay-150"></path><defs><linearGradient id="gradient"><stop offset="5%" stop-color="#fcb900ff"></stop><stop offset="95%" stop-color="#f78da7ff"></stop></linearGradient></defs><path d="M 0,500 C 0,500 0,333 0,333 C 118.10714285714286,294.5 236.21428571428572,256 349,280 C 461.7857142857143,304 569.2500000000001,390.5 683,392 C 796.7499999999999,393.5 916.7857142857142,310 1044,286 C 1171.2142857142858,262 1305.607142857143,297.5 1440,333 C 1440,333 1440,500 1440,500 Z" stroke="none" stroke-width="0" fill="url(#gradient)" class="transition-all duration-300 ease-in-out delay-150"></path></svg>
-            </Styles>
-        )
-      }
-    }
-}
+                </div> */}
+
+
+// class Connect_bot extends React.Component {
+//   constructor(props, showForm, setShowForm, showIdbot) {
+//     super(props);
+//     console.log(props.showForm)
+//     this.state = {
+//       platform: 'facebook',
+//       redirect: false,
+//       bot_id: ''
+//     };
+//     this.handlelineChange = this.handlelineChange.bind(this);
+//     this.handlefacebookChange = this.handlefacebookChange.bind(this);
+//     this.handleChange = this.handleChange.bind(this);
+//     this.modalRef = React.createRef();
+//     this.keyPress = this.keyPress(this);
+
+//   }
+
+//   renderSwitch(param) {
+//     switch (param) {
+//       case 'facebook':
+//         return <Facebookform props={this.props.match.params} />
+//       default:
+//         return <Lineform props={this.props.match.params} />
+//     }
+//   }
+
+//   handlelineChange(evt) {
+//     evt.preventDefault();
+//     this.setState({ platform: "line" });
+//   }
+//   handlefacebookChange(evt) {
+//     evt.preventDefault();
+//     this.setState({ platform: "facebook" });
+//     console.log(this.state.platform)
+//   }
+//   handleChange(evt) {
+//     this.setState({ [evt.target.name]: evt.target.value });
+//     console.log(this.state)
+//   }
+
+//   handleSubmit = (evt) => {
+//     evt.preventDefault();
+//     // const form = {
+//     // }
+//     // fetch('/bot/create',{
+//     //   method : 'POST',
+//     //   headers : {
+//     //     "Access-Control-Allow-Origin": "*",
+//     //     'Content-Type':'application/json'
+//     //   },
+//     //   body : JSON.stringify(form)
+//     // }).then( res => res.json()).
+//     // then(data => {
+//     //   this.setState({ bot_id : data.id})
+//     //   this.setState({ redirect: true }) 
+//     // }
+//     // );
+//     // .then(data =>
+//     // this.props.history.push('/bot/connect_platform'+ data.bot_id +'/line') 
+//     // )
+
+//   }
+//   // "/profile/"+localStorage.getItem('user_id')
+
+//   render() {
+//     console.log(this.showForm)
+//     // const modalRef = useRef();
+//     const closeModal = e => {
+//       if (this.modalRef.current === e.target) {
+//         this.setShowForm(false);
+//       }
+//     };
+
+//     this.keyPress(
+//       e => {
+//         if (e.key === 'Escape' && this.showForm) {
+//           this.setShowForm(false);
+//           console.log('I pressed');
+//         }
+//       },
+//       [this.setShowForm, this.showForm]
+//     );
+
+//     this.componentDidMount(
+//       () => {
+//         document.addEventListener('keydown', this.keyPress);
+//         return () => document.removeEventListener('keydown', this.keyPress);
+//       },
+//       [this.keyPress]
+//     );
+
+
+//     const { redirect, bot_id } = this.state;
+//     if (redirect) {
+//       return <Redirect to={"/bot/" + bot_id + "/connect"} />
+//     }
+//     else {
+//       return (
+//         <Styles>
+//           <div>
+//             {this.showForm ? (
+//               <Background onClick={closeModal} ref={this.modalRef}>
+//                 {/* <animated.div style={animation}> */}
+//                 <Container>
+//                   <ModalWrapper showForm={this.showForm}>
+//                     <ModalContent>
+//                       facebook form
+//                 </ModalContent>
+//                     <CloseModalButton
+//                       aria-label="Close modal"
+//                       onClick={() => this.setShowForm(prev => !prev)}
+//                     />
+//                   </ModalWrapper>
+//                 </Container>
+//                 {/* </animated.div> */}
+//               </Background>
+//             ) : null}
+//           </div>
+//           {/* <div className="container">
+//                     <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
+//                         <div className="card card-bot">
+//                             <div className="card-body">
+//                                 <div className="title_part">
+//                                     <p className="col ">Connect platform</p>
+//                                     <div className="line"></div>
+//                                 </div>
+//                                 <div className="connect_platform">
+//                                   <button className="con-facebook btn btn-primary text-uppercase" onClick={this.handlefacebookChange} type=""><i class="icon-facebook fab fa-facebook fa-2x"></i></button>
+//                                   <button className="con-line btn btn-success btn-line text-uppercase" onClick={this.handlelineChange} type=""><i class="icon-line fab fa-line fa-2x"></i></button>
+//                                 </div>
+//                                 {this.renderSwitch(this.state.platform)}
+//                             </div>
+//                         </div>
+//                     </div>   
+//                 </div> */}
+//         </Styles>
+//       )
+//     }
+//   }
+// }
 
 export default withRouter(Connect_bot);         

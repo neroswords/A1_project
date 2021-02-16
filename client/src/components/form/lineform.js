@@ -64,7 +64,7 @@ const Styles = styled.div`
     border: none;
     border-bottom: 2px solid #000;
     outline: none;
-    margit-bottom: 30px;
+    /* margin-bottom: 30px; */
     margin-top: 1px;
     font-size: 16px;
     padding: 5px 0;
@@ -117,6 +117,7 @@ const Styles = styled.div`
 `;
 
 export default function Lineform(props) {
+    console.log(props)
     const [access_token, setAccess_token] = useState('');
     const [channel_secret, setChannel_secret] = useState('');
     const [basic_id, setBasic_id] = useState('');
