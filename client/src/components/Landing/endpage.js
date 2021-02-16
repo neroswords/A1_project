@@ -32,26 +32,33 @@ const Styles = styled.div`
   }
 
   h1 {
+   
+
     font-size: 40px;
     font-weight: 700;
     margin-bottom: 5%;
-    font-family: 'Roboto', sans-serif;
+    margin-top: 16%;
+    font-family: 'Roboto',sans-serif;
+    color: #14213D;
+
 
   }
 
   span {
-    font-size: 20px;
-    color: grey;
+    font-size: 17px;
+    color: #14213D;
     margin-bottom: 15%;
   }
 
   .btn-regis button {
-    color: black;
+
+    color: white;
     font-weight: bold;
     padding: 15px 90px;
     border-radius: 30px;
-    background-color: #fca311;
-    border-style :none;
+    background-color: #14213d;
+    border-style: none;
+    
   }
 
   .btn-regis button:hover {
@@ -60,7 +67,7 @@ const Styles = styled.div`
     padding: 15px 90px;
     border-radius: 30px;
     background-color: white;
-    border: 2px solid #fca311;
+    // border: 2px solid #fca311;
   }
     
 
