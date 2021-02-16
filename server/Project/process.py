@@ -69,7 +69,7 @@ def isnotSymbol(string):
         return True
     else:
         return False
-
+#2
 def commandsHandler(**kwargs):
     cart_collection = mongo.db.carts
     customer_collection = mongo.db.customers
