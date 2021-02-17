@@ -9,7 +9,7 @@ const Styles = styled.div`
     display: flex;
 }
 .container {
-    margin-top:2%
+    margin-top: 10px;
 }
 ` 
 

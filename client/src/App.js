@@ -42,8 +42,6 @@ function App() {
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/group" component={ Group }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/mapping" component={ Mapping }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/add_item" component={ add_item }/>
-            
-            
           </Switch>
     </Router>
   );

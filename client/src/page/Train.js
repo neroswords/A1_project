@@ -11,8 +11,7 @@ const Styles = styled.div`
     display: flex;
   }
   .container {
-    margin-top: 2%;
-    overflow:hidden;
+    margin-top: 10px;
   }
 
 `;
