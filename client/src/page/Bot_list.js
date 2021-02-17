@@ -6,6 +6,7 @@ import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
 import Delete_pop from "../Components/Delete_pop";
 // import Facebookform from "../Components/Form/facebookform";
 import Connect_bot from "../Page/Connect_bot";
+import Popup from 'reactjs-popup';
 
 export default function Bot_list(props) {
     const [botlist,setBotlist] = useState([]);
@@ -66,8 +67,8 @@ export default function Bot_list(props) {
 
                                     </div> 
                                     <div className="popup-del-connect">
-                                    <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop} Delete_bot ={delete_bot} bot={showBotId}></Delete_pop>
-                                    <Connect_bot showForm={showForm} setShowForm={setShowForm} botID={showBotId} ></Connect_bot>
+                                        <Delete_pop className="pop-del" showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop} Delete_bot ={delete_bot} bot={showBotId}></Delete_pop>
+                                        <Connect_bot className="pop-con-mm" showForm={showForm} setShowForm={setShowForm} botID={showBotId} ></Connect_bot>
                                     </div>
 
 
@@ -130,8 +131,8 @@ function Dropdown({botData, deleteBot, openDelete_pop, openForm}){
                 <i class="fab fa-facebook-square"></i>
             </div>
              : <div className="connect-area facebookblack">
-             <i class="fab fa-facebook-square"></i>
-         </div>
+                <i class="fab fa-facebook-square"></i>
+            </div>
          }
             
         </div>
@@ -148,7 +149,7 @@ function Dropdown({botData, deleteBot, openDelete_pop, openForm}){
                         <a href={'/bot/'+botData._id.$oid+'/edit_bot'}><i class="fas fa-pen"></i> edit</a>
                     </li>
                     <li>
-                    <button onClick={OnopenForm}><i class="fas fa-link"></i> Connect</button>
+                        <a onClick={OnopenForm}><i class="fas fa-link"></i> Connect </a>
                     {/* <a href={'/bot/'+botData._id.$oid+'/connect'} ><i class="fas fa-link"></i> Connect</a> */}
                     {/* <Facebookform showForm={showForm} setShowForm={setShowForm} showIdbot={showIdbot}></Facebookform> */}
                     </li>

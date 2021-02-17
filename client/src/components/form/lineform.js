@@ -8,61 +8,81 @@ const Styles = styled.div`
     margin-top: 2%;
 }
 
-.facebook-card {
-    border: 0;
+.line-card {
+    height: 30rem;
+    width: 25rem;
+    /* border: 0; */
     border-radius: 1rem;
     background-color: #fff;
     color: black;
     // box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
     // border: 1px solid rgba(0,0,0,.1);
-    border: 5px solid #34a853;
+    border: 3px solid #34a853;
 }
 
-.facebook {
+.line {
     padding : 5%;
 }
 
-.facebook p{
+.line p{
     font-weight: bold;
     font-size: 23px;
-    margin: 0 0 25px;
-}
-
-.link i{
-    color: #34a853;
-}
-
-.link p{
-    font-size: 11px;
     color: black;
+}
+
+
+
+.copy-link p{
+    font-size: 15px;
+    color: black;
+    float:left;
+    max-width: 95%;
+    overflow-x: auto;
+}
+
+.copy-link p::-webkit-scrollbar {
+  /* width: 5px; */
+  height: 6px;
+}
+
+.copy-link p::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 1px gray; 
+  border-radius: 0.5rem;
+}
+.copy-link p::-webkit-scrollbar-thumb {
+  background: #dddddd; 
+  border-radius: 0.5rem;
+}
+
+.copy-link i{
+    color: #34a853;
 }
 
 .copy-clipboard {
     color: #34a853;
-    position: absolute;
+    /* position: absolute;
     top: 275px;
-    right: 70px;
+    right: 70px; */
 }
 
-.link button{
+.copy-link button{
+    position: relative;
+    float : right;
     background: white;
-    padding: 5px 12px;
-    margin-top: 15px;
-    font-size: 19px;
-    border-radius: 25px;
-    border: 3px solid #34a853;
-    transition: 0.5s;
+    border-radius: 1rem;
+    border: 2px solid #34a853;
+    margin: 0 -5% 0 0;
 }
 
-.facebook .input-Box label{
-    font-size: 18px;
+.line .input-Box label{
+    font-size: 15px;
 }
 
-.facebook .input-Box input{
+.line .input-Box input{
     box-shadow: none;
     outline: none;
     border: none;
-    border-bottom: 2px solid #000;
+    border-bottom: 2px solid #d3d3d3;
     outline: none;
     /* margin-bottom: 30px; */
     margin-top: 1px;
@@ -80,10 +100,11 @@ const Styles = styled.div`
 
 #container-button{
     text-align: center;
+    margin-top: 15%;
 }
 
 #container-button .submit{
-    padding: 5px 12px;
+    padding: 5px 20px;
     margin-top: 15px;
     font-size: 19px;
     border-radius: 25px;
@@ -99,7 +120,7 @@ const Styles = styled.div`
 }
 
 #container-button .cancle{
-    padding: 5px 12px;
+    padding: 5px 30px;
     margin-top: 15px;
     font-size: 19px;
     border-radius: 25px;
@@ -113,6 +134,7 @@ const Styles = styled.div`
 #container-button .cancle:hover{
     color: #000;
 }
+
 
 `;
 
@@ -157,12 +179,12 @@ export default function Lineform(props) {
             <Styles>
                 <div className="container">
                     <div className="row my-3">
-                        <div className="group facebook-card col-lg-12">
-                            <form className="facebook" onSubmit={ handleSubmit }>
+                        <div className="group line-card col-lg-12">
+                            <form className="line" onSubmit={ handleSubmit }>
                                 <div className="row">
-                                    <p className="col">Connect to Line</p>
+                                    <p className="col mb-4">Connect to Line</p>
                                 </div>
-                                <div className="link">
+                                <div className="copy-link">
                                     <p>{packageJson.proxy}bot/webhook/{props.props.bot_id}/line</p>
                                     <button type='button' className="copy-clipboard" onClick={() => {navigator.clipboard.writeText(webhook)}}><i className="fas fa-copy fa-xs"></i></button>
                                 </div>
@@ -181,8 +203,8 @@ export default function Lineform(props) {
                                 </div>
                                 </div>
                                 <div id="container-button">
-                                    <button className="submit" type='submit'>Submit</button>
                                     <button className="cancle" type='button' onClick={() => {history.goBack()}} >Back</button>
+                                    <button className="submit" type='submit'>Submit</button>
                                 </div>
                             </form>
                         </div>  
