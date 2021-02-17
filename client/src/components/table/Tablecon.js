@@ -93,7 +93,6 @@ function Tablecon({botID,add_data}) {
 
   return (
     <Styles>
-    <div className="container">
           <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
           <AddWord showWord={showWord} setShowWord={setShowWord} botID = {botID}/>
           <AddStyle />
@@ -167,7 +166,6 @@ function Tablecon({botID,add_data}) {
           ))}
         </tbody>
       </table>
-    </div>
     </Styles>
   );
 }

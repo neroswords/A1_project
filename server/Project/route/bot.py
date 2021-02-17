@@ -146,7 +146,7 @@ def webhook(platform, botID):
             else:
                 return "This is method get from facebook"
         elif request.method == "POST":
-            bot = Bot(bot_define["page_facebook_access_token"])
+            bot = Bot(bot_define["page_facebook_access_token"],api_version="4.0")
             payload = request.json
             event = payload['entry'][0]['messaging']
         
@@ -361,26 +361,25 @@ def template(platform, botID):
                 # con_box["attachment"]["payload"]["elements"].append(element)
                 # con_box["attachment"]["payload"]["elements"].append(element)
                 con_box = {
-                            "attachment":{
-                            "type":"template",
-                            "payload":{
-                                "template_type":"open_graph",
-                                "elements":[
-                                {
-                                    
-                                    "buttons":[
-                                    {
-                                        "type":"web_url",
-                                      
-                                        "title":"View More"
-                                    }              
-                                    ]      
-                                }
-                                ]
-                            }
-                            }
-                }
-                bot.send_message(sender_id, con_box)
+               "attachment": {
+                    "type": "template",
+                    "payload": {
+                      "template_type": "button",
+                      "text": "click below to open webview",
+                      "buttons": [
+                        {
+                           "type":"web_url",
+                           "url":"https://elastic-wescoff-3f1163.netlify.app/",
+                           "title": "province",
+                           "messenger_extensions": "true",
+                           "webview_height_ratio": "tall"
+                        }
+                     ]
+                  }
+               }
+}
+               
+                print(bot.send_message(sender_id, con_box))
                 print("Sended")
                 break
             return "Message received"
@@ -398,7 +397,6 @@ def additem(botID):
     #     print(data)
     #     return data
     if request.method == 'POST':
-
         creator = request.form['creator']
         item_name = request.form['item_name']
         item_type = request.form['type']

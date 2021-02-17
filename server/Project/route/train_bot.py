@@ -74,6 +74,7 @@ def training(botID):
 @train_bot.route('/<botID>/trained',methods=["GET"])
 def trained(botID):
     if request.method == 'GET' :
+        print('0000000000000')
         trained_collection = mongo.db.trained
         trained_cursor = trained_collection.find({"botID" : ObjectId(botID)})
         listcursor = list(trained_cursor)

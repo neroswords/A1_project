@@ -47,7 +47,7 @@ const Styles = styled.div`
     transition: all 0.2s;
     width: 80%;
     align-items: center;
-    background-color: #;
+    /* background-color: #; */
   }
   .btn-createbot{
       margin-top: 3rem;

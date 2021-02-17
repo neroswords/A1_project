@@ -48,8 +48,11 @@ export default function Bot_list(props) {
     return(
         
                 <div className="botlist-page">
-                     <Connect_bot showForm={showForm} setShowForm={setShowForm} botID={showBotId} ></Connect_bot>
-                     <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop} Delete_bot ={delete_bot} bot={showBotId}></Delete_pop>
+                    <div className="popup-del-connect">
+                        <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop} Delete_bot ={delete_bot} bot={showBotId}></Delete_pop>
+                        <Connect_bot showForm={showForm} setShowForm={setShowForm} botID={showBotId} ></Connect_bot>
+                    </div>
+
                     {/* <Navbar_member /> */}
                           <div class="container col-xl-9 col-lg-9 col-md-12 col-sm-12 col-xs-12">
                                     <div className="botlist-body">
@@ -69,11 +72,6 @@ export default function Bot_list(props) {
                                         {/* </div> */}
 
                                     </div> 
-                                    <div className="popup-del-connect">
-                                    
-                                   
-                                    </div>
-
 
                         </div>
                 </div>    
