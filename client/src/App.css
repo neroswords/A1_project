@@ -1,6 +1,11 @@
 body {
-  background-color: #f4f4f4;
-  /* background-image: url("../public/images/"); */
+  background-color: white;
+  /* background: url('http://127.0.0.1:200//images/etc/main.png') no-repeat fixed bottom; */
+  background-position: absolute;
+  background-size: 100%;
+  margin-top: 0%;
+  /* background: url(${process.env.PUBLIC_URL +'/images/bg-home.png'}) no-repeat fixed bottom; */
+  /* background-color: white; */
 }
 
 
