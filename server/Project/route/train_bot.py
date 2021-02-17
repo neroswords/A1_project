@@ -8,7 +8,7 @@ from bson.json_util import dumps,loads
 
 train_bot = Blueprint("train_bot",__name__)
 
-@train_bot.route('/delete/<id>', methods=['POST'])
+@train_bot.route('/delete/trained/<id>', methods=['POST'])
 def delete(id):
     trained_collection = mongo.db.trained
     if request.method == 'POST':
@@ -74,6 +74,7 @@ def training(botID):
 @train_bot.route('/<botID>/trained',methods=["GET"])
 def trained(botID):
     if request.method == 'GET' :
+        print('0000000000000')
         trained_collection = mongo.db.trained
         trained_cursor = trained_collection.find({"botID" : ObjectId(botID)})
         listcursor = list(trained_cursor)

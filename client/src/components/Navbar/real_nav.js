@@ -19,6 +19,17 @@ function Nav(){
 function Normal_nav(){
   return(
     <Navbar_real>
+      <Link to="#">
+          <div className="btn-login btn-nav">
+              <a className="btn" role="button">Home</a>
+          </div>
+      </Link>
+      <Link to="#">
+          <div className="btn-login btn-nav">
+              <a className="btn" role="button">ABOUT</a>
+          </div>
+      </Link>
+     
       <Link to="/login">
           <div className="btn-login btn-nav">
               <a className="btn" role="button">Log in</a>

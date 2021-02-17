@@ -1,0 +1,27 @@
+server/Project/route/__pycache__/bot.cpython-37.pyc
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+client/.eslintcache
+server/Project/__pycache__/__init__.cpython-37.pyc
+server/Project/__pycache__/message.cpython-37.pyc
+server/Project/__pycache__/nlp.cpython-37.pyc
+server/Project/__pycache__/process.cpython-37.pyc
+client/node_modules

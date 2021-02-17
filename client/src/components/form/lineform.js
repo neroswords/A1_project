@@ -209,7 +209,9 @@ export default function Lineform(props) {
                             </form>
                         </div>  
                     </div>
+                
                 </div>
+                
             </Styles>
         )   
 }
