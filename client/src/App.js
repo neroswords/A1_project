@@ -12,6 +12,7 @@ import Learned from './Page/Learned';
 import Group from './Page/Group';
 // import DatatablePage from './Components/DatatablePage';
 import Mapping from './Page/Mapping';
+import Mapping_create from './Page/Mapping_create';
 import Train from './Page/Train';
 import Bot_list from './Page/Bot_list';
 import Profile_edit from './Page/Profile_edit';
@@ -42,6 +43,7 @@ function App() {
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/group" component={ Group }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/mapping" component={ Mapping }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/add_item" component={ add_item }/>
+            <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/mapping/create" component={ Mapping_create }/>
             
             
           </Switch>

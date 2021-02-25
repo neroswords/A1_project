@@ -269,7 +269,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
     []
   )
   const [showWord, setShowWord] = useState(false);
-  let history = useHistory();
+  // let history = useHistory();
   const openWord = () => {
     setShowWord(prev => !prev);
   }
@@ -343,7 +343,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
   )
 
   const handleClick =()=> {
-    history.push('/bot/'+botID+'/trained')
+    // history.push('/bot/'+botID+'/trained')
   }
 
   return (
