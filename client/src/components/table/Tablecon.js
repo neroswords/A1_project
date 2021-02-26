@@ -83,7 +83,7 @@ const Styles = styled.div`
 }
 
 .pagination{
-  margin-bottom: 15%;
+  margin-bottom: 0;
 }
 
 .parginate-text{
