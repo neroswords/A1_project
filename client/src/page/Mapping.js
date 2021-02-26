@@ -18,6 +18,7 @@ import { Redirect } from 'react-router-dom';
 const Styles = styled.div` 
 .mapping-page {
     display: flex;
+    min-height: 92vh;
 }
 .container {
     margin-top:2%

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useHistory } from "react";
 import styled from 'styled-components';
 import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination, useRowSelect } from 'react-table'
 import { matchSorter } from 'match-sorter'
@@ -269,7 +269,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
     []
   )
   const [showWord, setShowWord] = useState(false);
-  let history = useHistory();
+  // let history = useHistory();
   const openWord = () => {
     setShowWord(prev => !prev);
   }
@@ -342,9 +342,9 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
 
   )
 
-  const handleClick =()=> {
-    history.push('/bot/'+botID+'/trained')
-  }
+  // const handleClick =()=> {
+  //   history.push('/bot/'+botID+'/trained')
+  // }
 
   return (
     <>

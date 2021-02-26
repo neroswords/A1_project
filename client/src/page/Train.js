@@ -9,6 +9,7 @@ import Tablecon from "../Components/Table/Tablecon";
 const Styles = styled.div`
   .train-page {
     display: flex;
+    min-height: 92vh;
   }
   .container {
     margin-top: 2%;

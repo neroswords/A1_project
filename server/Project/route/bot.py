@@ -201,7 +201,7 @@ def webhook(platform,botID):
                         elif 'image' in res.keys():
                             response = ImageSendMessage(
                                 original_content_url=res['image'],
-                                preview_image_url=res['image']'
+                                preview_image_url=res['image']
                             )
                         elif 'sticker' in res.keys():
                             response = sticker_message = StickerSendMessage(
