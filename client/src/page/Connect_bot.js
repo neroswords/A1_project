@@ -54,29 +54,6 @@ const Background = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-<<<<<<< HEAD
-  width: 400px;
-  height: 550px;
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  background: red;
-  z-index: -10 !important;
-  grid-template-columns: 1fr 1fr;
-  position: absolute;
-  margin-top: 20%;
-  @media (max-width: 1986px) {
-    align-items : center;
-    z-index : 5000;
-    position: absolute;
-    left: 500px;
-    top: 50px;
-    display: flex;
-    background: black;
-    justify-content: space-around;
-    /* justify-content : center; */
-    min-width: max-content;
-  }
-=======
   background-color: white;
   padding: 3rem 3rem;
   border-radius: 0.5rem;
@@ -91,7 +68,6 @@ const ModalWrapper = styled.div`
   /* border-radius: 10px; */
   /* background: #f4f4f4; */
   /* grid-template-columns: 1fr 1fr; */
->>>>>>> 58fe51575b876a926977c3c1736e3d12d819e6ed
   /* display: grid; */
   /* top: 50%;
   left: 50%; */
@@ -118,12 +94,7 @@ const ModalContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-<<<<<<< HEAD
-  margin-top: 20%;
-
-=======
   /* margin-top: 20%; */
->>>>>>> 58fe51575b876a926977c3c1736e3d12d819e6ed
 `;
 
 
