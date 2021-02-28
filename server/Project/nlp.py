@@ -3,7 +3,7 @@ from pythainlp.tokenize import word_tokenize
 import pythainlp.util
 from pythainlp.word_vector import *
 from sklearn.metrics.pairwise import cosine_similarity  # ใช้หาค่าความคล้ายคลึง
-from pythainlp.soundex import udom83,lk82
+from pythainlp.soundex import lk82, metasound
 import numpy as np
 
 warnings.filterwarnings('ignore')
@@ -34,7 +34,7 @@ def sentence_sound_index(ss1,ss2,list = "none"):
             s2 = x
         catch = 0
         for i in range(len(s1)):
-            if udom83(s1[i])[0] == udom83(s2[i])[0] or (i+2<len(s2) and udom83(s1[i])[0] == udom83(s2[i+2])[0]) or (i+1<len(s2) and udom83(s1[i])[0] == udom83(s2[i+1])[0]) or (i-1 >=0 and udom83(s1[i])[0] == udom83(s2[i-1])[0]): 
+            if lk82(s1[i]) == lk82(s2[i]) or (i+2<len(s2) and lk82(s1[i]) == lk82(s2[i+2])) or (i+1<len(s2) and lk82(s1[i]) == lk82(s2[i+1])) or (i-1 >=0 and lk82(s1[i]) == lk82(s2[i-1])): 
                 catch += 1
         if len(s1) < len(s2):
             return catch/len(s1)
@@ -49,7 +49,7 @@ def sentence_sound_index(ss1,ss2,list = "none"):
             s2 = x
         catch = 0
         for i in range(len(s1)):
-            if udom83(s1[i])[0] == udom83(s2[i])[0] or (i+2<len(s2) and udom83(s1[i])[0] == udom83(s2[i+2])[0]) or (i+1<len(s2) and udom83(s1[i])[0] == udom83(s2[i+1])[0]) or (i-1 >=0 and udom83(s1[i])[0] == udom83(s2[i-1])[0]): 
+            if lk82(s1[i]) == lk82(s2[i]) or (i+2<len(s2) and lk82(s1[i]) == lk82(s2[i+2])) or (i+1<len(s2) and lk82(s1[i]) == lk82(s2[i+1])) or (i-1 >=0 and lk82(s1[i]) == lk82(s2[i-1])): 
                 catch += 1
         if len(s1) > len(s2):
             return float(catch/len(s1))
@@ -58,12 +58,12 @@ def sentence_sound_index(ss1,ss2,list = "none"):
 
 def sentence_get_confident(ss1,ss2,list = "none"):
     if list == "none":
-        if pythainlp.util.isthai(ss1, ignore_chars="1234567890.-,$ "):
+        if pythainlp.util.isthai(ss1, ignore_chars="1234567890.-,$[@_!#$%^&*()<>?/\|}{~:] "):
             return (sentence_similarity(ss1,ss2)+sentence_sound_index(ss1, ss2))/2
         else:
             return False #"ขอโทษครับ ผมพูดได้แค่ภาษาไทย"
     elif list == "invert":
-        if pythainlp.util.isthai(ss1, ignore_chars="1234567890.-,$ "):
+        if pythainlp.util.isthai(ss1, ignore_chars="1234567890.-,$[@_!#$%^&*()<>?/\|}{~:] "):
             return (sentence_similarity(ss1,ss2)+sentence_sound_index(ss1, ss2, list='invert'))/2
         else:
             return False #"ขอโทษครับ ผมพูดได้แค่ภาษาไทย"
@@ -71,11 +71,10 @@ def sentence_get_confident(ss1,ss2,list = "none"):
 # print(example[inp])
 # print(pythainlp.util.isthai(inp))
 # print(sentence_similarity("ฮัลโหล","โหล"))
-
-# print(word_tokenize("ตากลม"))
+# print(word_tokenize("ค้นหา"))
 # print(word_tokenize("สบายดี"))
-# print(sentence_sound_index('ครับ','คับ',list='invert'))
-# print(lk82('ตากลม'))
-# print(lk82('ตากลม'))
-# print(lk82('ตากลม') == lk82('ตากลม'))
+# print(sentence_sound_index('สรา','สา',list='invert'))
+# print(lk82('ไง'))
+# print(lk82('สา'))
+print(lk82('ไ') == lk82('สา'))
 # print(sentence_get_confident("หวัดดี", "ดี"))

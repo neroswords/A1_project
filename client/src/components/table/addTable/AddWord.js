@@ -111,6 +111,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
   const modalRef = useRef();
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
+
   const addword =(id)=>{
     const data = {'question' : question,'answer' : answer ,'botID' : id}
     fetch('/bot/'+id+'/addword', {

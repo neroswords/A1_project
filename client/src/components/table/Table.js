@@ -5,11 +5,9 @@ import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
 import { AddWord } from "./AddTable/AddWord";
 import { Button } from 'react-bootstrap';
-import {connect} from 'react-redux'
-import { Provider,useSelector,useDispatch} from 'react-redux'
+
 
 const Styles = styled.div`
-
   table {
     margin: 10px 0;
     font-size: 1.2em;
@@ -21,19 +19,15 @@ const Styles = styled.div`
         }
       }
     }
-
     th,
     td {
       margin: 0;
       padding: 12px 15px;
       border-bottom: 1px solid #DADADA;
       border-right: 1px solid #DADADA;
-      
-
       :last-child {
         border-right: 0;
       }
-
       input {
         font-size: 0.9rem;
         padding: 0;
@@ -41,16 +35,15 @@ const Styles = styled.div`
         border: 0;
       }
     }
-
   .trained-Word{
     background-color: transparent;
     border-radius: 25px;
     padding-left:15px;
   }
-
 }
-
-
+.table tbody tr:nth-of-type(even){
+        background-color: #e5e5e5;
+    }
 .button-trained-word .buttondeleteWord{
     padding: 7px 15px !important;
     font-size: 12px !important;
@@ -61,19 +54,9 @@ const Styles = styled.div`
     color: #fff ;
     margin-left: 15px;
   }
-
-
   .button-trained-word .buttondeleteWord:hover{
     color: #000;
   }
-  .test-class{
-  position: relative;
-  float:right;
-  background:red;
-  }
-
-
-
   .buttonaddWord{
   padding: 7px 15px;
   font-size: 12px;
@@ -83,21 +66,17 @@ const Styles = styled.div`
   background-color: #0078ff;
   color: #fff;
 }
-
 .buttonaddWord:hover{
   color: #000;
 }
-
 .pagination{
   margin-bottom: 15%;
 }
-
 .parginate-text{
   padding-top: 7px;
   margin-right: 1%;
   margin-left: 1%;
 }
-
 .pagination button{
   border-radius: 15px;
   width: 35px;
@@ -106,31 +85,24 @@ const Styles = styled.div`
   margin-left: .5%;
   border: none;
 }
-
 .pagination button:hover{
   border-radius: 30px;
   background-color: #fca311;
   color: #000;
 }
-
 .searchBox{
   width: 130px;
   height: 30px;
   border-radius: 25px;
   border: .5px solid #A9A9A9;
-
 }
-
 input::placeholder{
   padding-left:15px;
-
 }
-
 .button-trained-word .SearchBar{
   position:relative;
   float: right;
 }
-
   
 `;
 
@@ -147,7 +119,7 @@ const IndeterminateCheckbox = React.forwardRef(
 
     return (
       <>
-        <input  type="checkbox" ref={resolvedRef} {...rest} />
+        <input type="checkbox" ref={resolvedRef} {...rest} />
       </>
     )
   }
@@ -195,7 +167,7 @@ function DefaultColumnFilter({
   const count = preFilteredRows.length
 
   return (
-    <input 
+    <input
       value={filterValue || ''}
       onChange={e => {
         setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
@@ -205,67 +177,55 @@ function DefaultColumnFilter({
   )
 }
 
-function fuzzyTextFilterFn(rows, filterValue) {
+function fuzzyTextFilterFn(rows, id, filterValue) {
   return matchSorter(rows, filterValue, { keys: [row => row.values[id]] })
 }
 
 fuzzyTextFilterFn.autoRemove = val => !val
 
+const EditableCell = ({
+  value: initialValue,
+  row: { index },
+  column: { id },
+  updateMyData, // This is a custom function that we supplied to our table instance
+}) => {
 
+  const [value, setValue] = React.useState(initialValue)
 
+  const onChange = e => {
+    setValue(e.target.value)
 
-
-function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained ,botID ,disabled,setdisabled}) {
-
-  var a = 1
-
-  const Ondelete = (e) => {
- 
-    delete_trained(e)
-  }
-  const dispatch = useDispatch()
-   const Onedit = (e) =>{
-    dispatch({
-      type : "change",
-    })
   }
 
-  const EditableCell = ({
-    value: initialValue,
-    row: { index },
-    column: { id },
-    updateMyData, // This is a custom function that we supplied to our table instance
-  }) => {
-    const stetus = useSelector(state => state.aR)
-    const [value, setValue] = React.useState(initialValue)
-    const onChange = e => {
-      setValue(e.target.value)
-  
-    }
-  
-    const onBlur = () => {
-      updateMyData(index, id, value)
-      console.log("test")
-    }
-  
-    
-    React.useEffect(() => {
-      setValue(initialValue)
-    }, [initialValue])
-  
-    console.log("state = "+stetus)
-
-    return <input disabled = {(stetus)? "disabled" : ""}  className="trained-Word" value={value} onChange={onChange} onBlur={onBlur} />
+  const onBlur = () => {
+    updateMyData(index, id, value)
+    console.log("test")
   }
-  
+
+
+  React.useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+
+
+  return <input className="trained-Word" value={value} onChange={onChange} onBlur={onBlur} />
+}
+
 const defaultColumn = {
   Cell: EditableCell
 }
 
+
+function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained ,botID }) {
+  const Ondelete = (e) => {
+    delete_trained(e)
+  }
+
   const filterTypes = React.useMemo(
     () => ({
       fuzzyText: fuzzyTextFilterFn,
-      text: (rows, id, filterValue,disabled) => {
+      text: (rows, id, filterValue) => {
         return rows.filter(row => {
           const rowValue = row.values[id]
           return rowValue !== undefined
@@ -287,6 +247,7 @@ const defaultColumn = {
     []
   )
   const [showWord, setShowWord] = useState(false);
+
   const openWord = () => {
     setShowWord(prev => !prev);
   }
@@ -358,14 +319,15 @@ const defaultColumn = {
     }
 
   )
-    console.log(selectedFlatRows)
+
+
+
   return (
     <>
       <Container>
         <div className="button-trained-word">
           <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
           <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
-          <button onClick={() => Onedit()} >edit</button>
           <div className='SearchBar'>
           <GlobalFilter
             preGlobalFilteredRows={preGlobalFilteredRows}
@@ -399,7 +361,6 @@ const defaultColumn = {
                   textAlign: 'right',
                 }}
               >
-
               </th>
             </tr> */}
           </thead>
@@ -544,7 +505,7 @@ function Table({ botID, delete_trained, add_data }) {
 
 
   const resetData = () => setTableState(originalData)
-  console.log(TableState)
+
   return (
 
 
@@ -559,7 +520,6 @@ function Table({ botID, delete_trained, add_data }) {
       />
 
     </Styles>
-    
   );
 }
 

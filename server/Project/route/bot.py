@@ -1,20 +1,24 @@
 
-from flask import Flask, request, abort, render_template, session, url_for, redirect, g, send_from_directory, send_file, Blueprint
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user, AnonymousUserMixin
-from pymessenger.bot import Bot
+from flask import Flask, request, abort, render_template, session,url_for,redirect,send_from_directory,send_file,Blueprint
+from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
+from pymessenger import Bot
 from Project.Config import *
-from Project.models.bot import ChatBot
 from werkzeug.utils import secure_filename
 import json
 import requests
-from Project.message import ReplyMessage, process_message, onState
+from Project.message import process_message, item_list_flexmessage
 from Project.extensions import mongo, JSONEncoder
 from Project.nlp import sentence_get_confident
+from Project.process import stateHandler
 from bson import ObjectId
 import os.path
 from bson.json_util import dumps, loads
+from Project.route.facebook import call_facebook
+from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, FlexSendMessage, BubbleContainer, TemplateSendMessage, ConfirmTemplate, PostbackAction, MessageAction
 
-bot = Blueprint("bot", __name__)
+bot = Blueprint("bot",__name__)
 UPLOAD_FOLDER = './Project/static/images/bot/bot_pic'
 UPLOAD_FOLDER_ITEMS = './Project/static/images/bucket'
 
@@ -49,13 +53,13 @@ def create():
     bots_collection = mongo.db.bots
     filename = ''
     if request.method == 'POST':
-        creator = request.form['creator']
+        creator = request.form['creator'] 
         bot_name = request.form['bot_name']
-        gender = request.form['gender']
+        gender = request.form['gender'] 
         age = request.form['age']
-        if "file" not in request.files:
+        if  "file" not in request.files :
             filename = "Avatar.jpg"
-        else:
+        else :
             file = request.files['file']
             filename = secure_filename(file.filename)
             filename = creator+"&"+bot_name+os.path.splitext(filename)[1]
@@ -100,10 +104,9 @@ def edit(id):
             filename = creator+"&"+bot_name+os.path.splitext(filename)[1]
             destination = "/".join([UPLOAD_FOLDER, filename])
             file.save(destination)
-            session['uploadFilePath'] = destination
-            response = "success"
-            info_update = {"$set": {'bot_name': bot_name, 'owner':  ObjectId(creator),
-                                    'gender': gender, 'age': age, 'Img': filename}}
+            session['uploadFilePath']=destination
+            response="success"
+            info_update = { "$set": {'bot_name': bot_name, 'owner':  ObjectId(creator), 'gender': gender, 'age': age, 'Img' : filename}}
 
         done = bots_collection.update_one({'_id': ObjectId(id)}, info_update)
         return {'message': 'add bot successfully'}
@@ -122,8 +125,7 @@ def delete(id):
         else:
             return {"message": "delete unsuccessfully"}
 
-
-@bot.route('/<id>/add_message', methods=["POST"])
+@bot.route('/<id>/add_message',methods=["POST"])
 def add_sentence(id):
     training_collection = mongo.db.training
     sentence = request.get_json()
@@ -140,73 +142,52 @@ def webhook(platform, botID):
     template_collection_define = template_collection.find({'botID': ObjectId(botID)})
     if platform == "facebook":
         if request.method == "GET":
-            print(bot_define)
-            if request.args.get("hub.verify_token") == bot_define["verify_token"]:
+            if  request.args.get("hub.verify_token") == bot_define["verify_token"]:
                 return request.args.get("hub.challenge")
             else:
                 return "This is method get from facebook"
         elif request.method == "POST":
-            bot = Bot(bot_define["page_facebook_access_token"],api_version="4.0")
-            payload = request.json
-            event = payload['entry'][0]['messaging']
-        
-            for msg in event:
-                sender_id = msg['sender']['id']
-                if ('message' in payload['entry'][0]['messaging'][0]):
-                    if('attachment' in payload['entry'][0]['messaging'][0]['message'].keys()):
-                        response = "รับแต่ข้อความ"
-                        sender_id = msg['sender']['id']
-                        bot.send_text_message(sender_id, response)
-                    elif('text' in payload['entry'][0]['messaging'][0]['message'].keys() ):
-                        text = msg['message']['text']
-                        sender_id = msg['sender']['id']
-                        stop = False
-                        for i in template_collection_define:
-                            if(text in i['item_name']):
-                                template("facebook", botID)
-                                # bot.send_text_message(sender_id, response)
-                                stop = True
-                                break
-                        if(not stop):
-                            print("HERE")
-                            response = "TEST MESSAGE"
-                            # response, conf = process_message(
-                            #                     text, botID, bot_define['confident'])
-                            bot.send_text_message(sender_id,response)
-                            print("_________")
-                            break
-                    else :
-                        response = "รับแต่ข้อความ"
-                        
-                        bot.send_text_message(sender_id, response)
-                elif('postback' in payload['entry'][0]['messaging'][0]):  #เช็ค postback
-                    t_post = payload['entry'][0]['messaging'][0]['postback']['payload']
-                    t_post = t_post.split("&")
-                    timestamp = msg['timestamp']
-                    item_id = t_post[1]
-                    amount = 1
-                    if("cart" in t_post): # add cart
-                        cart_collection_define = cart_collection.find({'botID': ObjectId(botID)})
-                        for i in cart_collection_define:
-                            if (t_post[1] == i['item_id']):
-                                amount = amount +1
-                                print("ADD TO DB")
-                                break
-                        cart = cart_collection.insert_one({'sender': sender_id, 'timestamp': timestamp, 'botID': ObjectId(botID), 'item_id': ObjectId(item_id),'amount' : amount})
-                    if("detail" in t_post): # see more
-                        inventory_collection = mongo.db.inventory
-                        inventory_collection_define = inventory_collection.find({'botID': ObjectId(botID)})
-                        for i in inventory_collection_define:
-                            img_box = {
-                                        "attachment": {
-                                            "type": "image",
-                                            "payload": {
-                                            "url": "https://scontent.fbkk5-6.fna.fbcdn.net/v/t1.0-0/p526x296/143825331_1318519655180519_7870318405144231408_o.jpg?_nc_cat=101&ccb=2&_nc_sid=730e14&_nc_eui2=AeF06_4cd565Jp-vXIrA5zK1MdpurrvgN_kx2m6uu-A3-UzffIHVW-hHX_JWkyaNn_H4NoG259QkxPNuPGeKdtNh&_nc_ohc=FQAqoC-BwfsAX_5slEo&_nc_oc=AQlZ2LZE_eXl-H0kNfrlpdRy_ouWotl_WBvo0s9yA5h8kG3eCW80QNyiruVV_IP33b0&_nc_ht=scontent.fbkk5-6.fna&tp=6&oh=d72759d4a8aa42ce6380c6da80b300fa&oe=6047BF9E"
-                                            }
-                                        }
-                                    }
+            call_facebook(botID)
+            # bot = Bot(bot_define["page_facebook_access_token"],api_version="4.0")
+            # payload = request.json
+            # event = payload['entry'][0]['messaging']
+            # for msg in event:
+            #     text = msg['message']['text']
+            #     for i in template_collection_define:
+            #         if(text == i['type']):
+            #             template("facebook",botID)
+            #             break
+            #         else: 
+            #             sender_id = msg['sender']['id']
+            #             bot.send_text_message(sender_id, response)
+            #     elif('postback' in payload['entry'][0]['messaging'][0]):  #เช็ค postback
+            #         t_post = payload['entry'][0]['messaging'][0]['postback']['payload']
+            #         t_post = t_post.split("&")
+            #         timestamp = msg['timestamp']
+            #         item_id = t_post[1]
+            #         amount = 1
+            #         if("cart" in t_post): # add cart
+            #             cart_collection_define = cart_collection.find({'botID': ObjectId(botID)})
+            #             for i in cart_collection_define:
+            #                 if (t_post[1] == i['item_id']):
+            #                     amount = amount +1
+            #                     print("ADD TO DB")
+            #                     break
+            #             cart = cart_collection.insert_one({'sender': sender_id, 'timestamp': timestamp, 'botID': ObjectId(botID), 'item_id': ObjectId(item_id),'amount' : amount})
+            #         if("detail" in t_post): # see more
+            #             inventory_collection = mongo.db.inventory
+            #             inventory_collection_define = inventory_collection.find({'botID': ObjectId(botID)})
+            #             for i in inventory_collection_define:
+            #                 img_box = {
+            #                             "attachment": {
+            #                                 "type": "image",
+            #                                 "payload": {
+            #                                 "url": "https://scontent.fbkk5-6.fna.fbcdn.net/v/t1.0-0/p526x296/143825331_1318519655180519_7870318405144231408_o.jpg?_nc_cat=101&ccb=2&_nc_sid=730e14&_nc_eui2=AeF06_4cd565Jp-vXIrA5zK1MdpurrvgN_kx2m6uu-A3-UzffIHVW-hHX_JWkyaNn_H4NoG259QkxPNuPGeKdtNh&_nc_ohc=FQAqoC-BwfsAX_5slEo&_nc_oc=AQlZ2LZE_eXl-H0kNfrlpdRy_ouWotl_WBvo0s9yA5h8kG3eCW80QNyiruVV_IP33b0&_nc_ht=scontent.fbkk5-6.fna&tp=6&oh=d72759d4a8aa42ce6380c6da80b300fa&oe=6047BF9E"
+            #                                 }
+            #                             }
+            #                         }
       
-                        return bot.send_message(sender_id, img_box)
+            #             return bot.send_message(sender_id, img_box)
             #     print(text)
             #     tag = []
             #     taglist = []
@@ -254,31 +235,59 @@ def webhook(platform, botID):
         if request.method == "GET":
             return "This is method get from line"
         elif request.method == "POST":
-            Channel_access_token = bot_define['access_token']
+            line_bot_api = LineBotApi(bot_define['access_token'])
             payload = request.json
             if not payload['events']:
-                return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+                return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
             Reply_token = payload['events'][0]['replyToken']
             sender = payload['events'][0]['source']
-            message_type = payload['events'][0]['message']['type']
-            sender_define = customer_collection.find_one(
-                {'$and': [{'userID': sender['userId']}, {'botID': ObjectId(botID)}]})
-            if sender_define == None:
-                sender_define = {
-                    'userID': sender['userId'], 'type': sender['type'], 'state': 'none', 'botID': bot_define['_id']}
+            if 'message' in payload['events'][0].keys():
+                message_type = payload['events'][0]['message']['type']
+            elif 'postback' in payload['events'][0].keys():
+                message_type = 'postback'
+            sender_define = customer_collection.find_one({'$and':[{'userID':sender['userId']},{'botID': ObjectId(botID)}]})
+            if sender_define == None :
+                sender_define = {'userID':sender['userId'],'type':sender['type'],'state':'none','botID':bot_define['_id'],'status':'open'}
                 customer_collection.insert_one(sender_define)
-            if message_type == 'text':
-                message = payload['events'][0]['message']['text']
-                if sender_define['state'] == 'none':
-                    response, conf = process_message(
-                        message, botID, bot_define['confident'])
-                    print(response)
+            if sender_define['status'] == 'open' :
+                if message_type == 'text':
+                    data = {'message':payload['events'][0]['message']['text']}
+                    inState, res = stateHandler(sender_id=sender_define['userID'], botID=botID, msg= data)
+                elif message_type == 'postback':
+                    data = {'postback':payload['events'][0]['postback']['data']}
+                    inState, res = stateHandler(sender_id=sender_define['userID'], botID=botID, postback= data)
                 else:
-                    response = onState(message, sender_define['state'], botID)
-            ReplyMessage(Reply_token, response, Channel_access_token)
-            return request.json, 200
+                    response = TextSendMessage(text = "ขอโทษครับ ผมพูดได้แค่ภาษาไทยเท่านั้น")       
+                    if inState :
+                        if 'message' in res.keys():
+                            response = TextSendMessage(text = res)
+                        elif 'postback' in res.keys():
+                            response = FlexSendMessage(contents = res)
+                    else:
+                        if "message" in data.keys():
+                            res = process_message(data,botID,bot_define['confident'])
+                        elif "postback" in data.keys():
+                            res = commandsHandler(commands=data,sender_id=sender_define['userID'],botID=botID)
+                        if "message" in res.keys():
+                            response = TextSendMessage(text = res['message'])
+                        elif 'postback' in res.keys():
+                            response = FlexSendMessage(contents = res)
+                        elif 'image' in res.keys():
+                            response = ImageSendMessage(
+                                original_content_url=res['image'],
+                                preview_image_url=res['image']
+                            )
+                        elif 'sticker' in res.keys():
+                            response = sticker_message = StickerSendMessage(
+                                package_id=res['sticker'],
+                                sticker_id=res['sticker']
+                            )
+                line_bot_api.reply_message(Reply_token, response)
+                return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+            else:
+                return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
     else:
-        return 200
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
 
 @bot.route('/<botID>/training', methods=["GET"])
@@ -316,6 +325,32 @@ def addword(botID):
         return {"message": "add done"}
     return {"message": "ok"}
 
+@bot.route('/item',methods=["GET"])
+def item():
+    return render_template('item_desc.html')
+
+# response = FlexSendMessage(
+                        #     alt_text='hello',
+                        #     contents=res
+                        # )
+
+# confirm_template_message = TemplateSendMessage(
+#                         alt_text='Confirm template',
+#                         template=ConfirmTemplate(
+#                             text='Are you sure?',
+#                             actions=[
+#                                 PostbackAction(
+#                                     label='postback',
+#                                     display_text='postback text',
+#                                     data='action=confirm&state=name'
+#                                 ),
+#                                 MessageAction(
+#                                     label='message',
+#                                     text='message text'
+#                                 )
+#                             ]
+#                         )
+#                     )
 
 def template(platform, botID):
     training_collection = mongo.db.training
