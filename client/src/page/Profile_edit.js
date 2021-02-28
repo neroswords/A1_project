@@ -49,12 +49,12 @@ const Styles = styled.div`
     transition: all 0.2s;
     width: 80%;
     text-align: center;
-    align-item: center;
+    align-items: center;
   }
 
   .btn-regis .btn {
     text-align: center;
-    align-item: center;
+    align-items: center;
   }
 
   @mixin transition($property: all, $duration: 0.5s, $ease: cubic-bezier(0.65,-0.25,0.25, 1.95)) {
@@ -63,7 +63,7 @@ const Styles = styled.div`
   
   .btn-regis button {
     text-align: center;
-    align-item: center;
+    align-items: center;
     position: relative;
     display: inline-block;
     cursor: pointer;
