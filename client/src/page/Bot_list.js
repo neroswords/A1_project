@@ -17,6 +17,7 @@ export default function Bot_list(props) {
             },
         });
         const newList = botlist.filter((bot) => bot._id.$oid !== id);
+        
         setBotlist(newList);
     }
 
@@ -38,12 +39,14 @@ export default function Bot_list(props) {
         console.log(localStorage.getItem("access_token") )
     },[])
 
-
+ 
     const card = botlist.map((bot) => 
+  
         <Dropdown botData={bot} deleteBot={delete_bot} openDelete_pop={openDelete_pop} openForm={openForm}/>
     );
 
     return(
+        
                 <div className="botlist-page">
                     <div className="popup-del-connect">
                         <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop} Delete_bot ={delete_bot} bot={showBotId}></Delete_pop>
@@ -65,6 +68,7 @@ export default function Bot_list(props) {
                                         </Link>
                                         {/* <div class="card-box"> */}
                                             {card}
+                                           
                                         {/* </div> */}
 
                                     </div> 

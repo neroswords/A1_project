@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useState, useEffect, useRef } from "react";
 import Navbar_member from '../Components/Navbar/navbar_member';
 import styled from 'styled-components';
 import Invenlist from '../Components/Inventory/Inven_list';
+import '../Components/Inventory/Inven.css';
 
 const Styles = styled.div` 
 .inventory-page {
@@ -16,13 +17,25 @@ const Styles = styled.div`
 }
 ` 
 function Inventory(props){
+    const [inventory,setinventory] = useState([]);
+    useEffect(async () => {
+        fetch('/inventory/bot/'+props.match.params.bot_id).then(res => res.json().then(data => setinventory(data)))
+    },[])
+    console.log(inventory)
+    const card = inventory.map((inventory) => 
+        <Invenlist props={inventory}/>
+    );
+
     return(
         <Styles>
             <div className="inventory-page" >
                <Navbar_member botID = {props.match.params.bot_id} path={"inventory"} />
                <div className="inventory-body">
                     <h2 className=''>Inventories</h2>
-                    <Invenlist/>
+                    <button className="create-invenbtn btn-success" type="button">Create</button>
+                    <hr></hr>
+                    {card}
+                    <hr></hr>
                </div>  
             </div>
             

@@ -10,14 +10,15 @@ from flask_jwt_extended import JWTManager
 from base64 import encodebytes
 from hashlib import sha1
 import hmac
-from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
-# from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection,check_bot,find_bot
 from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
 from Project.route.profile import profile
 from Project.route.bot import bot
 from Project.route.train_bot import train_bot
+from Project.route.mapping import mapping
 from Project.route.merchant import merchant
+from Project.route.facebook import facebook
+from Project.route.inventory import inventory
 from .extensions import mongo
 
 
@@ -31,18 +32,22 @@ mongo.init_app(app)
 app.config['JWT_SECRET_KEY'] = 'boost-is-the-secret-of-our-app'
 jwt=JWTManager(app)
 
-login_manager = LoginManager()
-login_manager.login_view = 'profile.login'
-login_manager.init_app(app)
+# login_manager = LoginManager()
+# login_manager.login_view = 'profile.login'
+# login_manager.init_app(app)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['DOWNLOAD_FOLDER'] = './static/images'
+app.config['DOWNLOAD_FOLDER'] = './static'
 
 
 app.register_blueprint(profile, url_prefix='/profile')
 app.register_blueprint(bot, url_prefix='/bot')
 app.register_blueprint(train_bot, url_prefix='/train_bot')
 app.register_blueprint(merchant, url_prefix='/merchant')
+app.register_blueprint(mapping, url_prefix='/mapping')
+app.register_blueprint(merchant, url_prefix='/merchant')
+app.register_blueprint(facebook, url_prefix='/facebook')
+app.register_blueprint(inventory, url_prefix='/inventory')
 
 
 
@@ -51,7 +56,6 @@ def fileUpload():
     file = request.files['file'] 
     filename = secure_filename(file.filename)
     filename = images.save(form.image.data)
-    print(destination)
     return response
 
 
@@ -59,9 +63,11 @@ def fileUpload():
 
 @app.route('/images/<path:image_name>')
 def serve_image(image_name):
-    return send_from_directory(app.config['DOWNLOAD_FOLDER'],image_name)
+    return send_from_directory(app.config['DOWNLOAD_FOLDER']+"/images/",image_name)
 
-
+@app.route('/video/<path:video_name>')
+def serve_video(video_name):
+    return send_from_directory(app.config['DOWNLOAD_FOLDER']+"/video/",video_name)
 
 # @app.before_request
 # def before_request():
