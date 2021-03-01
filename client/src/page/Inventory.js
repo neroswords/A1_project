@@ -23,7 +23,7 @@ function Inventory(props){
                <Navbar_member botID = {props.match.params.bot_id} path={"inventory"} />
                <div className="inventory-body">
                     <h2 className=''>Inventories</h2>
-                    <Invenlist botID = {props.match.params.bot_id}/>
+                    <Invenlist botID = {props.match.params.bot_id} />
                </div>  
             </div>
             
