@@ -15,6 +15,7 @@ from flask_cors import CORS, cross_origin
 from Project.route.profile import profile
 from Project.route.bot import bot
 from Project.route.train_bot import train_bot
+from Project.route.mapping import mapping
 from Project.route.merchant import merchant
 from .extensions import mongo
 

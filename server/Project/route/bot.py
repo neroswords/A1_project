@@ -187,6 +187,7 @@ def webhook(platform,botID):
                     data = {'postback':payload['events'][0]['postback']['data']}
                     res = stateHandler(sender_id=sender_define['userID'], botID=botID, postback= data)
                 else:
+<<<<<<< HEAD
                     res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}  
                 # if "message" in data.keys():
                 #     res = process_message(data,botID,bot_define['confident'],sender_define['userID'])
@@ -228,6 +229,33 @@ def webhook(platform,botID):
                                 package_id=reply['packageId'],
                                 sticker_id=reply['stickerId']
                             ))
+=======
+                    response = TextSendMessage(text = "ขอโทษครับ ผมพูดได้แค่ภาษาไทยเท่านั้น")       
+                    if inState :
+                        if 'message' in res.keys():
+                            response = TextSendMessage(text = res)
+                        elif 'postback' in res.keys():
+                            response = FlexSendMessage(contents = res)
+                    else:
+                        if "message" in data.keys():
+                            res = process_message(data,botID,bot_define['confident'])
+                        elif "postback" in data.keys():
+                            res = commandsHandler(commands=data,sender_id=sender_define['userID'],botID=botID)
+                        if "message" in res.keys():
+                            response = TextSendMessage(text = res['message'])
+                        elif 'postback' in res.keys():
+                            response = FlexSendMessage(contents = res)
+                        elif 'image' in res.keys():
+                            response = ImageSendMessage(
+                                original_content_url=res['image'],
+                                preview_image_url=res['image']
+                            )
+                        elif 'sticker' in res.keys():
+                            response = sticker_message = StickerSendMessage(
+                                package_id=res['sticker'],
+                                sticker_id=res['sticker']
+                            )
+>>>>>>> main
                 line_bot_api.reply_message(Reply_token, response)
                 return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
             else:
