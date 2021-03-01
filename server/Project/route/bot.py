@@ -1,22 +1,25 @@
 
 from flask import Flask, request, abort, render_template, session,url_for,redirect,send_from_directory,send_file,Blueprint
-from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
 from pymessenger import Bot
 from Project.Config import *
 from werkzeug.utils import secure_filename
 import json
 import requests
-from Project.message import process_message, item_list_flexmessage
-from Project.extensions import mongo, JSONEncoder
+from Project.message import item_list_flexmessage
+from Project.extensions import mongo, JSONEncoder, server_url
 from Project.nlp import sentence_get_confident
-from Project.process import stateHandler
+from Project.process import stateHandler, process_message,commandsHandler
 from bson import ObjectId
 import os.path
 from bson.json_util import dumps,loads
 
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, FlexSendMessage, BubbleContainer, TemplateSendMessage, ConfirmTemplate, PostbackAction, MessageAction
+from linebot.models import (MessageEvent, TextMessage, TextSendMessage, FlexSendMessage,
+                            BubbleContainer, TemplateSendMessage, ConfirmTemplate,
+                            PostbackAction, MessageAction, ImageSendMessage,StickerSendMessage,
+                            ImageCarouselTemplate, ImageCarouselColumn,CarouselTemplate,CarouselColumn,URIAction,
+                            CarouselContainer, ImageComponent)
 
 bot = Blueprint("bot",__name__)
 UPLOAD_FOLDER = './Project/static/images/bot/bot_pic'
@@ -121,6 +124,7 @@ def delete(id):
 @bot.route('/<id>/add_message',methods=["POST"])
 def add_sentence(id):
     training_collection = mongo.db.training
+    sentences_collection = mongo.db.sentence
     sentence = request.get_json()
     sentences_collection.insert_one(sentence)
     
@@ -177,37 +181,53 @@ def webhook(platform,botID):
                 customer_collection.insert_one(sender_define)
             if sender_define['status'] == 'open' :
                 if message_type == 'text':
-                    data = {'message':payload['events'][0]['message']['text']}
-                    inState, res = stateHandler(sender_id=sender_define['userID'], botID=botID, msg= data)
+                    data = {"message":payload['events'][0]['message']['text']}
+                    res = stateHandler(sender_id=sender_define['userID'], botID=botID, message= data, confident=bot_define['confident'])
                 elif message_type == 'postback':
                     data = {'postback':payload['events'][0]['postback']['data']}
-                    inState, res = stateHandler(sender_id=sender_define['userID'], botID=botID, postback= data)
+                    res = stateHandler(sender_id=sender_define['userID'], botID=botID, postback= data)
                 else:
-                    response = TextSendMessage(text = "ขอโทษครับ ผมพูดได้แค่ภาษาไทยเท่านั้น")       
-                    if inState :
-                        if 'message' in res.keys():
-                            response = TextSendMessage(text = res)
-                        elif 'postback' in res.keys():
-                            response = FlexSendMessage(contents = res)
-                    else:
-                        if "message" in data.keys():
-                            res = process_message(data,botID,bot_define['confident'])
-                        elif "postback" in data.keys():
-                            res = commandsHandler(commands=data,sender_id=sender_define['userID'],botID=botID)
-                        if "message" in res.keys():
-                            response = TextSendMessage(text = res['message'])
-                        elif 'postback' in res.keys():
-                            response = FlexSendMessage(contents = res)
-                        elif 'image' in res.keys():
-                            response = ImageSendMessage(
-                                original_content_url=res['image'],
-                                preview_image_url=res['image']
-                            )
-                        elif 'sticker' in res.keys():
-                            response = sticker_message = StickerSendMessage(
-                                package_id=res['sticker'],
-                                sticker_id=res['sticker']
-                            )
+                    res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}  
+                # if "message" in data.keys():
+                #     res = process_message(data,botID,bot_define['confident'],sender_define['userID'])
+
+                if "message" in res.keys():
+                    response = [TextSendMessage(text = res['message'])]
+                elif 'flex' in res.keys():
+                    response = FlexSendMessage(
+                    alt_text='hello',
+                    contents= res['flex']
+                    )
+                elif 'image' in res.keys():
+                    response = ImageSendMessage(
+                        original_content_url=res['image'],
+                        preview_image_url=res['image']
+                )
+                elif 'sticker' in res.keys():
+                    response = StickerSendMessage(
+                        package_id=res['sticker'],
+                        sticker_id=res['sticker']
+                    )
+                elif 'group' in res.keys():
+                    response = []
+                    for reply in res['group']:
+                        if "text" == reply['type']:
+                            response.append(TextSendMessage(text = reply["data"]))
+                        elif 'flex' in res.keys():
+                            response.append(FlexSendMessage(
+                            alt_text='hello',
+                            contents= res['flex']
+                            ))
+                        elif 'image' == reply['type']:
+                            response.append(ImageSendMessage(
+                                original_content_url=server_url+"/images/bot/image_message/"+reply["data"],
+                                preview_image_url=server_url+"/images/bot/image_message/"+reply["data"]
+                            ))
+                        elif 'sticker' == reply['type']:
+                            response.append(StickerSendMessage(
+                                package_id=reply['packageId'],
+                                sticker_id=reply['stickerId']
+                            ))
                 line_bot_api.reply_message(Reply_token, response)
                 return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
             else:
@@ -243,7 +263,6 @@ def addword(botID):
         question = trained_update['question']
         creator = trained_update['botID'] 
         ans = trained_update['answer']
-        
         trained_collection.insert_one({'question': question, 'botID':  ObjectId(creator), 'answer': ans})
         return {"message":"add done"}
     return {"message":"ok"}
