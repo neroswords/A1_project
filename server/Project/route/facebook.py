@@ -67,7 +67,15 @@ def call_facebook(botID):
             t_post = t_post.split("&")
             timestamp = msg['timestamp']
             item_id = t_post[1]
+            inventory_collection = mongo.db.inventory
+            inventory_collection_define = inventory_collection.find_one({'_id': ObjectId(t_post[1])})
+            print("____________")
+            print(inventory_collection_define)
+            item_name = inventory_collection_define['item_name']
+            price_per_ob = inventory_collection_define['price']
+            img_name = inventory_collection_define['img'][0]
             amount = 1
+            total_ob = int(price_per_ob)*int(amount)
             flag = False
             if("cart" in t_post):  # add cart
                 cart_define = cart_collection.find_one({'$and':[{"userID": sender_id},{'botID':ObjectId(botID)}]})
@@ -77,10 +85,13 @@ def call_facebook(botID):
                 if(cart_define != None):
                     for idx, val in enumerate(cart_define['cart']):
                         amount = cart_define['cart']
+
                         if( ObjectId(t_post[1]) == val['itemid']):
                             amount[idx]["amount"] += 1 
+                            amount[idx]["total_ob"] = int(price_per_ob)*amount[idx]["amount"]
+                            print('total',total_ob)
                             myquery = {"userID": sender_id,'botID':ObjectId(botID)}
-                            newvalues = {"$set":{"cart": amount}}
+                            newvalues = {"$set":{"cart": amount }}
                             cart_collection.update_one(myquery,newvalues)
                             flag = True
                             break
@@ -119,14 +130,13 @@ def call_facebook(botID):
                             print(amount)
                             print("passed if")
                             info_update = {"$push": {'cart': {'itemid': ObjectId(
-                                item_id), 'amount': 1, 'timestamp': timestamp}}}
-                            done = cart_collection.update_one(
-                                {'userID': sender_id}, info_update)
+                                item_id), 'amount': 1, 'timestamp': timestamp,'item_name':item_name,'price_per_ob':price_per_ob,'total_ob':total_ob,'img_name':img_name}}}
+                            done = cart_collection.update_one({'userID': sender_id}, info_update)
                             flag = True
                     if(not flag):
                         print("passed else")
                         cart = cart_collection.insert_one({'userID': sender_id, 'botID': ObjectId(
-                            botID), 'cart': [{'itemid': ObjectId(item_id), 'amount': amount, 'timestamp': timestamp}]})
+                            botID), 'cart': [{'itemid': ObjectId(item_id), 'amount': amount, 'timestamp': timestamp,'item_name':item_name,'price_per_ob':price_per_ob,'total_ob':total_ob,'img_name':img_name}]})
                     print("end if")
                     response = "ใส่ตะกร้าแล้ว"
                     bot.send_text_message(sender_id, response)
@@ -237,18 +247,27 @@ def call_basket(botID, sender_id, bot):
     print(bot.send_message(sender_id, con_box))
 
 
-@facebook.route('/<botID>/basket/', methods=['GET'])
-def basket_facebook(botID):
+@facebook.route('/<botID>/basket/<userID>', methods=['GET'])
+def basket_facebook(botID,userID):
     if request.method == 'GET':
+        print("GET")
         cart_collection = mongo.db.carts
-        inventory_collection = mongo.db.inventory
-        cart_cursor = cart_collection.find({"botID": ObjectId(botID)})
-        listcursor = list(cart_cursor)
-        print(listcursor[0]['cart'])
+        cart_cursor = cart_collection.find({"userID": userID})
+        cart_cursor = list(cart_cursor)
+        print(cart_cursor)
+        print("GET")
+        # print(cart_cursor[0]['cart'][0]['itemid'])
 
-        inventory_cursor = inventory_collection.find({"botID": ObjectId(bot)})
-        inventorycursor = list(inventory_cursor)
-        data = dumps(inventorycursor, indent=2)
-        info = json.loads(data)
-        # info[0].append(res[0]['amount_inCart'])
-        return render_template('basket_shop.html', data=res, info=info)
+        return render_template('basket_shop.html', data=cart_cursor)
+
+
+
+@facebook.route('/<botID>/detail/<itemId>', methods=['GET'])
+def call_detail(botID,itemId):
+    if request.method == 'GET':
+        print("GET")
+        inventory_collection = mongo.db.inventory
+        inventory_cursor = inventory_collection.find({'_id': ObjectId(itemId)})
+        data = list(inventory_cursor)
+        print(data)
+        return render_template('Item_Detail.html', data=data)
