@@ -13,151 +13,68 @@ const Styles = styled.div`
     font-family: 'Public Sans', sans-serif;
     margin-top: 2%;
   }
-
-  .card-bot{
-    border: 0;
-    border-radius: 1rem;
-    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-  }
-  
-  .card-bot .card-title {
-    margin-bottom: 2rem;
-    font-size: 2rem;
-    text-transform : uppercase;
-    font-family: 'Roboto', sans-serif;
-  }
-  
-  .card-bot .card-body {
-    margin: 1rem;
-  }
-  
-
-  .title_part p{
-    font-weight: bold;
-    margin-top: 5%;
-    font-size: 23px;
-
-  }
-
-  .title_part  .line{
-    border: 10px;
-    height: 4px;
-    background-color: #fca311;
-    width: 200px;
-    margin-bottom: 5%;
-  }
-
-  .form-bot .btn {
-    border-radius: 1rem;
-    letter-spacing: .1rem;
-    font-weight: bold;
-    padding: 0.75rem;
-    transition: all 0.2s;
-    width: 80%;
-    align-items: center;
-    /* background-color: #; */
-  }
-  .btn-createbot{
-      margin-top: 3rem;
-      text-align : center;
-  }
-
-  .form-bot input {
-    border-radius: 0.5rem;
-  }
-
-  .form-bot select{
-    border-radius: 0.5rem;
-  }
-
-  .row-2{
-    margin-bottom: 2rem;
-    margin-top: 1rem;
-  }
-
-  input[type=file]::-webkit-file-upload-button {
-    border: 2px;
-    padding: 0.5rem ;
-    border-radius: 0.75rem;
-    background-color: #fca311;
-    transition: 1s;
-    color: white;
-    width: 40%;
-    
-  }
-  
-  input[type="file"] {
-    max-width: 100%;
-  }
-
-  .showimage {
-    margin-bottom: 1%;
-    text-align: center;
-  }
-
-  .showimage img{
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    width: 80%;
-    text-align: center;
-  }
-  
-  .vertical-line {
-    border-left: 1px solid black;
-
-  }
-
-  .btn-facebook {
-    background-color: #0078ff;
-  }
-
-  .btn-line {
-    background-color: #34a853 ;
-  }
-  
+ 
   .con-line{
     margin-left: 50px;
   }
 
-  .connect_platform{
-    text-align: center;
-  }
-
   .connect_platform button{
-    padding: 7px 10px;
+    padding: 7px 5px;
     border-radius: 40px;
-    
   }
   
-
+  .model-popup {
+    /* position: relative;
+    left: 50px;
+    right: 150px;
+    top: -250px;
+    z-index :1000;
+    background-color: black; */
+    /* background-color:black; */
+    /* width: 100%;
+    height: 100%; */
+  }  
 `;
 
 const Background = styled.div`
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  /* position: absolute; */
-  /* display: flex;
+  background: blue;
+  position: absolute;
+  display: flex;
   justify-content: center;
-  align-items: center; */
-  
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background :rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const ModalWrapper = styled.div`
-  width: 400px;
-  height: 550px;
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  background: #fff;
-  z-index: -10 !important;
-  grid-template-columns: 1fr 1fr;
-  position: absolute;
-  margin-top: 20%;
+  background-color: white;
+  padding: 3rem 3rem;
+  border-radius: 0.5rem;
+  /* width: 400px; */
+  /* height: 550px; */
+  /* z-index: 1000; */
+  /* position: absolute; */
+  /* top: calc(100% - 450px); // half of width */
+  /* right: calc(100% - 800px); // half of height */
+
+  /* box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2); */
+  /* border-radius: 10px; */
+  /* background: #f4f4f4; */
+  /* grid-template-columns: 1fr 1fr; */
   /* display: grid; */
-  /* position: absolute;
   /* top: 50%;
-  /* left: 50%; */
+  left: 50%; */
   /* transform: translate(0%, -180%); */
+  /* @media (max-width: 960px) {
+      background: red;
+    } */
 `;
 
 const CloseModalButton = styled(MdClose)`
@@ -169,6 +86,7 @@ const CloseModalButton = styled(MdClose)`
   height: 25px;
   padding: 0;
   z-index: 10;
+  
 `;
 
 const ModalContent = styled.div`
@@ -176,7 +94,7 @@ const ModalContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 20%;
+  /* margin-top: 20%; */
 `;
 
 
@@ -190,6 +108,30 @@ export function Connect_bot({ setShowForm, showForm, botID }) {
         return <Lineform props={bot_id} />
     }
   }
+
+//   const popupCenter = ({url, title, w, h}) => {
+//     // Fixes dual-screen position                             Most browsers      Firefox
+//     const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX;
+//     const dualScreenTop = window.screenTop !==  undefined   ? window.screenTop  : window.screenY;
+
+//     const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : window.screen.width;
+//     const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : window.screen.height;
+
+//     const systemZoom = width / window.screen.availWidth;
+//     const left = (width - w) / 2 / systemZoom + dualScreenLeft
+//     const top = (height - h) / 2 / systemZoom + dualScreenTop
+//     const newWindow = window.open(url, title, 
+//       `
+//       scrollbars=yes,
+//       width=${w / systemZoom}, 
+//       height=${h / systemZoom}, 
+//       top=${top}, 
+//       left=${left}
+//       `
+//     )
+
+//     // if (window.focus) newWindow.focus();
+// }
 
   const modalRef = useRef();
   const animation = useSpring({
@@ -226,7 +168,7 @@ export function Connect_bot({ setShowForm, showForm, botID }) {
 
   return (
     <Styles>
-      <div>
+      <div className="model-popup">
         {showForm ? (
           <Background onClick={closeModal} ref={modalRef}>
             <animated.div style={animation}>
@@ -238,7 +180,6 @@ export function Connect_bot({ setShowForm, showForm, botID }) {
                       <button className="con-line btn btn-success btn-line text-uppercase" onClick={() => setplatform("line")} type=""><i class="icon-line fab fa-line fa-2x"></i></button>
                     </div>
                     {renderSwitch(platform, botID)}
-
                   </ModalContent>
                   <CloseModalButton
                     aria-label="Close modal"
@@ -248,6 +189,7 @@ export function Connect_bot({ setShowForm, showForm, botID }) {
               {/* </Container> */}
             </animated.div>
           </Background>
+          
         ) : null}
       </div>
 

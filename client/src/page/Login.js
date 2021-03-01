@@ -59,14 +59,14 @@ const Styles = styled.div`
   }
 
   .form-signin .row {
-    margin-top 5%;
+    margin-top: 5%;
     border-radius: 1rem;
   }
 
   .btn-login .btn {
     margin-top:15%;
     text-align: center;
-    align-item: center;
+    align-items: center;
   }
 
   @mixin transition($property: all, $duration: 0.5s, $ease: cubic-bezier(0.65,-0.25,0.25, 1.95)) {
@@ -83,7 +83,7 @@ const Styles = styled.div`
 
   .btn-login button {
     text-align: center;
-    align-item: center;
+    align-items: center;
     position: relative;
     display: inline-block;
     cursor: pointer;
@@ -126,6 +126,7 @@ const Styles = styled.div`
 
 
 `;
+
 class Login extends React.Component {
   constructor(props) {
     super(props);

@@ -11,21 +11,3 @@ def save(botID):
         return {"massage" : "yes"}
 
 
-
-
-
-
-
-
-
-
-
-    #     trained_collection = mongo.db.trained
-    #     trained_update = request.get_json()
-    #     question = trained_update['question']
-    #     creator = trained_update['botID'] 
-    #     ans = trained_update['answer']
-        
-    #     trained_collection.insert_one({'question': question, 'botID':  ObjectId(creator), 'answer': ans})
-    #     return {"message":"add done"}
-    # return {"message":"ok"}

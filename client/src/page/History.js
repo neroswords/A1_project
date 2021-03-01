@@ -1,0 +1,26 @@
+import React from 'react'
+import Navbar_member from '../Components/Navbar/navbar_member';
+import styled from 'styled-components';
+
+const Styles = styled.div` 
+.history-page {
+    display: flex;
+}
+.container {
+    margin-top:2%
+}
+` 
+function History(props){
+    return(
+        <Styles>
+            <div className="history-page">
+                <Navbar_member botID = {props.match.params.bot_id} path={"history"} />
+                <div className="container">
+                    <h2 className='p-2 flex-grow-1 bd-highlight'>History</h2> 
+                </div>
+            </div>
+        </Styles>
+    );
+}
+
+export default History;
