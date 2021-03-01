@@ -3,10 +3,6 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 const Styles = styled.div` 
   .container {
-<<<<<<< HEAD
-    min-height:92vh;
-=======
->>>>>>> 5436b1e6f862dcab3e383f6bb3a45c9b39aefc45
     font-family: 'Public Sans', sans-serif;
     margin-top: 2%;
   }
