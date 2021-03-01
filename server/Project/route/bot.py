@@ -438,15 +438,18 @@ def additem(botID):
         # payload = request.get_json()
         str1 = item_type.replace(']', '').replace('[', '')
         item_type = str1.replace('"', '').split(",")
-        print("_______________")
-        print(type(item_type))
-        print(item_type)
         amount = request.form['amount']
         des = request.form['des']
+        price = request.form['price']
+        print("PRICE = ",price)
         count = 0
+        print(request.files)
+        print("________________")
         info_update = {'item_name': item_name, 'owner':  ObjectId(creator),
-                       'type': item_type, 'amount': amount, 'des': des, 'botID': ObjectId(botID)}
+                       'type': item_type, 'amount': amount, 'des': des, 'botID': ObjectId(botID) ,'price':price}
+        info_pic = []
         for i in request.files:
+            print(i)
             file = request.files[i]
             filename = secure_filename(file.filename)
             filename = item_name+"&" + \
@@ -455,14 +458,19 @@ def additem(botID):
             file.save(destination)
             session['uploadFilePath'] = destination
             response = "success"
-            info_pic = {'img'+str(count): filename}
-            info_update.update(info_pic)
+            
+            info_pic.append(filename)
+            
+            # info_pic = {'img'+str(count): filename}
+            # 
             count = count+1
-        done = inventory_collection.insert_one(info_update)
+        info_update.update({"img":info_pic})
+        print(info_update)
+        inventory_collection.insert_one(info_update)
         # info_update = {'item_name': item_name, 'owner':  ObjectId(creator),
         #                'type': item_type, 'amount': amount, 'des': des, 'Img': filename}
-        template_collection.insert_one({'item_name': item_name, 'owner':  ObjectId(creator),
-                                        'type': item_type, 'amount': amount, 'des': des, 'Img': filename, 'botID': ObjectId(botID)})
+        # template_collection.insert_one({'item_name': item_name, 'owner':  ObjectId(creator),
+        #                                 'type': item_type, 'amount': amount, 'des': des, 'Img': filename, 'botID': ObjectId(botID)})
         return {'message': 'add bot successfully'}
     return "add bot unsuccessfully"
 

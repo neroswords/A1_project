@@ -19,6 +19,8 @@ from Project.route.bot import bot
 from Project.route.train_bot import train_bot
 from Project.route.mapping import mapping
 from Project.route.merchant import merchant
+from Project.route.facebook import facebook
+from Project.route.inventory import inventory
 from .extensions import mongo
 
 
@@ -45,6 +47,8 @@ app.register_blueprint(bot, url_prefix='/bot')
 app.register_blueprint(train_bot, url_prefix='/train_bot')
 app.register_blueprint(mapping, url_prefix='/mapping')
 app.register_blueprint(merchant, url_prefix='/merchant')
+app.register_blueprint(facebook, url_prefix='/facebook')
+app.register_blueprint(inventory, url_prefix='/inventory')
 
 
 

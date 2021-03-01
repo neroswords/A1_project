@@ -150,21 +150,19 @@
                     <div class="col-md-12 col-lg-8 col-11 mx-auto main_cart mb-lg-0 mb-5 shadow">
                         <h2 class="py-4 font-weight-bold">Cart</h2>
                         {% set test = 500 %}
-                        {% for i in data %}
+                        {% for i in data[0]['cart'] %}
                         <div class="card p-4">
-                            {% set price = info[loop.index]['price'] %}
-                            {{test = test + price}}
-                            {{price}}
+                        {% set price = i['price_per_ob'] %}
                             <div class="row">
                                 <div
                                     class="col-md-5 col-11 mx-auto bg-light d-flex justify-content-center align-items-center shadow product_img">
-                                    <img src="/images/bucket/{{info[loop.index]['img0']}}" class="img-fluid"
+                                    <img src="/images/bucket/{{i['img_name']}}" class="img-fluid"
                                         alt="cart img">
                                 </div>
                                 <div class="col-md-7 col-11 mx-auto px-4 mt-2">
                                     <div class="row">
                                         <div class="col-6 card-title">
-                                            <h1 class="mb-4 product_name"> {{info[loop.index]['item_name']}}</h1>
+                                            <h1 class="mb-4 product_name"> {{i['item_name']}}</h1>
                                         </div>
                                         <div class="col-6">
                                             <ul class="pagination justify-content-end set_quantity">
@@ -174,7 +172,7 @@
                                                         <i class="fas fa-minus"></i> </button>
                                                 </li>
                                                 <li class="page-item"><input type="text" name="" class="page-link"
-                                                        value="{{i['amount_inCart']}}" id="{{[loop.index-1]}}">
+                                                        value="{{i['amount']}}" id="{{[loop.index-1]}}">
                                                 </li>
                                                 <li class="page-item">
                                                     <button class="page-link"
@@ -191,7 +189,7 @@
                                             <p class="MoveToWishList"><i class="fas fa-heart"></i>MOVE TO WISH LIST </p>
                                         </div>
                                         <div class="col-4 d-flex justify-content-end price_money">
-                                            <h3>฿<span id="{{[loop.index-1]}}2">{{i['amount_inCart']*price}} </span></h3>
+                                            <h3>฿<span id="{{[loop.index-1]}}2" >{{i['total_ob']}} </span></h3>
                                         </div>
                                     </div>
                                 </div>
@@ -208,11 +206,11 @@
                             <h2 class="product_name mb-5">The Total Amount Of</h2>
                             <div class="price_indiv d-flex justify-content-between">
                                 <p>Product amount</p>
-                                <p>$<span id="product_total_amt" >{{test}}</span></p>
+                                <p>$<span id="product_total_amt" >0</span></p>
                             </div>
                             <div class="price_indiv d-flex justify-content-between">
                                 <p>Shipping Charge</p>
-                                <p>$<span id="shipping_charge">50</span></p>
+                                <p>$<span id="shipping_charge" >0</span></p>
                             </div>
                             <hr />
                             <div class="total-amt d-flex justify-content-between font-weight-bold">
@@ -284,16 +282,38 @@
 
             };
         }
+        var i 
+       
+        for (i = 0; i < 2; i++) {
+        var itemprice = document.getElementById("["+i+"]2");
+        var product_total_amt = document.getElementById('product_total_amt');
+        var total_cart_amt = document.getElementById('total_cart_amt');
+        var shipping_charge = document.getElementById('shipping_charge');
+        product_total_amt.innerHTML = parseInt(product_total_amt.innerHTML)+parseInt(itemprice.innerHTML) ;
+        
+        }
+        console.log(product_total_amt.innerHTML )
+        total_cart_amt.innerHTML = parseInt(product_total_amt.innerHTML) + parseInt(shipping_charge.innerHTML);
+        
 
         function DeleteItem(btn) {
+ 
             var row = btn.parentNode.parentNode;
-            row.parentNode.parentNode.parentNode.parentNode.removeChild(row.parentNode.parentNode.parentNode);
+            console.log(row.parentNode)
+            console.log(row.parentNode.parentNode.parentNode.parentNode.removeChild(row.parentNode.parentNode.parentNode));
+      
+            for (i = 0; i < 2; i++) {
+            // var itemprice = document.getElementById("["+i+"]2");
+            var itemprice = document.getElementById("[0]2");
+            console.log(itemprice)
+            }
         }
 
         var product_total_amt = document.getElementById('product_total_amt');
         var shipping_charge = document.getElementById('shipping_charge');
         var total_cart_amt = document.getElementById('total_cart_amt');
         var discountCode = document.getElementById('discount_code1');
+
         const decreaseNumber = (incdec, itemprice,price ) => {
             var itemval = document.getElementById(incdec);
             var itemprice = document.getElementById(itemprice);
