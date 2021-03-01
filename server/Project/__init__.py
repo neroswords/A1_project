@@ -17,11 +17,7 @@ from flask_cors import CORS, cross_origin
 from Project.route.profile import profile
 from Project.route.bot import bot
 from Project.route.train_bot import train_bot
-<<<<<<< HEAD
-from Project.route.mapping import mapping
-=======
 from Project.route.merchant import merchant
->>>>>>> developer/line
 from .extensions import mongo
 
 
@@ -46,11 +42,7 @@ app.config['DOWNLOAD_FOLDER'] = './static/images'
 app.register_blueprint(profile, url_prefix='/profile')
 app.register_blueprint(bot, url_prefix='/bot')
 app.register_blueprint(train_bot, url_prefix='/train_bot')
-<<<<<<< HEAD
-app.register_blueprint(mapping, url_prefix='/mapping')
-=======
 app.register_blueprint(merchant, url_prefix='/merchant')
->>>>>>> developer/line
 
 
 

@@ -19,35 +19,7 @@ const Styles = styled.div`
 function Learned(props){
     const [deleteState,setdeleteState] = useState([]);
     const  [Info,setInfo] = useState([]);
-    const delete_trained =(data)=>{
-        var newdata = []
-        var i = 0
-
-        // var a = []
-        for (i = 0; i < data.length; i++){
-            newdata.push(data[i].original)
-        }
-        // console.log(data)
-        console.log(newdata)
-        // console.log(data[0].original.ReplyWord)
-        // const newdata = new FormData();
-        // newdata.append('id', data);
-        // newdata.append('gender' ,this.gender.value);
-        // newdata.append('age' ,this.age.value);
-
-        if (data[0]){
-            fetch('/train_bot/delete/'+data[0].original.id, {
-                method : 'POST',
-                headers : {
-                    "Access-Control-Allow-Origin": "*",
-                    'Content-Type':'application/json'
-                    },
-                    body : JSON.stringify(newdata),
-                });
-                console.log(data)
-                window.location.reload("bot/"+deleteState.bot_id+'/trained');
-        }    
-    }
+    
     const add_data = (data) =>{
         deleteState.push(data)
         console.log(deleteState)
@@ -56,10 +28,34 @@ function Learned(props){
         console.log(id.botID)
     }
 
- 
+    const delete_trained = (data) => {
+        // setShowDelete_table(prev => !prev)
+        console.log(data)
+          var newdata = []
+          var i = 0
+          for (i = 0; i < data.length; i++){
+              newdata.push(data[i].original)
+          }
+          
+          console.log(newdata)
+          
+          if (data[0]){
+              fetch('/train_bot/delete/trained/'+data[0].original.id, {
+                  method : 'POST',
+                  headers : {
+                      "Access-Control-Allow-Origin": "*",
+                      'Content-Type':'application/json'
+                      },
+                      body : JSON.stringify(newdata),
+                  });
+                  console.log(data)
+                  window.location.reload("bot/"+id+'/trained');
+          }    
+      
+    }
     
 
-      
+
     return(
         <Styles>
         <div className="learned-page">
@@ -68,17 +64,9 @@ function Learned(props){
               
                 <div className="container-top d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight'>Trained</h2>
-                    {/* <div className="p-2 bd-highlight">
-                        <button className="btn btn-danger" type="button" onClick = {() => delete_trained(props.match.params.bot_id) } >Delete</button>
-                    </div> */}
-                    {/* <div className="p-2 bd-highlight">
-                        <Link to={'/bot/'+props.match.params.bot_id+'/training'}>
-                            <button className="btn btn-success" type="button">Training</button>
-                        </Link>
-                    </div> */}
                 </div>
                 <hr></hr>
-                <Table botID={props.match.params.bot_id} delete_trained={delete_trained}  />
+                <Table botID={props.match.params.bot_id} delete_trained={delete_trained}/>
             </div>
 
             </div>

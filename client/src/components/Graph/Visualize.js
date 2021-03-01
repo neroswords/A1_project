@@ -1,3 +1,4 @@
+import FileSaver from "file-saver";
 import React from "react";
 import { useMeasure } from "react-use";
 import {
@@ -10,7 +11,45 @@ import {
   YAxis
 } from "recharts";
 import { getPngData } from "recharts-to-png";
-import "./styles.css";
+import styled from 'styled-components';
+
+const Styles = styled.div`
+#container {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px;
+  width: 800px;
+  height: 800px;
+  background-color: #fff;
+}
+
+@media screen and (min-width: 400px) {
+  .LineChart{
+      width: 100px;
+      height: 50px;
+  }
+  
+}
+
+@media screen and (min-width: 641px) and (max-width: 960px) {
+  .LineChart{
+      width: 500px;
+      height: 500px;
+  }
+  
+}
+
+@media screen and (max-width: 960px) {
+  .LineChart{
+      width: 500px;
+      height: 500px;
+  }
+  
+}
+
+
+`;
 
 export const Visualize = () => {
   const [containerRef, { width: containerWidth }] = useMeasure();
@@ -32,18 +71,17 @@ export const Visualize = () => {
     { name: "Page E", uv: 1890, pv: 4800, amt: 2181 },
     { name: "Page F", uv: 2390, pv: 3800, amt: 2500 },
     { name: "Page G", uv: 3490, pv: 4300, amt: 2100 }
-  ];
+  ]; 
 
   return (
     <div id="container" ref={containerRef}>
-      <h2>recharts-to-png example with FileSaver</h2>
       <br />
-      <LineChart
+      <LineChart className="LineChart"
         ref={(ref) => setChart(ref)} // Save the ref of the chart
         data={data}
-        height={300}
-        width={600}
-        margin={{ top: 5, right: 30, left: 20, bottom: 25 }}
+        height={500}
+        width={1000}
+        margin={{ top: 5, right: 40, left: 20, bottom: 25 }}
       >
         <XAxis dataKey="name" />
         <YAxis />
@@ -62,13 +100,7 @@ export const Visualize = () => {
         <button onClick={handleDownload}>Download</button>
       </span>
       <br />
-      <p>Source</p>
-      <embed
-        type="text/html"
-        src="https://codesandbox.io/embed/busy-lake-dyy8q?autoresize=1&fontsize=14&hidenavigation=1&theme=light&view=editor"
-        width={containerWidth}
-        height={600}
-      />
+      
     </div>
   );
 };

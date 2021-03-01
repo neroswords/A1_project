@@ -7,33 +7,32 @@ import Button from '@material-ui/core/Button';
 import ImageWarnning from "./Images/warnning2.png";
 
 const Background = styled.div`
+  width: 100%;
+  height: 100%;
+  background: blue;
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
+  background :rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const ModalWrapper = styled.div`
-  width: 400px;
-  height: 250px;
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
-  background: #fff;
-  color: #000;
-  display: grid;
-  z-index: 10;
-  border-radius: 10px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(90%, -140%);
-  margin-top: 250px;
+  width: 350px;
+  background-color: white;
+  padding: 3rem;
+  border-radius: 0.5rem;
 `;
 
 const CloseModalButton = styled(MdClose)`
   cursor: pointer;
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 20px;
+  right: 20px;
   width: 25px;
   height: 25px;
   padding: 0;
@@ -45,7 +44,7 @@ const ModalContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  line-height: 1.8;
+  /* line-height: 1.8; */
 
 .button-delete-bot{
   text-align: center;
@@ -89,8 +88,8 @@ img{
 }
 `;
 
-function Delete_table({showDelete_table, setShowDelete_table, Delete_table, id}) {
-    
+function Delete_table({showDelete_table, setShowDelete_table, delete_trained, id, selectedFlatRows}) {
+   console.log('kaaaa') 
   const modalRef = useRef();
   const animation = useSpring({
     config: {
@@ -106,6 +105,36 @@ function Delete_table({showDelete_table, setShowDelete_table, Delete_table, id})
     }
   };
 
+  // const ConfirmDelete = (data) => {
+  //   setShowDelete_table(prev => !prev)
+  //   console.log(data)
+  //     var newdata = []
+  //     var i = 0
+  //     for (i = 0; i < data.length; i++){
+  //         newdata.push(data[i].original)
+  //     }
+      
+  //     console.log(newdata)
+      
+  //     if (data[0]){
+  //         fetch('/train_bot/delete/trained/'+data[0].original.id, {
+  //             method : 'POST',
+  //             headers : {
+  //                 "Access-Control-Allow-Origin": "*",
+  //                 'Content-Type':'application/json'
+  //                 },
+  //                 body : JSON.stringify(newdata),
+  //             });
+  //             console.log(data)
+  //             window.location.reload("bot/"+id+'/trained');
+  //     }    
+  
+  // }
+
+  const ConfirmDelete = (data) => {
+      delete_trained(data)
+      setShowDelete_table(prev => !prev)
+  }
   const keyPress = useCallback(
     e => {
       if (e.key === 'Escape' && showDelete_table) {
@@ -138,8 +167,8 @@ function Delete_table({showDelete_table, setShowDelete_table, Delete_table, id})
                   You want delete this word?
                 <Container className="button-delete-bot">
                     <Button className="cancle-delete-bot" onClick={() => setShowDelete_table(prev => !prev)}>cancle</Button>
-                    <Button className="delete-bot" >delete</Button>
-                  </Container>
+                    <Button className="delete-bot" onClick={() => ConfirmDelete(selectedFlatRows)}>delete</Button>
+                </Container>
                 </ModalContent>
                 <CloseModalButton
                   aria-label="Close modal"

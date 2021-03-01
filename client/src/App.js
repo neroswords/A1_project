@@ -20,10 +20,11 @@ import Create_bot from './Page/Create_bot';
 import Connect from './Page/Connect_bot'
 import AddWord from './Components/Table/AddTable/AddWord';
 import Nav from './Components/Navbar/real_nav';
-import Add_item from './Page/Add_item';
+import Add_item from './Page/add_item';
 import Inventory from './Page/Inventory';
 import Customer_infomation from './Page/Customer_infomation';
 import History from './Page/History';
+
 function App() {
   return (
     <Router>
@@ -48,7 +49,6 @@ function App() {
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/inventory" component={ Inventory } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/customer_infomation" component={ Customer_infomation } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/history" component={ History } />
-            
           </Switch>
     </Router>
   );

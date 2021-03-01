@@ -242,7 +242,9 @@ const defaultColumn = {
 
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained ,botID }) {
   const Ondelete = (e) => {
-    delete_trained(e)
+    openDelete_table(e)
+    // delete_trained(e)
+
   }
 
   // const delete_table =(id)=>{
@@ -280,13 +282,13 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
     []
   )
   const [showWord, setShowWord] = useState(false);
-  let history = useHistory();
   const openWord = () => {
     setShowWord(prev => !prev);
   }
 
   const [showDelete_table, setShowDelete_table] = useState(false);
-  const openDelete_table = () => {
+  const openDelete_table = (data) => {
+    console.log('111k')
     setShowDelete_table(prev => !prev);
   }
 
@@ -358,9 +360,9 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
 
   )
 
-  const handleClick =()=> {
-    history.push('/bot/'+botID+'/trained')
-  }
+  // const handleClick =()=> {
+  //   history.push('/bot/'+botID+'/trained')   
+  // }
 
   return (
     <>
@@ -368,7 +370,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
         <div className="button-trained-word">
           <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
           {/* <button className="buttondeleteWord" onClick={() => Ondelete(selectedFlatRows)}>Delete</button> */}
-          <button className="buttondeleteWord" onClick={openDelete_table}>Delete</button>
+          <button className="buttondeleteWord" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
           <div className='SearchBar'>
           <GlobalFilter
             preGlobalFilteredRows={preGlobalFilteredRows}
@@ -377,7 +379,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
         />
         </div>
           <AddWord showWord={showWord} setShowWord={setShowWord} botID = {botID}/>
-          <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table}/>
+          <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table} selectedFlatRows={selectedFlatRows} id={botID} delete_trained={delete_trained}/>
         </div>
 
         
@@ -521,11 +523,6 @@ function Table({ botID, delete_trained, add_data }) {
   }
 
   const openWord = () => {
-    setShowWord(prev => !prev);
-
-  }
-
-  const openDelete_table = () => {
     setShowWord(prev => !prev);
 
   }
