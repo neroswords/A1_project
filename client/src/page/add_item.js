@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { withRouter, Redirect } from 'react-router-dom'
-import { Multiselect } from 'multiselect-react-dropdown';
-
+// import { Multiselect } from 'multiselect-react-dropdown';
+import 'react-widgets/dist/css/react-widgets.css';
+import { Multiselect } from 'react-widgets'
 const Styles = styled.div`
   .container {
     font-family: 'Public Sans', sans-serif;
@@ -109,22 +110,39 @@ export default class Add_item extends React.Component {
       Image: '',
       des: '',
       imagesPreviewUrl: [],
-      options: [{ name: 'Srigar', id: 1 }, { name: 'Sam', id: 2 }]
+      options: ["d1","2"],
+      value: [],
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    // this.Onend = this.Onend.bind(this);
+    this.handleCreate = this.handleCreate.bind(this);
+   
   }
+  
+  handleCreate(name) {
+    let { options, value } = this.state;
 
+
+ 
+    this.setState({
+      value: [...value, name],  // select new option
+      options: [...options, name] // add new option to our dataset
+    })
+    console.log(this.state)
+  }
 
   handleChange(evt) {
     this.setState({ [evt.target.name]: evt.target.value });
     console.log(this.state)
   }
 
+
+
   _handleImageChange(e) {
     e.preventDefault();
-
-
+    console.log(this.state.value)
+    console.log(this.state)
     let i
     for (i = 0; i < e.target.files.length; i++) {
       let reader = new FileReader();
@@ -148,14 +166,14 @@ export default class Add_item extends React.Component {
   handleUploadImage(ev) {
     ev.preventDefault();
 
-    console.log(file)
+
     var i
     const data = new FormData();
     for (i = 0; i < this.uploadInput.files.length; i++) {
       data.append('file' + [i], this.uploadInput.files[i]);
     }
     data.append('item_name', this.item_name.value);
-    data.append('type', this.type.value);
+    data.append('type', JSON.stringify(this.state.value));
     data.append('amount', this.amount.value);
     data.append('creator', localStorage.getItem('user_id'))
     data.append('Image', this.state.Image)
@@ -164,10 +182,10 @@ export default class Add_item extends React.Component {
       method: 'POST',
       // headers : {
       //   "Access-Control-Allow-Origin": "*",
-      //   //'Content-Type':'application/json'
+      //   'Content-Type':'application/json'
       // },
-      //body : JSON.stringify(form),
-      body: data,
+      // body : JSON.stringify(json5),
+      body : data
     }).then((response) => {
       response.json().then((body) => {
         this.setState({ imageURL: `/${body.file}` });
@@ -178,17 +196,21 @@ export default class Add_item extends React.Component {
     });
 
   }
-  //  componentDidMount ()  {
-  // fetch('/bot/'+this.props.match.params.bot_id+'/edit').then((response) => {
-  //     response.json().then((data) => {
-  //       this.setState({ bot_name: data[0].bot_name });
-  //       this.setState({ gender : data[0].gender});
-  //       this.setState({ age: data[0].age }) ;
-  //       this.setState({ Image: data[0].Img }); 
-  //     });
-  //   });
+    componentDidMount ()  {
+     var a = []
+     var unique = []
+      fetch('/bot/'+this.props.match.params.bot_id+'/getitem').then((response) => {
+      response.json().then((data) => {console.log(data) 
+        var i = 0
+        for(i = 0 ;i<data.length;i++){
+          a.push(...data[i].type)
+          unique = [...new Set(a)];
+      }
+      this.setState ({ options : unique})
+    });
+    });
 
-  //     }
+      }
 
   render() {
     const { redirect, bot_id } = this.state;
@@ -197,6 +219,7 @@ export default class Add_item extends React.Component {
     }
     else {
       let { imagePreviewUrl } = this.state;
+      
       let $imagePreview = null;
       if (imagePreviewUrl) {
 
@@ -204,13 +227,7 @@ export default class Add_item extends React.Component {
       }
       return (
         <Styles>
-          <Multiselect
-            options={this.state.options} // Options to display in the dropdown
-            selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
-            onSelect={this.onSelect} // Function will trigger on select event
-            onRemove={this.onRemove} // Function will trigger on remove event
-            displayValue="name" // Property name to display in the dropdown options
-          />
+     
 
 
           <div className="container">
@@ -245,13 +262,18 @@ export default class Add_item extends React.Component {
                           <label className="form-label">item name</label>
                           <input type="text" name="item_name" value={this.state.item_name} ref={(ref) => { this.item_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname" />
                         </div>
-                        <div class="mt-3">
+                        {/* <div class="mt-3"  onKeyDown ={((e) => this.Onend(e))}> */}
+                        <div class="mt-3"  >
                           <label for="inputgender" class="form-label">type</label>
-                          <select id="inputgender" name="type" value={this.state.type} ref={(ref) => { this.type = ref; }} onChange={this.handleChange} class="form-select">
-                            <option selected>Choose...</option>
-                            <option>Male </option>
-                            <option>Female</option>
-                          </select>
+                          <Multiselect
+                            data={this.state.options}
+                            value={this.state.value}
+                            allowCreate="onFilter"
+                            onCreate={name => this.handleCreate(name)}
+                            onChange={value => this.setState({ value })}
+                            textField="name"
+                          />
+                          
                         </div>
                         <div className="mt-3">
                           <label for="inputFirstname" className="form-label">amount</label>

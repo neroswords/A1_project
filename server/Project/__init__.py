@@ -10,7 +10,7 @@ from flask_jwt_extended import JWTManager
 from base64 import encodebytes
 from hashlib import sha1
 import hmac
-from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
+# from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
 # from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection,check_bot,find_bot
 from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
@@ -32,9 +32,9 @@ mongo.init_app(app)
 app.config['JWT_SECRET_KEY'] = 'boost-is-the-secret-of-our-app'
 jwt=JWTManager(app)
 
-login_manager = LoginManager()
-login_manager.login_view = 'profile.login'
-login_manager.init_app(app)
+# login_manager = LoginManager()
+# login_manager.login_view = 'profile.login'
+# login_manager.init_app(app)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = './static/images'
