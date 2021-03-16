@@ -446,7 +446,7 @@ def additem(botID):
         print(request.files)
         print("________________")
         info_update = {'item_name': item_name, 'owner':  ObjectId(creator),
-                       'type': item_type, 'amount': amount, 'des': des, 'botID': ObjectId(botID) ,'price':price}
+                       'type': item_type, 'amount': int(amount), 'des': des, 'botID': ObjectId(botID) ,'price':int(price)}
         info_pic = []
         for i in request.files:
             print(i)

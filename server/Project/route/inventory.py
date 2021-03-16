@@ -27,3 +27,14 @@ def call_inventory(botID):
         # print(cart_cursor[0]['cart'][0]['itemid'])
 
         return data
+
+@inventory.route('/detail/<botID>/', methods=['GET'])
+def call_inventory2(botID):
+    if request.method == 'GET':
+        inventory_collection = mongo.db.inventory
+        inventory_cursor = inventory_collection.find_one({"_id": ObjectId(botID)})
+        data = dumps(inventory_cursor, indent=2)
+        print(data)
+        # print(cart_cursor[0]['cart'][0]['itemid'])
+
+        return data

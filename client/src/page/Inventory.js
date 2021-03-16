@@ -2,11 +2,13 @@ import React, {useState, useEffect, useRef } from "react";
 import Navbar_member from '../Components/Navbar/navbar_member';
 import styled from 'styled-components';
 import Invenlist from '../Components/Inventory/Inven_list';
-import '../Components/Inventory/Inven.css';
+import { Link } from "react-router-dom";
 
 const Styles = styled.div` 
+
 .inventory-page {
     display: flex;
+    min-height:92vh;
 }
 .inventory-body {
     margin-left: 2%;
@@ -15,7 +17,36 @@ const Styles = styled.div`
     background-color: white;
     width: 100%;
 }
+
+.inven-showlist{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media (min-width: 500px) {
+    .inven-showlist { 
+        grid-template-columns: repeat(2, 1fr); 
+        }
+}
+
+@media (min-width: 920px) {
+    .inven-showlist { 
+        grid-template-columns: repeat(3, 1fr); 
+        }
+}
+
+  @media (min-width: 1200px) {
+    .inven-showlist { 
+        grid-template-columns: repeat(4, 1fr); 
+    }
+  }
+
+.create-inven{
+    border-radius:1rem;
+    padding: 5px 15px;
+}
 ` 
+
 function Inventory(props){
     const [inventory,setinventory] = useState([]);
     useEffect(async () => {
@@ -23,7 +54,9 @@ function Inventory(props){
     },[])
     console.log(inventory)
     const card = inventory.map((inventory) => 
+
         <Invenlist props={inventory}/>
+        ,console.log(inventory)
     );
 
     return(
@@ -32,10 +65,14 @@ function Inventory(props){
                <Navbar_member botID = {props.match.params.bot_id} path={"inventory"} />
                <div className="inventory-body">
                     <h2 className=''>Inventories</h2>
-                    <button className="create-invenbtn btn-success" type="button">Create</button>
+                    <Link to={"/bot/"+props.match.params.bot_id+"/add_item"}>
+                        <button className="create-inven btn btn-success" type="button">Create</button>
+                    </Link>
                     <hr></hr>
-                    {card}
-                    <hr></hr>
+                    <div className="inven-showlist">
+                        {card}
+                    </div>
+                    
                </div>  
             </div>
             

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState, useEffect, useRef } from "react";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+
 const Styles = styled.div` 
   .container {
     font-family: 'Public Sans', sans-serif;
@@ -145,6 +146,15 @@ const Styles = styled.div`
 
 `
 function Product_datail(botID){
+
+    const [inventory,setinventory] = useState([]);
+    useEffect(() => {
+        fetch('/inventory/detail/'+botID.match.params.product_id).then(res => res.json().then(data => {setImg(data.img);setinventory(data)}))
+    },[])   
+    var test = []
+    test = inventory.img
+    const [img,setImg] = useState([]);
+    console.log(img)
     return(
         <Styles>
                 <div className="container">
@@ -152,7 +162,7 @@ function Product_datail(botID){
                     <div className="card card-pd">
                         <div className="card-pd-body">
                             <div className="btn-top-pd">
-                                <Link to={"/bot/"+ botID +"/inventory"} className="link-back-pd" > 
+                                <Link to={"/bot/"+ botID.match.params.bot_id +"/inventory"} className="link-back-pd" > 
                                     <i className="back-pd fas fa-arrow-left"></i>
                                 </Link>
                                 <h3>Product Details</h3>
@@ -161,10 +171,12 @@ function Product_datail(botID){
                             <div className="row">
                                 <div className="col previmg-pd">
                                     <div className="img-pd">
-                                        <img className="img-inven" src={'/images/add-inven.png'}/>
-                                        <img className="img-inven" src={'/images/add-inven.png'}/>
-                                        <img className="img-inven" src={'/images/add-inven.png'}/>
-                                        <img className="img-inven" src={'/images/add-inven.png'}/>
+
+                                { img.map((i, index) =>{
+                                     return <img className="img-inven" src={'/images/bucket/'+i}/>
+                                })  
+                            }               
+ 
                                     </div>
                                 </div>
                                 
@@ -172,11 +184,11 @@ function Product_datail(botID){
                                     {/* <Link to={"/bot/"+ botID +"/inventory"} className="pd-edit"> 
                                         <i className="edit-pd fas fa-pencil-alt"></i>
                                     </Link> */}
-                                    <div className="pd-name">ชื่อสินค้า</div>
-                                    <div className="pd-price">฿ </div>
-                                    <div className="pd-type">type</div>
-                                    <div className="pd-amount">Amount: </div>
-                                    <div className="pd-des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem nam pariatur voluptate perferendis, asperiores aspernatur! Porro similique consequatur, nobis soluta minima, quasi laboriosam hic cupiditate perferendis esse numquam magni.</div>
+                                    <div className="pd-name">{inventory.item_name}</div>
+                                    <div className="pd-price">฿ {inventory.price} </div>
+                                    {/* <div className="pd-type">type {inventory.type}</div> */}
+                                    <div className="pd-amount">Amount: {inventory.amount}</div>
+                                    <div className="pd-des">{inventory.des}</div>
                                 </div>
                             </div>
                             {/* <div className="line-pd"></div>
