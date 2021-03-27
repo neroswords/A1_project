@@ -506,10 +506,13 @@ def getitem(botID):
     print(data[0])
     return data
 
-    # userinfo_cursor =  users_collection.find({"_id" : ObjectId(id)})
-    # userinfo_cur = list(userinfo_cursor)
-    # data_info = dumps(userinfo_cur, indent = 2)
-    # print(data_info)
-    # return data_info
+@bot.route('/test', methods=["GET"])
+def test():
+    # return render_template('item_desc.html')
+    return render_template("Item_Detail.html")
 
+
+@bot.route('/liff', methods=["GET"])
+def liff():
+    return render_template('item_desc.html')
 

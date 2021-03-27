@@ -1,8 +1,8 @@
 from flask import Flask, request, abort, render_template, session,url_for,redirect,g,send_from_directory,send_file
-import requests #
-import json #
-from Project.Config import * #
-# from pymessenger import Bot #
+import requests
+import json
+from Project.Config import *
+# from pymessenger import Bot
 from flask_pymongo import PyMongo
 import bcrypt
 from flask_jwt_extended import JWTManager
@@ -19,13 +19,14 @@ from Project.route.mapping import mapping
 from Project.route.merchant import merchant
 from Project.route.facebook import facebook
 from Project.route.inventory import inventory
-from .extensions import mongo
-
+from Project.route.checkout import checkout
+from .extensions import mongo, Config
+from flask_talisman import Talisman
 
 UPLOAD_FOLDER = './Project/static/images'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 app.config['MONGO_URI'] = 'mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority'
 mongo.init_app(app)
 
@@ -39,6 +40,7 @@ jwt=JWTManager(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = './static'
 
+app.config.from_object(Config)
 
 app.register_blueprint(profile, url_prefix='/profile')
 app.register_blueprint(bot, url_prefix='/bot')
@@ -48,8 +50,9 @@ app.register_blueprint(mapping, url_prefix='/mapping')
 app.register_blueprint(merchant, url_prefix='/merchant')
 app.register_blueprint(facebook, url_prefix='/facebook')
 app.register_blueprint(inventory, url_prefix='/inventory')
+app.register_blueprint(checkout, url_prefix='/checkout')
 
-
+# Talisman(app, content_security_policy={"default-src": "'unsafe-inline' 'self' *.omise.co"},)
 
 @app.route('/upload', methods=['POST'])
 def fileUpload():
