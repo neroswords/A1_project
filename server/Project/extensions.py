@@ -4,7 +4,7 @@ from bson import ObjectId
 
 mongo = PyMongo()
 
-
+server_url = 'https://42138e36df81.ngrok.io'
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):

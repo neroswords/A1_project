@@ -19,6 +19,7 @@ facebook = Blueprint("facebook", __name__)
 def call_facebook(botID):
     bot_collection = mongo.db.bots
     cart_collection = mongo.db.carts
+    customer_collection = mongo.db.customers
     bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
     inventory_collection = mongo.db.inventory
     inventory_collection_define = inventory_collection.find(
@@ -33,12 +34,9 @@ def call_facebook(botID):
     for msg in event:
         sender_id = msg['sender']['id']
         if('message' in payload['entry'][0]['messaging'][0].keys()):
-            if('attachments' in payload['entry'][0]['messaging'][0]['message'].keys()):
-                response = "รับแต่ข้อความ"
-                break
-            text = msg['message']['text']
+            
+            message_type = 'text'
             if (text == "มีอะไรแนะนำบ้าง"):
-                print("DASDSADASDSA")
                 response = suggestion("facebook", botID, text, sender_id)
                 print(response)
                 break
@@ -68,6 +66,7 @@ def call_facebook(botID):
                 bot.send_text_message(sender_id, response)
                 break
         elif('postback' in payload['entry'][0]['messaging'][0].keys()):
+            message_type = 'postback'
             t_post = payload['entry'][0]['messaging'][0]['postback']['payload']
             t_post = t_post.split("&")
             timestamp = msg['timestamp']
@@ -146,19 +145,26 @@ def call_facebook(botID):
                 #     break
                 call_detail(botID, item_id, sender_id, bot)
         else:
-            response = "รับแต่ข้อความ"
-            bot.send_text_message(sender_id, response)
+            res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
+        sender_define = customer_collection.find_one(
+            {'$and': [{'userID': sender_id}, {'botID': ObjectId(botID)}]})
+        if sender_define == None:
+            sender_define = {'userID': sender_id, 'type': 'user',
+                'state': 'none', 'botID': bot_define['_id'], 'status': 'open'}
+            customer_collection.insert_one(sender_define)
+         if sender_define['status'] == 'open' :
+            if message_type == 'text':
+                if('attachments' in payload['entry'][0]['messaging'][0]['message'].keys()):
+                    res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
+                    break
+                data = {"message":msg['message']['text']}
+                res = stateHandler(sender_id=sender_define['userID'], botID=botID, message= data, confident=bot_define['confident'])
+            elif message_type == 'postback':
+                data = {"postback":payload['entry'][0]['messaging'][0]['postback']['payload']}
+                res = stateHandler(sender_id=sender_define['userID'], botID=botID, postback= data)
+            else:
+                res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
 
-        # text = msg['message']['text']
-        # for i in template_collection_define:
-        #     if(text == i['type']):
-        #         print("5")
-        #         # template("facebook", botID)
-        #         break
-        #     else:
-        #         sender_id = msg['sender']['id']
-        #         response = "Test"
-        #         bot.send_text_message(sender_id, response)
 
 
 def template(platform, botID, text, sender_id):

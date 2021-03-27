@@ -25,3 +25,4 @@ server/Project/__pycache__/message.cpython-37.pyc
 server/Project/__pycache__/nlp.cpython-37.pyc
 server/Project/__pycache__/process.cpython-37.pyc
 client/node_modules
+client/package-lock.json
