@@ -71,7 +71,7 @@ const Styles = styled.div`
     .navbar-c {
       top: 0;
       width:  5rem;
-      height: 92vh;
+      height: 100%;
     }
   }
 
@@ -128,7 +128,7 @@ const Styles = styled.div`
     .navbar2 {
       top: 0;
       width: 14rem;
-      height: 92vh;
+      height: 100%;
     }
   
   }

@@ -6,6 +6,7 @@ import Visualize from "../Components/Graph/Visualize";
 const Styles = styled.div` 
 .history-page {
     display: flex;
+    min-height: 92vh;
 }
 .container {
     margin-top:2%

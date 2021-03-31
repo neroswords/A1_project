@@ -74,8 +74,8 @@ const Styles = styled.div`
   border-radius: 25px;
   border: 1px solid #0078ff;
   transition: 0.5s;
-  background-color: Blue;
-  color: green;
+  background-color: #0078ff;
+  color: #fff;
 }
 
 .buttonaddWord:hover{
@@ -555,26 +555,3 @@ function Tablecon({ botID, delete_trained, add_data }) {
 }
 
 export default Tablecon;
-
-
-// useEffect(() => {
-//   fetch('/train_bot/'+botID+'/training')
-//   .then(res => res.json().then(data => {
-//     setTableconState(
-//       data.map(d => {
-//         console.log(d)
-//         return {
-//           select: false,
-//           id: d._id.$oid,
-//           Word: d.question,
-//           ReplyWord: d.answer,
-//           Confidence : d.confident
-//         };
-//       })
-
-
-//     );
-
-//   }))
-
-// }, []);

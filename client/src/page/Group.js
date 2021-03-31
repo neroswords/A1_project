@@ -7,6 +7,7 @@ import styled from 'styled-components';
 const Styles = styled.div` 
 .group-page {
     display: flex;
+    min-height: 92vh;
 }
 .container {
     margin-top: 10px;
