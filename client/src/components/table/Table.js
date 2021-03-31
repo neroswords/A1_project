@@ -8,7 +8,6 @@ import { Button } from 'react-bootstrap';
 
 
 const Styles = styled.div`
-
   table {
     margin: 10px 0;
     font-size: 1.2em;
@@ -20,18 +19,15 @@ const Styles = styled.div`
         }
       }
     }
-
     th,
     td {
       margin: 0;
       padding: 12px 15px;
       border-bottom: 1px solid #DADADA;
       border-right: 1px solid #DADADA;
-
       :last-child {
         border-right: 0;
       }
-
       input {
         font-size: 0.9rem;
         padding: 0;
@@ -39,19 +35,15 @@ const Styles = styled.div`
         border: 0;
       }
     }
-
   .trained-Word{
     background-color: transparent;
     border-radius: 25px;
     padding-left:15px;
   }
-
 }
-
 .table tbody tr:nth-of-type(even){
         background-color: #e5e5e5;
     }
-
 .button-trained-word .buttondeleteWord{
     padding: 7px 15px !important;
     font-size: 12px !important;
@@ -62,12 +54,9 @@ const Styles = styled.div`
     color: #fff ;
     margin-left: 15px;
   }
-
-
   .button-trained-word .buttondeleteWord:hover{
     color: #000;
   }
-
   .buttonaddWord{
   padding: 7px 15px;
   font-size: 12px;
@@ -77,21 +66,17 @@ const Styles = styled.div`
   background-color: #0078ff;
   color: #fff;
 }
-
 .buttonaddWord:hover{
   color: #000;
 }
-
 .pagination{
   margin-bottom: 15%;
 }
-
 .parginate-text{
   padding-top: 7px;
   margin-right: 1%;
   margin-left: 1%;
 }
-
 .pagination button{
   border-radius: 15px;
   width: 35px;
@@ -100,31 +85,24 @@ const Styles = styled.div`
   margin-left: .5%;
   border: none;
 }
-
 .pagination button:hover{
   border-radius: 30px;
   background-color: #fca311;
   color: #000;
 }
-
 .searchBox{
   width: 130px;
   height: 30px;
   border-radius: 25px;
   border: .5px solid #A9A9A9;
-
 }
-
 input::placeholder{
   padding-left:15px;
-
 }
-
 .button-trained-word .SearchBar{
   position:relative;
   float: right;
 }
-
   
 `;
 
@@ -269,6 +247,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
     []
   )
   const [showWord, setShowWord] = useState(false);
+  // let history = useHistory();
   const openWord = () => {
     setShowWord(prev => !prev);
   }
@@ -341,6 +320,10 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
 
   )
 
+  const handleClick =()=> {
+    // history.push('/bot/'+botID+'/trained')
+  }
+
   return (
     <>
       <Container>
@@ -380,7 +363,6 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
                   textAlign: 'right',
                 }}
               >
-
               </th>
             </tr> */}
           </thead>

@@ -74,8 +74,8 @@ const Styles = styled.div`
   border-radius: 25px;
   border: 1px solid #0078ff;
   transition: 0.5s;
-  background-color: #0078ff;
-  color: #fff;
+  background-color: Blue;
+  color: green;
 }
 
 .buttonaddWord:hover{
@@ -83,7 +83,7 @@ const Styles = styled.div`
 }
 
 .pagination{
-  margin-bottom: 15%;
+  margin-bottom: 0;
 }
 
 .parginate-text{
@@ -273,6 +273,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
   const openWord = () => {
     setShowWord(prev => !prev);
   }
+  
 
   const {
     getTableProps,
