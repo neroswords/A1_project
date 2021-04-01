@@ -10,8 +10,6 @@ import datetime
 from random import randint
 from Project.models.user import User
 from Project.extensions import mongo, JSONEncoder
-# from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
-# from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection,check_bot,find_bot
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required,
                                 get_jwt_identity, get_raw_jwt)
 import json
