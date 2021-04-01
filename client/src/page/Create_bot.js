@@ -11,6 +11,7 @@ const Styles = styled.div`
     font-family: 'Public Sans', sans-serif;
     margin-top: 2%;
   }
+
   .card-bot{
     border: 0;
     border-radius: 1rem;
@@ -85,8 +86,10 @@ const Styles = styled.div`
   .showimage img{
     border: 1px solid #ddd;
     border-radius: 50%;
-    width: 80%;
+    height: 150px;
+    width: 150px;
     text-align: center;
+    object-fit: cover;
   }
   
   .vertical-line {

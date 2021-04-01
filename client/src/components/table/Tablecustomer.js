@@ -465,7 +465,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
 
 
-function Tablecon({ botID, delete_trained, add_data }) {
+function Tablecustomer({ botID, delete_trained, add_data }) {
   const [TableconState, setTableconState] = useState([]);
 
                                                           
@@ -476,17 +476,21 @@ function Tablecon({ botID, delete_trained, add_data }) {
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Word',
-        accessor: 'Word', // accessor is the "key" in the data
+        Header: 'User Name',
+        accessor: 'User Name', // accessor is the "key" in the data
       },
       {
-        Header: 'ReplyWord',
-        accessor: 'ReplyWord',
+        Header: 'Name-Surname',
+        accessor: 'Name-Surname',
         filter: 'fuzzyText',
       },
       {
-        Header: 'Confidence',
-        accessor: 'Confidence',
+        Header: 'Address',
+        accessor: 'Address',
+      },
+      {
+        Header: 'Chat',
+        accessor: 'Chat',
       },
     ],
     []
@@ -568,27 +572,4 @@ function Tablecon({ botID, delete_trained, add_data }) {
   );
 }
 
-export default Tablecon;
-
-
-// useEffect(() => {
-//   fetch('/train_bot/'+botID+'/training')
-//   .then(res => res.json().then(data => {
-//     setTableconState(
-//       data.map(d => {
-//         console.log(d)
-//         return {
-//           select: false,
-//           id: d._id.$oid,
-//           Word: d.question,
-//           ReplyWord: d.answer,
-//           Confidence : d.confident
-//         };
-//       })
-
-
-//     );
-
-//   }))
-
-// }, []);
+export default Tablecustomer;

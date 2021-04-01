@@ -9,7 +9,25 @@ const Styles = styled.div`
     min-height: 92vh;
 }
 .container {
-    margin-top: 10px;
+    margin-bottom: 2%;
+    margin-top: 2%;
+    overflow:hidden;
+}
+.tained-title{
+    padding: 4px;
+    width: 100% ;
+    background-color: white;
+    border-radius: 0.25rem;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+}
+.showtable-learn{
+    min-height: 70vh;
+    margin-top: 1%;
+    background-color: white;
+    padding: 1%;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 0.25rem;
+    /* border: 1px solid #ececec; */
 }
 `
 // const mapStateToProps = (state) =>{
@@ -69,8 +87,10 @@ function Learned(props){
             <Navbar_member botID = {props.match.params.bot_id} path={"trained"}  />
             <div className="container">
               
-                <div className="container-top d-flex bd-highlight">
-                    <h2 className='p-2 flex-grow-1 bd-highlight'>Trained</h2>
+                <div className="container-top d-flex bd-highlight">                   
+                    <div className="tained-title"> 
+                        <h2 className=' p-2 flex-grow-1 bd-highlight'>Trained</h2>
+                    </div>
                     {/* <div className="p-2 bd-highlight">
                         <button className="btn btn-danger" type="button" onClick = {() => delete_trained(props.match.params.bot_id) } >Delete</button>
                     </div> */}
@@ -80,8 +100,10 @@ function Learned(props){
                         </Link>
                     </div> */}
                 </div>
-                <hr></hr>
-                <Table botID={props.match.params.bot_id} delete_trained={delete_trained}  />
+                <div className="showtable-learn">
+                    <Table botID={props.match.params.bot_id} delete_trained={delete_trained}  />
+                </div>
+                
             </div>
 
             </div>

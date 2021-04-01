@@ -11,11 +11,33 @@ const Styles = styled.div`
     display: flex;
     min-height: 92vh;
   }
+  
   .container {
+    margin-bottom: 2%;
     margin-top: 2%;
     overflow:hidden;
   }
+  
+  .training-title{
+    /* font-family: 'Public Sans', sans-serif;    */
+    padding: 4px;
+    width: 100% ;
+    background-color: white;
+    border-radius: 0.25rem;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    padding: 0 1%;
+  }
 
+
+  .showtablecon{
+    min-height: 70vh;
+    margin-top: 1%;
+    background-color: white;
+    padding: 5px;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 0.25rem;
+
+  }
 `;
 
 function Train(props) {
@@ -60,31 +82,36 @@ function Train(props) {
         <Navbar_member botID={props.match.params.bot_id} path={"training"} />
         <div className="container">
           <div className="container-top d-flex bd-highlight">
-            <h2 className="p-2 flex-grow-1 bd-highlight">Trainning</h2>
-            <div className="p-2 bd-highlight">
-              {/* <button className="btn btn-danger" type="button">
+            <div className="training-title">
+              <h2 className="p-2 flex-grow-1 bd-highlight">Trainning</h2> 
+            </div>
+
+            {/* <div className="p-2 bd-highlight">
+              <button className="btn btn-danger" type="button">
                             Delete
-                        </button> */}
-              {/* <DeleteModal
+                        </button>
+              <DeleteModal
                 className="button_delete_table"
                 dataType={"training"}
                 dataID={props.match.params.bot_id}
                 delete_trained={delete_trained}
                 add_data={add_data}
-              /> */}
-            </div>
-            <div className="p-2 bd-highlight">
-              {/* <Link to={'/bot/'+props.match.params.bot_id+'/trained'}>
+              />
+            </div> */}
+            {/* <div className="p-2 bd-highlight">
+              <Link to={'/bot/'+props.match.params.bot_id+'/trained'}>
                             <button className="btn btn-success" type="button">Trained</button>
-                        </Link> */}
-            </div>
+                        </Link>
+            </div> */}
           </div>
-          <hr></hr>
-          <Tablecon
-            botID={props.match.params.bot_id}
-            delete_trained={delete_trained}
-            add_data={add_data}
-          />
+          <div className="showtablecon">
+            <Tablecon
+              botID={props.match.params.bot_id}
+              delete_trained={delete_trained}
+              add_data={add_data}
+            />
+          </div>
+
         </div>
       </div>
     </Styles>

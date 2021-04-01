@@ -20,24 +20,23 @@ function Normal_nav(){
   return(
     <Navbar_real>
       <Link to="#">
-          <div className="btn-login btn-nav">
+          <div className="btn-signup btn-nav">
               <a className="btn" role="button">Home</a>
           </div>
       </Link>
       <Link to="#">
-          <div className="btn-login btn-nav">
+          <div className="btn-signup btn-nav">
               <a className="btn" role="button">ABOUT</a>
-          </div>
-      </Link>
-     
-      <Link to="/login">
-          <div className="btn-login btn-nav">
-              <a className="btn" role="button">Log in</a>
           </div>
       </Link>
       <Link to="/register">
           <div className="btn-signup btn-nav">
               <a className="btn" role="button">Register</a>
+          </div>
+      </Link>
+            <Link to="/login">
+          <div className="btn-login btn-nav">
+              <a className="btn" role="button">Log in</a>
           </div>
       </Link>
       </Navbar_real>
@@ -47,8 +46,6 @@ function Normal_nav(){
 function Loged_in_nav(props) {
 
   return (
-    
-    
     <Navbar_real>
         <div className="show-user">  
           <a href={"/bot_list/"+ localStorage.getItem('user_id')}><i class="fas fa-user"></i>{props}</a>
@@ -106,13 +103,6 @@ function DropdownMenu() {
   return (
     
     <div className="dropdown-real"  ref={dropdownRef}>
-
-      {/* <CSSTransition
-        in={activeMenu === 'main'}
-        timeout={500}
-        classNames="menu-primary"
-        unmountOnExit
-        onEnter={calcHeight}> */}
       <CSSTransition
       in={activeMenu === 'main'}
       timeout={500}
@@ -120,18 +110,7 @@ function DropdownMenu() {
       unmountOnExit
       >
         <div className="menu-real">
-          {/* <DropdownItem
-            leftIcon={<CogIcon />}
-            rightIcon={<ChevronIcon />}
-            goToMenu="settings">
-            Settings
-          </DropdownItem>
-          <DropdownItem
-            leftIcon="🦧"
-            rightIcon={<ChevronIcon />}
-            goToMenu="animals">
-            Animals
-          </DropdownItem> */}
+
            <a onClick={() => {
             window.location.replace("/profile/"+ localStorage.getItem('user_id')+"/edit")
           }}>
@@ -140,14 +119,7 @@ function DropdownMenu() {
                 Edit Profile
             </DropdownItem>
           </a>
-          <a onClick={() => {
-            window.location.replace("/bot_list/"+ localStorage.getItem('user_id'))
-          }}>
-            <DropdownItem 
-              leftIcon= {<i class="fas fa-robot"></i>}>
-                Manage Bot
-            </DropdownItem>
-          </a>
+
           <a onClick={() => {
             window.location.replace('/manual')
           }}>
