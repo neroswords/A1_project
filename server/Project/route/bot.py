@@ -1,5 +1,5 @@
 
-from flask import Flask, request, abort, render_template, session,url_for,redirect,send_from_directory,send_file,Blueprint
+from flask import Flask, request, abort, render_template, session,url_for,redirect,send_from_directory,send_file,Blueprint,current_app
 from pymessenger import Bot
 from Project.Config import *
 from werkzeug.utils import secure_filename
@@ -20,11 +20,21 @@ from linebot.models import (MessageEvent, TextMessage, TextSendMessage, FlexSend
                             PostbackAction, MessageAction, ImageSendMessage,StickerSendMessage,
                             ImageCarouselTemplate, ImageCarouselColumn,CarouselTemplate,CarouselColumn,URIAction,
                             CarouselContainer, ImageComponent)
+from flask_socketio import send, emit, join_room, leave_room
+from .. import socketio
 
 bot = Blueprint("bot",__name__)
 UPLOAD_FOLDER = './Project/static/images/bot/bot_pic'
 UPLOAD_FOLDER_ITEMS = './Project/static/images/bucket'
 
+# @socketio.on('message')
+# def webhook_message(message, userID, botID):
+#     socketio.emit("message", "Server message", room='my_room')
+
+# @bot.route('/msg')
+# def send_message():
+#     socketio.emit("message_from_webhook", "Server message", room='my_room')
+#     return "I got you."
 
 @bot.route('/<id>/connect', methods=['GET', 'POST'])
 # @login_required
@@ -47,8 +57,6 @@ def connect(id):
     elif request.method == 'GET':
         bot_define = bot_collection.find_one({'_id': ObjectId(id)})
         return dumps(bot_define, indent=2)
-
-# create bot
 
 
 @bot.route('/create', methods=['POST'])
@@ -75,8 +83,6 @@ def create():
         #id = JSONEncoder().encode(new_bot.inserted_id).replace('"','')
         return {'message': 'add bot successfully'}
     return "add bot unsuccessfully"
-
-# edit
 
 
 @bot.route('/<id>/edit', methods=['GET', 'POST'])
@@ -113,9 +119,7 @@ def edit(id):
 
         done = bots_collection.update_one({'_id': ObjectId(id)}, info_update)
         return {'message': 'add bot successfully'}
-    return "add bot unsuccessfully"
-
- # delete
+    return {'message': 'add bot unsuccessfully'}
 
 
 @bot.route('/delete/<id>', methods=['POST'])
@@ -135,6 +139,7 @@ def add_sentence(id):
     sentence = request.get_json()
     sentences_collection.insert_one(sentence)
 
+
 @bot.route('/webhook/<botID>/<platform>', methods=["POST", "GET"])
 def webhook(platform, botID):
     training_collection = mongo.db.training
@@ -152,87 +157,6 @@ def webhook(platform, botID):
                 return "This is method get from facebook"
         elif request.method == "POST":
             call_facebook(botID)
-            # bot = Bot(bot_define["page_facebook_access_token"],api_version="4.0")
-            # payload = request.json
-            # event = payload['entry'][0]['messaging']
-            # for msg in event:
-            #     text = msg['message']['text']
-            #     for i in template_collection_define:
-            #         if(text == i['type']):
-            #             template("facebook",botID)
-            #             break
-            #         else: 
-            #             sender_id = msg['sender']['id']
-            #             bot.send_text_message(sender_id, response)
-            #     elif('postback' in payload['entry'][0]['messaging'][0]):  #เช็ค postback
-            #         t_post = payload['entry'][0]['messaging'][0]['postback']['payload']
-            #         t_post = t_post.split("&")
-            #         timestamp = msg['timestamp']
-            #         item_id = t_post[1]
-            #         amount = 1
-            #         if("cart" in t_post): # add cart
-            #             cart_collection_define = cart_collection.find({'botID': ObjectId(botID)})
-            #             for i in cart_collection_define:
-            #                 if (t_post[1] == i['item_id']):
-            #                     amount = amount +1
-            #                     print("ADD TO DB")
-            #                     break
-            #             cart = cart_collection.insert_one({'sender': sender_id, 'timestamp': timestamp, 'botID': ObjectId(botID), 'item_id': ObjectId(item_id),'amount' : amount})
-            #         if("detail" in t_post): # see more
-            #             inventory_collection = mongo.db.inventory
-            #             inventory_collection_define = inventory_collection.find({'botID': ObjectId(botID)})
-            #             for i in inventory_collection_define:
-            #                 img_box = {
-            #                             "attachment": {
-            #                                 "type": "image",
-            #                                 "payload": {
-            #                                 "url": "https://scontent.fbkk5-6.fna.fbcdn.net/v/t1.0-0/p526x296/143825331_1318519655180519_7870318405144231408_o.jpg?_nc_cat=101&ccb=2&_nc_sid=730e14&_nc_eui2=AeF06_4cd565Jp-vXIrA5zK1MdpurrvgN_kx2m6uu-A3-UzffIHVW-hHX_JWkyaNn_H4NoG259QkxPNuPGeKdtNh&_nc_ohc=FQAqoC-BwfsAX_5slEo&_nc_oc=AQlZ2LZE_eXl-H0kNfrlpdRy_ouWotl_WBvo0s9yA5h8kG3eCW80QNyiruVV_IP33b0&_nc_ht=scontent.fbkk5-6.fna&tp=6&oh=d72759d4a8aa42ce6380c6da80b300fa&oe=6047BF9E"
-            #                                 }
-            #                             }
-            #                         }
-      
-            #             return bot.send_message(sender_id, img_box)
-            #     print(text)
-            #     tag = []
-            #     taglist = []
-            #     Ttag =""
-            #     count = 0
-            #     for i in template_collection_define:
-            #         print(i['type'])
-            #         tag.append(i['type'])
-            #         taglist = taglist + i['type']
-            #         print(taglist)
-            #         taglist = list(set(taglist))
-            #         print(taglist)
-            #     # count = 0
-            #     # for i in taglist:
-            #     #     print("taglist =")
-            #     #     print(i)
-            #     #     print("taglist[count] =")
-            #     #     print(taglist[count])
-            #     #     count = count+1
-            #     #     if (text == taglist[count]):
-            #     #         Ttag = taglist[count]
-            #     #         print("ISUD"+Ttag)
-            #     #     print(count)
-            #     #     count = count+1
-            #     # print("TTAG ===")
-            #     # print(Ttag)
-            #     for i in taglist:
-            #         print(i)
-            #         if(text == i):
-            #             print("0000000000000000000")
-            #             print(text)
-            #             template("facebook", botID)
-            #             break
-            #         else:
-            #             print("33333333333333")
-            #             sender_id = msg['sender']['id']
-            #             response, conf = process_message(
-            #                 text, botID, bot_define['confident'])
-            #             bot.send_text_message(sender_id, response)
-            #             break
-
             return "Message received"
 
     elif platform == "line":
@@ -245,17 +169,19 @@ def webhook(platform, botID):
                 return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
             Reply_token = payload['events'][0]['replyToken']
             sender = payload['events'][0]['source']
+            profile = line_bot_api.get_profile(sender['userId'])
             if 'message' in payload['events'][0].keys():
                 message_type = payload['events'][0]['message']['type']
             elif 'postback' in payload['events'][0].keys():
                 message_type = 'postback'
             sender_define = customer_collection.find_one({'$and':[{'userID':sender['userId']},{'botID': ObjectId(botID)}]})
             if sender_define == None :
-                sender_define = {'userID':sender['userId'],'type':sender['type'],'state':'none','botID':bot_define['_id'],'status':'open'}
+                sender_define = {'userID':sender['userId'],'type':sender['type'],'state':'none','botID':bot_define['_id'],'status':'open','pictureUrl':profile.picture_url,'display_name':profile.display_name}
                 customer_collection.insert_one(sender_define)
             if sender_define['status'] == 'open' :
                 if message_type == 'text':
                     data = {"message":payload['events'][0]['message']['text']}
+                    socketio.emit("message_from_webhook", {"message":data["message"], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"displayName":profile.display_name})
                     res = stateHandler(sender_id=sender_define['userID'], botID=botID, message= data, confident=bot_define['confident'])
                 elif message_type == 'postback':
                     data = {'postback':payload['events'][0]['postback']['data']}
@@ -506,9 +432,17 @@ def getitem(botID):
     print(data[0])
     return data
 
+@bot.route('/<botID>/customer', methods=["GET","POST"])
+def customer_list(botID):
+    customer_collection = mongo.db.customers
+    customer_cur = customer_collection.find({"botID": ObjectId(botID)})
+    customer_list = list(customer_cur)
+    # data = dumps(customer_list, indent=2)
+    return customer_list
+
+
 @bot.route('/test', methods=["GET"])
 def test():
-    # return render_template('item_desc.html')
     return render_template("Item_Detail.html")
 
 
