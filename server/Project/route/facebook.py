@@ -8,7 +8,7 @@ import requests
 from Project.message import process_message, item_list_flexmessage
 from Project.extensions import mongo, JSONEncoder
 from Project.nlp import sentence_get_confident
-from Project.process import stateHandler
+from Project.route.process_facebook import stateHandler
 from bson import ObjectId
 import os.path
 from bson.json_util import dumps, loads
@@ -164,6 +164,13 @@ def call_facebook(botID):
                 res = stateHandler(sender_id=sender_define['userID'], botID=botID, postback= data)
             else:
                 res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
+            if "message" in res.keys():
+                response = [TextSendMessage(text = res['message'])]
+            elif 'flex' in res.keys():
+                response = FlexSendMessage(
+                alt_text='hello',
+                contents= res['flex']
+                )
 
 
 
