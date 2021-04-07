@@ -20,28 +20,45 @@ const Styles = styled.div`
 function Chat(props){
     const [messages,setMessages] = useState([]);
     const [message,setMessage] = useState("");
-    const [userID, setUserID] = useState("");
+    // const [userID, setUserID] = useState("");
 
     useEffect(() =>{
+        fetch('/bot/'+props.match.params.bot_id+'/customer/'+props.match.params.customer_id, ).then(res=> res.json().then(data=> 
+                data.message.forEach(ele=>{ setMessages(messages=> [...messages,<div><p>{ele.sender}:{ele.message}</p></div>])
+            })
+        ))
+    },[])
+
+    useEffect(() =>{
+            
         getMessages();
     },[messages.length])
 
     const getMessages = () =>{
+        socket.on('connect', function (room) {
+            socket.emit('join_room', {
+                bot: props.match.params.bot_id,
+                customer: props.match.params.customer_id
+            })
+        })
+        
         socket.on("message_from_webhook", msg =>{
-            console.log(msg);
+            setMessages([...messages,<div><p>{msg.displayName}:{msg.message}</p></div>]);
+            // setUserID([msg.userID]);
+        })
+        socket.on("message_from_response", msg =>{
             setMessages([...messages,<div><p>{msg.displayName}:{msg.message}</p></div>]);
             // setUserID([msg.userID]);
         })
     }
 
     const onChange = e => {
-        console.log(e.target.value)
         setMessage(e.target.value);
     }
 
     const onClick = () => {
         if (message != ""){
-            socket.emit("send_message_back",message);
+            socket.emit("send_message",{"message": message,"room":props.match.params.bot_id+'&'+props.match.params.customer_id,"customerID":props.match.params.customer_id,"botID":props.match.params.bot_id});
             setMessage("");
         }else{
             alert("Type your message")

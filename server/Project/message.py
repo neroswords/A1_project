@@ -593,3 +593,63 @@ def address_flex(address):
     }
   }'''%(address,address)
   return flex
+
+def payment_flex(botID,customerID):
+  flex = '''
+  {
+    "type": "bubble",
+    "hero": {
+      "type": "image",
+      "size": "full",
+      "aspectRatio": "20:13",
+      "aspectMode": "cover",
+      "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png"
+    },
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Payment method",
+          "weight": "bold",
+          "size": "xl"
+        }
+      ],
+      "alignItems": "center"
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
+        {
+          "type": "button",
+          "style": "link",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "Pay",
+            "uri": "https://liff.line.me/1655652942-zNpjoxYV/checkout/%s/?customer=%s"
+          }
+        },
+        {
+          "type": "button",
+          "style": "link",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "Cancel",
+            "uri": "https://linecorp.com"
+          }
+        },
+        {
+          "type": "spacer",
+          "size": "sm"
+        }
+      ],
+      "flex": 0
+    }
+  }
+  '''%(botID,customerID)
+  return flex

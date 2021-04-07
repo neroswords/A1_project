@@ -128,7 +128,6 @@ def charge():
     # omise.api_public = bot_define["OMISE_PUBLIC_KEY"]
     omise.api_version = current_app.config.get("OMISE_API_VERSION")
     omise.api_main = current_app.config.get("OMISE_API_BASE")
-    print(userID)
     define_cart = cart_collection.find_one({'$and':[{'userID':userID},{'botID':ObjectId(botID)}]})
     order_id = str(define_cart['_id'])
     try:
@@ -153,7 +152,6 @@ def charge():
             nonce = {"source": source}
         else:
             nonce = {}
-        print(define_cart['cart'])
         item_list = json.dumps(define_cart['cart'], cls=JSONEncoder)
         chrg = omise.Charge.create(
             amount=int(define_cart['total']*100),
