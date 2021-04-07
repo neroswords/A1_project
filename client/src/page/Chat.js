@@ -18,20 +18,6 @@ const Styles = styled.div`
 
 ` 
 function Chat(props){
-<<<<<<< HEAD
-    return(
-        <Styles>  
-        <div className="chat-page">
-                <Navbar_member botID = {props.match.params.bot_id} path={"chat"} />
-            <div className="container">
-                <div className="row">
-                    <div className="col-4">
-                        <ChatList/> 
-                    </div>
-                    <div className="col">
-                    <Chatbody/>  
-                    </div>
-=======
     const [messages,setMessages] = useState([]);
     const [message,setMessage] = useState("");
     // const [userID, setUserID] = useState("");
@@ -84,7 +70,6 @@ function Chat(props){
             messages.map(msg => (
                 <div>
                     <p>{msg}</p>
->>>>>>> 782dc522cf02668de8d21846d169206cc306282a
                 </div>
             </div>
         </div>
