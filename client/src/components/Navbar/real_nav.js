@@ -48,7 +48,7 @@ function Loged_in_nav(props) {
   return (
     <Navbar_real>
         <div className="show-user">  
-          <a href={"/bot_list/"+ localStorage.getItem('user_id')}><i class="fas fa-user"></i>{props}</a>
+          <a href={"/bot_list/"+ localStorage.getItem('user_id')}><i class="fas fa-user-circle"></i>{props}</a>
         </div>
       <NavItem icon={<CaretIcon />}>
         <DropdownMenu></DropdownMenu>

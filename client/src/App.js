@@ -51,7 +51,7 @@ function App() {
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/customer_infomation" component={ Customer_infomation } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/history" component={ History } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/inventory/product_detail/:product_id" component={ Product_detail } />
-            <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/chat" component={ Chat } />
+            <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/chat" component={ Chat } />
 
           </Switch>
     </Router>

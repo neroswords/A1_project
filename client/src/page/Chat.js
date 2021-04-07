@@ -1,63 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client'
+import Navbar_member from '../Components/Navbar/navbar_member';
+import Chatbody from '../Components/Chat/chatbody';
+import ChatList from '../Components/Chat/chatlist';
 import styled from 'styled-components';
-import { Redirect } from 'react-router-dom';
-
-let endPoint = "http://localhost:200";
-
-let socket = io.connect(`${endPoint}`);
 
 const Styles = styled.div` 
-.mapping-page {
+.chat-page {
     display: flex;
+    min-height: 92vh;
 }
-.container {
-    margin-top:2%
+.chat-page .container {
+    /* margin-bottom: 2%; */
+    margin-top: 2%;
+    overflow:hidden;
+    background-color: #ffffff;
 }
 
 ` 
-
 function Chat(props){
-    const [messages,setMessages] = useState([]);
-    const [message,setMessage] = useState("");
-    const [userID, setUserID] = useState("");
-
-    useEffect(() =>{
-        getMessages();
-    },[messages.length])
-
-    const getMessages = () =>{
-        socket.on("message_from_webhook", msg =>{
-            console.log(msg);
-            setMessages([...messages,<div><p>{msg.displayName}:{msg.message}</p></div>]);
-            // setUserID([msg.userID]);
-        })
-    }
-
-    const onChange = e => {
-        console.log(e.target.value)
-        setMessage(e.target.value);
-    }
-
-    const onClick = () => {
-        if (message != ""){
-            socket.emit("send_message_back",message);
-            setMessage("");
-        }else{
-            alert("Type your message")
-        }
-    }
-    return(   
-        <div>
-            {messages.length > 0 && 
-            messages.map(msg => (
-                <div>
-                    <p>{msg}</p>
+    return(
+        <Styles>  
+        <div className="chat-page">
+                <Navbar_member botID = {props.match.params.bot_id} path={"chat"} />
+            <div className="container">
+                <div className="row">
+                    <div className="col-4">
+                        <ChatList/> 
+                    </div>
+                    <div className="col">
+                    <Chatbody/>  
+                    </div>
                 </div>
-            ))}
-            <input value={message} name="message" onChange={e => onChange(e)} />
-            <button onClick={()=> onClick()}>Send</button>
+            </div>
         </div>
+       </Styles>  
     );
 }
 

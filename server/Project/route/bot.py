@@ -437,8 +437,8 @@ def customer_list(botID):
     customer_collection = mongo.db.customers
     customer_cur = customer_collection.find({"botID": ObjectId(botID)})
     customer_list = list(customer_cur)
-    # data = dumps(customer_list, indent=2)
-    return customer_list
+    data = dumps(customer_list, indent=2)
+    return data
 
 
 @bot.route('/test', methods=["GET"])

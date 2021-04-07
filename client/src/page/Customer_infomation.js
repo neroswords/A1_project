@@ -41,7 +41,7 @@ function Customer_infomation(props){
                     </div>
                     
                     <div className="show-customer">
-                        <Tablecustomer/>
+                        <Tablecustomer botID = {props.match.params.bot_id}/>
                     </div>
                </div> 
             </div>

@@ -9,9 +9,9 @@ import { Button } from 'react-bootstrap';
 
 const Styles = styled.div`
   table {
-    font-family: 'Roboto',sans-serif;
+    /* font-family: 'Roboto',sans-serif; */
     margin: 10px 0;
-    font-size: 1.2em;
+    font-size: 1em;
     text-align: center;
     border: 1px solid #efeff5; 
     tr {
@@ -23,15 +23,17 @@ const Styles = styled.div`
     }
     th{
       margin: 0;
-      padding: 12px 15px;
+      /* padding: 12px 15px; */
       border: 1px solid #efeff5;
       background-color: #393939;
       color: white;
     }
     td {
+      font-family: 'Public Sans', sans-serif;
       margin: 0;
       padding: 12px 15px;
       border: 1px solid #efeff5;
+      font-size: 16px;
 
       :last-child {
         border-right: 0;

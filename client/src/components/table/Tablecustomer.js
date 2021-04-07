@@ -3,16 +3,16 @@ import styled from 'styled-components';
 import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination, useRowSelect } from 'react-table'
 import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
-import { AddWord } from "./AddTable/AddWord";
-import { Button } from 'react-bootstrap';
+import {Link} from "react-router-dom";
+
 
 
 const Styles = styled.div`
 
   table {
-    font-family: 'Roboto',sans-serif;
+    /* font-family: 'Roboto',sans-serif; */
     margin: 10px 0;
-    font-size: 1.2em;
+    font-size: 1em;
     text-align: center;
     border: 1px solid #efeff5;
     tr {
@@ -25,22 +25,26 @@ const Styles = styled.div`
 
     th {
       margin: 0;
-      padding: 12px 15px;
+      /* padding: 12px 15px; */
       border: 1px solid #efeff5;
       background-color: #393939;
       color: white;
+      width: 500px;
     }
     td {
+      font-family: 'Public Sans', sans-serif;
+      font-weight: 0;
       margin: 0;
       padding: 12px 15px;
       border: 1px solid #efeff5;
+      font-size: 16px;
 
       :last-child {
         border-right: 0;
       }
 
       input {
-        font-size: 0.9rem;
+        font-size: 50px;
         padding: 0;
         margin: 0;
         border: 0;
@@ -48,7 +52,7 @@ const Styles = styled.div`
       }
     }
 
-  .trained-Word{
+  .customer_input{
     background-color: transparent;
     border-radius: 25px;
     padding-left:15px;
@@ -72,7 +76,7 @@ const Styles = styled.div`
   }
 
 
-  .button-trained-word .buttondeleteWord:hover{
+  /* .button-trained-word .buttondeleteWord:hover{
     color: #000;
   }
 
@@ -88,7 +92,7 @@ const Styles = styled.div`
 
 .buttonaddWord:hover{
   color: #000;
-}
+} */
 
 .pagination{
   justify-content:space-between;
@@ -146,23 +150,23 @@ input::placeholder{
 `;
 
 
-const IndeterminateCheckbox = React.forwardRef(
+// const IndeterminateCheckbox = React.forwardRef(
 
-  ({ indeterminate, ...rest }, ref) => {
-    const defaultRef = React.useRef()
-    const resolvedRef = ref || defaultRef
+//   ({ indeterminate, ...rest }, ref) => {
+//     const defaultRef = React.useRef()
+//     const resolvedRef = ref || defaultRef
 
-    React.useEffect(() => {
-      resolvedRef.current.indeterminate = indeterminate
-    }, [resolvedRef, indeterminate])
+//     React.useEffect(() => {
+//       resolvedRef.current.indeterminate = indeterminate
+//     }, [resolvedRef, indeterminate])
 
-    return (
-      <>
-        <input type="checkbox" ref={resolvedRef} {...rest} />
-      </>
-    )
-  }
-)
+//     return (
+//       <>
+//         <input type="checkbox" ref={resolvedRef} {...rest} />
+//       </>
+//     )
+//   }
+// )
 
 
 
@@ -236,7 +240,7 @@ const EditableCell = ({
 
   }
 
-  const onBlur = () => {
+  const onBlur = () => { 
     updateMyData(index, id, value)
     console.log("test")
   }
@@ -248,7 +252,7 @@ const EditableCell = ({
 
 
 
-  return <input className="trained-Word" value={value} onChange={onChange} onBlur={onBlur} />
+  return <input className="customer_input" value={value} onChange={onChange} onBlur={onBlur} />
 }
 
 const defaultColumn = {
@@ -316,7 +320,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     {
       columns,
       data,
-      defaultColumn,
+      // defaultColumn,
       defaultColumnFilter, // Be sure to pass the defaultColumn option
       filterTypes,
       autoResetPage: !skipPageReset,
@@ -333,26 +337,26 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     hooks => {
       hooks.visibleColumns.push(columns => [
 
-        {
-          id: 'selection',
-          Header: ({ getToggleAllPageRowsSelectedProps }) => (
-            <div>
-              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+        // {
+        //   id: 'selection',
+        //   Header: ({ getToggleAllPageRowsSelectedProps }) => (
+        //     <div>
+        //       <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
 
-            </div>
-          ),
+        //     </div>
+        //   ),
 
-          Cell: ({ row }) => (
+        //   Cell: ({ row }) => (
 
-            <div >
+        //     <div >
 
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+        //       <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
 
 
-            </div>
-          ),
+        //     </div>
+        //   ),
 
-        },
+        // },
         ...columns,
 
       ])
@@ -364,8 +368,8 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     <>
       <Container>
         <div className="button-trained-word">
-          <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
-          <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
+          {/* <Button className='buttonaddWord' onClick={openWord}>Add Word</Button> */}
+          {/* <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button> */}
           <div className='SearchBar'>
             <GlobalFilter
               preGlobalFilteredRows={preGlobalFilteredRows}
@@ -373,11 +377,8 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               setGlobalFilter={setGlobalFilter}
             />
           </div>
-          <AddWord showWord={showWord} setShowWord={setShowWord} botID={botID} />
+          {/* <AddWord showWord={showWord} setShowWord={setShowWord} botID={botID} /> */}
         </div>
-
-
-
 
         <table {...getTableProps()} className="table">
           <thead>
@@ -389,6 +390,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
                   </th>
                 ))}
+                {/* <th>Chat</th> */}
               </tr>
 
             ))}
@@ -402,7 +404,9 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
               </th>
             </tr> */}
+
           </thead>
+
           <tbody {...getTableBodyProps()}>
             {page.map((row, i) => {
               prepareRow(row)
@@ -466,41 +470,36 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
 
 function Tablecustomer({ botID, delete_trained, add_data }) {
-  const [TableconState, setTableconState] = useState([]);
+  const [TablecustomerState, setTablecustomerState] = useState([]);
 
-                                                          
-
+                                                        
   const [showWord, setShowWord] = useState(false);
 
 
   const columns = React.useMemo(
     () => [
       {
-        Header: 'User Name',
-        accessor: 'User Name', // accessor is the "key" in the data
+        Header: 'UserName',
+        accessor: 'UserName', // accessor is the "key" in the data
       },
       {
-        Header: 'Name-Surname',
-        accessor: 'Name-Surname',
+        Header: 'Name',
+        accessor: 'Name',
         filter: 'fuzzyText',
       },
       {
         Header: 'Address',
         accessor: 'Address',
       },
-      {
-        Header: 'Chat',
-        accessor: 'Chat',
-      },
     ],
     []
   )
 
-  const [originalData] = React.useState(TableconState)
+  const [originalData] = React.useState(TablecustomerState)
   const [skipPageReset, setSkipPageReset] = React.useState(false)
 
   const updateMyData = (rowIndex, columnId, value) => {
-    setTableconState(old =>
+    setTablecustomerState(old =>
       old.map((row, index) => {
         if (index === rowIndex) {
           const editData = {
@@ -534,16 +533,19 @@ function Tablecustomer({ botID, delete_trained, add_data }) {
   }
 
   useEffect(() => {
-    fetch('/train_bot/' + botID + '/training')
+    fetch('/bot/' + botID + '/customer')
       .then(res => res.json().then(data => {
-        setTableconState(
+        console.log(data)
+
+        setTablecustomerState(
           data.map(d => {
             return {
               select: false,
               id: d._id.$oid,
-              Word: d.question,
-              ReplyWord: d.answer,
-              Confidence: d.confident
+              UserName: d.display_name,
+              Name: d.fullname,
+              Address: d.address
+
             };
           })
           
@@ -555,13 +557,13 @@ function Tablecustomer({ botID, delete_trained, add_data }) {
   }, []);
 
 
-  const resetData = () => setTableconState(originalData)
-  console.log(TableconState)
+  const resetData = () => setTablecustomerState(originalData)
+  console.log(TablecustomerState)
   return (
     <Styles>
       <TableShow
         columns={columns}
-        data={TableconState}
+        data={TablecustomerState}
         updateMyData={updateMyData}
         skipPageReset={skipPageReset}
         delete_trained={delete_trained}
