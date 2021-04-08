@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Styles = styled.div`
 
@@ -160,7 +161,16 @@ const Styles = styled.div`
   display:inline-block;
 }
 ` 
-function Chatlist(){
+function Chatlist({botID, onSelect}){
+
+    const [customerList, setCustomerList] =  useState([])
+
+    useEffect(() =>{
+      fetch('/bot/'+botID+'/customer').then(res=> res.json().then(data=> setCustomerList(data)
+      ))
+      
+    },[])
+
     return(
         <Styles> 
             <div className="chatlist">
@@ -191,33 +201,36 @@ function Chatlist(){
                               line
                             </div> */}
                         </div>
-                        <div className="chatlist-user">
-                            <div className="chatlist-msg">
+                      <div className="chatlist-user">
+
+                      { customerList.map((customer) => (
+                            <div onClick = { ()=> onSelect(customer.userID)} className="chatlist-msg">
                                 <li className="msg-user row">
                                     <div className="user-list-pic col-lg-3 col-sm-1">
                                       <img></img>
                                       <div className="connec">
                                         <i className="fab fa-facebook-square"></i>
                                       </div>
-                                      
                                     </div>
                                     <div className="user-list-input col">
-                                        <h6 className="user-list-name">NAMPUN</h6>
+                                        <h6 className="user-list-name">{customer.display_name}</h6>
                                         <div className="user-list-text"> 
                                           สวัสดีค่ะ มีสินค้าอะไรบ้างคะ คุยกับบอทแล้วไม่เข้าใจเลยค่ะ อยากเรียกให้ช่วยค่ะ มานี่ๆๆๆๆๆ มานี่มาาาาา
                                         </div>
                                     </div>
                                   </li>
                               </div>
+                             
+                              ))
+                      }
 
-                              <div className="chatlist-msg">
+                              {/* <div className="chatlist-msg">
                                   <li className="msg-user row">
                                       <div className="user-list-pic col-lg-3 col-sm-1">
                                         <img></img>
                                         <div className="connec">
                                           <i className="fab fa-line"></i>
                                         </div>
-                                        
                                       </div>
                                       <div className="user-list-input col">
                                           <h6 className="user-list-name">NAMPUN</h6>
@@ -226,135 +239,9 @@ function Chatlist(){
                                           </div>
                                       </div>
                                   </li>
-                              </div>
+                              </div> */}
 
-                              <div className="chatlist-msg">
-                                  <li className="msg-user row">
-                                      <div className="user-list-pic col-lg-3 col-sm-1">
-                                        <img></img>
-                                        <div className="connec">
-                                          <i className="fab fa-line"></i>
-                                        </div>
-                                        
-                                      </div>
-                                      <div className="user-list-input col">
-                                          <h6 className="user-list-name">NAMPUN</h6>
-                                          <div className="user-list-text"> 
-                                            สวัสดีค่ะ มีสินค้าอะไรบ้างคะ คุยกับบอทแล้วไม่เข้าใจเลยค่ะ อยากเรียกให้ช่วยค่ะ มานี่ๆๆๆๆๆ มานี่มาาาาา
-                                          </div>
-                                      </div>
-                                  </li>
-                              </div>
-                              <div className="chatlist-msg">
-                                  <li className="msg-user row">
-                                      <div className="user-list-pic col-lg-3 col-sm-1">
-                                        <img></img>
-                                        <div className="connec">
-                                          <i className="fab fa-line"></i>
-                                        </div>
-                                        
-                                      </div>
-                                      <div className="user-list-input col">
-                                          <h6 className="user-list-name">NAMPUN</h6>
-                                          <div className="user-list-text"> 
-                                            สวัสดีค่ะ มีสินค้าอะไรบ้างคะ คุยกับบอทแล้วไม่เข้าใจเลยค่ะ อยากเรียกให้ช่วยค่ะ มานี่ๆๆๆๆๆ มานี่มาาาาา
-                                          </div>
-                                      </div>
-                                  </li>
-                              </div>
-                              <div className="chatlist-msg">
-                                  <li className="msg-user row">
-                                      <div className="user-list-pic col-lg-3 col-sm-1">
-                                        <img></img>
-                                        <div className="connec">
-                                          <i className="fab fa-line"></i>
-                                        </div>
-                                        
-                                      </div>
-                                      <div className="user-list-input col">
-                                          <h6 className="user-list-name">NAMPUN</h6>
-                                          <div className="user-list-text"> 
-                                            สวัสดีค่ะ มีสินค้าอะไรบ้างคะ คุยกับบอทแล้วไม่เข้าใจเลยค่ะ อยากเรียกให้ช่วยค่ะ มานี่ๆๆๆๆๆ มานี่มาาาาา
-                                          </div>
-                                      </div>
-                                  </li>
-                              </div>
-                              <div className="chatlist-msg">
-                                  <li className="msg-user row">
-                                      <div className="user-list-pic col-lg-3 col-sm-1">
-                                        <img></img>
-                                        <div className="connec">
-                                          <i className="fab fa-line"></i>
-                                        </div>
-                                        
-                                      </div>
-                                      <div className="user-list-input col">
-                                          <h6 className="user-list-name">NAMPUN</h6>
-                                          <div className="user-list-text"> 
-                                            สวัสดีค่ะ มีสินค้าอะไรบ้างคะ คุยกับบอทแล้วไม่เข้าใจเลยค่ะ อยากเรียกให้ช่วยค่ะ มานี่ๆๆๆๆๆ มานี่มาาาาา
-                                          </div>
-                                      </div>
-                                  </li>
-                              </div>
-                              <div className="chatlist-msg">
-                                  <li className="msg-user row">
-                                      <div className="user-list-pic col-lg-3 col-sm-1">
-                                        <img></img>
-                                        <div className="connec">
-                                          <i className="fab fa-line"></i>
-                                        </div>
-                                        
-                                      </div>
-                                      <div className="user-list-input col">
-                                          <h6 className="user-list-name">NAMPUN</h6>
-                                          <div className="user-list-text"> 
-                                            สวัสดีค่ะ มีสินค้าอะไรบ้างคะ คุยกับบอทแล้วไม่เข้าใจเลยค่ะ อยากเรียกให้ช่วยค่ะ มานี่ๆๆๆๆๆ มานี่มาาาาา
-                                          </div>
-                                      </div>
-                                  </li>
-                              </div>
-                              <div className="chatlist-msg">
-                                  <li className="msg-user row">
-                                      <div className="user-list-pic col-lg-3 col-sm-1">
-                                        <img></img>
-                                        <div className="connec">
-                                          <i className="fab fa-line"></i>
-                                        </div>
-                                        
-                                      </div>
-                                      <div className="user-list-input col">
-                                          <h6 className="user-list-name">NAMPUN</h6>
-                                          <div className="user-list-text"> 
-                                            สวัสดีค่ะ มีสินค้าอะไรบ้างคะ คุยกับบอทแล้วไม่เข้าใจเลยค่ะ อยากเรียกให้ช่วยค่ะ มานี่ๆๆๆๆๆ มานี่มาาาาา
-                                          </div>
-                                      </div>
-                                  </li>
-                              </div>
-                              <div className="chatlist-msg">
-                                  <li className="msg-user row">
-                                      <div className="user-list-pic col-lg-3 col-sm-1">
-                                        <img></img>
-                                        <div className="connec">
-                                          <i className="fab fa-line"></i>
-                                        </div>
-                                        
-                                      </div>
-                                      <div className="user-list-input col">
-                                          <h6 className="user-list-name">NAMPUN</h6>
-                                          <div className="user-list-text"> 
-                                            สวัสดีค่ะ มีสินค้าอะไรบ้างคะ คุยกับบอทแล้วไม่เข้าใจเลยค่ะ อยากเรียกให้ช่วยค่ะ มานี่ๆๆๆๆๆ มานี่มาาาาา
-                                          </div>
-                                      </div>
-                                  </li>
-                              </div>
-
-
-
-
-
-
-
-                        </div>
+                        </div> 
                     </div>
                 </div>
             </div> 

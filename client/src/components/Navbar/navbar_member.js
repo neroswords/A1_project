@@ -239,7 +239,7 @@ const Styles = styled.div`
 
 `;
 
-function Navbar_member({ botID, path  }) {
+function Navbar_member({ botID, customer_id, path  }) {
   const stetus = useSelector(state => state.tr)
   const [change, setchange] = useState(stetus);
  
@@ -428,14 +428,14 @@ function Navbar_member({ botID, path  }) {
 
             <li className="nav-item-c">
             { path=="chat" ? (
-              <Link to={"/bot/" + botID + "/chat"} class="nav-check">
+              <Link to={"/chat/" + botID + "/live_chat/"} class="nav-check">
                 <div className="fa-group">
                   <div className="fa-secondary">
                   <i class="fas fa-comments-alt"></i>
                   </div>
                 </div>
               </Link> ) : (
-              <Link to={"/bot/" + botID + "/chat"} class="nav-link-c">
+              <Link to={"/chat/" + botID + "/live_chat/"} class="nav-link-c">
                <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="far fa-comments-alt"></i>
@@ -621,7 +621,7 @@ function Navbar_member({ botID, path  }) {
 
             <li className="nav-item2">
             { path=="chat" ? (
-              <Link to={"/bot/" + botID + "/chat"} onClick={onSubmit} class="nav-check-open">
+              <Link to={"/chat/" + botID + "/live_chat/" } onClick={onSubmit} class="nav-check-open">
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="fas fa-comments-alt"></i>
@@ -629,7 +629,7 @@ function Navbar_member({ botID, path  }) {
                 </div>
                 <span className="link-text">Chat</span>
               </Link> ) : (
-              <Link to={"/bot/" + botID + "/chat"} onClick={onSubmit} class="nav-link2">
+              <Link to={"/chat/" + botID + "/live_chat/"} onClick={onSubmit} class="nav-link2">
                   <div className="fa-group">
                       <div className="fa-secondary">
                       <i class="far fa-comments-alt"></i>

@@ -477,8 +477,6 @@ def customer_list(botID):
     customer_list = list(customer_cur)
     data = dumps(customer_list, indent=2)
     return data
-<<<<<<< HEAD
-=======
 
 @bot.route('/<botID>/customer/<customerID>', methods=["GET","POST"])
 def get_message(botID,customerID):
@@ -489,7 +487,6 @@ def get_message(botID,customerID):
     messages_list = list(messages_cur)
     data = dumps({"message":messages_list,"profile":customer}, indent=2)
     return data
->>>>>>> 782dc522cf02668de8d21846d169206cc306282a
 
 
 @bot.route('/test', methods=["GET"])
