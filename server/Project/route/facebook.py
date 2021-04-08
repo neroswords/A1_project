@@ -8,7 +8,7 @@ import requests
 from Project.message import item_list_flexmessage
 from Project.extensions import mongo, JSONEncoder
 from Project.nlp import sentence_get_confident
-from Project.process import process_message, stateHandler
+from Project.process import stateHandler,process_message
 from bson import ObjectId
 import os.path
 from bson.json_util import dumps, loads
