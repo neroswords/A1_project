@@ -1,36 +1,178 @@
 import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client'
 import styled from 'styled-components';
-import { Redirect, Link } from 'react-router-dom';
-import Chatbody from '../Components/Chat/chatbody'
+import { Link } from 'react-router-dom';
 
+const Styles = styled.div`
 
-// const Styles = styled.div` 
-// .mapping-page {
-//     display: flex;
-// }
-// .container {
-//     margin-top:2%
-// }
+.main-chatlist {
+  /* border-right: 1px solid #ebe7fb; */
+  padding: 20px 0 0 20px;
+  border-right: 1px solid #ebe7fb;
+}
 
-// ` 
+.chatlist__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 6%;
+}
 
-function Chat(props){
+.btn-nobg {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 10px;
+  color: #dad9dd;
+  outline: none;
+}
+
+.search_wrap {
+  background-color: #e6e5ea;
+  border-radius: 5px;
+  margin-bottom: 5%;
+  margin-right: 8%;
+}
+
+.search_wrap input {
+  background-color: transparent;
+  border: none;
+  padding: 15px 15px;
+  outline: none;
+  width: 80%;
+  padding-right: 0;
+}
+
+.search-btn {
+  height: 46px;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  width: 20%;
+  cursor: pointer;
+  font-size: 20px;
+}
+.chatlist-msg{
+  margin-right: 5%;
+}
+
+.chatlist-user{
+  /* background-color: #e6e5ea; */
+  border-radius: 5px;
+  /* font-family: 'Public Sans', sans-serif; */
+  margin-top: 2%;
+  height: 65vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-right: 4%;
+}
+
+.chatlist-user::-webkit-scrollbar-track{
+  background-color: #dfdfdfdf;
+  border-radius: 10px;
+  /* margin-left: 5%; */
+
+}
+
+.chatlist-user::-webkit-scrollbar{
+  width: 8px;
+  height: 8px;
+}
+
+.chatlist-user::-webkit-scrollbar-thumb{
+  background-color: rgba(0, 0, 0, 0.4);;
+  border-radius: 10px;
+
+}
+
+.user-list{
+  background-color : rgba(0, 0, 0, 0.2);
+}
+
+.user-list-pic img{
+  /* position: absolute; */
+  margin-top: 3px;
+  /* margin-right: 20px; */
+  width: 50px;
+  height: 50px;
+  /* border: 1px red solid; */
+  border-radius: 50%;
+  z-index: -1000;
+  /* margin-right: 20px; */
+  /* position: relative; */
+}
+
+.user-list-name{
+  /* font-weight: 900; */
+  /* padding: 2%; */
+}
+
+.msg-user{
+  margin: 0 0.1%;
+  padding: 5%;
+  max-height: 100px;
+  display: grid;
+  grid-template-columns: 20% 80%;
+  /* background-color: aquamarine; */
+  /* border-radius: 5px; */
+  border-bottom: 1px #dfdfdfdf solid;
+}
+
+.msg-user:hover{
+  background-color: #F7F7F9;
+  /* opacity: 0.3; */
+  cursor: pointer;
+}
+
+.user-list-text{
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical; 
+  /* max-width: 500px;  */
+  overflow: hidden;
+  /* padding: 2%; */
+}
+
+.user-list-input{
+  margin: 2%;
+}
+
+.connec {
+  display: flex;
+  margin-top: -15px;
+  margin-left: 35px;
+  width:15px;
+  height: 15px;
+  border-radius: 100%;
+  background-color: white;
+}
+
+.fa-line{
+  color: #00B900;
+}
+
+.fa-facebook-square{
+  color: #1877f2;
+}
+.tabs{
+  display:inline-block;
+}
+` 
+function Chatlist({botID}){
+
     const [customerList, setCustomerList] =  useState([])
-    const [customer, setCustomer] =  useState(props.match.params.customer_id)
-
-    useEffect(() => {
-        setCustomer(props.match.params.customer_id);
-      }, [props.match.params.customer_id]);
 
     useEffect(() =>{
-      fetch('/bot/'+props.match.params.bot_id+'/customer').then(res=> res.json().then(data=> setCustomerList(data)
+      fetch('/bot/'+botID+'/customer').then(res=> res.json().then(data=> setCustomerList(data)
       ))
       
     },[])
 
     return(
-        <>
+        <Styles> 
             <div className="chatlist">
                 <div className="chatlist_body">
                     <div className="main-chatlist">
@@ -62,7 +204,7 @@ function Chat(props){
                       <div className="chatlist-user">
 
                       { customerList.map((customer) => (
-                            <Link to={"/chat/"+ props.match.params.bot_id+"/live_chat/"+customer.userID} className="chatlist-msg">
+                            <Link to={"/chat/"+ botID+"/live_chat/"+customer.userID} className="chatlist-msg">
                                 <li className="msg-user row">
                                     <div className="user-list-pic col-lg-3 col-sm-1">
                                       <img></img>
@@ -103,68 +245,7 @@ function Chat(props){
                     </div>
                 </div>
             </div> 
-            <Chatbody botID={props.match.params.bot_id} customerID={props.match.params.customer_id} />
-        </>
-    )
-
-    // const [messages,setMessages] = useState([]);
-    // const [message,setMessage] = useState("");
-    // // const [userID, setUserID] = useState("");
-
-    // useEffect(() =>{
-    //     fetch('/bot/'+props.match.params.bot_id+'/customer/'+props.match.params.customer_id, ).then(res=> res.json().then(data=> 
-    //             data.message.forEach(ele=>{ setMessages(messages=> [...messages,<div><p>{ele.sender}:{ele.message}</p></div>])
-    //         })
-    //     ))
-    // },[])
-
-    // useEffect(() =>{
-            
-    //     getMessages();
-    // },[messages.length])
-
-    // const getMessages = () =>{
-    //     socket.on('connect', function (room) {
-    //         socket.emit('join_room', {
-    //             bot: props.match.params.bot_id,
-    //             customer: props.match.params.customer_id
-    //         })
-    //     })
-        
-    //     socket.on("message_from_webhook", msg =>{
-    //         setMessages([...messages,<div><p>{msg.displayName}:{msg.message}</p></div>]);
-    //         // setUserID([msg.userID]);
-    //     })
-    //     socket.on("message_from_response", msg =>{
-    //         setMessages([...messages,<div><p>{msg.displayName}:{msg.message}</p></div>]);
-    //         // setUserID([msg.userID]);
-    //     })
-    // }
-
-    // const onChange = e => {
-    //     setMessage(e.target.value);
-    // }
-
-    // const onClick = () => {
-    //     if (message != ""){
-    //         socket.emit("send_message",{"message": message,"room":props.match.params.bot_id+'&'+props.match.params.customer_id,"customerID":props.match.params.customer_id,"botID":props.match.params.bot_id});
-    //         setMessage("");
-    //     }else{
-    //         alert("Type your message")
-    //     }
-    // }
-    // return(   
-    //     <div>
-    //         {messages.length > 0 && 
-    //         messages.map(msg => (
-    //             <div>
-    //                 <p>{msg}</p>
-    //             </div>
-    //         ))}
-    //         <input value={message} name="message" onChange={e => onChange(e)} />
-    //         <button onClick={()=> onClick()}>Send</button>
-    //     </div>
-    // );
+       </Styles>  
+    );
 }
-
-export default Chat;
+export default Chatlist;

@@ -38,9 +38,10 @@ def save_message(message,message_type,sender,sender_id,sender_type,room):  #send
 
 @socketio.on('join_room')
 def handle_join_room_event(data):
-    # current_app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
+    current_app.logger.info("{} has joined the room {}".format(data['bot'], data['customer']))
     room_id = data['bot']+"&"+data['customer']
     join_room(room_id)
+    print(data)
     # socketio.emit('join_room_announcement', data, room=data['room'])
 
 
@@ -487,6 +488,10 @@ def get_message(botID,customerID):
     messages_list = list(messages_cur)
     data = dumps({"message":messages_list,"profile":customer}, indent=2)
     return data
+
+@bot.route('/<botID>/webhook', methods=["GET","POST"])
+def webhook_event(botID):
+    print(request.get_json())
 
 
 @bot.route('/test', methods=["GET"])

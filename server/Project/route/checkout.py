@@ -39,7 +39,7 @@ def get_client_ip():
 
     return request.remote_addr
 
-def process(chrg, already_redirected=False):
+def process(chrg, botID, userID, already_redirected=False):
     """
     Process charge depending on payment method.  `already_redirected`
     tries to ensure that the customer is redirected only once.
@@ -70,6 +70,10 @@ def process(chrg, already_redirected=False):
 
     if chrg.status == "successful":
         flash(f"Order {order_id} successfully completed.")
+        cart_collection = mongo.db.carts
+        customer_collection = mongo.db.customers
+        customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "address"}})
+        cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
         return render_template("complete.html")
 
     # Check whether source is "econtext" before checking whether charge has `authorize_uri`.
@@ -167,16 +171,16 @@ def charge():
             capture=current_app.config.get("AUTO_CAPTURE"),
             **nonce,
         )
-        return process(chrg)
+        return process(chrg, botID, userID)
 
     except omise.errors.BaseError as error:
         flash(f"An error occurred.  Please contact support.  Order ID: {order_id}")
         current_app.logger.error(f"OmiseError: {repr(error)}.")
-        return redirect(url_for("checkout.check_out"))
+        return redirect("/checkout/"+botID)
     except Exception as e:
         flash("""An error occurred.  Please contact support.""")
         current_app.logger.error(repr(e))
-        return redirect(url_for("checkout.check_out"))
+        return redirect("/checkout/"+botID)
 
 @checkout.route("/complete",methods=['GET'])
 def complete():
@@ -184,11 +188,15 @@ def complete():
 
 @checkout.route("/<botID>", methods=['GET'])
 def check_out(botID):
+    if request.args.get('liff.state') != None:
+        return render_template('checkout.html',liffId = "1655652942-zNpjoxYV")
+    cart_collection = mongo.db.carts
+    cart_define = cart_collection.find_one({'$and':[{'userID':request.args.get('customer')},{'botID':ObjectId(botID)}]})
     return render_template(
         'checkout.html',
         key=current_app.config.get("OMISE_PUBLIC_KEY"),
         # cart=3000,
-        # Price=3000,
+        Price=cart_define['total']*100,
         botID = botID,
         currency=current_app.config.get("STORE_CURRENCY"),
         customer=session.get("customer"),
