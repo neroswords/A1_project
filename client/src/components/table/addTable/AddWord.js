@@ -6,30 +6,30 @@ import { Button, Container } from "react-bootstrap";
 
 
 const Background = styled.div`
-  position: relative;
+  width: 100%;
+  height: 100%;
+  background: blue;
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
+  background :rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const ModalWrapper = styled.div`
   width: 800px;
-  height: 500px !important;
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
-  background: #fff;
-  color: #000;
-  display: grid;
-  z-index: 10;
-  border-radius: 10px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin-top: 200px;
+  height: 500px;
+  background-color: white;
+  padding: 3rem;
+  border-radius: 0.5rem;
 `;
 
 const ModalContent = styled.div`
-
+  margin-top: 10%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -101,10 +101,6 @@ const CloseModalButton = styled(MdClose)`
   padding: 0;
   z-index: 10;
 `;
-
-
-
-
 
 
 export const AddWord = ({ showWord, setShowWord,botID}) => {
@@ -197,26 +193,3 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
 };
 
 export default AddWord;
-
-
-{/* <Form.Group>
-                <h1>Add your Question and Answer</h1>
-                <Form.Row>
-                <Form.Label column>
-                  Question
-                </Form.Label>
-                <Col>
-                  <Form.Control type="text" className="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question" />
-                </Col>
-                </Form.Row>
-                <br />
-                <Form.Row>
-                <Form.Label column>
-                  Answer
-                </Form.Label>
-                <Col>
-                  <Form.Control type="text" className="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer" />
-                </Col>
-                </Form.Row>
-                <br />
-              </Form.Group> */}

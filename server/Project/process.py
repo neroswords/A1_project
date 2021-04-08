@@ -145,25 +145,28 @@ def commandsHandler(**kwargs):
             if define_item['amount'] <= 0 :
                 return {"message":"ขออภัยครับ สินค้าชิ้นนี่หมดแล้ว"}
             if define_cart == None :
-                cart_collection.insert_one({'cart':[{'itemid': ObjectId(itemid),'item_name':define_item['item_name'],'price_per_ob':define_item['price'], 'amount': 1,'total_ob':define_item['price']}], 'userID': kwargs['sender_id'], 'botID': ObjectId(kwargs['botID'])})
+                cart_collection.insert_one({'cart':[{'itemid': ObjectId(itemid),'item_name':define_item['item_name'],'price_per_ob':define_item['price'], 'amount': 1,'total_ob':define_item['price']}], 'userID': kwargs['sender_id'], 'botID': ObjectId(kwargs['botID']), 'total':define_item['price']})
                 customer_collection.update_one({"userID": kwargs['sender_id']},{"$set": {"state":"inCart"}})
                 return {"message":"ใส่ "+define_item['item_name']+" ลงตระกร้าเรียบร้อยแล้วครับบ"}
             else:
                 newlist = define_cart['cart']
+                total = define_cart['total']
                 for idx, val in enumerate(newlist):
                     if ObjectId(itemid) == val['itemid']:
                         newlist[idx]['amount'] += 1
                         newlist[idx]['total_ob'] += newlist[idx]['price_per_ob']
+                        total += newlist[idx]['price_per_ob']
                         if define_item['amount'] < newlist[idx]['amount'] :
                             return {"message":"ขออภัยครับ สินค้าชิ้นนี่หมดแล้ว"}
                         myquery = {'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]}
-                        newvalues = {"$set": {"cart": newlist}}
+                        newvalues = {"$set": {"cart": newlist,"total": total}}
                         cart_collection.update_one(myquery,newvalues)
                         customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
                         return {"message":"ใส่ "+define_item['item_name']+" ลงตระกร้าเรียบร้อยแล้วครับบ"}
                 myquery = {"userID": kwargs['sender_id']}
                 newvalues = {"$push":{'cart':{'itemid': ObjectId(itemid),'price_per_ob':define_item['price'],'item_name':define_item['item_name'], 'amount': 1,'total_ob':define_item['price']}}}
                 cart_collection.update_one(myquery,newvalues)
+                cart_collection.update_one(myquery,{"$set": {"total":define_cart['total']+define_item['price']}})
                 customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
                 return {"message":"ใส่ "+define_item['item_name']+" ลงตระกร้าเรียบร้อยแล้วครับบ"}
     elif commands[0] == "action=confirm":
