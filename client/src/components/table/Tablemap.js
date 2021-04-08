@@ -6,6 +6,7 @@ import { Container } from "react-bootstrap";
 
 import { Button } from 'react-bootstrap';
 import {Link} from "react-router-dom";
+import Delete_table from "../Delete_table";
 
 
 const Styles = styled.div`
@@ -236,15 +237,15 @@ const EditableCell = ({
 }
 
 const defaultColumn = {
-  Cell: EditableCell
+  // Cell: EditableCell
 }
 
 
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID }) {
   // console.log(data)
   const Ondelete = (e) => {
-    delete_trained(e)
-    
+    // delete_trained(e)
+    openDelete_table(e)
   }
 
   const filterTypes = React.useMemo(
@@ -274,6 +275,13 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
   const openWord = () => {
     setShowWord(prev => !prev);
   }
+
+  const [showDelete_table, setShowDelete_table] = useState(false);
+  const openDelete_table = (data) => {
+    setShowDelete_table(prev => !prev);
+      
+  }
+ 
 
   const {
     getTableProps,
@@ -348,8 +356,8 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
       <Container>
         <div className="button-trained-word">
           {/* {console.log(botID)} */}
-          <Link to ={'/bot/'+botID+'/mapping/create'} ><Button className='buttonaddMapping' >Create Mapping</Button></Link>
-          <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
+          {/* <Link to ={'/bot/'+botID+'/mapping/create'} ><Button className='buttonaddMapping' >Create Mapping</Button></Link> */}
+          {/* <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button> */}
           <div className='SearchBar'>
             <GlobalFilter
               preGlobalFilteredRows={preGlobalFilteredRows}
@@ -357,7 +365,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               setGlobalFilter={setGlobalFilter}
             />
           </div>
-         
+          <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table} selectedFlatRows={selectedFlatRows} id={botID} delete_trained={delete_trained}/>
         </div>
 
 
@@ -392,7 +400,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
           {/* {  console.log(page[0]) } */}
             {page.map((row, i) => {
               prepareRow(row)
-              console.log(row)
+              // console.log(row)
               return (  
                 
                 <tr {...row.getRowProps()}>

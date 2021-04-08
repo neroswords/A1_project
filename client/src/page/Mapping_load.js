@@ -84,7 +84,7 @@ input::placeholder{
 function Mapping_load(props){
   const history = useHistory();
 
-  console.log(props.match.params.map_id)
+  // console.log(props.match.params.map_id)
   const mapID = props.match.params.map_id
   const botID = props.match.params.bot_id
   const flowKey = 'example-flow';
@@ -93,12 +93,12 @@ function Mapping_load(props){
 
 
   const LoadElements = [
-  { id: '1', type:'input', data: { label: '' }, position: { x: 400, y: 100 } },
-  // { id: '2', data: { label: 'Node 2' }, position: { x: 200, y: 200 } },
-  // { id: 'e1-2', source: '1', target: '2' },
+  // { id: '1', type:'input', data: { label: '' }, position: { x: 400, y: 100 } },
+  // // { id: '2', data: { label: 'Node 2' }, position: { x: 200, y: 200 } },
+  // // { id: 'e1-2', source: '1', target: '2' },
   ];
   const LoadData = [
-    { id: '1', answer: 'Root', keyword: 'shirt' ,parameter : 'red'}
+    // { id: '1', answer: 'Root', keyword: 'shirt' ,parameter : 'red'}
   
   ];
   const style = {
@@ -129,15 +129,17 @@ function Mapping_load(props){
 }
 
   const onSelectionChange = (ClickElements) => {
-    
+  
     if(ClickElements != null){
-      
-      setselectNode(ClickElements[0].id)
-      const index = getIndex(ClickElements[0].id, elements, 'id');
      
-      setNodeName(elements[index].data.label)
-      setKeyword(details[index].keyword)
-      setParameter(details[index].parameter)
+      setselectNode(ClickElements[0].id)
+      
+      const index_el = getIndex(ClickElements[0].id, elements, 'id');
+      const index_details = getIndex(ClickElements[0].id, details, 'id');
+    
+      setNodeName(elements[index_el].data.label)
+      setKeyword(details[index_details].keyword)
+      setParameter(details[index_details].parameter)
      
 
     }
@@ -149,7 +151,7 @@ function Mapping_load(props){
 
   useEffect(() => {
     fetch('/mapping/detail/'+mapID).then(res => res.json().then(data => {
-      console.log(data[0])
+      // console.log(data[0])
       setElements(data[0].node)
     setDetails(data[0].details)
     setName(data[0].name)
@@ -158,6 +160,8 @@ function Mapping_load(props){
 
     
   }, []);
+
+  console.log(elements)
 
   const onSave = () => {
     
@@ -215,7 +219,7 @@ const changeAnswer =  (evt) =>{
         if (el.id === selectNode) {
   
           el.keyword = evt;
-          console.log(el)
+          // console.log(el)
         }
         return el;
       })
@@ -248,7 +252,7 @@ const changeAnswer =  (evt) =>{
 
 
   const onAdd = () => {
-    console.log(selectNode)
+    // console.log(selectNode)
     const newNode = {
       id: getNodeId(),
       data: { label: ' New node' },
@@ -267,10 +271,11 @@ const changeAnswer =  (evt) =>{
       const newDetails = {
         id : newNode.id,
         answer : newNode.data.label,
-        keyword : '',
-        parameter : '',
+        keyword : "keyword",
+        parameter : "parameter",
         }
-    
+    // console.log(newNode)
+    // console.log(newDetails)
    
     setElements((els) => els.concat(newNode))
     setDetails((els) => els.concat(newDetails))
@@ -287,7 +292,7 @@ const changeAnswer =  (evt) =>{
     console.log(delSource)
     setElements(delSource);
 }
-  console.log(name)
+  // console.log(name)
       return(
         <Styles>
         
