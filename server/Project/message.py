@@ -630,7 +630,7 @@ def payment_flex(botID,customerID):
           "action": {
             "type": "uri",
             "label": "Pay",
-            "uri": "https://liff.line.me/1655652942-zNpjoxYV/checkout/%s/?customer=%s"
+            "uri": "https://liff.line.me/1655652942-zNpjoxYV/?customer=%s"
           }
         },
         {
@@ -651,5 +651,5 @@ def payment_flex(botID,customerID):
       "flex": 0
     }
   }
-  '''%(botID,customerID)
+  '''%(customerID)
   return flex

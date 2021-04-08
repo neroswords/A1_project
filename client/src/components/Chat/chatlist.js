@@ -161,7 +161,11 @@ const Styles = styled.div`
   display:inline-block;
 }
 ` 
+<<<<<<< HEAD
 function Chatlist({botID, onSelect}){
+=======
+function Chatlist({botID}){
+>>>>>>> a03ab3f15d69b4ba09186004f810c069954dcb78
 
     const [customerList, setCustomerList] =  useState([])
 
@@ -204,7 +208,11 @@ function Chatlist({botID, onSelect}){
                       <div className="chatlist-user">
 
                       { customerList.map((customer) => (
+<<<<<<< HEAD
                             <div onClick = { ()=> onSelect(customer.userID)} className="chatlist-msg">
+=======
+                            <Link to={"/chat/"+ botID+"/live_chat/"+customer.userID} className="chatlist-msg">
+>>>>>>> a03ab3f15d69b4ba09186004f810c069954dcb78
                                 <li className="msg-user row">
                                     <div className="user-list-pic col-lg-3 col-sm-1">
                                       <img></img>
@@ -219,7 +227,11 @@ function Chatlist({botID, onSelect}){
                                         </div>
                                     </div>
                                   </li>
+<<<<<<< HEAD
                               </div>
+=======
+                              </Link>
+>>>>>>> a03ab3f15d69b4ba09186004f810c069954dcb78
                              
                               ))
                       }
@@ -248,5 +260,8 @@ function Chatlist({botID, onSelect}){
        </Styles>  
     );
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> a03ab3f15d69b4ba09186004f810c069954dcb78
 export default Chatlist;
