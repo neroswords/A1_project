@@ -7,6 +7,7 @@ import '../Components/Inventory/Inven.css';
 const Styles = styled.div` 
 .inventory-page {
     display: flex;
+    min-height: 92vh;
 }
 .inventory-body {
     margin-left: 2%;

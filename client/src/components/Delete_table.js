@@ -22,7 +22,7 @@ const Background = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-  width: 500px;
+  width: 350px;
   background-color: white;
   padding: 3rem;
   border-radius: 0.5rem;
@@ -31,7 +31,7 @@ const ModalWrapper = styled.div`
 const CloseModalButton = styled(MdClose)`
   cursor: pointer;
   position: absolute;
-  top: 35px;
+  top: 20px;
   right: 20px;
   width: 25px;
   height: 25px;
@@ -51,14 +51,15 @@ const ModalContent = styled.div`
 }
 
 .button-delete-bot .cancle-delete-bot{
-  padding: 7px 20px;
-  font-size: 15px;
+  padding: 7px 15px;
+  font-size: 12px;
   border-radius: 25px;
   border: 1px solid #0078ff;
   transition: 0.5s;
   margin: 10px;
   background-color: #fff;
   color: #0078ff;
+
 }
 
 .button-delete-bot .cancle-delete-bot:hover{
@@ -66,8 +67,8 @@ const ModalContent = styled.div`
 }
 
 .button-delete-bot .delete-bot{
-    padding: 7px 20px;
-    font-size: 15px;
+    padding: 7px 15px;
+    font-size: 12px;
     border-radius: 25px;
     border: 1px solid #CD5C5C;
     transition: 0.5s;
@@ -83,40 +84,65 @@ img{
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 70%;
+  width: 50%;
 }
 `;
 
-function Delete_pop({ showDelete_pop, setShowDelete_pop, Delete_bot, bot }) {
-
-  const ConfirmDelete = (bot) => {
-    Delete_bot(bot)
-    setShowDelete_pop(prev => !prev)
-  }
-
+function Delete_table({showDelete_table, setShowDelete_table, delete_trained, id, selectedFlatRows}) {
+   console.log('kaaaa') 
   const modalRef = useRef();
   const animation = useSpring({
     config: {
       duration: 250
     },
-    opacity: showDelete_pop ? 1 : 0,
-    transform: showDelete_pop ? `translateY(0%)` : `translateY(-100%)`
+    opacity: showDelete_table ? 1 : 0,
+    transform: showDelete_table ? `translateY(0%)` : `translateY(-100%)`
   });
 
   const closeModal = e => {
     if (modalRef.current === e.target) {
-      setShowDelete_pop(false);
+      setShowDelete_table(false);
     }
   };
 
+  // const ConfirmDelete = (data) => {
+  //   setShowDelete_table(prev => !prev)
+  //   console.log(data)
+  //     var newdata = []
+  //     var i = 0
+  //     for (i = 0; i < data.length; i++){
+  //         newdata.push(data[i].original)
+  //     }
+      
+  //     console.log(newdata)
+      
+  //     if (data[0]){
+  //         fetch('/train_bot/delete/trained/'+data[0].original.id, {
+  //             method : 'POST',
+  //             headers : {
+  //                 "Access-Control-Allow-Origin": "*",
+  //                 'Content-Type':'application/json'
+  //                 },
+  //                 body : JSON.stringify(newdata),
+  //             });
+  //             console.log(data)
+  //             window.location.reload("bot/"+id+'/trained');
+  //     }    
+  
+  // }
+
+  const ConfirmDelete = (data) => {
+      delete_trained(data)
+      setShowDelete_table(prev => !prev)
+  }
   const keyPress = useCallback(
     e => {
-      if (e.key === 'Escape' && showDelete_pop) {
-        setShowDelete_pop(false);
+      if (e.key === 'Escape' && showDelete_table) {
+        setShowDelete_table(false);
         console.log('I pressed');
       }
     },
-    [setShowDelete_pop, showDelete_pop]
+    [setShowDelete_table, showDelete_table]
   );
 
   useEffect(
@@ -129,24 +155,24 @@ function Delete_pop({ showDelete_pop, setShowDelete_pop, Delete_bot, bot }) {
 
   return (
     <div>
-      {showDelete_pop ? (
+      {showDelete_table ? (
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
             <Container>
-              <ModalWrapper showDelete_pop={showDelete_pop}>
+              <ModalWrapper showDelete_table={showDelete_table}>
                 <ModalContent>
                   <div>
                     <img src={ImageWarnning} alt="warnning" className="warnning_img" />
                   </div>
-                  you want to delete this bot?
+                  You want delete this word?
                 <Container className="button-delete-bot">
-                    <Button className="cancle-delete-bot" onClick={() => setShowDelete_pop(prev => !prev)}>cancle</Button>
-                    <Button className="delete-bot" onClick={() => { ConfirmDelete(bot)}}>delete</Button>
-                  </Container>
+                    <Button className="cancle-delete-bot" onClick={() => setShowDelete_table(prev => !prev)}>cancle</Button>
+                    <Button className="delete-bot" onClick={() => ConfirmDelete(selectedFlatRows)}>delete</Button>
+                </Container>
                 </ModalContent>
                 <CloseModalButton
                   aria-label="Close modal"
-                  onClick={() => setShowDelete_pop(prev => !prev)}
+                  onClick={() => setShowDelete_table(prev => !prev)}
                 />
               </ModalWrapper>
             </Container>
@@ -158,4 +184,4 @@ function Delete_pop({ showDelete_pop, setShowDelete_pop, Delete_bot, bot }) {
 
 };
 
-export default Delete_pop;
+export default Delete_table;

@@ -5,6 +5,7 @@ import Table from '../Components/Table/Tablemap';
 const Styles = styled.div` 
 .customer-page {
     display: flex;
+    min-height: 92vh;
 }
 .container {
     margin-top:2%
