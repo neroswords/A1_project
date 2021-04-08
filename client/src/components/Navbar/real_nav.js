@@ -50,8 +50,8 @@ function Loged_in_nav(props) {
     
     
     <Navbar_real>
-        <div className="show-user">  
-          <a href={"/bot_list/"+ localStorage.getItem('user_id')}><i class="fas fa-user"></i>{props}</a>
+        <div className="show-user" >  
+          <a href={"/bot_list/"+ localStorage.getItem('user_id')} name="validate_user"><i class="fas fa-user"></i>{props}</a>
         </div>
       <NavItem icon={<CaretIcon />}>
         <DropdownMenu></DropdownMenu>

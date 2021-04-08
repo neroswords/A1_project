@@ -222,7 +222,7 @@ const EditableCell = ({
 
   const onBlur = () => {
     updateMyData(index, id, value)
-    console.log("test")
+    // console.log("test")
   }
 
 
@@ -241,7 +241,7 @@ const defaultColumn = {
 
 
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID }) {
-  
+  // console.log(data)
   const Ondelete = (e) => {
     delete_trained(e)
     
@@ -342,12 +342,12 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     }
 
   )
-  console.log(selectedFlatRows)
+  // console.log(selectedFlatRows)
   return (
     <>
       <Container>
         <div className="button-trained-word">
-          {console.log(botID)}
+          {/* {console.log(botID)} */}
           <Link to ={'/bot/'+botID+'/mapping/create'} ><Button className='buttonaddMapping' >Create Mapping</Button></Link>
           <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
           <div className='SearchBar'>
@@ -389,18 +389,29 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
             </tr> */}
           </thead>
           <tbody {...getTableBodyProps()}>
+          {/* {  console.log(page[0]) } */}
             {page.map((row, i) => {
               prepareRow(row)
-              return (
+              console.log(row)
+              return (  
+                
                 <tr {...row.getRowProps()}>
                    
                   {row.cells.map(cell => {
+                    //  console.log(cell.row.original.id)
+                    return (
+                    <><td {...cell.getCellProps()}>{cell.render('Cell')} </td>
+                    {/* <td><Link to ={'/bot/'+botID+'/mapping/'+cell.row.original.id} ><i className="far fa-edit" ></i></Link></td> */}
+                    </>
+                    )
                     
-                    return <td {...cell.getCellProps()}>{cell.render('Cell')} </td>
-                    
-                    
-                  })}
-                 <td><Link to ={'/bot/'+botID+'/mapping/create'} ><i className="far fa-edit" ></i></Link></td>
+                  }
+                  
+                  )} 
+                  
+                      <td><Link to ={'/bot/'+botID+'/mapping/details/'+row.original.id} ><i className="far fa-edit" ></i></Link></td>
+                 
+                 
                 </tr>
               )
             })}
@@ -454,7 +465,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 function Tablemap({ botID, delete_trained, add_data }) {
   const [TablemapState, setTablemapState] = useState([]);
 
-  console.log(botID)                                               
+  // console.log(botID)                                               
 
   const [showWord, setShowWord] = useState(false);
 
@@ -462,18 +473,17 @@ function Tablemap({ botID, delete_trained, add_data }) {
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Word',
-        accessor: 'Word', // accessor is the "key" in the data
+        Header: 'Name',
+        accessor: 'Name', // accessor is the "key" in the data
       },
       {
         Header: 'ReplyWord',
         accessor: 'ReplyWord',
-        filter: 'fuzzyText',
+        // filter: 'fuzzyText',
       },
-      // {
-      //   Header: 'Link',
-      //   accessor: 'Link',
-      // },
+
+      
+
     ],
     []
   )
@@ -516,16 +526,18 @@ function Tablemap({ botID, delete_trained, add_data }) {
   }
 
   useEffect(() => {
-    fetch('/train_bot/' + botID + '/training')
+    fetch('/mapping/' + botID)
       .then(res => res.json().then(data => {
         setTablemapState(
           data.map(d => {
+            // console.log(d.details[0].answer)
             return {
+              
               select: false,
               id: d._id.$oid,
-              Word: d.question,
-              ReplyWord: d.answer,
-              // Link:  <i className="far fa-edit" >sssssssssssssss</i>
+              Name: d.name,
+              ReplyWord: d.details[0].answer,
+             
             };
           })
           
@@ -536,9 +548,7 @@ function Tablemap({ botID, delete_trained, add_data }) {
 
   }, []);
 
-
-  const resetData = () => setTablemapState(originalData)
-  
+ 
   return (
     <Styles>
       <TableShow
@@ -548,6 +558,7 @@ function Tablemap({ botID, delete_trained, add_data }) {
         skipPageReset={skipPageReset}
         delete_trained={delete_trained}
         botID={botID}
+        // mapID ={TablemapState[0].id}
       />
 
     </Styles>
