@@ -168,6 +168,12 @@ _handleImageChange(e) {
 
   let reader = new FileReader();
   let file = e.target.files[0];
+  if (!file){
+    this.setState({
+      imagePreviewUrl: ""
+    });
+    return
+  }
 
   reader.onloadend = () => {
     this.setState({

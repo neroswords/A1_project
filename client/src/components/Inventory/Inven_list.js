@@ -1,78 +1,21 @@
-import React from 'react';
 import '../Inventory/Inven.css';
 import {Link} from "react-router-dom";
-
-export default function Invenlist() {
-
+import React, {useState, useEffect, useRef } from "react";
+export default function Invenlist(props) {
+    console.log(props)
     return(
                 <div class="inven-list">
-                    <hr></hr>
-                    <button className="create-invenbtn btn-success" type="button">Create</button>
+                    
                     <div className="inven-list-body">
-                        <Link className="inven-card">
-                            <img className="img-inven" src={'/images/add-inven.png'}/>
+                        <Link to = {"inventory/product_detail/"+props.props._id.$oid} className="inven-card">
+                            <img className="img-inven" src={'/images/bucket/'+props.props.img}/>
                             <div className="inven-info">
-                                <div className="product-name">ProductName</div>
-                                <div className="product-price">Price(฿) : </div>
-                                <div className="product-onhand">On hand : </div>
+                                <div className="product-name">{props.props.item_name}</div>
+                                <div className="product-price">{props.props.price}(฿) : </div>
+                                <div className="product-onhand">Amount : {props.props.amount}</div>
                             </div>    
                         </Link>
-                        <Link className="inven-card">
-                            <img className="img-inven" src={'/images/add-inven.png'}/>
-                            <div className="inven-info">
-                                <div className="product-name">ProductName</div>
-                                <div className="product-price">Price(฿) : </div>
-                                <div className="product-onhand">On hand : </div>
-                            </div>    
-                        </Link>
-                        <Link className="inven-card">
-                            <img className="img-inven" src={'/images/add-inven.png'}/>
-                            <div className="inven-info">
-                                <div className="product-name">ProductName</div>
-                                <div className="product-price">Price(฿) : </div>
-                                <div className="product-onhand">On hand : </div>
-                            </div>    
-                        </Link>
-                        <Link className="inven-card">
-                            <img className="img-inven" src={'/images/add-inven.png'}/>
-                            <div className="inven-info">
-                                <div className="product-name">ProductName</div>
-                                <div className="product-price">Price(฿) : </div>
-                                <div className="product-onhand">On hand : </div>
-                            </div>    
-                        </Link>
-                        <Link className="inven-card">
-                            <img className="img-inven" src={'/images/add-inven.png'}/>
-                            <div className="inven-info">
-                                <div className="product-name">ProductName</div>
-                                <div className="product-price">Price(฿) : </div>
-                                <div className="product-onhand">On hand : </div>
-                            </div>    
-                        </Link>
-                        <Link className="inven-card">
-                            <img className="img-inven" src={'/images/add-inven.png'}/>
-                            <div className="inven-info">
-                                <div className="product-name">ProductName</div>
-                                <div className="product-price">Price(฿) : </div>
-                                <div className="product-onhand">On hand : </div>
-                            </div>    
-                        </Link>
-                        <Link className="inven-card">
-                            <img className="img-inven" src={'/images/add-inven.png'}/>
-                            <div className="inven-info">
-                                <div className="product-name">ProductName</div>
-                                <div className="product-price">Price(฿) : </div>
-                                <div className="product-onhand">On hand : </div>
-                            </div>    
-                        </Link>
-                        <Link className="inven-card">
-                            <img className="img-inven" src={'/images/add-inven.png'}/>
-                            <div className="inven-info">
-                                <div className="product-name">ProductName</div>
-                                <div className="product-price">Price(฿) : </div>
-                                <div className="product-onhand">On hand : </div>
-                            </div>    
-                        </Link>
+                      
                         
                     </div>
 
@@ -81,3 +24,4 @@ export default function Invenlist() {
 
     );
 }
+

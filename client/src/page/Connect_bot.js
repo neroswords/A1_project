@@ -86,6 +86,7 @@ const CloseModalButton = styled(MdClose)`
   height: 25px;
   padding: 0;
   z-index: 10;
+  
 `;
 
 const ModalContent = styled.div`
@@ -179,7 +180,6 @@ export function Connect_bot({ setShowForm, showForm, botID }) {
                       <button className="con-line btn btn-success btn-line text-uppercase" onClick={() => setplatform("line")} type=""><i class="icon-line fab fa-line fa-2x"></i></button>
                     </div>
                     {renderSwitch(platform, botID)}
-
                   </ModalContent>
                   <CloseModalButton
                     aria-label="Close modal"

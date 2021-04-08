@@ -26,18 +26,18 @@ import Add_item from './Page/Add_item';
 import Inventory from './Page/Inventory';
 import Customer_infomation from './Page/Customer_infomation';
 import History from './Page/History';
+import Product_detail from './Page/Product_detail';
+import Chat from './Page/Chat';
 function App() {
   return (
     <Router>
         <Nav/>
           <Switch>
             <Route path="/" exact component= { Home } />
-            {/* <Route path="/DatatablePage" exact component= { DatatablePage } /> */}
             <CloseRoute isLoggedIn={isLoggedIn()} path="/register" exact component={ Register } />
             <CloseRoute isLoggedIn={isLoggedIn()} path="/login" exact component={ Login } />
-            
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/profile/:user_id/edit" component={ Profile_edit }/>
-            <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot_list/:user_id" component={ Bot_list }/>
+            <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot_list/:_id" component={ Bot_list }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:user_id/create_bot" exact component ={ Create_bot } />
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/edit_bot" exact component ={ Edit_bot } />
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/connect" exact component ={ Connect } />
@@ -51,10 +51,13 @@ function App() {
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/mapping/details/:map_id" component={ Mapping_load }/>
             
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/add_item" component={ Add_item }/>
+            <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/mapping/create" component={ Mapping_create }/>
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/inventory" component={ Inventory } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/customer_infomation" component={ Customer_infomation } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/history" component={ History } />
-            
+            <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/inventory/product_detail/:product_id" component={ Product_detail } />
+            <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/chat/:bot_id/live_chat/:customer_id" component={ Chat } />
+
           </Switch>
     </Router>
   );

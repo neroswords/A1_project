@@ -1,8 +1,7 @@
-const aReducer = (state = String, action) => {
+const aReducer = (state = Boolean, action) => {
     switch (action.type) {
-        case 'aut':
-            state = action.access_token
-            console.log(state)
+        case 'change':
+            state = !state
             return state;
         default:
             return state;
