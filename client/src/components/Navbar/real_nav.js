@@ -21,23 +21,23 @@ function Normal_nav(){
     <Navbar_real>
       <Link to="#">
           <div className="btn-login btn-nav">
-              <a className="btn" role="button">Home</a>
+              <a className="btn" role="button" name="btn-home">Home</a>
           </div>
       </Link>
-      <Link to="#">
+      {/* <Link to="#">
           <div className="btn-login btn-nav">
               <a className="btn" role="button">ABOUT</a>
           </div>
-      </Link>
+      </Link> */}
      
       <Link to="/login">
           <div className="btn-login btn-nav">
-              <a className="btn" role="button">Log in</a>
+              <a className="btn" role="button" name="login">Log in</a>
           </div>
       </Link>
       <Link to="/register">
           <div className="btn-signup btn-nav">
-              <a className="btn" role="button">Register</a>
+              <a className="btn" role="button" name="btn-regist">Register</a>
           </div>
       </Link>
       </Navbar_real>
@@ -77,8 +77,8 @@ function NavItem(props) {
 
   return (
     
-    <li className="nav-item-real">
-      <a href="#" className="icon-button-real" onClick={() => setOpen(!open)}>
+    <li className="nav-item-real" >
+      <a href="#" className="icon-button-real" name="user-dropdown" onClick={() => setOpen(!open)}>
         {props.icon}
       </a>
 
@@ -95,7 +95,7 @@ function DropdownMenu() {
 
   function DropdownItem(props) {
     return (
-      <a href="#" className="menu-item-real" onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}>
+      <a href="#" className="menu-item-real"  onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}>
         <span className="icon-button-real">{props.leftIcon}</span>
         {props.children}
         <span className="icon-right-real">{props.rightIcon}</span>
@@ -132,7 +132,7 @@ function DropdownMenu() {
             goToMenu="animals">
             Animals
           </DropdownItem> */}
-           <a onClick={() => {
+           <a name="user-edit" onClick={() => {
             window.location.replace("/profile/"+ localStorage.getItem('user_id')+"/edit")
           }}>
             <DropdownItem 
@@ -140,7 +140,7 @@ function DropdownMenu() {
                 Edit Profile
             </DropdownItem>
           </a>
-          <a onClick={() => {
+          <a name="user-manage" onClick={() => {
             window.location.replace("/bot_list/"+ localStorage.getItem('user_id'))
           }}>
             <DropdownItem 
@@ -156,7 +156,7 @@ function DropdownMenu() {
               Manual
             </DropdownItem>
           </a>
-          <a onClick={() => {
+          <a name="signout" onClick={() => {
             deleteTokens();
             window.location.replace("/")
           }}>

@@ -77,12 +77,12 @@ const Log = () =>{
             <form className="d-flex justify-content-evenly btn-navbar">
                 <Link to="/register">
                     <div className="btn-signup">
-                        <a className="btn btn-outline-secondary" role="button">Register</a>
+                        <a className="btn btn-outline-secondary" role="button" name="btn-regist">Register</a>
                     </div>    
                 </Link>
                 <Link to="/login">
                     <div className="btn-login me-5">
-                        <a className="" role="button">Log in</a>
+                        <a className="" role="button" name="login">Log in</a>
                     </div>
                 </Link>
             </form>
