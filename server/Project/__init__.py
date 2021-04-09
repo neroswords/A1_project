@@ -51,6 +51,7 @@ app.register_blueprint(merchant, url_prefix='/merchant')
 app.register_blueprint(mapping, url_prefix='/mapping')
 app.register_blueprint(merchant, url_prefix='/merchant')
 app.register_blueprint(facebook, url_prefix='/facebook')
+app.register_blueprint(facebook, url_prefix='/template_facebook')
 app.register_blueprint(inventory, url_prefix='/inventory')
 app.register_blueprint(checkout, url_prefix='/checkout')
 
@@ -80,9 +81,8 @@ def serve_api():
 
 CORS(app, expose_headers='Authorization')
 
-# if __name__ == '__main__':
-# #     http_server = WSGIServer(('',200), app)
-# #     http_server.serve_forever()
-#     print("Test")
-#     app.secret_key = 'mysecret'
-#     socketio.run(app, port=200, debug=True)
+if __name__ == '__main__':
+#     http_server = WSGIServer(('',200), app)
+#     http_server.serve_forever()
+    app.secret_key = 'mysecret'
+    socketio.run(app, port=200, debug=True)

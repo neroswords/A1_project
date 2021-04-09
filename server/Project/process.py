@@ -50,14 +50,29 @@ def objectReader(ss,botID):
             return {"group":object_define['message']}
     return {"message":ss}
 
-def process_message(message,botID,min_conf,sender_id):
+def isnotSymbol(string): 
+    # Make own character set and pass  
+    # this as argument in compile method 
+    regex = re.compile('[\\[@_!#$%^&*()<>?/\|}{~:\\]]') 
+    # Pass the string in search
+    # method of regex object.     
+    if(regex.search(string) == None):
+        print("regex true") 
+        return True
+    else:
+        print("regex False") 
+        return False
+
+def process_message(message,botID,min_conf,sender_id,platform):
     training_collection = mongo.db.training
     trained_collection = mongo.db.trained
     msg_token = word_tokenize(message['message'])
+    print(msg_token,"=aaa")
     max = 0
     ans = ''
     flag = True
-    flag,ans = basicEventHandler(msg_token,botID,sender_id)
+    flag,ans = basicEventHandler(msg_token,botID,sender_id,platform)
+    print("proooo")
     if not flag:
         similar_trained_word = trained_collection.find({'botID': ObjectId(botID)})
         for word in similar_trained_word:
@@ -85,7 +100,8 @@ def process_message(message,botID,min_conf,sender_id):
     return ans
 
 #use with reg
-def basicEventHandler(msg,botID,sender_id):
+def basicEventHandler(msg,botID,sender_id,platform):
+    print("AAAAAAAAAAAAAAA")
     event_collection = mongo.db.events
     for key in msg:
         event_define = event_collection.find_one({'data_set': {'$in': [key]}}) #,"$options" :'i'
@@ -94,16 +110,31 @@ def basicEventHandler(msg,botID,sender_id):
             break
     for x in ['ครับ', 'ค่ะ', 'ค่า', 'คะ', 'คับ', 'คร้าบ', 'ฮ่ะ', 'อ่ะ', 'อ่า', 'ป้ะ', 'ป่ะ', 'บ่', 'แมะ', 'มะ', 'ก๊า', 'ไหม', 'มั้ย', 'ค้า', 'หน่อย']:
         try:
+            print("3")
             msg.remove(x)
         except :
+            print("4")
             continue
+        
     # event_define = event_collection.find_one({'data_set': {'$regex': key,"$options" :'i'}}) #####มาเช็คดีๆ
+    print("5")
     if event_define != None and event_define['type'] == 'search':
-        item = json.loads(item_list_flexmessage(botID = botID, query=''.join(msg)))
+        print("6")
+        print(msg)
+        if isnotSymbol(''.join(msg)):
+            item = json.loads(item_list_flexmessage(botID = botID, query=''.join(msg),platform=platform,sender_id = sender_id))
+        else:
+            item = {"message" : "การค้นหาผิดพลาด"}
+        print("7")
+        print(item)
+        print(type(item))
         if type(item) == list:
             return True,{"flex":CarouselContainer(item),"alt":"ค้นหาสินค้า"}
         elif "message" in item.keys():
+            print("99")
             return True,item
+        elif "facebook" == platform:
+            return True,{"flex":item}
     elif event_define != None and event_define['type'] == 'confirm_order':
         item = json.loads(invoice_flexmessage(botID = botID, sender_id=sender_id))
         if "message" in item.keys():
@@ -115,17 +146,6 @@ def basicEventHandler(msg,botID,sender_id):
         return True,{"message":"https://liff.line.me/1655652942-YyMAypje"}
     return False,'not found word'
 
-def isnotSymbol(string): 
-    # Make own character set and pass  
-    # this as argument in compile method 
-    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]') 
-      
-    # Pass the string in search
-    # method of regex object.     
-    if(regex.search(string) == None): 
-        return True
-    else:
-        return False
 
 def commandsHandler(**kwargs):
     cart_collection = mongo.db.carts

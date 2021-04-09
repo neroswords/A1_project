@@ -27,6 +27,7 @@ import Inventory from './Page/Inventory';
 import Customer_infomation from './Page/Customer_infomation';
 import History from './Page/History';
 import Product_detail from './Page/Product_detail';
+import Product_edit from './Page/Product_edit';
 import Chat from './Page/Chat';
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/customer_infomation" component={ Customer_infomation } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/history" component={ History } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/inventory/product_detail/:product_id" component={ Product_detail } />
+            <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/inventory/product_edit/:product_id" component={ Product_edit } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/chat/:bot_id/live_chat/:customer_id" component={ Chat } />
 
           </Switch>

@@ -14,6 +14,7 @@ function Nav(){
     return Normal_nav();
   }
 
+
 }
 
 function Normal_nav(){
@@ -40,19 +41,24 @@ function Normal_nav(){
               <a className="btn" role="button" name="btn-regist">Register</a>
           </div>
       </Link>
+            <Link to="/login">
+          <div className="btn-login btn-nav">
+              <a className="btn" role="button">Log in</a>
+          </div>
+      </Link>
       </Navbar_real>
     )
 }
 
 function Loged_in_nav(props) {
-
+  const [main, setMain] = useState(window.location.hash)
+  
   return (
-    
-    
     <Navbar_real>
-        <div className="show-user" >  
-          <a href={"/bot_list/"+ localStorage.getItem('user_id')} name="validate_user"><i class="fas fa-user"></i>{props}</a>
+        <div className= {"show-user " + (main == "#main" ? "click-show-user" :"")}>
+            <a className="click" href={"/bot_list/"+ localStorage.getItem('user_id')+"#main"}><i class="fas fa-user-circle"></i>{props}</a>
         </div>
+      
       <NavItem icon={<CaretIcon />}>
         <DropdownMenu></DropdownMenu>
       </NavItem>
@@ -106,13 +112,6 @@ function DropdownMenu() {
   return (
     
     <div className="dropdown-real"  ref={dropdownRef}>
-
-      {/* <CSSTransition
-        in={activeMenu === 'main'}
-        timeout={500}
-        classNames="menu-primary"
-        unmountOnExit
-        onEnter={calcHeight}> */}
       <CSSTransition
       in={activeMenu === 'main'}
       timeout={500}
@@ -148,6 +147,7 @@ function DropdownMenu() {
                 Manage Bot
             </DropdownItem>
           </a>
+
           <a onClick={() => {
             window.location.replace('/manual')
           }}>

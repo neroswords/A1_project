@@ -1,3 +1,4 @@
+
 import React from 'react';
 import styled from 'styled-components';
 import { withRouter, Redirect } from 'react-router-dom'
@@ -140,7 +141,7 @@ const Styles = styled.div`
 
 `;
 let file = {}
-export default class Add_item extends React.Component {
+export default class Product_edit extends React.Component {
   constructor(props) {
     super(props);
 
@@ -156,14 +157,16 @@ export default class Add_item extends React.Component {
       options: ["d1","2"],
       value: [],
       price: '',
+      url_preview: [],
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
     // this.Onend = this.Onend.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
-   
+    this.OnDeletepic = this.OnDeletepic.bind(this);
+    
   }
-  
+
   handleCreate(name) {
     let { options, value } = this.state;
 
@@ -173,20 +176,22 @@ export default class Add_item extends React.Component {
       value: [...value, name],  // select new option
       options: [...options, name] // add new option to our dataset
     })
-    console.log(this.state)
+
   }
 
   handleChange(evt) {
     this.setState({ [evt.target.name]: evt.target.value });
-    console.log(this.state)
+
   }
+  OnDeletepic = (e) => {
+    console.log(e)
+}
 
 
 
   _handleImageChange(e) {
     e.preventDefault();
-    console.log(this.state.value)
-    console.log(this.state)
+
     let i
     for (i = 0; i < e.target.files.length; i++) {
       let reader = new FileReader();
@@ -194,16 +199,13 @@ export default class Add_item extends React.Component {
       if (!file) {
         return
       }
-      console.log(this.state.imagesPreviewUrl)
       reader.onloadend = () => {
         this.setState({
           file: file[i],
           imagesPreviewUrl: [...this.state.imagesPreviewUrl, reader.result]
         });
       }
-      console.log(reader.result)
       reader.readAsDataURL(file[i])
-
     }
 
 
@@ -222,16 +224,17 @@ export default class Add_item extends React.Component {
       data.append('file' + [i], this.uploadInput.files[i]);
     }
 
-    console.log(file)
+
     // data.append('file', file);
     data.append('item_name', this.item_name.value);
     data.append('type', JSON.stringify(this.state.value));
     data.append('amount', this.amount.value);
     data.append('creator', localStorage.getItem('user_id'))
+    console.log(this.state.Image)
     data.append('Image', this.state.Image)
     data.append('des', this.des.value);
     data.append('price', this.price.value);
-    fetch('/bot/' + this.props.match.params.bot_id + '/additem', {
+    fetch('/inventory/'+this.props.match.params.bot_id+'/product_edit/'+this.props.match.params.product_id, {
       method: 'POST',
       // headers : {
       //   "Access-Control-Allow-Origin": "*",
@@ -249,23 +252,41 @@ export default class Add_item extends React.Component {
 
   }
     componentDidMount ()  {
-     var a = []
-     var unique = []
-      fetch('/bot/'+this.props.match.params.bot_id+'/getitem').then((response) => {
-      response.json().then((data) => {console.log(data) 
-        var i = 0
-        for(i = 0 ;i<data.length;i++){
-          a.push(...data[i].type)
-          unique = [...new Set(a)];
-      }
-      this.setState ({ options : unique})
-    });
-    });
+    //  var a = []
+    //  var unique = []
+    //   fetch('/bot/'+this.props.match.params.bot_id+'/getitem').then((response) => {
+    //   response.json().then((data) => {console.log(data) 
+    //     var i = 0
+    //     for(i = 0 ;i<data.length;i++){
+    //       a.push(...data[i].type)
+    //       unique = [...new Set(a)];
+    //   }
+    //   this.setState ({ options : unique})
+    // });
+    // });
+    // console.log('/inventory/'+this.props.match.params.bot_id+'/product_edit/'+this.props.match.params.product_id)
+    fetch('/inventory/'+this.props.match.params.bot_id+'/product_edit/'+this.props.match.params.product_id).then((response) => {
+        response.json().then((data) => {
+          this.setState({ item_name: data.item_name });
+          this.setState({ value: data.type });
+          this.setState({ amount: data.amount });
+          this.setState({ url_preview: data.img });
+          this.setState({ Image: data.img });
+          this.setState({ des: data.des });
+          this.setState({ price: data.price });
+          console.log(this.state.Image)
+        });
+        
+      });
+    
+        }
+    
 
-      }
+      
 
   render() {
     const { redirect, bot_id } = this.state;
+
     if (redirect) {
       return <Redirect to={"/bot/" + this.props.match.params.bot_id+"/inventory"} />
     }
@@ -275,7 +296,8 @@ export default class Add_item extends React.Component {
       let $imagePreview = null;
       if (imagePreviewUrl) {
 
-        $imagePreview = (<img src={imagePreviewUrl} />);
+        $imagePreview = (<img src={"imagePreviewUrl"} />);
+
       }
       return (
         <Styles>
@@ -294,9 +316,14 @@ export default class Add_item extends React.Component {
                             <div className="col upload-newinv">
                                 <input ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
                             </div>
-                              {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
-                                return <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
+                              {this.state.url_preview.map((url_preview) => {
+                    
+                                return [<img key={url_preview} alt='previewImg' src={"/images/bucket/"+url_preview} /> ]
                               })}
+                                {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
+                                   
+                                    return <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
+                                })}
                           </div>  
                     </div>  
                     
@@ -327,6 +354,7 @@ export default class Add_item extends React.Component {
                                 onChange={value => this.setState({ value })}
                                 textField="name"
                               />
+                              
                               
                             </div>
                             <div className="col mt-2">

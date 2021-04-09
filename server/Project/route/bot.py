@@ -383,8 +383,6 @@ def template(platform, botID):
                 # print(msg)
                 text = msg['message']['text']
                 sender_id = msg['sender']['id']
-                
-                print("KUYYYYYYYYYYYYYYYYYYYYYYY")
                 # con_box = {
                 #     "attachment": {
                 #         "type": "template",
@@ -454,17 +452,16 @@ def additem(botID):
         price = request.form['price']
         print("PRICE = ",price)
         count = 0
-        print(request.files)
-        print("________________")
+
         info_update = {'item_name': item_name, 'owner':  ObjectId(creator),
-                       'type': item_type, 'amount': amount, 'des': des, 'botID': ObjectId(botID) ,'price':price}
+                       'type': item_type, 'amount': int(amount), 'des': des, 'botID': ObjectId(botID) ,'price':int(price)}
         info_pic = []
         for i in request.files:
             print(i)
             file = request.files[i]
             filename = secure_filename(file.filename)
             filename = item_name+"&" + \
-            str(count)+creator+os.path.splitext(filename)[1]
+            str(count)+"&"+creator+"&"+str(file.filename)
             destination = "/".join([UPLOAD_FOLDER_ITEMS, filename])
             file.save(destination)
             session['uploadFilePath'] = destination
