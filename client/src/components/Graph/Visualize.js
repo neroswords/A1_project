@@ -84,7 +84,7 @@ export const Visualize = () => {
   const handleDownload = React.useCallback(async () => {
     // Send the chart to getPngData
     // const pngData = await getPngData(chart);
-    // Use FileSaver to download the PNG
+    // //Use FileSaver to download the PNG
     // FileSaver.saveAs(pngData, "test.png");
   }, [chart]);
 
