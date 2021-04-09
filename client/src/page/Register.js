@@ -295,7 +295,7 @@ flash = (e) =>{
                                     <textarea className="form-control" id="inputshopaddress" rows="2" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
                                   </div>
                                 <div class="form-check">
-                                  <input className="form-check-input" type="checkbox" value="" id="chaeckvalidate" required/>
+                                  <input className="form-check-input" type="checkbox" value="" name="checkvalidate" required/>
                                   <label className="form-check-label" for="flexCheckDefault">
                                     ยินยอมตามข้อกำหนด
                                     <a  href="/Login"> ข้อกำหนดการใช้บริการ </a>
@@ -303,12 +303,12 @@ flash = (e) =>{
                                   </label>
                                 </div>                                
                                 <div className="btn-regis">
-                                    <button className="btn btn-primary text-uppercase btn-inregis" type="submit" >register</button>
+                                    <button className="btn btn-primary text-uppercase btn-inregis" type="submit" name="btn-regist">register</button>
                                 </div>
                                 <hr className="my-4"/>
                                 <div align="center">
                                   <span> Already have an account ? </span>
-                                  <a  href="/Login" >Log in</a> 
+                                  <a  href="/Login" name="li-login">Log in</a> 
                                 </div>
                             </form>
                             

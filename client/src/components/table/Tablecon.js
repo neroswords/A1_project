@@ -178,7 +178,7 @@ function GlobalFilter({
           fontSize: '0.8rem',
           // marginLeft: '1rem'
         }}
-      />
+        name="training-search" />
     </span>
   )
 }
@@ -195,7 +195,7 @@ function DefaultColumnFilter({
         setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
       }}
       placeholder={`Search ${count} records...`}
-    />
+       />
   )
 }
 
@@ -353,8 +353,8 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     <>
       <Container>
         <div className="button-trained-word">
-          <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
-          <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
+          <Button className='buttonaddWord' name="btn-addword" onClick={openWord}>Add Word</Button>
+          <button className="buttondeleteWord" name="btn-delword" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
           <div className='SearchBar'>
             <GlobalFilter
               preGlobalFilteredRows={preGlobalFilteredRows}
@@ -369,7 +369,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
 
 
-        <table {...getTableProps()} className="table">
+        <table {...getTableProps()} className="table" name="training-table">
           <thead>
             {headerGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -397,7 +397,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
             {page.map((row, i) => {
               prepareRow(row)
               return (
-                <tr {...row.getRowProps()}>
+                <tr {...row.getRowProps()} name="training-row">
                   {row.cells.map(cell => {
                     return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                   })}

@@ -21,7 +21,7 @@ function Group(props){
             <Navbar_member botID = {props.match.params.bot_id} path={"group"} />
             <div className="container">
                 <div className="container-top d-flex bd-highlight">
-                    <h2 className='p-2 flex-grow-1 bd-highlight'>Group</h2>
+                    <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group</h2>
                     {/* <div className="p-2 bd-highlight"><button className="btn btn-danger" type="button">Delete</button></div> */}
                 </div>
                 <hr></hr>

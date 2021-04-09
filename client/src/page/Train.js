@@ -54,7 +54,7 @@ function Train(props) {
         <Navbar_member botID={props.match.params.bot_id} path={"training"} />
         <div className="container">
           <div className="container-top d-flex bd-highlight">
-            <h2 className="p-2 flex-grow-1 bd-highlight">Trainning</h2>
+            <h2 className="p-2 flex-grow-1 bd-highlight" id="training-header">Training</h2>
             <div className="p-2 bd-highlight">
               {/* <Link to={'/bot/'+props.match.params.bot_id+'/trained'}>
                             <button className="btn btn-success" type="button">Trained</button>

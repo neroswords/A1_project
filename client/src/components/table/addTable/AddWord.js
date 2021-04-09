@@ -163,21 +163,21 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
             <ModalWrapper showWord={showWord}>
               <ModalContent>
                 <article className="part Addword">
-                  <h1>
+                  <h1 name="addword-popup">
                     Add your Question and Answer
                   </h1>
                   <form>
                     <div className="group-Question">
                       <label for="AddQuestion">Question</label>
-                      <input type="text" className="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question"></input>
+                      <input type="text" className="input-question" name="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question"></input>
                     </div>
                     <div className="group-Answer">
                       <label for="AddAnswer">Answer</label>
-                      <input type="text" className="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer"></input>
+                      <input type="text" className="input-answer" name="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer"></input>
                     </div>
                   </form>
                 </article>
-              <Button className="qa-comfirm" variant="success" onClick = {() => addword(botID) }>Comfirm</Button>
+              <Button className="qa-comfirm" variant="success" name="btn-addword-confirm" onClick = {() => addword(botID) }>Comfirm</Button>
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"
