@@ -11,6 +11,8 @@
         <form id="checkout-form" method="POST" action="/checkout/charge">
             {% if customer %}
             <input type="hidden" name="omiseCustomer" value={{ customer }}>
+            <input name="botID" value="{{ botID }}" type="hidden">
+            <input name="userID" type="hidden" id="userID" >
             {% else %}
             <input name="email" placeholder="Email">
             <input name="botID" value="{{ botID }}" type="hidden">
@@ -53,7 +55,7 @@
         <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
         <script src="{{ url_for('static', filename='js/liff-checkout.js') }}"></script>
         <script language="javascript">
-            main()
+            main(window.location.href)
          </script>
     </body>
 </html>

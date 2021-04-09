@@ -81,7 +81,7 @@ function Learned(props){
             <Navbar_member botID = {props.match.params.bot_id} path={"trained"}  />
             <div className="container">
                 <div className="learned-title d-flex bd-highlight">
-                    <h2 className='p-2 flex-grow-1 bd-highlight'>Trained</h2>
+                    <h2 className='p-2 flex-grow-1 bd-highlight' id="trained-header">Trained</h2>
                 </div>
                 {/* <hr></hr> */}
                 <div className="showtable-learn">

@@ -1,0 +1,30 @@
+{
+  "title": index["item_name"],
+  "image_url": "https://9bfdab4a218f.ngrok.io/images/bucket/" + index["img"][0],
+  "subtitle": "ราคา" + str(index["price"]) + "บาท",
+  "default_action": {
+    "type": "web_url",
+    "url": "https://petersfancybrownhats.com/view?item=103",
+    "webview_height_ratio": "tall"
+  },
+  "buttons": [
+    {
+      "type": "web_url",
+      "title": "ดูข้อมูล",
+      "url":
+        "https://9bfdab4a218f.ngrok.io/facebook/" +
+        kwargs["botID"] +
+        "/detail/" +
+        str(index["_id"]) +
+        "/" +
+        kwargs["sender_id"],
+      "messenger_extensions": "true",
+      "webview_height_ratio": "tall"
+    },
+    {
+      "type": "postback",
+      "title": "ใส่รถเข็น",
+      "payload": "cart&" + str(index["_id"])
+    }
+  ]
+}

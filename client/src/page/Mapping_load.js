@@ -23,6 +23,9 @@ const Styles = styled.div`
 .container {
     margin-top:2%
 }
+.react-flow{
+  max-height: 50vh;
+}
 .save__controls {
   z-index: 10;
   position: relative;
@@ -60,10 +63,12 @@ const Styles = styled.div`
 }
 .updatenode__controls {
   z-index: 10;
-  /* position: absolute; */
+  position: relative;
   margin-top: 1%;
   width: 100%;
   text-align: right;
+  max-width: 25%;
+  float: right;
 }
 .updateNode {
   width: 130px;
@@ -71,6 +76,7 @@ const Styles = styled.div`
   border-radius: 25px;
   border: .5px solid #A9A9A9;
   margin-left: 1%;
+  margin-top: 1%;
   
 }
 input::placeholder{
@@ -300,40 +306,11 @@ const changeAnswer =  (evt) =>{
             <Navbar_member botID = {props.match.params.bot_id} path={"mapping"} />
             <div className="container">
                 <div className="container-top d-flex bd-highlight">
-                    <h2 className='p-2 flex-grow-1 bd-highlight'>Mapping</h2>
+                    <h2 className='p-2 flex-grow-1 bd-highlight' id="mapping-load-header">Mapping</h2>
                     
                 </div>
-
-                <div className="updatenode__controls">
-        <div className="details__node">
-        <label >Name:</label>
-        <input className="updateNode"
-          value={name}
-          onChange={(evt) => changeName(evt.target.value)}
-        />
-        <label >Answer:</label>
-        <input className="updateNode"
-          value={nodeName}
-          onChange={(evt) => changeAnswer(evt.target.value)}
-        />
-
-        <label >Keyword :</label>
-        <input className="updateNode"
-          value={Keyword}
-          onChange={(evt) => changeKeyword(evt.target.value)}
-        />
-
-      <label >Parameter :</label>
-        <input className="updateNode"
-          value={Parameter}
-          onChange={(evt) => changeParams(evt.target.value)}
-        />
-
-      
-        </div>
-        
-        
-        </div>
+             
+               
                 <ReactFlowProvider>
       <ReactFlow
         elements={elements}
@@ -344,6 +321,8 @@ const changeAnswer =  (evt) =>{
         onSelectionChange={onSelectionChange}     
         >
 
+
+
         <div className="save__controls">
           <button className="saveButton" onClick={onSave}>save</button>
           {/* <button onClick={onRestore}>restore</button> */}
@@ -351,9 +330,47 @@ const changeAnswer =  (evt) =>{
           <button className="deleteButton" onClick={onDelete}>delete</button>
         </div>
 
+        <div className="updatenode__controls">
+        <div className="name__node">
+        <label >Name:</label>
+        <input className="updateNode"
+          value={name}
+          onChange={(evt) => changeName(evt.target.value)}
+        />
+         </div>
+         <div className="answer__node">
+        <label >Answer:</label>
+        <input className="updateNode"
+          value={nodeName}
+          onChange={(evt) => changeAnswer(evt.target.value)}
+        /></div>
+
+        <div className="Keyword__node">
+        <label >Keyword :</label>
+        <input className="updateNode"
+          value={Keyword}
+          onChange={(evt) => changeKeyword(evt.target.value)}
+        />
+        </div>
+
+        <div className="params__node">
+      <label >Parameter :</label>
+        <input className="updateNode"
+          value={Parameter}
+          onChange={(evt) => changeParams(evt.target.value)}
+        />
+        </div>
+      
+       
+        
+        
+        </div> 
         
       </ReactFlow>
+      
     </ReactFlowProvider>
+
+    
 
            
                 

@@ -159,33 +159,37 @@
                                     <img src="/images/bucket/{{i['img_name']}}" class="img-fluid"
                                         alt="cart img">
                                 </div>
+                                
                                 <div class="col-md-7 col-11 mx-auto px-4 mt-2">
                                     <div class="row">
                                         <div class="col-6 card-title">
                                             <h1 class="mb-4 product_name"> {{i['item_name']}}</h1>
+                                            {{price}} per one
                                         </div>
+                                        
                                         <div class="col-6">
                                             <ul class="pagination justify-content-end set_quantity">
                                                 <li class="page-item">
                                                     <button class="page-link "
-                                                        onclick="decreaseNumber('{{[loop.index-1]}}','{{[loop.index-1]}}2','{{price}}')">
+                                                        onclick="decreaseNumber('{{[loop.index-1]}}ft','{{[loop.index-1]}}2','{{price}}')">
                                                         <i class="fas fa-minus"></i> </button>
                                                 </li>
                                                 <li class="page-item"><input type="text" name="" class="page-link"
-                                                        value="{{i['amount']}}" id="{{[loop.index-1]}}">
+                                                        value="{{i['amount']}}" id="{{[loop.index-1]}}ft">
                                                 </li>
                                                 <li class="page-item">
                                                     <button class="page-link"
-                                                        onclick="increaseNumber('{{[loop.index-1]}}','{{[loop.index-1]}}2','{{price}}')">
+                                                        onclick="increaseNumber('{{[loop.index-1]}}ft','{{[loop.index-1]}}2','{{price}}')">
                                                         <i class="fas fa-plus"></i></button>
                                                 </li>
+                                                
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-8 d-flex justify-content-between remove_wish">
                                             <p class="RemoveItem"><i class="fas fa-trash-alt" id="RemoveItem"
-                                                    onclick="DeleteItem(this)"></i>REMOVE ITEM</p>
+                                                    onclick="DeleteItem(this,'{{loop.index-1}}')"></i>REMOVE ITEM</p>
                                             <p class="MoveToWishList"><i class="fas fa-heart"></i>MOVE TO WISH LIST </p>
                                         </div>
                                         <div class="col-4 d-flex justify-content-end price_money">
@@ -196,7 +200,7 @@
                             </div>
                         </div>
                         <div>
-                            <input  id="{{[loop.index-1]}}" name="price" value={{price}}>
+                          
                         </div>
                         {% endfor %}
                         <!-- <hr /> -->
@@ -283,9 +287,11 @@
             };
         }
         var i 
-       
+        var itemlist = []
         for (i = 0; i < 2; i++) {
         var itemprice = document.getElementById("["+i+"]2");
+        itemlist.push(itemprice)
+ 
         var product_total_amt = document.getElementById('product_total_amt');
         var total_cart_amt = document.getElementById('total_cart_amt');
         var shipping_charge = document.getElementById('shipping_charge');
@@ -296,17 +302,18 @@
         total_cart_amt.innerHTML = parseInt(product_total_amt.innerHTML) + parseInt(shipping_charge.innerHTML);
         
 
-        function DeleteItem(btn) {
+        function DeleteItem(btn,t) {
  
             var row = btn.parentNode.parentNode;
-            console.log(row.parentNode)
-            console.log(row.parentNode.parentNode.parentNode.parentNode.removeChild(row.parentNode.parentNode.parentNode));
+
+            row.parentNode.parentNode.parentNode.parentNode.removeChild(row.parentNode.parentNode.parentNode);
       
-            for (i = 0; i < 2; i++) {
+            console.log(t)
             // var itemprice = document.getElementById("["+i+"]2");
-            var itemprice = document.getElementById("[0]2");
-            console.log(itemprice)
-            }
+            console.log(itemlist[t].innerHTML)
+            product_total_amt.innerHTML = parseInt(product_total_amt.innerHTML)-parseInt(itemlist[t].innerHTML) ;
+            total_cart_amt.innerHTML = parseInt(product_total_amt.innerHTML) + parseInt(shipping_charge.innerHTML);
+            
         }
 
         var product_total_amt = document.getElementById('product_total_amt');
@@ -334,6 +341,7 @@
             }
         }
         const increaseNumber = (incdec, itemprice,price ) => {
+
             var itemval = document.getElementById(incdec);
             var itemprice = document.getElementById(itemprice);
             if (itemval.value >= 20) {

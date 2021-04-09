@@ -198,7 +198,7 @@ function GlobalFilter({
           fontSize: '0.8rem',
           // marginLeft: '1rem'
         }}
-      />
+      name="mapping-search" />
     </span>
   )
 }
@@ -389,7 +389,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
 
 
-        <table {...getTableProps()} className="table">
+        <table {...getTableProps()} className="table" name="mapping-table">
           <thead>
             {headerGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -435,7 +435,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
                   
                   )} 
                   
-                      <td><Link to ={'/bot/'+botID+'/mapping/details/'+row.original.id} ><i className="far fa-edit" ></i></Link></td>
+                      <td><Link to ={'/bot/'+botID+'/mapping/details/'+row.original.id} name="mapping-details"><i className="far fa-edit" ></i></Link></td>
                  
                  
                 </tr>

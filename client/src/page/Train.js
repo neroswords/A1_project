@@ -76,7 +76,7 @@ function Train(props) {
         <Navbar_member botID={props.match.params.bot_id} path={"training"} />
         <div className="container">
           <div className="training-title">
-            <h2 className="p-2 flex-grow-1 bd-highlight">Trainning</h2>
+            <h2 className="p-2 flex-grow-1 bd-highlight" id="training-header">Trainning</h2>
           </div>
           {/* <div className=" d-flex bd-highlight">
           

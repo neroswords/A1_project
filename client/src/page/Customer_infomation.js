@@ -37,7 +37,7 @@ function Customer_infomation(props){
                <Navbar_member botID = {props.match.params.bot_id} path={"customer_infomation"} />
                <div className="container">
                    <div className="customer-title">
-                        <h2 className='p-2 flex-grow-1 bd-highlight'>Customer Infomation</h2>
+                        <h2 className='p-2 flex-grow-1 bd-highlight' id="customer-header">Customer Infomation</h2>
                     </div>
                     
                     <div className="show-customer">

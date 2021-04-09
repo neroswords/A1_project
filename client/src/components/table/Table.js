@@ -383,7 +383,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
         
         
         
-        <table {...getTableProps()} className="table">
+        <table {...getTableProps()} className="table" name="trained-table">
           <thead>
             {headerGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -406,7 +406,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
               </th>
             </tr> */}
           </thead>
-          <tbody {...getTableBodyProps()}>
+          <tbody {...getTableBodyProps()} >
             {page.map((row, i) => {
               prepareRow(row)
               return (

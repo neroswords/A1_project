@@ -194,6 +194,7 @@ export default class Add_item extends React.Component {
       if (!file) {
         return
       }
+      console.log(this.state.imagesPreviewUrl)
       reader.onloadend = () => {
         this.setState({
           file: file[i],
@@ -266,7 +267,7 @@ export default class Add_item extends React.Component {
   render() {
     const { redirect, bot_id } = this.state;
     if (redirect) {
-      return <Redirect to={"/bot_list/" + localStorage.getItem('user_id')} />
+      return <Redirect to={"/bot/" + this.props.match.params.bot_id+"/inventory"} />
     }
     else {
       let { imagePreviewUrl } = this.state;

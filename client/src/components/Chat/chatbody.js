@@ -47,7 +47,6 @@ function Chatbody({botID,customerID}){
       })
       
       socket.on("message_from_webhook", msg =>{
-          console.log(msg)
           setMessages([...messages,
               <div className="customer-msg col">
                   <p className="head-name from-cust msg">{msg.sender}</p><p className="msg customer-send">{msg.message}</p>
@@ -55,7 +54,6 @@ function Chatbody({botID,customerID}){
           // setUserID([msg.userID]);
       })
       socket.on("message_from_response", msg =>{
-          console.log(msg)
           setMessages([...messages,
               <div className="owner-msg col">
                   <p className="head-name from-owner msg">{msg.sender}</p><p className="msg owner-send">{msg.message}</p>

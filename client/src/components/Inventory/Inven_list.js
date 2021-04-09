@@ -23,6 +23,14 @@ const Styles = styled.div`
     padding: 5px 15px;
     border-radius: 0.5rem;
     border-style :none; */
+    /* font-size: 17px;
+    margin-bottom: 1%;
+    background-color: rgb(29, 151, 29);
+    color: white;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 0.5rem;
+    border-style :none; */
 }
 
 .inven-list-body{
@@ -87,20 +95,19 @@ const Styles = styled.div`
 
 .inven-card img{
     border: 1px solid #dbdbdb;
-    /* filter: grayscale(1); */
-    /* color: #dbdbdb; */
+      /* color: #dbdbdb; */
     /* background-color: #dbdbdb; */
 } 
 ` 
 export default function Invenlist(props) {
-    console.log(props)
+    console.log(props.props._id.$oid)
     return(    
         <Styles>
                 <div class="inven-list">
                     
                     <div className="inven-list-body">
-                        <Link to = {"inventory/product_detail/ "+props.props._id.$oid} className="inven-card">
-                            <img className="img-inven" src={'/images/bucket/'+props.props.img}/>
+                        <Link to = {"inventory/product_detail/"+props.props._id.$oid} className="inven-card">
+                            <img className="img-inven" src={'/images/bucket/'+props.props.img[0]}/>
                             <div className="inven-info">
                                 <div className="product-name">{props.props.item_name}</div>
                                 <div className="product-price">Price(฿) : {props.props.price}</div>

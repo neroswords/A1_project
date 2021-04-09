@@ -44,7 +44,7 @@ function Mapping(props){
             <Navbar_member botID = {props.match.params.bot_id} path={"mapping"} />
             <div className="container">
                 <div className="mapping-title">
-                    <h2 className='p-2 flex-grow-1 bd-highlight'>Mapping</h2>
+                    <h2 className='p-2 flex-grow-1 bd-highlight' id="mapping-header">Mapping</h2>
                 </div>
                 <div className="showtablemap">
                     <Tablemap 

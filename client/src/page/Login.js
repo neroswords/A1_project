@@ -201,13 +201,13 @@ class Login extends React.Component {
                                   </div>
                                 }
                                 <div className="btn-login col-lg-9 col-md-12 col-sm-12 col-xs-12 ms-5">
-                                    <button class="btn btn-primary text-uppercase btn-inlogin " type="submit" onClick={this.handleSignIn}>Log in</button>
+                                    <button class="btn btn-primary text-uppercase btn-inlogin " type="submit" name="btn-login" onClick={this.handleSignIn}>Log in</button>
                                 </div>
                                 <hr className="my-4"/>
                                 
                                 <div align="center">
                                   <span>Don't have an account ? </span>
-                                  <a  href="/Register" >Register</a> 
+                                  <a  href="/Register" name="li-regist">Register</a> 
                                 </div>
                             </form>
                           </div>
