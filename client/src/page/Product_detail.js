@@ -198,23 +198,31 @@ function Product_datail(botID){
         <Styles>
                 <div className="container">
                     <div className="col-sm-10 col-md-9 col-lg-8 mx-auto">
+                        <h3 className="head-pd">Product Details</h3>
                     <div className="card card-pd">
                         <div className="card-pd-body">
                             <div className="btn-top-pd">
                                 <Link to={"/bot/"+ botID.match.params.bot_id +"/inventory"} className="link-back-pd" > 
                                     <i className="back-pd fas fa-arrow-left"></i>
                                 </Link>
-                                <h3>Product Details</h3>
+                                
+                                
+                                    <button  onClick={() => { OnDelete()}} className=" pd-delete btn btn-outline-danger"> Delete  <i className="fas fa-trash"></i> </button>
+
+                                    <Link to={'/bot/'+botID.match.params.bot_id+'/inventory'+'/product_edit/'+botID.match.params.product_id} className="link-back-pd" > 
+                                        <button className="pd-edit btn btn-outline-primary" type="button"> Edit <i className="edit-pd fas fa-pencil-alt"></i></button>
+                                    </Link>
+                                
                             </div>
                             <hr></hr>
                             <div className="row">
                                
-                            <button  onClick={() => { OnDelete()}} className=" pd-delete btn btn-outline-danger"> Delete  <i className="fas fa-trash"></i> </button>
+                            {/* <button  onClick={() => { OnDelete()}} className=" pd-delete btn btn-outline-danger"> Delete  <i className="fas fa-trash"></i> </button>
 
                                 <Link to={'/bot/'+botID.match.params.bot_id+'/inventory'+'/product_edit/'+botID.match.params.product_id} className="link-back-pd" > 
                                
                                 <button className="pd-edit btn btn-outline-primary" type="button"> Edit <i className="edit-pd fas fa-pencil-alt"></i></button>
-                                </Link>
+                                </Link> */}
                                 <div className="col previmg-pd">
                                     <div className="img-pd">
 
@@ -225,7 +233,6 @@ function Product_datail(botID){
  
                                     </div>
                                 </div>
-                                
                                 <div className="col pd-detail">
                                     {/* <Link to={"/bot/"+ botID +"/inventory"} className="pd-edit"> 
                                         <i className="edit-pd fas fa-pencil-alt"></i>

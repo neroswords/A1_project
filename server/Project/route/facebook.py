@@ -28,9 +28,6 @@ def call_facebook(botID):
         {'botID': ObjectId(botID)})
     bot = Bot(bot_define["page_facebook_access_token"])
     payload = request.json
-    print("*************")
-    print(payload)
-    print("*************")
     inventory_collection = mongo.db.inventory
     inventory_collection_define = inventory_collection.find(
         {'botID': ObjectId(botID)})
