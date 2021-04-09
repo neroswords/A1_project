@@ -70,7 +70,11 @@ const Styles = styled.div`
   @media only screen and (min-width: 600px) {
     .navbar-c {
       top: 0;
+<<<<<<< HEAD
       width:  4rem;
+=======
+      width:  5rem;
+>>>>>>> 3736762ecdedf3a05a6616afeb320baa700a545f
       height: 100%;
     }
     /* .navbar2 {

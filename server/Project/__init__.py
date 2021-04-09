@@ -55,12 +55,12 @@ app.register_blueprint(checkout, url_prefix='/checkout')
 # Talisman(app, content_security_policy={"default-src": "'unsafe-inline' 'self' *.omise.co"},)
 
 
-@app.route('/upload', methods=['POST'])
-def fileUpload():
-    file = request.files['file'] 
-    filename = secure_filename(file.filename)
-    filename = images.save(form.image.data)
-    return response
+# @app.route('/upload', methods=['POST'])
+# def fileUpload():
+#     file = request.files['file'] 
+#     filename = secure_filename(file.filename)
+#     filename = images.save(form.image.data)
+#     return response
 
 
 @app.route('/images/<path:image_name>')

@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar_member from '../Components/Navbar/navbar_member';
 import styled from 'styled-components';
+import Visualize from "../Components/Graph/Visualize";
 
 const Styles = styled.div` 
 .history-page {
@@ -35,12 +36,17 @@ function History(props){
             <div className="history-page">
                 <Navbar_member botID = {props.match.params.bot_id} path={"history"} />
                 <div className="container">
+<<<<<<< HEAD
                     <div className="title-history">
                         <h2 className='p-2 flex-grow-1 bd-highlight'>History</h2> 
                     </div>
                     <div className="show-history">
 
                     </div>
+=======
+                    <h2 className='p-2 flex-grow-1 bd-highlight'>History</h2> 
+                    <Visualize/>
+>>>>>>> 3736762ecdedf3a05a6616afeb320baa700a545f
                 </div>
             </div>
         </Styles>

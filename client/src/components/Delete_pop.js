@@ -7,10 +7,6 @@ import Button from '@material-ui/core/Button';
 import ImageWarnning from "./Images/warnning2.png";
 
 const Background = styled.div`
-  /* position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center; */
   width: 100%;
   height: 100%;
   background: blue;
@@ -26,19 +22,6 @@ const Background = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-  /* width: 400px;
-  height: 250px;
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
-  background: #fff;
-  color: #000;
-  display: grid;
-  z-index: 10;
-  border-radius: 10px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(90%, -140%);
-  margin-top: 250px; */
   width: 500px;
   background-color: white;
   padding: 3rem;
@@ -48,7 +31,7 @@ const ModalWrapper = styled.div`
 const CloseModalButton = styled(MdClose)`
   cursor: pointer;
   position: absolute;
-  top: 45px;
+  top: 35px;
   right: 20px;
   width: 25px;
   height: 25px;
@@ -110,7 +93,6 @@ function Delete_pop({ showDelete_pop, setShowDelete_pop, Delete_bot, bot }) {
     Delete_bot(bot)
     setShowDelete_pop(prev => !prev)
   }
-  console.log(showDelete_pop);
 
   const modalRef = useRef();
   const animation = useSpring({

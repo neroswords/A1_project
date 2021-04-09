@@ -6,7 +6,11 @@ import Invenlist from '../Components/Inventory/Inven_list';import { Link } from 
 const Styles = styled.div` 
 .inventory-page {
     display: flex;
+<<<<<<< HEAD
     min-height:92vh;
+=======
+    min-height: 92vh;
+>>>>>>> 3736762ecdedf3a05a6616afeb320baa700a545f
 }
 .container {
     margin-bottom: 2%;

@@ -49,8 +49,13 @@ function Loged_in_nav(props) {
   
   return (
     <Navbar_real>
+<<<<<<< HEAD
         <div className= {"show-user " + (main == "#main" ? "click-show-user" :"")}>
             <a className="click" href={"/bot_list/"+ localStorage.getItem('user_id')+"#main"}><i class="fas fa-user-circle"></i>{props}</a>
+=======
+        <div className="show-user" >  
+          <a href={"/bot_list/"+ localStorage.getItem('user_id')} name="validate_user"><i class="fas fa-user"></i>{props}</a>
+>>>>>>> 3736762ecdedf3a05a6616afeb320baa700a545f
         </div>
       
       <NavItem icon={<CaretIcon />}>

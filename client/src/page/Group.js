@@ -10,6 +10,7 @@ const Styles = styled.div`
     min-height: 92vh;
 }
 .container {
+<<<<<<< HEAD
     margin-bottom: 2%;
     margin-top: 2%;
     overflow:hidden;
@@ -38,6 +39,9 @@ const Styles = styled.div`
     border-radius: 25px;
     /* border: 1px solid #0078ff; */
     transition: 0.5s;
+=======
+    margin-top: 10px;
+>>>>>>> 3736762ecdedf3a05a6616afeb320baa700a545f
 }
 ` 
 
@@ -47,12 +51,18 @@ function Group(props){
         <div className="group-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"group"} />
             <div className="container">
+<<<<<<< HEAD
                 <div className="group-title d-flex bd-highlight">
                     <h2 className=' p-2 flex-grow-1 bd-highlight'>Group</h2>
                     <div className="delete-group p-2 bd-highlight"><button className="btn btn-danger" type="button">Delete</button></div>
                 </div>
                 <div className="showtablegroup">
                     <Table />
+=======
+                <div className="container-top d-flex bd-highlight">
+                    <h2 className='p-2 flex-grow-1 bd-highlight'>Group</h2>
+                    {/* <div className="p-2 bd-highlight"><button className="btn btn-danger" type="button">Delete</button></div> */}
+>>>>>>> 3736762ecdedf3a05a6616afeb320baa700a545f
                 </div>
                 
             </div>

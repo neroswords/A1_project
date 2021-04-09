@@ -38,10 +38,8 @@ def save_message(message,message_type,sender,sender_id,sender_type,room):  #send
 
 @socketio.on('join_room')
 def handle_join_room_event(data):
-    current_app.logger.info("{} has joined the room {}".format(data['bot'], data['customer']))
     room_id = data['bot']+"&"+data['customer']
     join_room(room_id)
-    print(data)
     # socketio.emit('join_room_announcement', data, room=data['room'])
 
 
@@ -54,7 +52,7 @@ def handle_send_message_event(data):
     line_bot_api = LineBotApi(bot_define['access_token'])
     line_bot_api.push_message(data['customerID'], TextSendMessage(text=data['message']))
     save_message(message=data["message"],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(data['botID']),sender_type="bot",room=data['botID']+'&'+data['customerID'])
-    socketio.emit("message_from_response", {"message":data['message'], "userID":data['customerID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"displayName":bot_define['bot_name'],"type":"bot"},room=data['botID']+'&'+data['customerID'])
+    socketio.emit("message_from_response", {"message":data['message'], "userID":data['customerID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"displayName":bot_define['bot_name'],"type":"bot"},room=data['room'])
 
 
 
@@ -197,8 +195,10 @@ def webhook(platform, botID):
             elif 'postback' in payload['events'][0].keys():
                 message_type = 'postback'
             sender_define = customer_collection.find_one({'$and':[{'userID':sender['userId']},{'botID': ObjectId(botID)}]})
+            if sender_define != None and sender_define['userID']==profile.display_name and sender_define['pictureUrl']==profile.picture_url:
+                customer_collection.update_one({'$and':[{'userID':sender['userId']},{'botID': ObjectId(botID)}]},{"$set":{'pictureUrl':profile.picture_url,'display_name':profile.display_name}})
             if sender_define == None :
-                sender_define = {'userID':sender['userId'],'type':sender['type'],'state':'none','botID':bot_define['_id'],'status':'open','pictureUrl':profile.picture_url,'display_name':profile.display_name}
+                sender_define = {'userID':sender['userId'],'type':"lineUser",'state':'none','botID':bot_define['_id'],'status':'open','pictureUrl':profile.picture_url,'display_name':profile.display_name}
                 customer_collection.insert_one(sender_define)
             if sender_define['status'] == 'open' :
                 if message_type == 'text':

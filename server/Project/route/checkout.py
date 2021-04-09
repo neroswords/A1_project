@@ -16,6 +16,7 @@ import uuid
 from Project.extensions import mongo, JSONEncoder
 from bson import ObjectId
 import json
+import datetime
 
 checkout = Blueprint("checkout", __name__)
 
@@ -72,7 +73,10 @@ def process(chrg, botID, userID, already_redirected=False):
         flash(f"Order {order_id} successfully completed.")
         cart_collection = mongo.db.carts
         customer_collection = mongo.db.customers
-        customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "address"}})
+        purchased_collection = mongo.db.purchased
+        customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "tracking"}})
+        cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+        purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":datetime.datetime.now()})
         cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
         return render_template("complete.html")
 

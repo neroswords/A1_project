@@ -2,11 +2,8 @@ import React, {useState, useEffect, useRef } from "react";
 import {Link} from "react-router-dom";
 import '../Components/Botlist/Bot_list.css';
 import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
-// import DeleteModal from '../Components/delete_modal'
 import Delete_pop from "../Components/Delete_pop";
-// import Facebookform from "../Components/Form/facebookform";
 import Connect_bot from "../Page/Connect_bot";
-
 
 export default function Bot_list(props) {
     const [botlist,setBotlist] = useState([]);
@@ -95,14 +92,6 @@ function Dropdown({botData, deleteBot, openDelete_pop, openForm}){
     // const [showIdbot, setshowIdbot] = useState(botData._id.$oid);
     // console.log(isActive);
     };
-
-    // const forceUpdate = useForceUpdate();
-    // console.log(botData)
-    
-    // const [showConnect, setShowConnect] = useState(false);
-    // const openConnect = () => {
-    //     setShowConnect(prev => !prev);
-    //   }
     const OnDelete = () => {
     openDelete_pop(botData._id.$oid)
     onClick()
