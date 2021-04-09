@@ -3,7 +3,7 @@ from pythainlp.tokenize import word_tokenize
 import re 
 from bson import ObjectId
 from Project.extensions import mongo
-from Project.message import invoice_flexmessage,item_list_flexmessage,confirm_flexmessage,address_flex
+from Project.message import invoice_flexmessage,item_list_flexmessage,confirm_flexmessage,address_flex, payment_flex
 import json
 from linebot.models import CarouselContainer
 
@@ -203,7 +203,7 @@ def commandsHandler(**kwargs):
                 newvalues = { "$set": {"address": commands[2].split('=')[1],"state":"payment"}}
                 customer_collection.update_one(myquery, newvalues)
                 # customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"payment"}})
-                return {'message': 'จบแล้วครับ'}
+                return {'flex': json.loads(payment_flex(kwargs['botID'], kwargs['sender_id']))}
             elif commd[1] == "false":
                 customer_collection.update_one({'$and': [{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
                 return {'message':'เชิญเลือกซื้อของต่อได้เลยครับ'}
@@ -215,7 +215,8 @@ def commandsHandler(**kwargs):
                 customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]}, {"$set": {"state": "payment"}})
                 return {'message':'tracking number'}
             elif commd[1] == "false":
-                return {'message':'โปรดจ่ายเงินด้วยครับ'}
+                customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]}, {"$set": {"state": "inCart"}})
+                return {'message':'ยกเลิกการจ่ายเงินแล้ว เชิญเลือกซื้อของต่อได้เลยครับ'}
         else: return {"message":"เกิดข้อผิดพลาดโปรดลองใหม่หรือทำกระบวนการที่ทำอยู่ให้เสร็จก่อนครับ"}
 
 
@@ -228,7 +229,7 @@ def stateHandler(**kwargs):
             return {"flex":json.loads(confirm_flexmessage(kwargs['message']['message']))}
         elif customer_define['state'] == "address":
             return {"flex":json.loads(address_flex(kwargs['message']['message']))}
-        elif customer_define['state'] == "none" or customer_define['state'] == "inCart":
+        elif customer_define['state'] == "none" or customer_define['state'] == "inCart" or customer_define['state'] == "tracking":
             res = process_message(kwargs['message'],kwargs['botID'],kwargs['confident'],kwargs['sender_id'])
     elif 'postback' in kwargs.keys():
         # if customer_define['state'] in ["none","inCart"]:
