@@ -13,10 +13,12 @@ from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
 from .extensions import mongo, Config
 from flask_talisman import Talisman
+from engineio.payload import Payload
 
+Payload.max_decode_packets = 250
 
 app = Flask(__name__, static_url_path='/static')
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", ping_timeout=5000, ping_interval=25000)
 
 UPLOAD_FOLDER = './Project/static/images'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -55,12 +57,13 @@ app.register_blueprint(checkout, url_prefix='/checkout')
 
 # Talisman(app, content_security_policy={"default-src": "'unsafe-inline' 'self' *.omise.co"},)
 
-@app.route('/upload', methods=['POST'])
-def fileUpload():
-    file = request.files['file'] 
-    filename = secure_filename(file.filename)
-    filename = images.save(form.image.data)
-    return response
+
+# @app.route('/upload', methods=['POST'])
+# def fileUpload():
+#     file = request.files['file'] 
+#     filename = secure_filename(file.filename)
+#     filename = images.save(form.image.data)
+#     return response
 
 
 @app.route('/images/<path:image_name>')
@@ -70,6 +73,11 @@ def serve_image(image_name):
 @app.route('/video/<path:video_name>')
 def serve_video(video_name):
     return send_from_directory(app.config['DOWNLOAD_FOLDER']+"/video/",video_name)
+
+@app.route('/')
+def serve_api():
+    # if request.args.get('liff.state') != None:
+    return render_template('loading.html')
 
 CORS(app, expose_headers='Authorization')
 

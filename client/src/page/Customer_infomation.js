@@ -5,6 +5,7 @@ import Table from '../Components/Table/Tablemap';
 const Styles = styled.div` 
 .customer-page {
     display: flex;
+    min-height: 92vh;
 }
 .container {
     margin-top:2%
@@ -16,7 +17,7 @@ function Customer_infomation(props){
             <div className="customer-page">
                <Navbar_member botID = {props.match.params.bot_id} path={"customer_infomation"} />
                <div className="container">
-                    <h2 className='p-2 flex-grow-1 bd-highlight'>Customer Infomation</h2> 
+                    <h2 className='p-2 flex-grow-1 bd-highlight' id="customer-header">Customer Infomation</h2> 
                </div> 
             </div>
         </Styles>

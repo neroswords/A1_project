@@ -64,7 +64,7 @@ function Inventory(props){
             <div className="inventory-page" >
                <Navbar_member botID = {props.match.params.bot_id} path={"inventory"} />
                <div className="inventory-body">
-                    <h2 className=''>Inventories</h2>
+                    <h2 className='' id="inventory-header">Inventories</h2>
                     <Link to={"/bot/"+props.match.params.bot_id+"/add_item"}>
                         <button className="create-inven btn btn-success" type="button">Create</button>
                     </Link>

@@ -77,7 +77,7 @@ function regisBot(props){
   if(isLoggedIn()){
     return(
       <Link to={'/bot_list/'+localStorage.getItem('user_id')}>
-        <button className="" >Manage Bot</button>
+        <button name="user-manage-bot" >Manage Bot</button>
       </Link>
     )
   }

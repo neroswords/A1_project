@@ -652,5 +652,52 @@ def address_flex(address):
         }
       ]
     }
-  }''' % (address, address)
-    return flex
+  }'''%(address,address)
+  return flex
+
+def payment_flex(botID,customerID):
+  flex = '''
+  {
+    "type": "bubble",
+    "hero": {
+      "type": "image",
+      "url": "https://cdn.omise.co/assets/screenshots/series-b/omise-logo.jpg",
+      "size": "full",
+      "aspectRatio": "20:13",
+      "aspectMode": "fit"
+    },
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": []
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
+        {
+          "type": "button",
+          "style": "primary",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "Pay",
+            "uri": "https://liff.line.me/1655652942-zNpjoxYV/checkout/%s?customer=%s"
+          }
+        },
+        {
+          "type": "button",
+          "style": "secondary",
+          "height": "sm",
+          "action": {
+            "type": "postback",
+            "label": "Cancel",
+            "data": "action=payment&confirm=false"
+          }
+        }
+      ],
+      "flex": 0
+    }
+  }'''%(botID,customerID)
+  return flex 
