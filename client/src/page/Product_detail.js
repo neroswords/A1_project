@@ -2,18 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 const Styles = styled.div` 
-  .container {
+  
+.container {
     font-family: 'Public Sans', sans-serif;
     margin-top: 2%;
-  }
-  .card-pd{
+}
+.card-pd{
     padding: 20px;
     border: 0;
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-  }
+}
   
-  .card-pd .card-pd-body {
+.card-pd .card-pd-body {
     margin: 1rem;
 }
 
@@ -31,7 +32,7 @@ const Styles = styled.div`
     color: black;
 }
 
-.pd-edit i {
+/* .btn-pd button{
     float:right;
     font-size: 20px;
     border: 5px solid white;
@@ -39,17 +40,43 @@ const Styles = styled.div`
     cursor: pointer;
     padding: 4px;
     margin-bottom: 50px;
+} */
+
+.pd-delete {
+    float: right;
+    color: black;
+    border-radius: 1rem;
+    margin-left: 1%;
+    padding: 1% 2%;
 }
 
-.edit-pd:hover{
+.pd-edit{
+    float: right;
+    color: black;
+    border-radius: 1rem;
+    padding: 1% 2%;
+    /* background-color: #aecaf9; */
+}
+
+/* .btn-pd :hover{
     border: 5px solid #ddd;
     border-radius : 50%;
     background-color: #ddd;
-    padding: 2px;
+    padding: 4px;
+} */
+
+.fa-pencil-alt {
+    margin-left: 4px;
 }
-.btn-top-pd h3{
-    float:right;
-    font-weight: bold;
+
+.fa-trash{
+    margin-left: 4px;
+}
+
+.head-pd{
+    /* float:right; */
+    margin: 2%;
+    font-weight: bolder;
 }
 
 .pd-detail .pd-name{
@@ -99,7 +126,8 @@ const Styles = styled.div`
 }
 
 .line-pd{
-    margin-top: 5%;
+    margin-top: 8%;
+    margin-bottom: 3%;
     width: 100%;
     height: 3px;
     background: #115dd8;
@@ -148,16 +176,27 @@ function Product_datail(botID){
     return(
         <Styles>
                 <div className="container">
-                    <div className="col-sm-10 col-md-9 col-lg-8 mx-auto">
+                    <div className="col-sm-10 col-md-9 col-lg-9 mx-auto">
+                    <h3 className="head-pd">Product Details</h3>
                     <div className="card card-pd">
                         <div className="card-pd-body">
                             <div className="btn-top-pd">
                                 <Link to={"/bot/"+ botID +"/inventory"} className="link-back-pd" > 
                                     <i className="back-pd fas fa-arrow-left"></i>
                                 </Link>
-                                <h3>Product Details</h3>
+                                    {/* <div className="btn-pd"></div> */}
+                                    
+                                    <button className=" pd-delete btn btn-outline-danger"> 
+                                        Delete 
+                                            <i className="fas fa-trash"></i>
+                                    </button>
+                                    <button className="pd-edit btn btn-outline-primary" type="button"> 
+                                        Edit 
+                                        <i className="edit-pd fas fa-pencil-alt"></i>
+                                    </button>
                             </div>
-                            <hr></hr>
+                            {/* <hr></hr> */}
+                            <div className="line-pd"></div>
                             <div className="row">
                                 <div className="col previmg-pd">
                                     <div className="img-pd">
@@ -168,10 +207,7 @@ function Product_datail(botID){
                                     </div>
                                 </div>
                                 
-                                <div className="col pd-detail">
-                                    {/* <Link to={"/bot/"+ botID +"/inventory"} className="pd-edit"> 
-                                        <i className="edit-pd fas fa-pencil-alt"></i>
-                                    </Link> */}
+                                <div className="col pd-detail pb-4">
                                     <div className="pd-name">ชื่อสินค้า</div>
                                     <div className="pd-price">฿ </div>
                                     <div className="pd-type">type</div>
@@ -181,13 +217,13 @@ function Product_datail(botID){
                             </div>
                             {/* <div className="line-pd"></div>
                             <div className="card__footer d-flex justify-content-between">
-                                    <div className="recommend-pd">
-                                        <p>Recommended by</p>
-                                        <h3>Andrew Palmer</h3>
-                                    </div>
-                                <button className="edit-pd" type="button">Edit Product Product Datail</button>
+                                        <div className="recommend-pd">
+                                            <p>Recommended by</p>
+                                            <h3>Andrew Palmer</h3>
+                                        </div>
+                                    <button className="edit-pd" type="button">Edit Product Product Datail</button>
                             </div> */}
-                        </div>
+                            </div>
                     </div>
                     </div>
 

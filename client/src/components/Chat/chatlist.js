@@ -10,6 +10,10 @@ const Styles = styled.div`
   border-right: 1px solid #ebe7fb;
 }
 
+link {
+  text-decoration: none;
+}
+
 .chatlist__heading {
   display: flex;
   justify-content: space-between;
@@ -53,8 +57,11 @@ const Styles = styled.div`
   cursor: pointer;
   font-size: 20px;
 }
-.chatlist-msg{
+
+.chatlist-msg link{
   margin-right: 5%;
+  text-decoration: none;
+
 }
 
 .chatlist-user{
@@ -157,15 +164,12 @@ const Styles = styled.div`
 .fa-facebook-square{
   color: #1877f2;
 }
+
 .tabs{
   display:inline-block;
 }
 ` 
-<<<<<<< HEAD
-function Chatlist({botID, onSelect}){
-=======
 function Chatlist({botID}){
->>>>>>> a03ab3f15d69b4ba09186004f810c069954dcb78
 
     const [customerList, setCustomerList] =  useState([])
 
@@ -208,30 +212,26 @@ function Chatlist({botID}){
                       <div className="chatlist-user">
 
                       { customerList.map((customer) => (
-<<<<<<< HEAD
-                            <div onClick = { ()=> onSelect(customer.userID)} className="chatlist-msg">
-=======
-                            <Link to={"/chat/"+ botID+"/live_chat/"+customer.userID} className="chatlist-msg">
->>>>>>> a03ab3f15d69b4ba09186004f810c069954dcb78
-                                <li className="msg-user row">
-                                    <div className="user-list-pic col-lg-3 col-sm-1">
+                        <div className="chatlist-msg">
+           
+                            <Link to={"/chat/"+ botID+"/live_chat/"+customer.userID}>
+                                <li className="msg-cust row">
+                                    <div className="cust-list-pic col-lg-3 col-sm-1">
                                       <img></img>
                                       <div className="connec">
                                         <i className="fab fa-facebook-square"></i>
                                       </div>
                                     </div>
-                                    <div className="user-list-input col">
-                                        <h6 className="user-list-name">{customer.display_name}</h6>
-                                        <div className="user-list-text"> 
+                                    <div className="cust-list-input col">
+                                        <h6 className="cust-list-name">{customer.display_name}</h6>
+                                        <div className="cust-list-text"> 
                                           สวัสดีค่ะ มีสินค้าอะไรบ้างคะ คุยกับบอทแล้วไม่เข้าใจเลยค่ะ อยากเรียกให้ช่วยค่ะ มานี่ๆๆๆๆๆ มานี่มาาาาา
                                         </div>
                                     </div>
                                   </li>
-<<<<<<< HEAD
+                                </Link>  
                               </div>
-=======
-                              </Link>
->>>>>>> a03ab3f15d69b4ba09186004f810c069954dcb78
+                              
                              
                               ))
                       }
@@ -260,8 +260,4 @@ function Chatlist({botID}){
        </Styles>  
     );
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> a03ab3f15d69b4ba09186004f810c069954dcb78
 export default Chatlist;

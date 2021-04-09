@@ -49,6 +49,11 @@
     
   }
 
+  .click-show-user .click{
+    background-color: #fca311;
+    color: white;
+  }
+
   .show-user:hover a{
     background-color: #fca311;
     color: white;
@@ -64,7 +69,7 @@
     height: auto; */
     padding: 0.35rem 2.5rem;
     margin: 2px;
-    background-color: #d3d3d3;
+    background-color: #eaeaea;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -103,7 +108,7 @@
     width: var(--button-size);
     height: var(--button-size);
     /* background-color: #F2F2F0; */
-    background-color: #fdb742;
+    background-color: #eaeaea;
     border-radius: 50%;
     padding: 5px;
     margin: 2px;
@@ -114,7 +119,7 @@
   }
   
   .icon-button-real:hover {
-    filter: brightness(1.2);
+    /* filter: brightness(1.2); */
   }
   
   .icon-button-real svg { 

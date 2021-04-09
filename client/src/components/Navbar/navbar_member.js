@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import {createStore} from 'redux'
 import tReducers from '../../Reducers/tReducers'
 import {connect} from 'react-redux'
-import { Provider,useSelector,useDispatch} from 'react-redux'
+import { Provider,useSelector,useDispatch} from 'react-redux';
 // const store = createStore(tReducers,+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 const Styles = styled.div` 
   .navbar-c {
@@ -428,14 +428,14 @@ function Navbar_member({ botID, customer_id, path  }) {
 
             <li className="nav-item-c">
             { path=="chat" ? (
-              <Link to={"/chat/" + botID + "/live_chat/"} class="nav-check">
+              <Link to={"/chat/" + botID + "/live_chat/main"} class="nav-check">
                 <div className="fa-group">
                   <div className="fa-secondary">
                   <i class="fas fa-comments-alt"></i>
                   </div>
                 </div>
               </Link> ) : (
-              <Link to={"/chat/" + botID + "/live_chat/"} class="nav-link-c">
+              <Link to={"/chat/" + botID + "/live_chat/main"} class="nav-link-c">
                <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="far fa-comments-alt"></i>
@@ -621,7 +621,7 @@ function Navbar_member({ botID, customer_id, path  }) {
 
             <li className="nav-item2">
             { path=="chat" ? (
-              <Link to={"/chat/" + botID + "/live_chat/" } onClick={onSubmit} class="nav-check-open">
+              <Link to={"/chat/" + botID + "/live_chat/main" } onClick={onSubmit} class="nav-check-open">
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="fas fa-comments-alt"></i>
@@ -629,7 +629,7 @@ function Navbar_member({ botID, customer_id, path  }) {
                 </div>
                 <span className="link-text">Chat</span>
               </Link> ) : (
-              <Link to={"/chat/" + botID + "/live_chat/"} onClick={onSubmit} class="nav-link2">
+              <Link to={"/chat/" + botID + "/live_chat/main"} onClick={onSubmit} class="nav-link2">
                   <div className="fa-group">
                       <div className="fa-secondary">
                       <i class="far fa-comments-alt"></i>

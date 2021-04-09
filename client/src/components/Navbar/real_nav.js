@@ -44,12 +44,14 @@ function Normal_nav(){
 }
 
 function Loged_in_nav(props) {
-
+  const [main, setMain] = useState(window.location.hash)
+  
   return (
     <Navbar_real>
-        <div className="show-user">  
-          <a href={"/bot_list/"+ localStorage.getItem('user_id')}><i class="fas fa-user-circle"></i>{props}</a>
+        <div className= {"show-user " + (main == "#main" ? "click-show-user" :"")}>
+            <a className="click" href={"/bot_list/"+ localStorage.getItem('user_id')+"#main"}><i class="fas fa-user-circle"></i>{props}</a>
         </div>
+      
       <NavItem icon={<CaretIcon />}>
         <DropdownMenu></DropdownMenu>
       </NavItem>
@@ -117,6 +119,15 @@ function DropdownMenu() {
             <DropdownItem 
               leftIcon= {<i class="fas fa-user"></i>}>
                 Edit Profile
+            </DropdownItem>
+          </a>
+
+          <a onClick={() => {
+            window.location.replace("/bot_list/"+ localStorage.getItem('user_id'))
+          }}>
+            <DropdownItem 
+              leftIcon= {<i class="fas fa-robot"></i>}>
+                Manage Bot
             </DropdownItem>
           </a>
 

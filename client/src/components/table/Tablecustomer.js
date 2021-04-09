@@ -11,7 +11,7 @@ const Styles = styled.div`
 
   table {
     /* font-family: 'Roboto',sans-serif; */
-    margin: 10px 0;
+    margin: 3% 0;
     font-size: 1em;
     text-align: center;
     border: 1px solid #efeff5;
