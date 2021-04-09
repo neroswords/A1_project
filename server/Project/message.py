@@ -600,23 +600,15 @@ def payment_flex(botID,customerID):
     "type": "bubble",
     "hero": {
       "type": "image",
+      "url": "https://cdn.omise.co/assets/screenshots/series-b/omise-logo.jpg",
       "size": "full",
       "aspectRatio": "20:13",
-      "aspectMode": "cover",
-      "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png"
+      "aspectMode": "fit"
     },
     "body": {
       "type": "box",
       "layout": "vertical",
-      "contents": [
-        {
-          "type": "text",
-          "text": "Payment method",
-          "weight": "bold",
-          "size": "xl"
-        }
-      ],
-      "alignItems": "center"
+      "contents": []
     },
     "footer": {
       "type": "box",
@@ -625,30 +617,26 @@ def payment_flex(botID,customerID):
       "contents": [
         {
           "type": "button",
-          "style": "link",
+          "style": "primary",
           "height": "sm",
           "action": {
             "type": "uri",
             "label": "Pay",
-            "uri": "https://liff.line.me/1655652942-zNpjoxYV/?customer=%s"
+            "uri": "https://liff.line.me/1655652942-zNpjoxYV/checkout/%s?customer=%s"
           }
         },
         {
           "type": "button",
+          "style": "secondary",
+          "height": "sm",
           "action": {
             "type": "postback",
             "label": "Cancel",
             "data": "action=payment&confirm=false"
-          },
-          "style": "link"
-        },
-        {
-          "type": "spacer",
-          "size": "sm"
+          }
         }
       ],
       "flex": 0
     }
-  }
-  '''%(customerID)
-  return flex
+  }'''%(botID,customerID)
+  return flex 

@@ -195,7 +195,7 @@ background-color: #fff;
   color:black;
 }
 ` 
-let endPoint = "http://localhost:200";
+let endPoint = "http://127.0.0.1:200";
 
 let socket = io.connect(`${endPoint}`);
  
@@ -235,15 +235,13 @@ function Chatbody({botID,customerID}){
       })
       
       socket.on("message_from_webhook", msg =>{
-          console.log(msg)
           setMessages([...messages,
               <div className="user">
-                  <p style="color:red">{msg.displayName}:{msg.message}</p>
+                  <p>{msg.displayName}:{msg.message}</p>
               </div>]);
           // setUserID([msg.userID]);
       })
       socket.on("message_from_response", msg =>{
-          console.log(msg)
           setMessages([...messages,
               <div className="bot">
                   <p>{msg.displayName}:{msg.message}</p>
