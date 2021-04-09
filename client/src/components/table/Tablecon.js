@@ -5,7 +5,7 @@ import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
 import { AddWord } from "./AddTable/AddWord";
 import { Button } from 'react-bootstrap';
-
+import Delete_table from "../Delete_table";
 
 const Styles = styled.div`
 
@@ -83,7 +83,7 @@ const Styles = styled.div`
 }
 
 .pagination{
-  margin-bottom: 15%;
+  margin-bottom: 0;
 }
 
 .parginate-text{
@@ -178,7 +178,7 @@ function GlobalFilter({
           fontSize: '0.8rem',
           // marginLeft: '1rem'
         }}
-      />
+        name="training-search" />
     </span>
   )
 }
@@ -195,7 +195,7 @@ function DefaultColumnFilter({
         setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
       }}
       placeholder={`Search ${count} records...`}
-    />
+       />
   )
 }
 
@@ -242,8 +242,8 @@ const defaultColumn = {
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID }) {
   
   const Ondelete = (e) => {
-    delete_trained(e)
-    
+    // delete_trained(e)
+    openDelete_table(e)
   }
 
   const filterTypes = React.useMemo(
@@ -272,6 +272,13 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
   const [showWord, setShowWord] = useState(false);
   const openWord = () => {
     setShowWord(prev => !prev);
+  }
+  
+
+  const [showDelete_table, setShowDelete_table] = useState(false);
+  const openDelete_table = (data) => {
+    setShowDelete_table(prev => !prev);
+      
   }
 
   const {
@@ -346,8 +353,8 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     <>
       <Container>
         <div className="button-trained-word">
-          <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
-          <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
+          <Button className='buttonaddWord' name="btn-addword" onClick={openWord}>Add Word</Button>
+          <button className="buttondeleteWord" name="btn-delword" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
           <div className='SearchBar'>
             <GlobalFilter
               preGlobalFilteredRows={preGlobalFilteredRows}
@@ -355,13 +362,14 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               setGlobalFilter={setGlobalFilter}
             />
           </div>
-          <AddWord showWord={showWord} setShowWord={setShowWord} botID={botID} />
+          <AddWord showWord={showWord} setShowWord={setShowWord} botID = {botID}/>
+          <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table} selectedFlatRows={selectedFlatRows} id={botID} delete_trained={delete_trained}/>
         </div>
 
 
 
 
-        <table {...getTableProps()} className="table">
+        <table {...getTableProps()} className="table" name="training-table">
           <thead>
             {headerGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -389,7 +397,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
             {page.map((row, i) => {
               prepareRow(row)
               return (
-                <tr {...row.getRowProps()}>
+                <tr {...row.getRowProps()} name="training-row">
                   {row.cells.map(cell => {
                     return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                   })}
@@ -547,26 +555,3 @@ function Tablecon({ botID, delete_trained, add_data }) {
 }
 
 export default Tablecon;
-
-
-// useEffect(() => {
-//   fetch('/train_bot/'+botID+'/training')
-//   .then(res => res.json().then(data => {
-//     setTableconState(
-//       data.map(d => {
-//         console.log(d)
-//         return {
-//           select: false,
-//           id: d._id.$oid,
-//           Word: d.question,
-//           ReplyWord: d.answer,
-//           Confidence : d.confident
-//         };
-//       })
-
-
-//     );
-
-//   }))
-
-// }, []);

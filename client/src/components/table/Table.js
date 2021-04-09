@@ -5,10 +5,10 @@ import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
 import { AddWord } from "./AddTable/AddWord";
 import { Button } from 'react-bootstrap';
+import Delete_table from "../Delete_table";
 
 
 const Styles = styled.div`
-
   table {
     margin: 10px 0;
     font-size: 1.2em;
@@ -20,18 +20,15 @@ const Styles = styled.div`
         }
       }
     }
-
     th,
     td {
       margin: 0;
       padding: 12px 15px;
       border-bottom: 1px solid #DADADA;
       border-right: 1px solid #DADADA;
-
       :last-child {
         border-right: 0;
       }
-
       input {
         font-size: 0.9rem;
         padding: 0;
@@ -39,19 +36,15 @@ const Styles = styled.div`
         border: 0;
       }
     }
-
   .trained-Word{
     background-color: transparent;
     border-radius: 25px;
     padding-left:15px;
   }
-
 }
-
 .table tbody tr:nth-of-type(even){
         background-color: #e5e5e5;
     }
-
 .button-trained-word .buttondeleteWord{
     padding: 7px 15px !important;
     font-size: 12px !important;
@@ -62,12 +55,9 @@ const Styles = styled.div`
     color: #fff ;
     margin-left: 15px;
   }
-
-
   .button-trained-word .buttondeleteWord:hover{
     color: #000;
   }
-
   .buttonaddWord{
   padding: 7px 15px;
   font-size: 12px;
@@ -77,21 +67,17 @@ const Styles = styled.div`
   background-color: #0078ff;
   color: #fff;
 }
-
 .buttonaddWord:hover{
   color: #000;
 }
-
 .pagination{
   margin-bottom: 15%;
 }
-
 .parginate-text{
   padding-top: 7px;
   margin-right: 1%;
   margin-left: 1%;
 }
-
 .pagination button{
   border-radius: 15px;
   width: 35px;
@@ -100,31 +86,24 @@ const Styles = styled.div`
   margin-left: .5%;
   border: none;
 }
-
 .pagination button:hover{
   border-radius: 30px;
   background-color: #fca311;
   color: #000;
 }
-
 .searchBox{
   width: 130px;
   height: 30px;
   border-radius: 25px;
   border: .5px solid #A9A9A9;
-
 }
-
 input::placeholder{
   padding-left:15px;
-
 }
-
 .button-trained-word .SearchBar{
   position:relative;
   float: right;
 }
-
   
 `;
 
@@ -241,8 +220,20 @@ const defaultColumn = {
 
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained ,botID }) {
   const Ondelete = (e) => {
-    delete_trained(e)
+    openDelete_table(e)
+    // delete_trained(e)
+
   }
+
+  // const delete_table =(id)=>{
+  //   fetch('/train_bot/delete/training/id'+id,{
+  //     method : 'POST',
+  //     headers : {
+  //         "Access-Control-Allow-Origin": "*",
+  //         'Content-Type':'application/json'
+  //     },
+  //   });
+  // }
 
   const filterTypes = React.useMemo(
     () => ({
@@ -269,9 +260,14 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
     []
   )
   const [showWord, setShowWord] = useState(false);
-  let history = useHistory();
   const openWord = () => {
     setShowWord(prev => !prev);
+  }
+
+  const [showDelete_table, setShowDelete_table] = useState(false);
+  const openDelete_table = (data) => {
+    console.log('111k')
+    setShowDelete_table(prev => !prev);
   }
 
   const {
@@ -342,16 +338,17 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
 
   )
 
-  const handleClick =()=> {
-    history.push('/bot/'+botID+'/trained')
-  }
+  // const handleClick =()=> {
+  //   history.push('/bot/'+botID+'/trained')   
+  // }
 
   return (
     <>
       <Container>
         <div className="button-trained-word">
           <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
-          <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
+          {/* <button className="buttondeleteWord" onClick={() => Ondelete(selectedFlatRows)}>Delete</button> */}
+          <button className="buttondeleteWord" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
           <div className='SearchBar'>
           <GlobalFilter
             preGlobalFilteredRows={preGlobalFilteredRows}
@@ -360,12 +357,13 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
         />
         </div>
           <AddWord showWord={showWord} setShowWord={setShowWord} botID = {botID}/>
+          <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table} selectedFlatRows={selectedFlatRows} id={botID} delete_trained={delete_trained}/>
         </div>
 
         
         
         
-        <table {...getTableProps()} className="table">
+        <table {...getTableProps()} className="table" name="trained-table">
           <thead>
             {headerGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -385,11 +383,10 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
                   textAlign: 'right',
                 }}
               >
-
               </th>
             </tr> */}
           </thead>
-          <tbody {...getTableBodyProps()}>
+          <tbody {...getTableBodyProps()} >
             {page.map((row, i) => {
               prepareRow(row)
               return (
@@ -453,7 +450,7 @@ function Table({ botID, delete_trained, add_data }) {
 
 
   const [showWord, setShowWord] = useState(false);
-
+  const [showDelete_table, setShowDelete_table] = useState(false);
 
   const columns = React.useMemo(
     () => [

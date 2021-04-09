@@ -7,33 +7,32 @@ import Button from '@material-ui/core/Button';
 import ImageWarnning from "./Images/warnning2.png";
 
 const Background = styled.div`
+  width: 100%;
+  height: 100%;
+  background: blue;
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
+  background :rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const ModalWrapper = styled.div`
-  width: 400px;
-  height: 250px;
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
-  background: #fff;
-  color: #000;
-  display: grid;
-  z-index: 10;
-  border-radius: 10px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(90%, -140%);
-  margin-top: 250px;
+  width: 500px;
+  background-color: white;
+  padding: 3rem;
+  border-radius: 0.5rem;
 `;
 
 const CloseModalButton = styled(MdClose)`
   cursor: pointer;
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 35px;
+  right: 20px;
   width: 25px;
   height: 25px;
   padding: 0;
@@ -45,22 +44,21 @@ const ModalContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  line-height: 1.8;
+  /* line-height: 1.8; */
 
 .button-delete-bot{
   text-align: center;
 }
 
 .button-delete-bot .cancle-delete-bot{
-  padding: 7px 15px;
-  font-size: 12px;
+  padding: 7px 20px;
+  font-size: 15px;
   border-radius: 25px;
   border: 1px solid #0078ff;
   transition: 0.5s;
   margin: 10px;
   background-color: #fff;
   color: #0078ff;
-
 }
 
 .button-delete-bot .cancle-delete-bot:hover{
@@ -68,8 +66,8 @@ const ModalContent = styled.div`
 }
 
 .button-delete-bot .delete-bot{
-    padding: 7px 15px;
-    font-size: 12px;
+    padding: 7px 20px;
+    font-size: 15px;
     border-radius: 25px;
     border: 1px solid #CD5C5C;
     transition: 0.5s;
@@ -85,7 +83,7 @@ img{
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 70%;
 }
 `;
 
@@ -95,7 +93,6 @@ function Delete_pop({ showDelete_pop, setShowDelete_pop, Delete_bot, bot }) {
     Delete_bot(bot)
     setShowDelete_pop(prev => !prev)
   }
-  console.log(showDelete_pop);
 
   const modalRef = useRef();
   const animation = useSpring({

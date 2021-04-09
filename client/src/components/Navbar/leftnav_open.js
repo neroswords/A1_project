@@ -53,7 +53,7 @@ const Styles = styled.div`
 function Leftnav_open ({botID}) {
           return(
               <Styles>
-                     <nav className="navbar">
+                     <nav className="navbar" >
                         <ul className="navbar-nav">
                           {/* <div className="logo">
                             <div href="#" className="nav-link">

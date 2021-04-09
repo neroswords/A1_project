@@ -71,7 +71,7 @@ const Styles = styled.div`
     .navbar-c {
       top: 0;
       width:  5rem;
-      height: 92vh;
+      height: 100%;
     }
   }
 
@@ -128,7 +128,7 @@ const Styles = styled.div`
     .navbar2 {
       top: 0;
       width: 14rem;
-      height: 92vh;
+      height: 100%;
     }
   
   }
@@ -264,9 +264,9 @@ function Navbar_member({ botID, path  }) {
   return (
     <Styles>
       {change ? (
-        <nav className="navbar-c">
-          <ul className="navbar-nav-c">
-            <li className="btn-nav">
+        <nav className="navbar-c" >
+          <ul className="navbar-nav-c" >
+            <li className="btn-nav" >
               <Link onClick={Change} className="btn-nav-open" > 
                   <div className="fa-group">
                       <div className="fa-secondary">
@@ -275,6 +275,7 @@ function Navbar_member({ botID, path  }) {
                   </div>
               </Link>
             </li>
+
             <li className="nav-item-c">
             { path=="training" ? ( 
               <Link to={"/bot/" + botID + "/training"} onClick={onSubmit} class="nav-check">
@@ -314,6 +315,7 @@ function Navbar_member({ botID, path  }) {
               ) 
             }
             </li>
+
             <li className="nav-item-c">
             { path=="group" ? (
               <Link to={"/bot/" + botID + "/group"} onClick={onSubmit} class="nav-check">
@@ -333,6 +335,8 @@ function Navbar_member({ botID, path  }) {
               ) 
             }
             </li>
+
+         
             <li className="nav-item-c">
             { path=="mapping" ? (
               <Link to={"/bot/" + botID + "/mapping"} class="nav-check">
@@ -352,43 +356,76 @@ function Navbar_member({ botID, path  }) {
               )
             }
             </li>
-
+            
+            
             <li className="nav-item-c">
-            <Link class="nav-link-c">
+            { path=="history" ? (
+              <Link to={"/bot/" + botID + "/history"} class="nav-check">
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="fas fa-history"></i>
                   </div>
                 </div>
-              </Link>
+              </Link> ) : (
+              <Link to={"/bot/" + botID + "/history"} class="nav-link-c">
+                  <div className="fa-group">
+                      <div className="fa-secondary">
+                          <i class="fas fa-history"></i>
+                      </div>
+                  </div>
+                </Link>
+              )
+            }
             </li>
 
+
             <li className="nav-item-c">
-            <Link class="nav-link-c">
+            { path=="inventory" ? (
+              <Link to={"/bot/" + botID + "/inventory"} class="nav-check">
                 <div className="fa-group">
                   <div className="fa-secondary">
-                    <i class="fad fa-boxes"></i>
+                    <i class="fas fa-box-open"></i>
                   </div>
                 </div>
-            </Link>
+              </Link> ) : (
+              <Link to={"/bot/" + botID + "/inventory"} class="nav-link-c">
+                  <div className="fa-group">
+                      <div className="fa-secondary">
+                        <i class="fas fa-box-open"></i>
+                      </div>
+                  </div>
+                </Link>
+              )
+            }
             </li>
 
             <li className="nav-item-c">
-            <Link class="nav-link-c">
+            { path=="customer_infomation" ? (
+              <Link to={"/bot/" + botID + "/customer_infomation"} class="nav-check">
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="far fa-address-book"></i>
                   </div>
                 </div>
-            </Link>
+              </Link> ) : (
+              <Link to={"/bot/" + botID + "/customer_infomation"} class="nav-link-c">
+               <div className="fa-group">
+                  <div className="fa-secondary">
+                    <i class="far fa-address-book"></i>
+                  </div>
+                </div>
+                </Link>
+              )
+            }
             </li>
+
           </ul>
         </nav>
 
       ) : (
 
         <nav className="navbar2">
-          <ul className="navbar-nav2">
+          <ul className="navbar-nav2" id="left-navbar">
             <li className="btn-nav">
               
               <Link onClick={Change} className="btn-nav-close">
@@ -402,7 +439,7 @@ function Navbar_member({ botID, path  }) {
 
             <li className="nav-item2">
             { path=="training" ? (
-              <Link to={"/bot/" + botID + "/training"} onClick={onSubmit} class="nav-check-open">
+              <Link to={"/bot/" + botID + "/training"} onClick={onSubmit} class="nav-check-open" name="menu-training">
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i className="fas fa-robot"></i>
@@ -410,7 +447,7 @@ function Navbar_member({ botID, path  }) {
                 </div>
                 <span className="link-text">Training bot</span>
               </Link> ) : (
-              <Link to={"/bot/" + botID + "/training"} onClick={onSubmit} class="nav-link2">
+              <Link to={"/bot/" + botID + "/training"} onClick={onSubmit} class="nav-link2" name="menu-training">
                   <div className="fa-group">
                       <div className="fa-secondary">
                           <i className="fas fa-robot"></i>
@@ -423,23 +460,23 @@ function Navbar_member({ botID, path  }) {
             </li>
 
             
-            <li className="nav-item2">
+            <li className="nav-item2" >
             { path=="trained" ? (
-              <Link to={"/bot/" + botID + "/trained"} onClick={onSubmit} class="nav-check-open">
+              <Link to={"/bot/" + botID + "/trained"} onClick={onSubmit} class="nav-check-open" name="menu-trained" >
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="fas fa-graduation-cap"></i>
                   </div>
                 </div>
-                <span className="link-text">Trained</span>
+                <span className="link-text" name="menu-trained">Trained</span>
               </Link> ) : (
-              <Link to={"/bot/" + botID + "/trained"}  onClick={onSubmit} class="nav-link2">
+              <Link to={"/bot/" + botID + "/trained"}  onClick={onSubmit} class="nav-link2" name="menu-trained">
                   <div className="fa-group">
                       <div className="fa-secondary">
                           <i class="fas fa-graduation-cap"></i>
                       </div>
                   </div>
-                  <span className="link-text">Trained</span>
+                  <span className="link-text" >Trained</span>
               </Link>
               )
             }
@@ -447,7 +484,7 @@ function Navbar_member({ botID, path  }) {
 
             <li className="nav-item2">
             { path=="group" ? (
-              <Link to={"/bot/" + botID + "/group"} onClick={onSubmit} class="nav-check-open">
+              <Link to={"/bot/" + botID + "/group"} onClick={onSubmit} class="nav-check-open" name="menu-group">
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="fas fa-object-group"></i>
@@ -455,7 +492,7 @@ function Navbar_member({ botID, path  }) {
                 </div>
                 <span className="link-text">Group</span>
               </Link> ) : (
-              <Link to={"/bot/" + botID + "/group"} onClick={onSubmit} class="nav-link2">
+              <Link to={"/bot/" + botID + "/group"} onClick={onSubmit} class="nav-link2" name="menu-group">
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="fas fa-object-group"></i>
@@ -469,7 +506,7 @@ function Navbar_member({ botID, path  }) {
 
             <li className="nav-item2">
             { path=="mapping" ? (  
-              <Link to={"/bot/" + botID + "/mapping"} class="nav-check-open">
+              <Link to={"/bot/" + botID + "/mapping"} class="nav-check-open" name="menu-mapping">
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="fas fa-project-diagram"></i>
@@ -477,7 +514,7 @@ function Navbar_member({ botID, path  }) {
                 </div>
                 <span className="link-text">Mapping</span>
               </Link> ) : (
-              <Link to={"/bot/" + botID + "/mapping"} class="nav-link2">
+              <Link to={"/bot/" + botID + "/mapping"} class="nav-link2" name="menu-mapping">
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="fas fa-project-diagram"></i>
@@ -490,38 +527,70 @@ function Navbar_member({ botID, path  }) {
             </li>
 
             <li className="nav-item2">
-            <Link class="nav-link2">
+            { path=="history" ? (
+              <Link to={"/bot/" + botID + "/history"} onClick={onSubmit} class="nav-check-open" name="menu-history">
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="fas fa-history"></i>
                   </div>
                 </div>
                 <span className="link-text">History</span>
-            </Link>  
+              </Link> ) : (
+              <Link to={"/bot/" + botID + "/history"} onClick={onSubmit} class="nav-link2" name="menu-history">
+                  <div className="fa-group">
+                      <div className="fa-secondary">
+                          <i class="fas fa-history"></i>
+                      </div>
+                  </div>
+                  <span className="link-text">History</span>
+              </Link>
+              )
+            }  
             </li>
-
+            
             <li className="nav-item2">
-            <Link class="nav-link2">
+            { path=="inventory" ? (
+              <Link to={"/bot/" + botID + "/inventory"} onClick={onSubmit} class="nav-check-open" name="menu-inventory">
                 <div className="fa-group">
                   <div className="fa-secondary">
-                    <i class="fad fa-boxes"></i>
+                    <i class="fas fa-box-open"></i>
                   </div>
                 </div>
                 <span className="link-text">Inventory</span>
-            </Link> 
+              </Link> ) : (
+              <Link to={"/bot/" + botID + "/inventory"} onClick={onSubmit} class="nav-link2" name="menu-inventory">
+                  <div className="fa-group">
+                      <div className="fa-secondary">
+                      <i class="fas fa-box-open"></i>
+                      </div>
+                  </div>
+                  <span className="link-text">Inventory</span>
+              </Link>
+              )
+            }
             </li>
 
             <li className="nav-item2">
-            <Link class="nav-link2">
+            { path=="customer_infomation" ? (
+              <Link to={"/bot/" + botID + "/customer_infomation"} onClick={onSubmit} class="nav-check-open" name="menu-customer">
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="far fa-address-book"></i>
                   </div>
                 </div>
                 <span className="link-text">Customer <br></br> infomation</span>
-            </Link>
+              </Link> ) : (
+              <Link to={"/bot/" + botID + "/customer_infomation"} onClick={onSubmit} class="nav-link2" name="menu-customer">
+                  <div className="fa-group">
+                      <div className="fa-secondary">
+                          <i class="far fa-address-book"></i>
+                      </div>
+                  </div>
+                  <span className="link-text">Customer <br></br> infomation</span>
+              </Link>
+              )
+            }
             </li>
-
           </ul>
         </nav>
       )}

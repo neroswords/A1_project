@@ -1,4 +1,6 @@
 {
-    "python.pythonPath": "C:\\Users\\ADMIN\\AppData\\Local\\Programs\\Python\\Python37\\python.exe",
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "jupyter.jupyterServerType": "local",
+    "ponicode.testSettings.testLocation.locationType": "Same folder as source file",
+    "ponicode.testSettings.testLocation.path": "{rootDir}/{filePath}/{fileName}.test.{ext}"
 }

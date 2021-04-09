@@ -1,56 +1,31 @@
-from Project.extensions import mongo
-from bson import ObjectId
-from Project.nlp import sentence_get_confident
-from pythainlp.tokenize import word_tokenize
 import json
-import requests
 import re
-def process_message(message,botID,min_conf):
-    training_collection = mongo.db.training
-    trained_collection = mongo.db.trained
-    msg_token = word_tokenize(message)
-    if msg_token == 'ค้นหา':
-      ans = json.loads(item_list_flexmessage(botID = botID))
-      return ans
-    max = 0
-    ans = ''
-    flag = True
-    similar_trained_word = trained_collection.find({'botID': ObjectId(botID)})
-    for word in similar_trained_word:
-        conf = float("{:.2f}".format(sentence_get_confident(message,word['question'])))
-        if conf == False : 
-            flag = False
-            break
-        elif conf == 1.0:
-            max = conf
-            ans = word['answer']
-            flag = False
-            break
-        elif conf > max:
-            max = conf
-            ans = word['answer']
-    if (max < min_conf):
-        ans = "ขอโทษครับ ผมยังไม่เข้าใจคำนี้ครับกำลังศึกษาอยู่"
-    if flag:
-        similar_training_word = training_collection.find_one({'question':message,'botID': ObjectId(botID)})
-        if similar_training_word == None :
-            training_collection.insert_one({'question': message, 'answer': ans, 'confident': max, 'botID': ObjectId(botID)})
-    return {'message':ans }
+import requests
+from bson import ObjectId
+from linebot.models import (BubbleContainer, CarouselColumn, CarouselTemplate,
+                            ConfirmTemplate, FlexSendMessage,
+                            ImageCarouselColumn, ImageCarouselTemplate,
+                            ImageSendMessage, MessageAction, MessageEvent,
+                            PostbackAction, StickerSendMessage,
+                            TemplateSendMessage, URIAction)
+from pythainlp.tokenize import word_tokenize
+
+from Project.extensions import mongo, server_url
+
 
 def ReplyMessage(Reply_token, TextMessage, Line_Acess_Token):
     LINE_API = 'https://api.line.me/v2/bot/message/reply'
 
-    Authorization = 'Bearer {}'.format(Line_Acess_Token) ##ที่ยาวๆ
+    Authorization = 'Bearer {}'.format(Line_Acess_Token)
     headers = {
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization':Authorization
+        'Authorization': Authorization
     }
-
     data = {
-        "replyToken":Reply_token,
-        "messages":[{
-            "type":"text",
-            "text":TextMessage
+        "replyToken": Reply_token,
+        "messages": [{
+            "type": "text",
+            "text": TextMessage
         }]
     }
     
@@ -59,153 +34,421 @@ def ReplyMessage(Reply_token, TextMessage, Line_Acess_Token):
     return 200
 
 
+# def item_list_flexmessage(**kwargs):
+#     inventory_collection = mongo.db.inventory
+#     print(kwargs['query'])
+#     search_request = {'$and':[{'$or':
+#         [
+#             {'item_name': {'$regex': kwargs['query'].strip()}},
+#             {'tag': {'$regex': f".*{kwargs['query']}.*", '$options': 'i'}}
+#         ]
+#         },{'botID': ObjectId(kwargs['botID'])}
+#         ]
+#     }
+#     data = inventory_collection.find(search_request).limit(10)
+#     data_list = list(data)
+#     if len(data_list) == 0:
+#         return {"message":"ไม่พบผลการค้นหา"}
+#     else:
+#       full_content = []
+#       for part in data_list:
+#         full_content.append(CarouselColumn(
+#                 thumbnail_image_url='https://www.beartai.com/wp-content/uploads/2020/03/Untitled-1.png',
+#                 title='this is menu1',
+#                 text='description1',
+#                 actions=[
+#                     PostbackAction(
+#                         label='postback1',
+#                         display_text='postback text1',
+#                         data='action=buy&itemid=1'
+#                     ),
+#                     MessageAction(
+#                         label='message1',
+#                         text='message text1'
+#                     ),
+#                     URIAction(
+#                         label='uri1',
+#                         uri='http://example.com/1'
+#                     )
+#                 ]
+#             ))
+#       return {"flex":full_content}
 
 def item_list_flexmessage(**kwargs):
     inventory_collection = mongo.db.inventory
-    search = "เสื้อ"
-    search_request = {'$and':[{'$or':
-        [
-            {'author': {'$regex': f".*{search}.*", '$options': 'i'}},
-            {'header': {'$regex': f".*{search}.*", '$options': 'i'}}
-        ]
-        },{'botID': ObjectId(kwargs['botID'])}
+    search_request = {'$and': [{'$or':
+        [{'item_name': {'$regex': kwargs['query'].strip(), "$options" :'i'}}, {'type': {'$regex': kwargs['query'].strip().lower(), "$options": 'i'}},
+        ]}, {'botID': ObjectId(kwargs['botID'])}
         ]
     }
-    data = inventory_collection.find(search_request).limit(10)
-    data_list = list(data) 
+    data = inventory_collection.find(search_request).limit(9)
+    data_list = list(data)
     if len(data_list) == 0:
-        return '''{"message":"nodata"}'''
+        return '''{"message":"ไม่พบผลการค้นหา"}'''
     else:
-      contents ='''
-        {
+      contents_block = ''''''
+      for index in data_list:
+        #server_url+"/images/bot/inventory/"+index['item_img'][0]
+        if index['amount'] <= 0:
+          contents ='''{
           "type": "bubble",
+          "hero": {
+            "type": "image",
+            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_5_carousel.png",
+            "size": "full",
+            "aspectRatio": "20:13",
+            "aspectMode": "cover"
+          },
           "body": {
             "type": "box",
-            "layout": "horizontal",
+            "layout": "vertical",
+            "spacing": "sm",
             "contents": [
               {
                 "type": "text",
-                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                "wrap": true
+                "text": "%s",
+                "weight": "bold",
+                "size": "xl",
+                "wrap": true,
+                "contents": []
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "฿%d",
+                    "weight": "bold",
+                    "size": "xl",
+                    "flex": 0,
+                    "wrap": true,
+                    "contents": []
+                  }
+                ]
               }
             ]
           },
           "footer": {
             "type": "box",
-            "layout": "horizontal",
+            "layout": "vertical",
+            "spacing": "sm",
             "contents": [
               {
                 "type": "button",
-                "style": "primary",
                 "action": {
-                  "type":"postback",
-                  "label":"Buy",
-                  "data":"action=buy&itemid=111"
-                }
+                  "type": "postback",
+                  "label": "Add to Cart",
+                  "data": "action=buy&itemid=%s"
+                },
+                "style": "secondary"
               },
               {
                 "type": "button",
-                "style": "primary",
                 "action": {
                   "type": "uri",
-                  "label": "Set",
-                  "uri": "https://liff.line.me/1655652942-JB5revQV"
+                  "label": "Description",
+                  "uri": "https://liff.line.me/1655652942-1EJmM0LZ"
                 }
               }
             ]
           }
-        }
-        '''
-      contents_block = ''''''
-      for index in data:
-        print(index)
-        if contents_block == '':
-          contents_block = contents
+        }'''%(index['item_name'],index['price'],index['_id'])
         else:
-          contents_block = contents_block+','+contents
-    flex = '''
-    {
-      "type": "carousel",
-      "contents": [
-        %s
-      ]
-    }'''%(contents_block)
-    return flex
-
-def invoice_flexmessage(data):
-    res = "test"
-    if res == 'nodata':
-        return 'nodata'
-    else:
-      contents ='''
-        {
+          contents ='''{
           "type": "bubble",
+          "hero": {
+            "type": "image",
+            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_5_carousel.png",
+            "size": "full",
+            "aspectRatio": "20:13",
+            "aspectMode": "cover"
+          },
           "body": {
             "type": "box",
-            "layout": "horizontal",
+            "layout": "vertical",
+            "spacing": "sm",
             "contents": [
               {
                 "type": "text",
-                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                "wrap": true
+                "text": "%s",
+                "weight": "bold",
+                "size": "xl",
+                "wrap": true,
+                "contents": []
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "฿%d",
+                    "weight": "bold",
+                    "size": "xl",
+                    "flex": 0,
+                    "wrap": true,
+                    "contents": []
+                  }
+                ]
               }
             ]
           },
           "footer": {
             "type": "box",
-            "layout": "horizontal",
+            "layout": "vertical",
+            "spacing": "sm",
             "contents": [
               {
                 "type": "button",
-                "style": "primary",
                 "action": {
-                  "type":"postback",
-                  "label":"Buy",
-                  "data":"action=buy&itemid=111"
-                }
+                  "type": "postback",
+                  "label": "Add to Cart",
+                  "data": "action=buy&itemid=%s"
+                },
+                "style": "primary"
               },
               {
                 "type": "button",
-                "style": "primary",
                 "action": {
-                  "type":"postback",
-                  "label":"More info",
-                  "data":"action=info&itemid=111"
-                },
-                {
-                "type": "uri",
-                "label": "Action 1",
-                "uri": "https://www.set.or.th/set/mainpage.do?language=th&country=TH"
-              }
+                  "type": "uri",
+                  "label": "Description",
+                  "uri": "https://liff.line.me/1655652942-1EJmM0LZ"
+                }
               }
             ]
           }
-        }
-        '''
-      contents_block = ''''''
-      for i in range(10):
-        if contents_block == '':
+        }'''%(index['item_name'],index['price'],index['_id'])
+        if contents_block == "":
           contents_block = contents
         else:
           contents_block = contents_block+','+contents
-      productName,imgUrl,desc,cont = res
     flex = '''
+    [%s,
     {
-      "type": "carousel",
-      "contents": [
-        %s
-      ]
-    }'''%(contents_block)
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "button",
+            "flex": 1,
+            "gravity": "center",
+            "action": {
+              "type": "uri",
+              "label": "See more",
+              "uri": "https://linecorp.com"
+            }
+          }
+        ]
+      },
+      "action": {
+        "type": "uri",
+        "label": "action",
+        "uri": "http://linecorp.com/"
+      }
+    }]'''%(contents_block)
     return flex
 
 
-def confirm_flexmessage(sender_id):
-    customer_collection = mongo.db.customers
-    sender_define = customer_collection.find_one({"userID":sender_id})
+
+def invoice_flexmessage(**kwargs):
+    cart_collection = mongo.db.carts
+    bot_collection = mongo.db.bots
+    bot_define = bot_collection.find_one({'_id': ObjectId(kwargs['botID'])})
+    cart_define = cart_collection.find_one({'$and':[{'userID':kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]})
+    if cart_define == None:
+        return '''{"message":"ไม่มีตะกร้า โปรดตรวจสอบใหม่อีกครั้ง"}'''
+    else:
+      sum = 0
+      total_count = 0
+      contents_block = ''''''
+      for item in cart_define['cart']:
+        contents ='''
+        {
+          "type": "box",
+          "layout": "horizontal",
+          "contents": [
+            {
+              "type": "text",
+                    "text": "%s",
+                    "size": "sm",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": "*%d",
+                    "align": "center"
+                  },
+                  {
+                    "type": "text",
+                    "text": "฿%d",
+                    "size": "sm",
+                    "color": "#111111",
+                    "align": "end"
+                  }
+                ]
+              }'''%(item['item_name'],item['amount'],item['total_ob'])
+        if contents_block == '':
+          contents_block = contents
+          sum += item['total_ob']
+          total_count += item['amount']
+        else:
+          contents_block = contents_block+','+contents
+          sum += item['total_ob']
+          total_count += item['amount']
+      flex = '''
+      {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "RECEIPT",
+            "weight": "bold",
+            "color": "#1DB446",
+            "size": "sm"
+          },
+          {
+            "type": "text",
+            "text": "%s",
+            "weight": "bold",
+            "size": "xxl",
+            "margin": "md"
+          },
+          {
+            "type": "text",
+            "text": "Miraina Tower, 4-1-6 Shinjuku, Tokyo",
+            "size": "xs",
+            "color": "#aaaaaa",
+            "wrap": true
+          },
+          {
+            "type": "separator",
+            "margin": "xxl"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "margin": "xxl",
+            "spacing": "sm",
+            "contents": [
+              %s
+              ,
+              {
+                "type": "separator",
+                "margin": "xxl"
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "margin": "xxl",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "ITEMS",
+                    "size": "sm",
+                    "color": "#555555"
+                  },
+                  {
+                    "type": "text",
+                    "text": "%d",
+                    "size": "sm",
+                    "color": "#111111",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "TOTAL",
+                    "size": "sm",
+                    "color": "#555555"
+                  },
+                  {
+                    "type": "text",
+                    "text": "฿%d",
+                    "size": "sm",
+                    "color": "#111111",
+                    "align": "end"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "separator",
+            "margin": "xxl"
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "margin": "md",
+            "contents": [
+              {
+                "type": "text",
+                "text": "CART ID",
+                "size": "xs",
+                "color": "#aaaaaa",
+                "flex": 0
+              },
+              {
+                "type": "text",
+                "text": "%s",
+                "color": "#aaaaaa",
+                "size": "xs",
+                "align": "end"
+              }
+            ]
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "postback",
+              "label": "Accept",
+              "data": "action=confirm&data=true"
+            },
+            "style": "primary"
+          },
+          {
+            "type": "button",
+            "action": {
+              "type": "postback",
+              "label": "Cancel",
+              "data": "action=confirm&data=false"
+            },
+            "color": "#E74F4FFF"
+          }
+        ]
+      },
+      "styles": {
+        "footer": {
+          "separator": true
+        }
+      }
+    }'''%(bot_define['bot_name'].upper(),contents_block,total_count,sum,str(cart_define['_id']))
+    return flex
+
+
+def confirm_flexmessage(sender_name):
     flex = '''
     {
       "type": "bubble",
-      "direction": "ltr",
       "header": {
         "type": "box",
         "layout": "vertical",
@@ -213,8 +456,7 @@ def confirm_flexmessage(sender_id):
           {
             "type": "text",
             "text": "ยืนยันชื่อ-นามสกุล",
-            "align": "center",
-            "contents": []
+            "align": "center"
           }
         ]
       },
@@ -224,38 +466,189 @@ def confirm_flexmessage(sender_id):
         "contents": [
           {
             "type": "text",
-            "text": "%s %s",
-            "size": "xl",
-            "align": "start",
-            "contents": []
+            "text": "%s",
+            "wrap": true,
+            "weight": "bold",
+            "offsetBottom": "lg"
+          },
+          {
+            "type": "separator"
+          },
+          {
+            "type": "text",
+            "text": "*พิมพ์ชื่ออีกครั้งได้หากต้องการแก้ไข",
+            "size": "xxs",
+            "offsetTop": "md"
+          },
+          {
+            "type": "text",
+            "text": "*กดEnterหาถูกต้องหรือCancelเพื่อกลับไปซื้อของ",
+            "size": "xxs",
+            "offsetTop": "md"
           }
         ]
       },
       "footer": {
         "type": "box",
         "layout": "horizontal",
-        "position": "default",
         "contents": [
           {
             "type": "button",
             "action": {
               "type": "postback",
-              "label": "ยกเลิก",
-              "data": "confirm=cancle"
+              "label": "Confirm",
+              "data": "action=name&confirm=true&data=%s"
             },
-            "color": "#E74F4FFF",
-            "style": "primary"
+            "style": "primary",
+            "margin": "none",
+            "offsetStart": "none",
+            "offsetEnd": "none"
           },
           {
             "type": "button",
             "action": {
               "type": "postback",
-              "label": "ยืนยัน",
-              "data": "confirm=true"
+              "label": "Cancel",
+              "data": "action=name&confirm=false"
             },
-            "style": "primary"
+            "style": "link"
           }
         ]
       }
-    }'''%(sender_define['name'], sender_define['surname'])
+    }'''%(sender_name,sender_name)
     return flex
+
+def address_flex(address):
+  flex = '''
+    {
+    "type": "bubble",
+    "header": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": "ที่อยู่ที่ต้องการให้จัดส่ง",
+          "align": "center",
+          "weight": "bold"
+        }
+      ]
+    },
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": "%s",
+          "wrap": true,
+          "offsetBottom": "lg"
+        },
+        {
+          "type": "separator"
+        },
+        {
+          "type": "text",
+          "text": "*พิมพ์ที่อยู่อีกครั้งได้หากต้องการแก้ไข",
+          "size": "xxs",
+          "offsetTop": "md",
+          "weight": "regular",
+          "style": "normal"
+        },
+        {
+          "type": "text",
+          "text": "*กดEnterหาถูกต้องหรือCancelเพื่อกลับไปซื้อของ",
+          "size": "xxs",
+          "offsetTop": "md",
+          "style": "normal"
+        }
+      ]
+    },
+    "footer": {
+      "type": "box",
+      "layout": "horizontal",
+      "contents": [
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
+            "label": "Confirm",
+            "data": "action=address&confirm=true&data=%s"
+          },
+          "style": "primary",
+          "margin": "none",
+          "offsetStart": "none",
+          "offsetEnd": "none"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
+            "label": "Cancel",
+            "data": "action=address&confirm=false"
+          },
+          "style": "link"
+        }
+      ]
+    }
+  }'''%(address,address)
+  return flex
+
+def payment_flex(botID,customerID):
+  flex = '''
+  {
+    "type": "bubble",
+    "hero": {
+      "type": "image",
+      "size": "full",
+      "aspectRatio": "20:13",
+      "aspectMode": "cover",
+      "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png"
+    },
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Payment method",
+          "weight": "bold",
+          "size": "xl"
+        }
+      ],
+      "alignItems": "center"
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
+        {
+          "type": "button",
+          "style": "link",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "Pay",
+            "uri": "https://liff.line.me/1655652942-zNpjoxYV/?customer=%s"
+          }
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
+            "label": "Cancel",
+            "data": "action=payment&confirm=false"
+          },
+          "style": "link"
+        },
+        {
+          "type": "spacer",
+          "size": "sm"
+        }
+      ],
+      "flex": 0
+    }
+  }
+  '''%(customerID)
+  return flex

@@ -10,8 +10,6 @@ import datetime
 from random import randint
 from Project.models.user import User
 from Project.extensions import mongo, JSONEncoder
-from flask_login import LoginManager, login_user, logout_user, login_required,current_user,AnonymousUserMixin
-# from Project.db import get_user,save_user,update_connect,new_bot,check_user,get_connection,check_bot,find_bot
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required,
                                 get_jwt_identity, get_raw_jwt)
 import json
@@ -62,7 +60,7 @@ def login():
             user_define['type_shop'], 
             user_define['birthday']) 
             if user and user.check_password(user_info['password']):
-                login_user(user)
+                # login_user(user)
                 letters = string.ascii_lowercase
                 value = randint(0, 999999)
                 value = str(value)
@@ -71,50 +69,14 @@ def login():
                 access_token = ''.join(random.choice(letters) for i in range(12))+value
                 access_token = generate_password_hash(access_token)
                 refresh_token = ''.join(random.choice(letters) for i in range(15))+value_re
-                # access_token = create_access_token(identity=user_define['username'])
-                # refresh_token = create_refresh_token(identity=user_define['username'])
+
                 user_id = JSONEncoder().encode(user_define['_id']).replace('"','')
-                info_update = { "$set": {'access_token': access_token,'refresh_token':refresh_token}}
-                 
-                done = users_collection.update_one({'_id': ObjectId(user_id)}, info_update)
-                timestamp = datetime.datetime.now()
-                utc_timestamp = datetime.datetime.utcnow()
-                current_date_and_time = datetime.datetime.now()
-                minutes = 1
-                hours_added = datetime.timedelta(minutes = minutes)
-
-                future_date_and_time = current_date_and_time + hours_added
-                # users_collection.create_index("date", expireAfterSeconds=5)                     
-                # users_collection.insert({'_id': 'utc_session', "date": utc_timestamp, "session": "test session"})
-
-                index_cursor = users_collection.list_indexes()
-                print ("\nindex_cursor TYPE:", type(index_cursor))
-                list_index = []
-                for index in index_cursor:
-                    if index["name"] == "_id_":
-                        continue
-                    list_index.append(index["name"])
-                print(list_index)
-                for a in list_index:
-                    print("user_id = "+user_id+"_1")
-                    print("index = "+a)
-                    if user_id+"_1" == a:
-                        users_collection.drop_index(user_id+"_1")
-
-                # users_collection.create_index("expireAt": 1, expireAfterSeconds=0)
-                # users_collection.insert( {"expireAt": future_date_and_time,"logEvent": 2,"logMessage": "Success!"} )
-
-                # users_collection.create_index(user_id, expireAfterSeconds=1)
-                # users_collection.ensure_index(user_id, expireAfterSeconds=1)  
-                # users_collection.insert({'_id': user_id, "date": timestamp, "session": "test session"})
-                users_collection.insert({"EE": access_token, user_id: future_date_and_time, "session": "test session"})
                 return {
-                        'username': current_user.username,
+                        'username': user_define['username'],
                         'access_token': access_token,
                         'user_id' : user_id,
                         'refresh_token': refresh_token
                     }
-                run_timer()
                 
             else:
                 return {"error":"Username or password wrong"}
@@ -128,6 +90,7 @@ def Profile_edit2(id):
         userinfo_cursor =  users_collection.find({"_id" : ObjectId(id)})
         userinfo_cur = list(userinfo_cursor) 
         data_info = dumps(userinfo_cur, indent = 2) 
+        print(data_info)
         return data_info
     if request.method == 'POST':
         user_info = request.get_json()
