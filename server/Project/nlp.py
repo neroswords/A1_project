@@ -73,7 +73,7 @@ def sentence_get_confident(ss1,ss2,list = "none"):
 # print(example[inp])
 # print(pythainlp.util.isthai(inp))
 # print(sentence_similarity("ฮัลโหล","โหล"))
-# print(word_tokenize("คิดเงิน"))
+# print(word_tokenize("คนขายของ"))
 # print(word_tokenize("สบายดี"))
 # print(sentence_sound_index('สรา','สา',list='invert'))
 # print(lk82('ไง'))

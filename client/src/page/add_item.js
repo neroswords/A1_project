@@ -195,6 +195,7 @@ export default class Add_item extends React.Component {
       if (!file) {
         return
       }
+      console.log(this.state.imagesPreviewUrl)
       reader.onloadend = () => {
         this.setState({
           file: file[i],

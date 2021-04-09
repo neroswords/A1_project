@@ -1,20 +1,21 @@
 import React, {useState, useEffect, useRef } from "react";
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link,Redirect,useHistory  } from 'react-router-dom';
 
 const Styles = styled.div` 
-  .container {
+  
+.container {
     font-family: 'Public Sans', sans-serif;
     margin-top: 2%;
-  }
-  .card-pd{
+}
+.card-pd{
     padding: 20px;
     border: 0;
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-  }
+}
   
-  .card-pd .card-pd-body {
+.card-pd .card-pd-body {
     margin: 1rem;
 }
 
@@ -32,7 +33,7 @@ const Styles = styled.div`
     color: black;
 }
 
-.pd-edit i {
+/* .btn-pd button{
     float:right;
     font-size: 20px;
     border: 5px solid white;
@@ -40,17 +41,43 @@ const Styles = styled.div`
     cursor: pointer;
     padding: 4px;
     margin-bottom: 50px;
+} */
+
+.pd-delete {
+    float: right;
+    color: black;
+    border-radius: 1rem;
+    margin-left: 1%;
+    padding: 1% 2%;
 }
 
-.edit-pd:hover{
+.pd-edit{
+    float: right;
+    color: black;
+    border-radius: 1rem;
+    padding: 1% 2%;
+    /* background-color: #aecaf9; */
+}
+
+/* .btn-pd :hover{
     border: 5px solid #ddd;
     border-radius : 50%;
     background-color: #ddd;
-    padding: 2px;
+    padding: 4px;
+} */
+
+.fa-pencil-alt {
+    margin-left: 4px;
 }
-.btn-top-pd h3{
-    float:right;
-    font-weight: bold;
+
+.fa-trash{
+    margin-left: 4px;
+}
+
+.head-pd{
+    /* float:right; */
+    margin: 2%;
+    font-weight: bolder;
 }
 
 .pd-detail .pd-name{
@@ -100,7 +127,8 @@ const Styles = styled.div`
 }
 
 .line-pd{
-    margin-top: 5%;
+    margin-top: 8%;
+    margin-bottom: 3%;
     width: 100%;
     height: 3px;
     background: #115dd8;
@@ -146,7 +174,7 @@ const Styles = styled.div`
 
 `
 function Product_datail(botID){
-
+    let history = useHistory();
     const [inventory,setinventory] = useState([]);
     useEffect(() => {
         fetch('/inventory/detail/'+botID.match.params.product_id).then(res => res.json().then(data => {setImg(data.img);setinventory(data)}))
@@ -155,6 +183,17 @@ function Product_datail(botID){
     test = inventory.img
     const [img,setImg] = useState([]);
     console.log(img)
+
+    const OnDelete = () => {
+        fetch("/inventory/"+botID.match.params.bot_id+'/product_edit/'+botID.match.params.product_id+'/delete', {
+            method : 'POST',
+          
+                 });
+                //  window.location.reload("/bot/"+ botID.match.params.bot_id +"/inventory");
+                history.push("/bot/"+ botID.match.params.bot_id +"/inventory");
+               
+        }
+
     return(
         <Styles>
                 <div className="container">
@@ -169,11 +208,18 @@ function Product_datail(botID){
                             </div>
                             <hr></hr>
                             <div className="row">
+                               
+                            <button  onClick={() => { OnDelete()}} className=" pd-delete btn btn-outline-danger"> Delete  <i className="fas fa-trash"></i> </button>
+
+                                <Link to={'/bot/'+botID.match.params.bot_id+'/inventory'+'/product_edit/'+botID.match.params.product_id} className="link-back-pd" > 
+                               
+                                <button className="pd-edit btn btn-outline-primary" type="button"> Edit <i className="edit-pd fas fa-pencil-alt"></i></button>
+                                </Link>
                                 <div className="col previmg-pd">
                                     <div className="img-pd">
 
                                 { img.map((i, index) =>{
-                                     return <img className="img-inven" src={'/images/bucket/'+i}/>
+                                     return [<img className="img-inven" src={'/images/bucket/'+i}/> ]
                                 })  
                             }               
  

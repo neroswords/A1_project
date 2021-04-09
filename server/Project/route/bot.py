@@ -1,5 +1,5 @@
 
-from flask import Flask, request, abort, render_template, session,url_for,redirect,send_from_directory,send_file,Blueprint
+from flask import Flask, request, abort, render_template, session,url_for,redirect,send_from_directory,send_file,Blueprint,current_app
 from pymessenger import Bot
 from Project.Config import *
 from werkzeug.utils import secure_filename
@@ -20,11 +20,21 @@ from linebot.models import (MessageEvent, TextMessage, TextSendMessage, FlexSend
                             PostbackAction, MessageAction, ImageSendMessage,StickerSendMessage,
                             ImageCarouselTemplate, ImageCarouselColumn,CarouselTemplate,CarouselColumn,URIAction,
                             CarouselContainer, ImageComponent)
+from flask_socketio import send, emit, join_room, leave_room
+from .. import socketio
 
 bot = Blueprint("bot",__name__)
 UPLOAD_FOLDER = './Project/static/images/bot/bot_pic'
 UPLOAD_FOLDER_ITEMS = './Project/static/images/bucket'
 
+# @socketio.on('message')
+# def webhook_message(message, userID, botID):
+#     socketio.emit("message", "Server message", room='my_room')
+
+# @bot.route('/msg')
+# def send_message():
+#     socketio.emit("message_from_webhook", "Server message", room='my_room')
+#     return "I got you."
 
 @bot.route('/<id>/connect', methods=['GET', 'POST'])
 # @login_required
@@ -47,8 +57,6 @@ def connect(id):
     elif request.method == 'GET':
         bot_define = bot_collection.find_one({'_id': ObjectId(id)})
         return dumps(bot_define, indent=2)
-
-# create bot
 
 
 @bot.route('/create', methods=['POST'])
@@ -75,8 +83,6 @@ def create():
         #id = JSONEncoder().encode(new_bot.inserted_id).replace('"','')
         return {'message': 'add bot successfully'}
     return "add bot unsuccessfully"
-
-# edit
 
 
 @bot.route('/<id>/edit', methods=['GET', 'POST'])
@@ -113,9 +119,7 @@ def edit(id):
 
         done = bots_collection.update_one({'_id': ObjectId(id)}, info_update)
         return {'message': 'add bot successfully'}
-    return "add bot unsuccessfully"
-
- # delete
+    return {'message': 'add bot unsuccessfully'}
 
 
 @bot.route('/delete/<id>', methods=['POST'])
@@ -135,6 +139,7 @@ def add_sentence(id):
     sentence = request.get_json()
     sentences_collection.insert_one(sentence)
 
+
 @bot.route('/webhook/<botID>/<platform>', methods=["POST", "GET"])
 def webhook(platform, botID):
     training_collection = mongo.db.training
@@ -152,7 +157,6 @@ def webhook(platform, botID):
                 return "This is method get from facebook"
         elif request.method == "POST":
             call_facebook(botID)
-          
             return "Message received"
 
     elif platform == "line":
@@ -165,18 +169,20 @@ def webhook(platform, botID):
                 return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
             Reply_token = payload['events'][0]['replyToken']
             sender = payload['events'][0]['source']
+            profile = line_bot_api.get_profile(sender['userId'])
             if 'message' in payload['events'][0].keys():
                 message_type = payload['events'][0]['message']['type']
             elif 'postback' in payload['events'][0].keys():
                 message_type = 'postback'
             sender_define = customer_collection.find_one({'$and':[{'userID':sender['userId']},{'botID': ObjectId(botID)}]})
             if sender_define == None :
-                sender_define = {'userID':sender['userId'],'type':sender['type'],'state':'none','botID':bot_define['_id'],'status':'open'}
+                sender_define = {'userID':sender['userId'],'type':sender['type'],'state':'none','botID':bot_define['_id'],'status':'open','pictureUrl':profile.picture_url,'display_name':profile.display_name}
                 customer_collection.insert_one(sender_define)
             if sender_define['status'] == 'open' :
                 if message_type == 'text':
                     data = {"message":payload['events'][0]['message']['text']}
-                    res = stateHandler(sender_id=sender_define['userID'], botID=botID, message= data, confident=bot_define['confident'])
+                    socketio.emit("message_from_webhook", {"message":data["message"], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"displayName":profile.display_name})
+                    res = stateHandler(sender_id=sender_define['userID'], botID=botID, message= data, confident=bot_define['confident'],platform = "line")
                 elif message_type == 'postback':
                     data = {'postback':payload['events'][0]['postback']['data']}
                     res = stateHandler(sender_id=sender_define['userID'], botID=botID, postback= data)
@@ -393,7 +399,7 @@ def additem(botID):
             file = request.files[i]
             filename = secure_filename(file.filename)
             filename = item_name+"&" + \
-            str(count)+creator+os.path.splitext(filename)[1]
+            str(count)+"&"+creator+"&"+str(file.filename)
             destination = "/".join([UPLOAD_FOLDER_ITEMS, filename])
             file.save(destination)
             session['uploadFilePath'] = destination
@@ -426,10 +432,21 @@ def getitem(botID):
     print(data[0])
     return data
 
-    # userinfo_cursor =  users_collection.find({"_id" : ObjectId(id)})
-    # userinfo_cur = list(userinfo_cursor)
-    # data_info = dumps(userinfo_cur, indent = 2)
-    # print(data_info)
-    # return data_info
+@bot.route('/<botID>/customer', methods=["GET","POST"])
+def customer_list(botID):
+    customer_collection = mongo.db.customers
+    customer_cur = customer_collection.find({"botID": ObjectId(botID)})
+    customer_list = list(customer_cur)
+    # data = dumps(customer_list, indent=2)
+    return customer_list
 
+
+@bot.route('/test', methods=["GET"])
+def test():
+    return render_template("Item_Detail.html")
+
+
+@bot.route('/liff', methods=["GET"])
+def liff():
+    return render_template('item_desc.html')
 
