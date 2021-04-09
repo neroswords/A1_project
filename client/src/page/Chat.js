@@ -1,19 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client'
+import Navbar_member from '../Components/Navbar/navbar_member';
+import Chatbody from '../Components/Chat/Chatbody';
 import styled from 'styled-components';
 import { Redirect, Link } from 'react-router-dom';
-import Chatbody from '../Components/Chat/chatbody'
-
-
-// const Styles = styled.div` 
-// .mapping-page {
-//     display: flex;
-// }
-// .container {
-//     margin-top:2%
-// }
-
-// ` 
 
 function Chat(props){
     const [customerList, setCustomerList] =  useState([])
@@ -30,58 +19,71 @@ function Chat(props){
     },[])
 
     return(
-        <>
-            <div className="chatlist">
-                <div className="chatlist_body">
-                    <div className="main-chatlist">
-                        <div className="chatlist__heading">
-                            <h2>Chats</h2>
-                            <button className="btn-nobg">
-                                <i className="fa fa-ellipsis-h"></i>
-                            </button>
-                        </div>
-                        <div className="chatList__search">
-                            <div className="search_wrap">
-                                <input type="text" placeholder="Search Here" required />
-                                <button className="search-btn">
-                                <i className="fa fa-search"></i>
+        
+            <div className="chat-page">
+                    <Navbar_member botID = {props.match.params.bot_id} path={"chat"} />
+                <div className="container">
+                    <div className="main-chatlist row">
+                
+                        <div className="main-chatlist col-4">
+                            <div className="chatlist__heading">
+                                <h2>Chats</h2>
+                                <button className="btn-nobg">
+                                    <i className="fa fa-ellipsis-h"></i>
                                 </button>
                             </div>
-                        </div>
-                        <div className="tabs">
-                            {/* <div className="tabs-all">
-                              All
+                            <div className="chatList__search">
+                                <div className="search_wrap">
+                                    <input type="text" placeholder="Search Here" required />
+                                    <button className="search-btn">
+                                        <i className="fa fa-search"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div className="tabs-facebook">
-                              Facebook
-                            </div>
-                            <div className="tabs-line">
-                              line
+                            {/* <div className="tabs">
+                                <div className="tabs-all">
+                                All
+                                </div>
+                                <div className="tabs-facebook">
+                                Facebook
+                                </div>
+                                <div className="tabs-line">
+                                line
+                                </div>
                             </div> */}
-                        </div>
-                      <div className="chatlist-user">
-
-                      { customerList.map((customer) => (
-                            <Link to={"/chat/"+ props.match.params.bot_id+"/live_chat/"+customer.userID} className="chatlist-msg">
-                                <li className="msg-user row">
-                                    <div className="user-list-pic col-lg-3 col-sm-1">
-                                      <img></img>
-                                      <div className="connec">
-                                        <i className="fab fa-facebook-square"></i>
-                                      </div>
-                                    </div>
-                                    <div className="user-list-input col">
-                                        <h6 className="user-list-name">{customer.display_name}</h6>
-                                        <div className="user-list-text"> 
-                                          สวัสดีค่ะ มีสินค้าอะไรบ้างคะ คุยกับบอทแล้วไม่เข้าใจเลยค่ะ อยากเรียกให้ช่วยค่ะ มานี่ๆๆๆๆๆ มานี่มาาาาา
-                                        </div>
-                                    </div>
-                                  </li>
-                              </Link>
-                             
-                              ))
-                      }
-
+                            <div className="chatlist-user">
+                                { customerList.map((customer) => (
+                                    
+                                    <Link to={"/chat/"+ props.match.params.bot_id+"/live_chat/"+customer.userID} className="chatlist-msg">
+                                        <li className={"msg-user row " + (props.match.params.customer_id == customer.userID ? "select-user-list":"")}>
+                                            <div className="user-list-pic col-lg-3 col-sm-1">
+                                                <img src={customer.pictureUrl}></img>
+                                                {   customer.type == "lineUser" ?
+                                                    (            
+                                                    <div className="connec">
+                                                        <i className="fab fa-line"></i>
+                                                    </div>
+                                                    ) : (
+                                                    <div className="connec">
+                                                        <i className="fab fa-facebook-square"></i>
+                                                    </div>    
+                                                    )
+                                                }
+                                                
+                                                </div>
+                                            <div className="user-list-input col">
+                                                <h6 className="user-list-name">{customer.display_name}</h6>
+                                                <div className="user-list-text"> 
+                                                    {/* สวัสดีค่ะ มีสินค้าอะไรบ้างคะ คุยกับบอทแล้วไม่เข้าใจเลยค่ะ อยากเรียกให้ช่วยค่ะ มานี่ๆๆๆๆๆ มานี่มาาาาา */}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </Link>
+                                    
+                                    ))
+                                }
+                                </div>
+                            </div>
                               {/* <div className="chatlist-msg">
                                   <li className="msg-user row">
                                       <div className="user-list-pic col-lg-3 col-sm-1">
@@ -98,13 +100,15 @@ function Chat(props){
                                       </div>
                                   </li>
                               </div> */}
-
-                        </div> 
+                            <div className="col">
+                                <Chatbody botID={props.match.params.bot_id} customerID={props.match.params.customer_id} />
+                            </div> 
+                        </div>
                     </div>
-                </div>
+                    
+                
             </div> 
-            <Chatbody botID={props.match.params.bot_id} customerID={props.match.params.customer_id} />
-        </>
+        
     )
 
     // const [messages,setMessages] = useState([]);

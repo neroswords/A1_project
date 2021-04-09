@@ -19,9 +19,12 @@ import { Redirect, useHistory } from 'react-router-dom';
 const Styles = styled.div` 
 .mapping-page {
     display: flex;
+    min-height: 92vh;
 }
 .container {
-    margin-top:2%
+    margin-bottom: 2%;
+    margin-top: 2%;
+    overflow:hidden;
 }
 .save__controls {
   z-index: 10;
@@ -268,7 +271,6 @@ function Mapping_create(props){
 
     return(
         <Styles>
-        
         <div className="mapping-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"mapping"} />
             <div className="container">

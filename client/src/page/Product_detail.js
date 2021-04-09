@@ -214,7 +214,8 @@ function Product_datail(botID){
                                     </Link>
                                 
                             </div>
-                            <hr></hr>
+                            {/* <hr></hr> */}
+                            <div className="line-pd"></div>
                             <div className="row">
                                
                             {/* <button  onClick={() => { OnDelete()}} className=" pd-delete btn btn-outline-danger"> Delete  <i className="fas fa-trash"></i> </button>
@@ -246,13 +247,13 @@ function Product_datail(botID){
                             </div>
                             {/* <div className="line-pd"></div>
                             <div className="card__footer d-flex justify-content-between">
-                                    <div className="recommend-pd">
-                                        <p>Recommended by</p>
-                                        <h3>Andrew Palmer</h3>
-                                    </div>
-                                <button className="edit-pd" type="button">Edit Product Product Datail</button>
+                                        <div className="recommend-pd">
+                                            <p>Recommended by</p>
+                                            <h3>Andrew Palmer</h3>
+                                        </div>
+                                    <button className="edit-pd" type="button">Edit Product Product Datail</button>
                             </div> */}
-                        </div>
+                            </div>
                     </div>
                     </div>
 

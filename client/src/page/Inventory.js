@@ -10,12 +10,28 @@ const Styles = styled.div`
     display: flex;
     min-height:92vh;
 }
-.inventory-body {
-    margin-left: 2%;
-    margin-right: 2%;
-    padding: 2%;
+.container {
+    margin-bottom: 2%;
+    margin-top: 2%;
+    overflow:hidden;
+  }
+
+  .inven-title{
+    padding: 4px;
+    width: 100% ;
     background-color: white;
-    width: 100%;
+    border-radius: 0.25rem;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.inventory-body {
+    min-height: 70vh;
+    margin-top: 1%;
+    background-color: white;
+    padding: 1%;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 0.25rem;
+    /* border: 1px solid #ececec; */
 }
 
 .inven-showlist{
@@ -42,9 +58,16 @@ const Styles = styled.div`
   }
 
 .create-inven{
-    border-radius:1rem;
-    padding: 5px 15px;
+    padding: 7px 20px;
+    margin-bottom: 1%;
+    font-size: 12px;
+    border-radius: 25px;
+    border: 1px solid #0078ff;
+    transition: 0.5s;
+    background-color: #0078ff;
+    color: #fff;
 }
+
 ` 
 
 function Inventory(props){
@@ -63,17 +86,21 @@ function Inventory(props){
         <Styles>
             <div className="inventory-page" >
                <Navbar_member botID = {props.match.params.bot_id} path={"inventory"} />
-               <div className="inventory-body">
-                    <h2 className='' id="inventory-header">Inventories</h2>
-                    <Link to={"/bot/"+props.match.params.bot_id+"/add_item"}>
-                        <button className="create-inven btn btn-success" type="button">Create</button>
-                    </Link>
-                    <hr></hr>
-                    <div className="inven-showlist">
-                        {card}
-                    </div>
+               <div className="container">
+                   <div className="inven-title">
+                       <h2 className="p-2 flex-grow-1 bd-highlight" id="inventory-header">Inventories</h2>
+                   </div> 
+                    <div className="inventory-body">        
+                        <Link to={"/bot/"+props.match.params.bot_id+"/add_item"}>
+                            <button className="create-inven btn btn-success" type="button">Create</button>
+                        </Link>
+                        
+                        <div className="inven-showlist">
+                            {card}
+                        </div>
                     
-               </div>  
+                    </div> 
+                </div> 
             </div>
             
         </Styles>

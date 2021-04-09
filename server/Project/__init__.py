@@ -81,9 +81,8 @@ def serve_api():
 
 CORS(app, expose_headers='Authorization')
 
-# if __name__ == '__main__':
-# #     http_server = WSGIServer(('',200), app)
-# #     http_server.serve_forever()
-#     print("Test")
-#     app.secret_key = 'mysecret'
-#     socketio.run(app, port=200, debug=True)
+if __name__ == '__main__':
+#     http_server = WSGIServer(('',200), app)
+#     http_server.serve_forever()
+    app.secret_key = 'mysecret'
+    socketio.run(app, port=200, debug=True)
