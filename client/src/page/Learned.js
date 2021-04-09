@@ -81,31 +81,11 @@ function Learned(props){
             <Navbar_member botID = {props.match.params.bot_id} path={"trained"}  />
             <div className="container">
               
-<<<<<<< HEAD
-                <div className="container-top d-flex bd-highlight">                   
-                    <div className="tained-title"> 
-                        <h2 className=' p-2 flex-grow-1 bd-highlight'>Trained</h2>
-                    </div>
-                    {/* <div className="p-2 bd-highlight">
-                        <button className="btn btn-danger" type="button" onClick = {() => delete_trained(props.match.params.bot_id) } >Delete</button>
-                    </div> */}
-                    {/* <div className="p-2 bd-highlight">
-                        <Link to={'/bot/'+props.match.params.bot_id+'/training'}>
-                            <button className="btn btn-success" type="button">Training</button>
-                        </Link>
-                    </div> */}
-                </div>
-                <div className="showtable-learn">
-                    <Table botID={props.match.params.bot_id} delete_trained={delete_trained}  />
-                </div>
-                
-=======
                 <div className="container-top d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight'>Trained</h2>
                 </div>
                 <hr></hr>
                 <Table botID={props.match.params.bot_id} delete_trained={delete_trained}/>
->>>>>>> 3736762ecdedf3a05a6616afeb320baa700a545f
             </div>
 
             </div>
