@@ -10,8 +10,8 @@ import Delete_table from "../Delete_table";
 const Styles = styled.div`
 
   table {
-    font-family: 'Roboto',sans-serif;
-    margin: 10px 0;
+    /* font-family: 'Roboto',sans-serif; */
+    margin: 3% 0;
     font-size: 1em;
     text-align: center;
     border: 1px solid #efeff5;
@@ -29,6 +29,7 @@ const Styles = styled.div`
       border: 1px solid #efeff5;
       background-color: #393939;
       color: white;
+      width: 500px;
     }
     td {
       font-family: 'Public Sans', sans-serif;

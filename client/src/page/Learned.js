@@ -13,7 +13,7 @@ const Styles = styled.div`
     margin-top: 2%;
     overflow:hidden;
 }
-.tained-title{
+.learned-title{
     padding: 4px;
     width: 100% ;
     background-color: white;
@@ -80,12 +80,13 @@ function Learned(props){
         <div className="learned-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"trained"}  />
             <div className="container">
-              
-                <div className="container-top d-flex bd-highlight">
+                <div className="learned-title d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight'>Trained</h2>
                 </div>
-                <hr></hr>
-                <Table botID={props.match.params.bot_id} delete_trained={delete_trained}/>
+                {/* <hr></hr> */}
+                <div className="showtable-learn">
+                    <Table botID={props.match.params.bot_id} delete_trained={delete_trained}/>
+                </div>
             </div>
 
             </div>

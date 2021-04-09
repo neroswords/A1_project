@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Navbar_member from '../Components/Navbar/navbar_member';
 import Chatbody from '../Components/Chat/Chatbody';
-import ChatList from '../Components/Chat/Chatlist';
 import styled from 'styled-components';
 import { Redirect, Link } from 'react-router-dom';
-import '../Components/Chat/Chat.css';
 
 function Chat(props){
     const [customerList, setCustomerList] =  useState([])

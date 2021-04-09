@@ -180,7 +180,7 @@ function Product_datail(botID){
                     <h3 className="head-pd">Product Details</h3>
                     <div className="card card-pd">
                         <div className="card-pd-body">
-                            <div className="btn-top-pd">
+                            <div btn-top-pdiv className="btn-top-pd">
                                 <Link to={"/bot/"+ botID +"/inventory"} className="link-back-pd" > 
                                     <i className="back-pd fas fa-arrow-left"></i>
                                 </Link>

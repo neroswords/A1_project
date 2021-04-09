@@ -10,11 +10,12 @@ const Styles = styled.div`
   .train-page {
     display: flex;
     min-height: 92vh;
-    
   }
   
   .container {
-    margin-top: 10px;
+    /* margin-top: 10px; */
+    margin-top: 2%;
+    overflow:hidden;
   }
   
   .training-title{
@@ -37,7 +38,7 @@ const Styles = styled.div`
     border-radius: 0.25rem;
 
   }
-`;
+`
 
 function Train(props) {
   let history = useHistory();
@@ -74,20 +75,26 @@ function Train(props) {
       <div className="train-page">
         <Navbar_member botID={props.match.params.bot_id} path={"training"} />
         <div className="container">
-          <div className="container-top d-flex bd-highlight">
+          <div className="training-title">
             <h2 className="p-2 flex-grow-1 bd-highlight">Trainning</h2>
+          </div>
+          {/* <div className=" d-flex bd-highlight">
+          
             <div className="p-2 bd-highlight">
-              {/* <Link to={'/bot/'+props.match.params.bot_id+'/trained'}>
+              <Link to={'/bot/'+props.match.params.bot_id+'/trained'}>
                             <button className="btn btn-success" type="button">Trained</button>
                         </Link>
-            </div> */}
-          </div>
-          <hr></hr>
+            </div>
+          </div> */}
+          {/* <hr></hr> */}
+          <div className="showtablecon">
           <Tablecon
             botID={props.match.params.bot_id} delete_trained={delete_trained}
           />
+          </div>
         </div>
       </div>
+      
     </Styles>
   );
 }
