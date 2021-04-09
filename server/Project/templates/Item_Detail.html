@@ -218,7 +218,7 @@ img{
 }
   </style>
   <body>
-    
+    <form method='post' action='/facebook/{{botID}}/detail/{{itemId}}/{{userID}}'>
     <div class = "card-wrapper">
       <div class = "card">
         <!-- card left -->
@@ -259,8 +259,8 @@ img{
           <h2 class = "product-title">Cars</h2>
 
           <div class = "product-price">
-            <p class = "last-price">Old Price: <span>$200.00</span></p>
-            <p class = "new-price">New Price: <span>$150.00 </span></p>
+            <p class = "last-price">Old Price: <span>$ {{data[0]['price']+0}}</span></p>
+            <p class = "new-price">New Price: <span>${{data[0]['price']}}</span></p>
           </div>
 
           <div class = "product-detail">
@@ -277,10 +277,11 @@ img{
           </div>
 
           <div class = "purchase-info">
-            <input type = "number" min = "0" value = "1">
-            <button type = "button" class = "btn">
+            <input name = "valueitem" type = "number" min = "0" value = "1">
+            <button  type = "submit" class = "btn" onclick=closeTem()>
               Add to Cart <i class = "fas fa-shopping-cart"></i>
             </button>
+
           </div>
 
         </div>
@@ -288,6 +289,26 @@ img{
     </div>
 
     <script type="text/javascript">
+      function closeTem() {
+            (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) { return; }
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, "script", "Messenger"));
+
+            window.extAsyncInit = function () {
+                // the Messenger Extensions JS SDK is done loading
+                //close the webview
+                MessengerExtensions.requestCloseBrowser(function success() {
+
+                }, function error(err) {
+
+                });
+
+            };
+        }
         const imgs = document.querySelectorAll('.img-select a');
         const imgBtns = [...imgs];
         let imgId = 1;

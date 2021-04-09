@@ -635,13 +635,12 @@ def payment_flex(botID,customerID):
         },
         {
           "type": "button",
-          "style": "link",
-          "height": "sm",
           "action": {
-            "type": "uri",
+            "type": "postback",
             "label": "Cancel",
-            "uri": "https://linecorp.com"
-          }
+            "data": "action=payment&confirm=false"
+          },
+          "style": "link"
         },
         {
           "type": "spacer",
