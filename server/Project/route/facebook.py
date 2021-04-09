@@ -50,12 +50,12 @@ def call_facebook(botID):
             {'$and': [{'userID': sender_id}, {'botID': ObjectId(botID)}]})
         if sender_define == None:
             sender_define = {'userID': sender_id, 'type': "user",
-                             'state': 'none', 'botID': bot_define['_id'], 'status': 'open',"pictureUrl":profile['picture']['data']['url'],"displayName":profile['name']}
+                             'state': 'none', 'botID': bot_define['_id'], 'status': 'open',"pictureUrl":profile['picture']['data']['url'],"display_name":profile['name']}
             customer_collection.insert_one(sender_define)
         if sender_define['status'] == 'open':
             if message_type == 'text':
                 data = {"message": payload['entry'][0]
-                        ['messaging'][0]['message']['text'],"pictureUrl":profile['picture']['data']['url'],"displayName":profile['name']}
+                        ['messaging'][0]['message']['text'],"pictureUrl":profile['picture']['data']['url'],"display_name":profile['name']}
                 # socketio.emit("message_from_webhook", {"message":data["message"], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"displayName":profile.display_name})
                 res = stateHandler(
                     sender_id=sender_define['userID'], botID=botID, message=data, confident=bot_define['confident'],platform='facebook')

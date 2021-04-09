@@ -653,7 +653,7 @@ def address_flex(address):
       ]
     }
   }'''%(address,address)
-  return flex
+    return flex
 
 def payment_flex(botID,customerID):
   flex = '''
