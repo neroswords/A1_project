@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis
 } from "recharts";
-import { getPngData } from "recharts-to-png";
+// import { getPngData } from "recharts-to-png";
 import styled from 'styled-components';
 
 const Styles = styled.div`
@@ -83,9 +83,9 @@ export const Visualize = () => {
 
   const handleDownload = React.useCallback(async () => {
     // Send the chart to getPngData
-    const pngData = await getPngData(chart);
+    // const pngData = await getPngData(chart);
     // Use FileSaver to download the PNG
-    FileSaver.saveAs(pngData, "test.png");
+    // FileSaver.saveAs(pngData, "test.png");
   }, [chart]);
 
   const data = [

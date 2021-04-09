@@ -183,7 +183,17 @@ background-color: #fff;
   background-color: #3b5bfe;
   color: #fff;
 }
+.user {
+  color: red;
+}
 
+.bot {
+  color:blue;
+}
+
+.head {
+  color:black;
+}
 ` 
 let endPoint = "http://localhost:200";
 
@@ -194,16 +204,24 @@ let socket = io.connect(`${endPoint}`);
 function Chatbody({botID,customerID}){
     const [messages,setMessages] = useState([]);
     const [message,setMessage] = useState("");
-    // const [userID, setUserID] = useState("");
+    const [username, setUsername] = useState("");
   
     useEffect(() =>{
         setMessages([])
-        fetch('/bot/'+botID+'/customer/'+customerID).then(res=> res.json().then(data=> 
-                data.message.forEach(ele=>{ setMessages(messages=> [...messages,<div><p>{ele.sender}:{ele.message}</p></div>])
+        fetch('/bot/'+botID+'/customer/'+customerID).then(res=> res.json().then(data=>{
+                setUsername(data.profile.display_name);
+                data.message.forEach(ele=>{ 
+                  console.log(ele)
+                  if (ele.sender_type == "bot"){
+                    setMessages(messages=> [...messages,<div><p className="bot">{ele.sender}:{ele.message}</p></div>])
+                  } else if (ele.sender_type == "lineUser"){
+                    setMessages(messages=> [...messages,<div><p className="user">{ele.sender}:{ele.message}</p></div>])
+                  }   
             })
-        ))
+          }))
     },[customerID])
 
+    
     useEffect(() =>{
         getMessages();
     },[messages.length])
@@ -219,15 +237,15 @@ function Chatbody({botID,customerID}){
       socket.on("message_from_webhook", msg =>{
           console.log(msg)
           setMessages([...messages,
-              <div className="customer-msg">
-                  <p>{msg.displayName}:{msg.message}</p>
+              <div className="user">
+                  <p style="color:red">{msg.displayName}:{msg.message}</p>
               </div>]);
           // setUserID([msg.userID]);
       })
       socket.on("message_from_response", msg =>{
           console.log(msg)
           setMessages([...messages,
-              <div className="owner-msg">
+              <div className="bot">
                   <p>{msg.displayName}:{msg.message}</p>
               </div>]);
           // setUserID([msg.userID]);
@@ -253,7 +271,7 @@ function Chatbody({botID,customerID}){
                         <div className="blocks">
                             <div className="current-chatting-user">
                       
-                              <p>Tim Hover</p>
+                              <p>{username}</p>
                             </div>
                         </div>
                       </div>
