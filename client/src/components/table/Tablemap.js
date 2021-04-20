@@ -6,14 +6,17 @@ import { Container } from "react-bootstrap";
 
 import { Button } from 'react-bootstrap';
 import {Link} from "react-router-dom";
+import Delete_table from "../Delete_table";
 
 
 const Styles = styled.div`
 
   table {
+    font-family: 'Roboto',sans-serif;
     margin: 10px 0;
-    font-size: 1.2em;
+    font-size: 1em;
     text-align: center;
+    border: 1px solid #efeff5;
     tr {
       :last-child {
         td {
@@ -22,13 +25,20 @@ const Styles = styled.div`
       }
     }
 
-    th,
+    th{
+      margin: 0;
+      /* padding: 12px 15px; */
+      border: 1px solid #efeff5;
+      background-color: #393939;
+      color: white;
+    }
     td {
+      font-family: 'Public Sans', sans-serif;
       margin: 0;
       padding: 12px 15px;
-      border-bottom: 1px solid #DADADA;
-      border-right: 1px solid #DADADA;
-
+      border: 1px solid #efeff5;
+      font-size: 16px;
+      
       :last-child {
         border-right: 0;
       }
@@ -50,18 +60,18 @@ const Styles = styled.div`
 }
 
 .table tbody tr:nth-of-type(even){
-        background-color: #e5e5e5;
+        background-color: #fafafc
     }
 
 .button-trained-word .buttondeleteWord{
-    padding: 7px 15px !important;
+    padding: 7px 20px !important;
     font-size: 12px !important;
     border-radius: 25px !important;
     border: 1px solid #CD5C5C ;
     transition: 0.5s;
     background-color: #CD5C5C;
     color: #fff ;
-    margin-left: 15px;
+    margin-left: 1%;
   }
 
 
@@ -84,21 +94,27 @@ const Styles = styled.div`
 }
 
 .pagination{
- margin-bottom: 0;
+  justify-content:space-between;
+  width:100%;
+  margin-bottom: 0;
 }
 
 .parginate-text{
+  display:inline;
   padding-top: 7px;
   margin-right: 1%;
   margin-left: 1%;
 }
 
+.parginate-arrow{
+  text-align:right;
+}
 .pagination button{
   border-radius: 15px;
   width: 35px;
   height: 35px;
   background-color: transparent;
-  margin-left: .5%;
+  margin-left: 0.5%;
   border: none;
 }
 
@@ -109,7 +125,7 @@ const Styles = styled.div`
 }
 
 .searchBox{
-  width: 130px;
+  width: 190px;
   height: 30px;
   border-radius: 25px;
   border: .5px solid #A9A9A9;
@@ -126,6 +142,9 @@ input::placeholder{
   float: right;
 }
 
+.select-pagesize {
+  padding: 0 1%;
+}
   
 `;
 
@@ -179,7 +198,7 @@ function GlobalFilter({
           fontSize: '0.8rem',
           // marginLeft: '1rem'
         }}
-      />
+      name="mapping-search" />
     </span>
   )
 }
@@ -222,7 +241,7 @@ const EditableCell = ({
 
   const onBlur = () => {
     updateMyData(index, id, value)
-    console.log("test")
+    // console.log("test")
   }
 
 
@@ -236,15 +255,15 @@ const EditableCell = ({
 }
 
 const defaultColumn = {
-  Cell: EditableCell
+  // Cell: EditableCell
 }
 
 
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID }) {
-  
+  // console.log(data)
   const Ondelete = (e) => {
-    delete_trained(e)
-    
+    // delete_trained(e)
+    openDelete_table(e)
   }
 
   const filterTypes = React.useMemo(
@@ -274,6 +293,13 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
   const openWord = () => {
     setShowWord(prev => !prev);
   }
+
+  const [showDelete_table, setShowDelete_table] = useState(false);
+  const openDelete_table = (data) => {
+    setShowDelete_table(prev => !prev);
+      
+  }
+ 
 
   const {
     getTableProps,
@@ -342,14 +368,14 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     }
 
   )
-  console.log(selectedFlatRows)
+  // console.log(selectedFlatRows)
   return (
     <>
       <Container>
         <div className="button-trained-word">
-          {console.log(botID)}
-          <Link to ={'/bot/'+botID+'/mapping/create'} ><Button className='buttonaddMapping' >Create Mapping</Button></Link>
-          <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
+          {/* {console.log(botID)} */}
+          {/* <Link to ={'/bot/'+botID+'/mapping/create'} ><Button className='buttonaddMapping' >Create Mapping</Button></Link> */}
+          {/* <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button> */}
           <div className='SearchBar'>
             <GlobalFilter
               preGlobalFilteredRows={preGlobalFilteredRows}
@@ -357,13 +383,13 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               setGlobalFilter={setGlobalFilter}
             />
           </div>
-         
+          <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table} selectedFlatRows={selectedFlatRows} id={botID} delete_trained={delete_trained}/>
         </div>
 
 
 
 
-        <table {...getTableProps()} className="table">
+        <table {...getTableProps()} className="table" name="mapping-table">
           <thead>
             {headerGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -389,58 +415,72 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
             </tr> */}
           </thead>
           <tbody {...getTableBodyProps()}>
+          {/* {  console.log(page[0]) } */}
             {page.map((row, i) => {
               prepareRow(row)
-              return (
+              // console.log(row)
+              return (  
+                
                 <tr {...row.getRowProps()}>
                    
                   {row.cells.map(cell => {
+                    //  console.log(cell.row.original.id)
+                    return (
+                    <><td {...cell.getCellProps()}>{cell.render('Cell')} </td>
+                    {/* <td><Link to ={'/bot/'+botID+'/mapping/'+cell.row.original.id} ><i className="far fa-edit" ></i></Link></td> */}
+                    </>
+                    )
                     
-                    return <td {...cell.getCellProps()}>{cell.render('Cell')} </td>
-                    
-                    
-                  })}
-                 <td><Link to ={'/bot/'+botID+'/mapping/create'} ><i className="far fa-edit" ></i></Link></td>
+                  }
+                  
+                  )} 
+                  
+                      <td><Link to ={'/bot/'+botID+'/mapping/details/'+row.original.id} name="mapping-details"><i className="far fa-edit" ></i></Link></td>
+                 
+                 
                 </tr>
               )
             })}
           </tbody>
         </table>
         <div className="pagination">
-          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-            {'<<'}
-          </button>{' '}
-          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-            {'<'}
-          </button>{' '}
-          <button onClick={() => nextPage()} disabled={!canNextPage}>
-            {'>'}
-          </button>{' '}
-          <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-            {'>>'}
-          </button>{' '}
-          <span className='parginate-text'>
-            Page{' '}
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>{' '}
-          </span>
-          <span>
-            {' '}
-
-          </span>{' '}
-          <select
-            value={pageSize}
-            onChange={e => {
-              setPageSize(Number(e.target.value))
-            }}
-          >
-            {[10, 25, 50].map(pageSize => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
+        <div className="parginate-tex col">
+              <span >
+                Page{' '}
+                <strong>
+                  {pageIndex + 1} of {pageOptions.length}
+                </strong>{' '}
+              </span>
+              <span>
+                {' '}
+              </span>{' '}
+              <select className="select-pagesize"
+                value={pageSize}
+                onChange={e => {
+                  setPageSize(Number(e.target.value))
+                }}
+              >
+                {[10, 25, 50].map(pageSize => (
+                  <option key={pageSize} value={pageSize}>
+                    Show {pageSize}
+                  </option>
+                ))}
+              </select>
+          </div>
+          <div className="parginate-arrow col">
+                <button  onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                  {<i class="fad fa-chevron-double-left"></i>}
+                </button>{' '}
+                <button  onClick={() => previousPage()} disabled={!canPreviousPage}>
+                  {<i class="fad fa-chevron-left"></i>}
+                </button>{' '}
+                <button  onClick={() => nextPage()} disabled={!canNextPage}>
+                  {<i class="fas fa-chevron-right"></i>}
+                </button>{' '}
+                <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                  {<i class="fas fa-chevron-double-right"></i>}
+                </button>{' '}
+          </div>
 
         </div>
       </Container>
@@ -454,7 +494,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 function Tablemap({ botID, delete_trained, add_data }) {
   const [TablemapState, setTablemapState] = useState([]);
 
-  console.log(botID)                                               
+  // console.log(botID)                                               
 
   const [showWord, setShowWord] = useState(false);
 
@@ -462,18 +502,17 @@ function Tablemap({ botID, delete_trained, add_data }) {
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Word',
-        accessor: 'Word', // accessor is the "key" in the data
+        Header: 'Name',
+        accessor: 'Name', // accessor is the "key" in the data
       },
       {
         Header: 'ReplyWord',
         accessor: 'ReplyWord',
-        filter: 'fuzzyText',
+        // filter: 'fuzzyText',
       },
-      // {
-      //   Header: 'Link',
-      //   accessor: 'Link',
-      // },
+
+      
+
     ],
     []
   )
@@ -516,16 +555,18 @@ function Tablemap({ botID, delete_trained, add_data }) {
   }
 
   useEffect(() => {
-    fetch('/train_bot/' + botID + '/training')
+    fetch('/mapping/' + botID)
       .then(res => res.json().then(data => {
         setTablemapState(
           data.map(d => {
+            // console.log(d.details[0].answer)
             return {
+              
               select: false,
               id: d._id.$oid,
-              Word: d.question,
-              ReplyWord: d.answer,
-              // Link:  <i className="far fa-edit" >sssssssssssssss</i>
+              Name: d.name,
+              ReplyWord: d.details[0].answer,
+             
             };
           })
           
@@ -536,9 +577,7 @@ function Tablemap({ botID, delete_trained, add_data }) {
 
   }, []);
 
-
-  const resetData = () => setTablemapState(originalData)
-  
+ 
   return (
     <Styles>
       <TableShow
@@ -548,6 +587,7 @@ function Tablemap({ botID, delete_trained, add_data }) {
         skipPageReset={skipPageReset}
         delete_trained={delete_trained}
         botID={botID}
+        // mapID ={TablemapState[0].id}
       />
 
     </Styles>

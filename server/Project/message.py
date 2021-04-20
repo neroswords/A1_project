@@ -9,7 +9,7 @@ from linebot.models import (BubbleContainer, CarouselColumn, CarouselTemplate,
                             PostbackAction, StickerSendMessage,
                             TemplateSendMessage, URIAction)
 from pythainlp.tokenize import word_tokenize
-
+from Project.route.template_facebook import template_facebook
 from Project.extensions import mongo, server_url
 
 
@@ -19,20 +19,39 @@ def ReplyMessage(Reply_token, TextMessage, Line_Acess_Token):
     Authorization = 'Bearer {}'.format(Line_Acess_Token)
     headers = {
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization':Authorization
+        'Authorization': Authorization
     }
     data = {
-        "replyToken":Reply_token,
-        "messages":[{
-            "type":"text",
-            "text":TextMessage
+        "replyToken": Reply_token,
+        "messages": [{
+            "type": "text",
+            "text": TextMessage
         }]
     }
-    
+
     data = json.dumps(data)
-    r = requests.post(LINE_API, headers=headers, data=data) 
+    r = requests.post(LINE_API, headers=headers, data=data)
     return 200
 
+def ReplyMessageFB(**kwargs):
+    Facebook_API = 'https://graph.facebook.com/v10.0/'+kwargs['sender_id']
+
+    Authorization = 'Bearer {}'.format(Line_Acess_Token)
+    headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': Authorization
+    }
+    data = {
+        "replyToken": Reply_token,
+        "messages": [{
+            "type": "text",
+            "text": TextMessage
+        }]
+    }
+
+    data = json.dumps(data)
+    r = requests.post(LINE_API, headers=headers, data=data)
+    return 200
 
 # def item_list_flexmessage(**kwargs):
 #     inventory_collection = mongo.db.inventory
@@ -76,138 +95,238 @@ def ReplyMessage(Reply_token, TextMessage, Line_Acess_Token):
 
 def item_list_flexmessage(**kwargs):
     inventory_collection = mongo.db.inventory
-    search_request = {'$and':[{'$or':
-        [
-            {'item_name': {'$regex': kwargs['query'].strip(),"$options" :'i'}},
-            {'type': {'$regex': kwargs['query'].strip().lower(),"$options" :'i'}},
-        ]
-        },{'botID': ObjectId(kwargs['botID'])}
-        ]
-    }
+    print("01")
+    print(kwargs)
+    search_request = {'$and': [{'$or':
+                                [{'item_name': {'$regex': kwargs['query'].strip(), "$options":'i'}}, {'type': {'$regex': kwargs['query'].strip().lower(), "$options": 'i'}},
+                                 ]}, {'botID': ObjectId(kwargs['botID'])}
+                               ]
+                      }
+    print(search_request)
     data = inventory_collection.find(search_request).limit(9)
+    print("02")
+    print("DATA = ", data)
     data_list = list(data)
+    elements =  {
+                "attachment": {
+                    "type": "template",
+                    "payload": {
+                        "template_type": "generic",
+                        "elements": []
+
+                        
+                    }
+                }
+            }
     if len(data_list) == 0:
+        print("03")
         return '''{"message":"ไม่พบผลการค้นหา"}'''
     else:
-      contents_block = ''''''
-      for index in data_list:
-        #server_url+"/images/bot/inventory/"+index['item_img'][0]
-        contents ='''{
-        "type": "bubble",
-        "hero": {
-          "type": "image",
-          "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_5_carousel.png",
-          "size": "full",
-          "aspectRatio": "20:13",
-          "aspectMode": "cover"
-        },
-        "body": {
-          "type": "box",
-          "layout": "vertical",
-          "spacing": "sm",
-          "contents": [
-            {
-              "type": "text",
-              "text": "%s",
-              "weight": "bold",
-              "size": "xl",
-              "wrap": true,
-              "contents": []
+        print("04")
+        contents_block = ''''''
+        for index in data_list:
+            # server_url+"/images/bot/inventory/"+index['item_img'][0]
+            print(index)
+            if "facebook" == kwargs['platform']:
+              print("pass facebook ja")
+              if index['amount'] <= 0:
+                print("05")
+                element = {"title": index["item_name"], "image_url": "https://9bfdab4a218f.ngrok.io/images/bucket/"+index['img'][0], "subtitle": "ราคา"+str(index["price"])+"บาท",
+                           "default_action": {"type": "web_url", "url": "https://petersfancybrownhats.com/view?item=103",
+                                              "webview_height_ratio": "tall", }, "buttons": [{"type": "web_url", "title": "ดูข้อมูล", "url": "https://9bfdab4a218f.ngrok.io/facebook/"+kwargs['botID']+"/detail/"+str(index["_id"])+"/"+kwargs['sender_id'],
+                                                                                              "messenger_extensions": "true",
+                                                                                              "webview_height_ratio": "tall"},
+                                                                                             {"type": "postback", "title": "ใส่รถเข็น", "payload": "cart&"+str(index["_id"])}, ]}
+                elements["attachment"]["payload"]["elements"].append(element)
+                print(elements)
+                print("pass elements")
+            elif "line" == kwargs['platform']:
+                if index['amount'] <= 0:
+                  print("06")
+                  contents = '''{
+            "type": "bubble",
+            "hero": {
+              "type": "image",
+              "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_5_carousel.png",
+              "size": "full",
+              "aspectRatio": "20:13",
+              "aspectMode": "cover"
             },
-            {
+            "body": {
               "type": "box",
-              "layout": "baseline",
+              "layout": "vertical",
+              "spacing": "sm",
               "contents": [
                 {
                   "type": "text",
-                  "text": "$49",
+                  "text": "%s",
                   "weight": "bold",
                   "size": "xl",
-                  "flex": 0,
                   "wrap": true,
                   "contents": []
                 },
                 {
-                  "type": "text",
-                  "text": ".99",
-                  "weight": "bold",
-                  "size": "sm",
-                  "flex": 0,
-                  "wrap": true,
-                  "contents": []
+                  "type": "box",
+                  "layout": "baseline",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "฿%d",
+                      "weight": "bold",
+                      "size": "xl",
+                      "flex": 0,
+                      "wrap": true,
+                      "contents": []
+                    }
+                  ]
+                }
+              ]
+            },
+            "footer": {
+              "type": "box",
+              "layout": "vertical",
+              "spacing": "sm",
+              "contents": [
+                {
+                  "type": "button",
+                  "action": {
+                    "type": "postback",
+                    "label": "Add to Cart",
+                    "data": "action=buy&itemid=%s"
+                  },
+                  "style": "secondary"
+                },
+                {
+                  "type": "button",
+                  "action": {
+                    "type": "uri",
+                    "label": "Description",
+                    "uri": "https://liff.line.me/1655652942-1EJmM0LZ"
+                  }
                 }
               ]
             }
-          ]
-        },
-        "footer": {
-          "type": "box",
-          "layout": "vertical",
-          "spacing": "sm",
-          "contents": [
-            {
-              "type": "button",
-              "action": {
-                "type": "postback",
-                "label": "Add to Cart",
-                "data": "action=buy&itemid=%s"
-              },
-              "style": "primary"
+          }''' % (index['item_name'], index['price'], index['_id'])
+                else:
+                  print("07")
+                  contents = '''{
+            "type": "bubble",
+            "hero": {
+              "type": "image",
+              "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_5_carousel.png",
+              "size": "full",
+              "aspectRatio": "20:13",
+              "aspectMode": "cover"
             },
-            {
-              "type": "button",
-              "action": {
-                "type": "uri",
-                "label": "Add to wishlist",
-                "uri": "https://linecorp.com"
-              }
+            "body": {
+              "type": "box",
+              "layout": "vertical",
+              "spacing": "sm",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "%s",
+                  "weight": "bold",
+                  "size": "xl",
+                  "wrap": true,
+                  "contents": []
+                },
+                {
+                  "type": "box",
+                  "layout": "baseline",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "฿%d",
+                      "weight": "bold",
+                      "size": "xl",
+                      "flex": 0,
+                      "wrap": true,
+                      "contents": []
+                    }
+                  ]
+                }
+              ]
+            },
+            "footer": {
+              "type": "box",
+              "layout": "vertical",
+              "spacing": "sm",
+              "contents": [
+                {
+                  "type": "button",
+                  "action": {
+                    "type": "postback",
+                    "label": "Add to Cart",
+                    "data": "action=buy&itemid=%s"
+                  },
+                  "style": "primary"
+                },
+                {
+                  "type": "button",
+                  "action": {
+                    "type": "uri",
+                    "label": "Description",
+                    "uri": "https://liff.line.me/1655652942-1EJmM0LZ"
+                  }
+                }
+              ]
             }
-          ]
-        }
-      }'''%(index['item_name'],index['_id'])
-        if contents_block == "":
-          contents_block = contents
-        else:
-          contents_block = contents_block+','+contents
-    flex = '''
-    [%s,
-    {
-      "type": "bubble",
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "spacing": "sm",
-        "contents": [
-          {
-            "type": "button",
-            "action": {
-              "type": "uri",
-              "label": "See more",
-              "uri": "https://linecorp.com"
-            },
-            "flex": 1,
-            "gravity": "center"
+          }''' % (index['item_name'], index['price'], index['_id'])
+                print("08")
+                if contents_block == "":
+                    contents_block = contents
+                else:
+                    contents_block = contents_block+','+contents
+        if "line" == kwargs['platform']:
+          print("09")
+          flex = '''
+        [%s,
+        {
+          "type": "bubble",
+          "body": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "button",
+                "flex": 1,
+                "gravity": "center",
+                "action": {
+                  "type": "uri",
+                  "label": "See more",
+                  "uri": "https://linecorp.com"
+                }
+              }
+            ]
+          },
+          "action": {
+            "type": "uri",
+            "label": "action",
+            "uri": "http://linecorp.com/"
           }
-        ]
-      }
-    }]'''%(contents_block)
+        }]''' % (contents_block)
+        elif "facebook" == kwargs['platform']:
+          flex = json.dumps(elements)
+          print(type(flex))
     return flex
-
 
 
 def invoice_flexmessage(**kwargs):
     cart_collection = mongo.db.carts
     bot_collection = mongo.db.bots
     bot_define = bot_collection.find_one({'_id': ObjectId(kwargs['botID'])})
-    cart_define = cart_collection.find_one({'$and':[{'userID':kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]})
+    cart_define = cart_collection.find_one(
+        {'$and': [{'userID': kwargs['sender_id']}, {'botID': ObjectId(kwargs['botID'])}]})
     if cart_define == None:
         return '''{"message":"ไม่มีตะกร้า โปรดตรวจสอบใหม่อีกครั้ง"}'''
     else:
-      sum = 0
-      total_count = 0
-      contents_block = ''''''
-      for item in cart_define['cart']:
-        contents ='''
+        sum = 0
+        total_count = 0
+        contents_block = ''''''
+        for item in cart_define['cart']:
+            contents = '''
         {
           "type": "box",
           "layout": "horizontal",
@@ -226,22 +345,22 @@ def invoice_flexmessage(**kwargs):
                   },
                   {
                     "type": "text",
-                    "text": "$%d",
+                    "text": "฿%d",
                     "size": "sm",
                     "color": "#111111",
                     "align": "end"
                   }
                 ]
-              }'''%(item['item_name'],item['amount'],item['total_ob'])
-        if contents_block == '':
-          contents_block = contents
-          sum += item['total_ob']
-          total_count += item['amount']
-        else:
-          contents_block = contents_block+','+contents
-          sum += item['total_ob']
-          total_count += item['amount']
-      flex = '''
+              }''' % (item['item_name'], item['amount'], item['total_ob'])
+            if contents_block == '':
+                contents_block = contents
+                sum += item['total_ob']
+                total_count += item['amount']
+            else:
+                contents_block = contents_block+','+contents
+                sum += item['total_ob']
+                total_count += item['amount']
+        flex = '''
       {
       "type": "bubble",
       "body": {
@@ -317,7 +436,7 @@ def invoice_flexmessage(**kwargs):
                   },
                   {
                     "type": "text",
-                    "text": "$%d",
+                    "text": "฿%d",
                     "size": "sm",
                     "color": "#111111",
                     "align": "end"
@@ -382,7 +501,7 @@ def invoice_flexmessage(**kwargs):
           "separator": true
         }
       }
-    }'''%(bot_define['bot_name'].upper(),contents_block,total_count,sum,str(cart_define['_id']))
+    }''' % (bot_define['bot_name'].upper(), contents_block, total_count, sum, str(cart_define['_id']))
     return flex
 
 
@@ -456,11 +575,12 @@ def confirm_flexmessage(sender_name):
           }
         ]
       }
-    }'''%(sender_name,sender_name)
+    }''' % (sender_name, sender_name)
     return flex
 
+
 def address_flex(address):
-  flex = '''
+    flex = '''
     {
     "type": "bubble",
     "header": {
@@ -533,4 +653,51 @@ def address_flex(address):
       ]
     }
   }'''%(address,address)
-  return flex
+    return flex
+
+def payment_flex(botID,customerID):
+  flex = '''
+  {
+    "type": "bubble",
+    "hero": {
+      "type": "image",
+      "url": "https://cdn.omise.co/assets/screenshots/series-b/omise-logo.jpg",
+      "size": "full",
+      "aspectRatio": "20:13",
+      "aspectMode": "fit"
+    },
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": []
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
+        {
+          "type": "button",
+          "style": "primary",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "Pay",
+            "uri": "https://liff.line.me/1655652942-zNpjoxYV/checkout/%s?customer=%s"
+          }
+        },
+        {
+          "type": "button",
+          "style": "secondary",
+          "height": "sm",
+          "action": {
+            "type": "postback",
+            "label": "Cancel",
+            "data": "action=payment&confirm=false"
+          }
+        }
+      ],
+      "flex": 0
+    }
+  }'''%(botID,customerID)
+  return flex 

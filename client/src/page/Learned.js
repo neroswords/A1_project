@@ -6,9 +6,28 @@ import styled from 'styled-components';
 const Styles = styled.div` 
 .learned-page {
     display: flex;
+    min-height: 92vh;
 }
 .container {
-    margin-top: 10px;
+    margin-bottom: 2%;
+    margin-top: 2%;
+    overflow:hidden;
+}
+.learned-title{
+    padding: 4px;
+    width: 100% ;
+    background-color: white;
+    border-radius: 0.25rem;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+}
+.showtable-learn{
+    min-height: 70vh;
+    margin-top: 1%;
+    background-color: white;
+    padding: 1%;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 0.25rem;
+    /* border: 1px solid #ececec; */
 }
 `
 // const mapStateToProps = (state) =>{
@@ -61,12 +80,13 @@ function Learned(props){
         <div className="learned-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"trained"}  />
             <div className="container">
-              
-                <div className="container-top d-flex bd-highlight">
-                    <h2 className='p-2 flex-grow-1 bd-highlight'>Trained</h2>
+                <div className="learned-title d-flex bd-highlight">
+                    <h2 className='p-2 flex-grow-1 bd-highlight' id="trained-header">Trained</h2>
                 </div>
-                <hr></hr>
-                <Table botID={props.match.params.bot_id} delete_trained={delete_trained}/>
+                {/* <hr></hr> */}
+                <div className="showtable-learn">
+                    <Table botID={props.match.params.bot_id} delete_trained={delete_trained}/>
+                </div>
             </div>
 
             </div>

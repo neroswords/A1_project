@@ -1,5 +1,5 @@
 
-from flask import Flask, request, abort, render_template, session,url_for,redirect,send_from_directory,send_file,Blueprint
+from flask import Flask, request, abort, render_template, session,url_for,redirect,send_from_directory,send_file,Blueprint,current_app
 from pymessenger import Bot
 from Project.Config import *
 from werkzeug.utils import secure_filename
@@ -20,10 +20,62 @@ from linebot.models import (MessageEvent, TextMessage, TextSendMessage, FlexSend
                             PostbackAction, MessageAction, ImageSendMessage,StickerSendMessage,
                             ImageCarouselTemplate, ImageCarouselColumn,CarouselTemplate,CarouselColumn,URIAction,
                             CarouselContainer, ImageComponent)
+from flask_socketio import send, emit, join_room, leave_room
+from .. import socketio
+import datetime
+from reportlab.pdfgen.canvas import Canvas
 
 bot = Blueprint("bot",__name__)
 UPLOAD_FOLDER = './Project/static/images/bot/bot_pic'
 UPLOAD_FOLDER_ITEMS = './Project/static/images/bucket'
+
+# @socketio.on('message')
+# def webhook_message(message, userID, botID):
+#     socketio.emit("message", "Server message", room='my_room')
+def create_cover_sheet(date,botID,customerID):
+    bot_collection = mongo.db.bots
+    customer_collection = mongo.db.customers
+    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
+    customer_define = customer_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
+    canvas = Canvas("cover_"+botID+"&"+customerID+"_"+date+".pdf")
+
+def create_list_sheet(date,botID,customerID):
+    cart_collection = mongo.db.carts
+    cart_define = cart_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
+    canvas = Canvas("itemsList_"+botID+"&"+customerID+"_"+date+".pdf")
+
+def save_message(message,message_type,sender,sender_id,sender_type,room):  #sender=Id(bot or user), sender_type=bot or facebookuser or lineuser, message_type = text or image
+    message_collection = mongo.db.messages
+    message_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now()})
+
+def push_message(data):
+    bot_collection = mongo.db.bots
+    customer_collection = mongo.db.customers
+    bot_define = bot_collection.find_one({'_id': ObjectId(data['botID'])})
+    customer_define = customer_collection.find_one({'$and':[{'userID':data['customerID']},{'botID': ObjectId(data['botID'])}]})
+    line_bot_api = LineBotApi(bot_define['access_token'])
+    line_bot_api.push_message(data['customerID'], TextSendMessage(text=data['message']))
+    save_message(message=data["message"],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(data['botID']),sender_type="bot",room=data['botID']+'&'+data['customerID'])
+
+
+@socketio.on('join_room')
+def handle_join_room_event(data):
+    room_id = data['bot']+"&"+data['customer']
+    join_room(room_id)
+    # socketio.emit('join_room_announcement', data, room=data['room'])
+
+
+@socketio.on('send_message')
+def handle_send_message_event(data):
+    bot_collection = mongo.db.bots
+    customer_collection = mongo.db.customers
+    bot_define = bot_collection.find_one({'_id': ObjectId(data['botID'])})
+    customer_define = customer_collection.find_one({'$and':[{'userID':data['customerID']},{'botID': ObjectId(data['botID'])}]})
+    line_bot_api = LineBotApi(bot_define['access_token'])
+    line_bot_api.push_message(data['customerID'], TextSendMessage(text=data['message']))
+    save_message(message=data["message"],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(data['botID']),sender_type="bot",room=data['botID']+'&'+data['customerID'])
+    socketio.emit("message_from_response", {"message":data['message'], "userID":data['customerID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"displayName":bot_define['bot_name'],"type":"bot"},room=data['room'])
+
 
 
 @bot.route('/<id>/connect', methods=['GET', 'POST'])
@@ -47,8 +99,6 @@ def connect(id):
     elif request.method == 'GET':
         bot_define = bot_collection.find_one({'_id': ObjectId(id)})
         return dumps(bot_define, indent=2)
-
-# create bot
 
 
 @bot.route('/create', methods=['POST'])
@@ -75,8 +125,6 @@ def create():
         #id = JSONEncoder().encode(new_bot.inserted_id).replace('"','')
         return {'message': 'add bot successfully'}
     return "add bot unsuccessfully"
-
-# edit
 
 
 @bot.route('/<id>/edit', methods=['GET', 'POST'])
@@ -113,9 +161,7 @@ def edit(id):
 
         done = bots_collection.update_one({'_id': ObjectId(id)}, info_update)
         return {'message': 'add bot successfully'}
-    return "add bot unsuccessfully"
-
- # delete
+    return {'message': 'add bot unsuccessfully'}
 
 
 @bot.route('/delete/<id>', methods=['POST'])
@@ -135,6 +181,7 @@ def add_sentence(id):
     sentence = request.get_json()
     sentences_collection.insert_one(sentence)
 
+
 @bot.route('/webhook/<botID>/<platform>', methods=["POST", "GET"])
 def webhook(platform, botID):
     training_collection = mongo.db.training
@@ -152,87 +199,6 @@ def webhook(platform, botID):
                 return "This is method get from facebook"
         elif request.method == "POST":
             call_facebook(botID)
-            # bot = Bot(bot_define["page_facebook_access_token"],api_version="4.0")
-            # payload = request.json
-            # event = payload['entry'][0]['messaging']
-            # for msg in event:
-            #     text = msg['message']['text']
-            #     for i in template_collection_define:
-            #         if(text == i['type']):
-            #             template("facebook",botID)
-            #             break
-            #         else: 
-            #             sender_id = msg['sender']['id']
-            #             bot.send_text_message(sender_id, response)
-            #     elif('postback' in payload['entry'][0]['messaging'][0]):  #เช็ค postback
-            #         t_post = payload['entry'][0]['messaging'][0]['postback']['payload']
-            #         t_post = t_post.split("&")
-            #         timestamp = msg['timestamp']
-            #         item_id = t_post[1]
-            #         amount = 1
-            #         if("cart" in t_post): # add cart
-            #             cart_collection_define = cart_collection.find({'botID': ObjectId(botID)})
-            #             for i in cart_collection_define:
-            #                 if (t_post[1] == i['item_id']):
-            #                     amount = amount +1
-            #                     print("ADD TO DB")
-            #                     break
-            #             cart = cart_collection.insert_one({'sender': sender_id, 'timestamp': timestamp, 'botID': ObjectId(botID), 'item_id': ObjectId(item_id),'amount' : amount})
-            #         if("detail" in t_post): # see more
-            #             inventory_collection = mongo.db.inventory
-            #             inventory_collection_define = inventory_collection.find({'botID': ObjectId(botID)})
-            #             for i in inventory_collection_define:
-            #                 img_box = {
-            #                             "attachment": {
-            #                                 "type": "image",
-            #                                 "payload": {
-            #                                 "url": "https://scontent.fbkk5-6.fna.fbcdn.net/v/t1.0-0/p526x296/143825331_1318519655180519_7870318405144231408_o.jpg?_nc_cat=101&ccb=2&_nc_sid=730e14&_nc_eui2=AeF06_4cd565Jp-vXIrA5zK1MdpurrvgN_kx2m6uu-A3-UzffIHVW-hHX_JWkyaNn_H4NoG259QkxPNuPGeKdtNh&_nc_ohc=FQAqoC-BwfsAX_5slEo&_nc_oc=AQlZ2LZE_eXl-H0kNfrlpdRy_ouWotl_WBvo0s9yA5h8kG3eCW80QNyiruVV_IP33b0&_nc_ht=scontent.fbkk5-6.fna&tp=6&oh=d72759d4a8aa42ce6380c6da80b300fa&oe=6047BF9E"
-            #                                 }
-            #                             }
-            #                         }
-      
-            #             return bot.send_message(sender_id, img_box)
-            #     print(text)
-            #     tag = []
-            #     taglist = []
-            #     Ttag =""
-            #     count = 0
-            #     for i in template_collection_define:
-            #         print(i['type'])
-            #         tag.append(i['type'])
-            #         taglist = taglist + i['type']
-            #         print(taglist)
-            #         taglist = list(set(taglist))
-            #         print(taglist)
-            #     # count = 0
-            #     # for i in taglist:
-            #     #     print("taglist =")
-            #     #     print(i)
-            #     #     print("taglist[count] =")
-            #     #     print(taglist[count])
-            #     #     count = count+1
-            #     #     if (text == taglist[count]):
-            #     #         Ttag = taglist[count]
-            #     #         print("ISUD"+Ttag)
-            #     #     print(count)
-            #     #     count = count+1
-            #     # print("TTAG ===")
-            #     # print(Ttag)
-            #     for i in taglist:
-            #         print(i)
-            #         if(text == i):
-            #             print("0000000000000000000")
-            #             print(text)
-            #             template("facebook", botID)
-            #             break
-            #         else:
-            #             print("33333333333333")
-            #             sender_id = msg['sender']['id']
-            #             response, conf = process_message(
-            #                 text, botID, bot_define['confident'])
-            #             bot.send_text_message(sender_id, response)
-            #             break
-
             return "Message received"
 
     elif platform == "line":
@@ -245,63 +211,88 @@ def webhook(platform, botID):
                 return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
             Reply_token = payload['events'][0]['replyToken']
             sender = payload['events'][0]['source']
+            profile = line_bot_api.get_profile(sender['userId'])
             if 'message' in payload['events'][0].keys():
                 message_type = payload['events'][0]['message']['type']
             elif 'postback' in payload['events'][0].keys():
                 message_type = 'postback'
+            else:
+                message_type = 'else'
             sender_define = customer_collection.find_one({'$and':[{'userID':sender['userId']},{'botID': ObjectId(botID)}]})
+            if sender_define != None and sender_define['userID']==profile.display_name and sender_define['pictureUrl']==profile.picture_url:
+                customer_collection.update_one({'$and':[{'userID':sender['userId']},{'botID': ObjectId(botID)}]},{"$set":{'pictureUrl':profile.picture_url,'display_name':profile.display_name}})
             if sender_define == None :
-                sender_define = {'userID':sender['userId'],'type':sender['type'],'state':'none','botID':bot_define['_id'],'status':'open'}
+                sender_define = {'userID':sender['userId'],'type':"lineUser",'state':'none','botID':bot_define['_id'],'status':'open','pictureUrl':profile.picture_url,'display_name':profile.display_name}
                 customer_collection.insert_one(sender_define)
             if sender_define['status'] == 'open' :
                 if message_type == 'text':
                     data = {"message":payload['events'][0]['message']['text']}
+                    socketio.emit("message_from_webhook", {"message":data["message"], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"type":"customer"},room=botID+'&'+sender_define['userID'])
                     res = stateHandler(sender_id=sender_define['userID'], botID=botID, message= data, confident=bot_define['confident'])
+                    save_message(message=data['message'],message_type="text",sender=profile.display_name,sender_id=sender_define['userID'],sender_type="lineUser",room=botID+'&'+sender_define['userID'])
                 elif message_type == 'postback':
                     data = {'postback':payload['events'][0]['postback']['data']}
                     res = stateHandler(sender_id=sender_define['userID'], botID=botID, postback= data)
                 else:
-                    res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}  
+                    save_message(message="unavailable to show content",message_type="text",sender=profile.display_name,sender_id=sender_define['userID'],sender_type="lineUser",room=botID+'&'+sender_define['userID'])
+                    socketio.emit("message_from_webhook", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"type":"customer"},room=botID+'&'+sender_define['userID'])
+                    res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
                 # if "message" in data.keys():
                 #     res = process_message(data,botID,bot_define['confident'],sender_define['userID'])
 
                 if "message" in res.keys():
                     response = [TextSendMessage(text = res['message'])]
+                    socketio.emit("message_from_response", {"message":res['message'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
+                    save_message(message=res['message'],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'])
                 elif 'flex' in res.keys():
                     response = FlexSendMessage(
-                    alt_text='hello',
+                    alt_text=res['alt'],
                     contents= res['flex']
                     )
+                    socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
+                    save_message(message="unavailable to show content",message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'])
                 elif 'image' in res.keys():
                     response = ImageSendMessage(
                         original_content_url=res['image'],
                         preview_image_url=res['image']
-                )
+                    )
+                    socketio.emit("message_from_response", {"ImageURL":res['image'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
+                    save_message(message="unavailable to show content",message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'])
                 elif 'sticker' in res.keys():
                     response = StickerSendMessage(
                         package_id=res['sticker'],
                         sticker_id=res['sticker']
                     )
+                    socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
+                    save_message(message="unavailable to show content",message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'])
                 elif 'group' in res.keys():
                     response = []
                     for reply in res['group']:
                         if "text" == reply['type']:
+                            socketio.emit("message_from_response", {"message":reply["data"], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
                             response.append(TextSendMessage(text = reply["data"]))
+                            save_message(message=reply["data"],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'])
                         elif 'flex' in res.keys():
                             response.append(FlexSendMessage(
-                            alt_text='hello',
+                            alt_text=res['alt'],
                             contents= res['flex']
                             ))
+                            socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
+                            save_message(message="unavailable to show content",message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'])
                         elif 'image' == reply['type']:
                             response.append(ImageSendMessage(
                                 original_content_url=server_url+"/images/bot/image_message/"+reply["data"],
                                 preview_image_url=server_url+"/images/bot/image_message/"+reply["data"]
                             ))
+                            socketio.emit("message_from_response", {"ImageURL":res['image'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
+                            save_message(message=res['image'],message_type="image",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'])
                         elif 'sticker' == reply['type']:
                             response.append(StickerSendMessage(
                                 package_id=reply['packageId'],
                                 sticker_id=reply['stickerId']
                             ))
+                            socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
+                            save_message(message="unavailable to show content",message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="lineUser",room=botID+'&'+sender_define['userID'])
                 line_bot_api.reply_message(Reply_token, response)
                 return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
             else:
@@ -392,8 +383,6 @@ def template(platform, botID):
                 # print(msg)
                 text = msg['message']['text']
                 sender_id = msg['sender']['id']
-                
-                print("KUYYYYYYYYYYYYYYYYYYYYYYY")
                 # con_box = {
                 #     "attachment": {
                 #         "type": "template",
@@ -463,17 +452,16 @@ def additem(botID):
         price = request.form['price']
         print("PRICE = ",price)
         count = 0
-        print(request.files)
-        print("________________")
+
         info_update = {'item_name': item_name, 'owner':  ObjectId(creator),
-                       'type': item_type, 'amount': amount, 'des': des, 'botID': ObjectId(botID) ,'price':price}
+                       'type': item_type, 'amount': int(amount), 'des': des, 'botID': ObjectId(botID) ,'price':int(price)}
         info_pic = []
         for i in request.files:
             print(i)
             file = request.files[i]
             filename = secure_filename(file.filename)
             filename = item_name+"&" + \
-            str(count)+creator+os.path.splitext(filename)[1]
+            str(count)+"&"+creator+"&"+str(file.filename)
             destination = "/".join([UPLOAD_FOLDER_ITEMS, filename])
             file.save(destination)
             session['uploadFilePath'] = destination
@@ -506,10 +494,35 @@ def getitem(botID):
     print(data[0])
     return data
 
-    # userinfo_cursor =  users_collection.find({"_id" : ObjectId(id)})
-    # userinfo_cur = list(userinfo_cursor)
-    # data_info = dumps(userinfo_cur, indent = 2)
-    # print(data_info)
-    # return data_info
+@bot.route('/<botID>/customer', methods=["GET","POST"])
+def customer_list(botID):
+    customer_collection = mongo.db.customers
+    customer_cur = customer_collection.find({"botID": ObjectId(botID)})
+    customer_list = list(customer_cur)
+    data = dumps(customer_list, indent=2)
+    return data
 
+@bot.route('/<botID>/customer/<customerID>', methods=["GET","POST"])
+def get_message(botID,customerID):
+    messages_collection = mongo.db.messages
+    customer_collection = mongo.db.customers
+    messages_cur = messages_collection.find({"room": botID+'&'+customerID})
+    customer = customer_collection.find_one({"$and": [{"botID":ObjectId(botID)},{"userID":customerID}]})
+    messages_list = list(messages_cur)
+    data = dumps({"message":messages_list,"profile":customer}, indent=2)
+    return data
+
+@bot.route('/<botID>/webhook', methods=["GET","POST"])
+def webhook_event(botID):
+    print(request.get_json())
+
+
+@bot.route('/test', methods=["GET"])
+def test():
+    return render_template("Item_Detail.html")
+
+
+@bot.route('/liff', methods=["GET"])
+def liff():
+    return render_template('item_desc.html')
 

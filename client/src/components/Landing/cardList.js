@@ -90,7 +90,6 @@ li p {
 .img-card img {
     width: 80%;
     text-align: center;
-    align-item: center;
     // background-color: black;
     margin-bottom:10%;
 }
@@ -122,7 +121,6 @@ li p {
     left: 0px;
     right: 0px;
     top:0px;
-    
     z-index:-1;
 }
 .svg-bg .rec-svg {
@@ -130,7 +128,7 @@ li p {
     left: 0px;
     right: 0px;
     top:0px;
-    max-width: 100%
+    max-width: 100%;
     z-index:-1;
 }
 

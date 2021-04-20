@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!-- Created By CodingNepal -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <!-- Somehow I got an error, so I comment the title, just uncomment to show -->
+    <!-- <title>Screen Loader | CodingNepal</title> -->
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+.loader{
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  transition: all 0.5s;
+}
+.loader .ring{
+  height: 45px;
+  width: 45px;
+  border: 5px solid #ddd;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loader .ring:after{
+  position: absolute;
+  content: "";
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  border: 5px solid #ff3d00;
+  border-top-color: transparent;
+  animation: rotate 1.5s linear infinite;
+}
+@keyframes rotate {
+  100%{
+    transform: rotate(360deg);
+  }
+}
+.content .image{
+  background: url("bg.png") no-repeat;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+}
+.content .text{
+  padding: 20px 50px;
+}
+.content .text .title{
+  padding: 10px 0 0 0;
+  font-size: 35px;
+  font-weight: 700;
+}
+.content .text p{
+  padding: 10px 0;
+  text-align: justify;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="loader">
+      <div class="ring">
+</div>
+</div>
+<div class="content">
+      <div class="image">
+</div>
+</div>
+<script>
+    const loader = document.querySelector(".loader");
+    window.onload = function(){
+      setTimeout(function(){
+        loader.style.opacity = "0";
+        setTimeout(function(){
+          loader.style.display = "none";
+        }, 500);
+      },1500);
+    }
+    </script>
+
+<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+        <script src="{{ url_for('static', filename='js/liff-checkout.js') }}"></script>
+        <script language="javascript">
+            main(window.location.href)
+  </script>
+  </body>
+</html>

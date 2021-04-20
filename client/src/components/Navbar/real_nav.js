@@ -14,6 +14,7 @@ function Nav(){
     return Normal_nav();
   }
 
+
 }
 
 function Normal_nav(){
@@ -21,23 +22,28 @@ function Normal_nav(){
     <Navbar_real>
       <Link to="#">
           <div className="btn-login btn-nav">
-              <a className="btn" role="button">Home</a>
+              <a className="btn" role="button" name="btn-home">Home</a>
           </div>
       </Link>
-      <Link to="#">
+      {/* <Link to="#">
           <div className="btn-login btn-nav">
               <a className="btn" role="button">ABOUT</a>
           </div>
-      </Link>
+      </Link> */}
      
       <Link to="/login">
           <div className="btn-login btn-nav">
-              <a className="btn" role="button">Log in</a>
+              <a className="btn" role="button" name="login">Log in</a>
           </div>
       </Link>
       <Link to="/register">
           <div className="btn-signup btn-nav">
-              <a className="btn" role="button">Register</a>
+              <a className="btn" role="button" name="btn-regist">Register</a>
+          </div>
+      </Link>
+            <Link to="/login">
+          <div className="btn-login btn-nav">
+              <a className="btn" role="button">Log in</a>
           </div>
       </Link>
       </Navbar_real>
@@ -45,14 +51,14 @@ function Normal_nav(){
 }
 
 function Loged_in_nav(props) {
-
+  const [main, setMain] = useState(window.location.hash)
+  
   return (
-    
-    
     <Navbar_real>
-        <div className="show-user">  
-          <a href={"/bot_list/"+ localStorage.getItem('user_id')}><i class="fas fa-user"></i>{props}</a>
+        <div className= {"show-user " + (main == "#main" ? "click-show-user" :"")}>
+            <a className="click" href={"/bot_list/"+ localStorage.getItem('user_id')+"#main"}><i class="fas fa-user-circle"></i>{props}</a>
         </div>
+      
       <NavItem icon={<CaretIcon />}>
         <DropdownMenu></DropdownMenu>
       </NavItem>
@@ -77,8 +83,8 @@ function NavItem(props) {
 
   return (
     
-    <li className="nav-item-real">
-      <a href="#" className="icon-button-real" onClick={() => setOpen(!open)}>
+    <li className="nav-item-real" >
+      <a href="#" className="icon-button-real" name="user-dropdown" onClick={() => setOpen(!open)}>
         {props.icon}
       </a>
 
@@ -95,7 +101,7 @@ function DropdownMenu() {
 
   function DropdownItem(props) {
     return (
-      <a href="#" className="menu-item-real" onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}>
+      <a href="#" className="menu-item-real"  onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}>
         <span className="icon-button-real">{props.leftIcon}</span>
         {props.children}
         <span className="icon-right-real">{props.rightIcon}</span>
@@ -106,13 +112,6 @@ function DropdownMenu() {
   return (
     
     <div className="dropdown-real"  ref={dropdownRef}>
-
-      {/* <CSSTransition
-        in={activeMenu === 'main'}
-        timeout={500}
-        classNames="menu-primary"
-        unmountOnExit
-        onEnter={calcHeight}> */}
       <CSSTransition
       in={activeMenu === 'main'}
       timeout={500}
@@ -132,7 +131,7 @@ function DropdownMenu() {
             goToMenu="animals">
             Animals
           </DropdownItem> */}
-           <a onClick={() => {
+           <a name="user-edit" onClick={() => {
             window.location.replace("/profile/"+ localStorage.getItem('user_id')+"/edit")
           }}>
             <DropdownItem 
@@ -140,7 +139,7 @@ function DropdownMenu() {
                 Edit Profile
             </DropdownItem>
           </a>
-          <a onClick={() => {
+          <a name="user-manage" onClick={() => {
             window.location.replace("/bot_list/"+ localStorage.getItem('user_id'))
           }}>
             <DropdownItem 
@@ -148,6 +147,7 @@ function DropdownMenu() {
                 Manage Bot
             </DropdownItem>
           </a>
+
           <a onClick={() => {
             window.location.replace('/manual')
           }}>
@@ -156,7 +156,7 @@ function DropdownMenu() {
               Manual
             </DropdownItem>
           </a>
-          <a onClick={() => {
+          <a name="signout" onClick={() => {
             deleteTokens();
             window.location.replace("/")
           }}>
