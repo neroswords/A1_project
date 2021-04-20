@@ -10,18 +10,6 @@
     "@emotion/styled": "^11.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
-<<<<<<< HEAD
-    "@material-ui/core": "^5.0.0-alpha.23",
-    "@material-ui/data-grid": "^4.0.0-alpha.17",
-    "@material-ui/lab": "^4.0.0-alpha.57",
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.3",
-    "@testing-library/user-event": "^12.6.0",
-    "axios": "^0.21.1",
-    "bootstrap": "^4.5.3",
-    "file-saver": "^2.0.5",
-=======
->>>>>>> dd8944ef92ae71b64c0da4a3467fe1e6029b3433
     "html-react-parser": "^1.2.1",
     "localforage": "^1.9.0",
     "match-sorter": "^6.1.0",
