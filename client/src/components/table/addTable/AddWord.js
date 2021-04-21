@@ -131,7 +131,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
   const closeModal = e => {
     if (modalRef.current === e.target) {
       setShowWord(false);
-      window.location.replace("/login")
+      // window.location.replace("/login")
     }
   };
 

@@ -4,8 +4,7 @@ import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination,
 import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
 import {Link} from "react-router-dom";
-
-
+import TextForm from "../Form/GroupForm/TextForm"
 
 const Styles = styled.div`
   table {
@@ -126,23 +125,23 @@ input::placeholder{
 `;
 
 
-// const IndeterminateCheckbox = React.forwardRef(
+const IndeterminateCheckbox = React.forwardRef(
 
-//   ({ indeterminate, ...rest }, ref) => {
-//     const defaultRef = React.useRef()
-//     const resolvedRef = ref || defaultRef
+  ({ indeterminate, ...rest }, ref) => {
+    const defaultRef = React.useRef()
+    const resolvedRef = ref || defaultRef
 
-//     React.useEffect(() => {
-//       resolvedRef.current.indeterminate = indeterminate
-//     }, [resolvedRef, indeterminate])
+    React.useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate
+    }, [resolvedRef, indeterminate])
 
-//     return (
-//       <>
-//         <input type="checkbox" ref={resolvedRef} {...rest} />
-//       </>
-//     )
-//   }
-// )
+    return (
+      <>
+        <input type="checkbox" ref={resolvedRef} {...rest} />
+      </>
+    )
+  }
+)
 
 
 
@@ -266,9 +265,9 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     }),
     []
   )
-  const [showWord, setShowWord] = useState(false);
-  const openWord = () => {
-    setShowWord(prev => !prev);
+  const [showForm, setShowForm] = useState(false);
+  const openForm = () => {
+    setShowForm(prev => !prev);
   }
   
 
@@ -313,26 +312,26 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     hooks => {
       hooks.visibleColumns.push(columns => [
 
-        // {
-        //   id: 'selection',
-        //   Header: ({ getToggleAllPageRowsSelectedProps }) => (
-        //     <div>
-        //       <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+        {
+          id: 'selection',
+          Header: ({ getToggleAllPageRowsSelectedProps }) => (
+            <div>
+              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
 
-        //     </div>
-        //   ),
+            </div>
+          ),
 
-        //   Cell: ({ row }) => (
+          Cell: ({ row }) => (
 
-        //     <div >
+            <div >
 
-        //       <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
 
 
-        //     </div>
-        //   ),
+            </div>
+          ),
 
-        // },
+        },
         ...columns,
 
       ])
@@ -390,7 +389,8 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
                   {row.cells.map(cell => {
                     return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                   })}
-                  <td><Link><i className="far fa-edit" ></i></Link></td>
+                  <td><button onClick={openForm}><i className="far fa-edit" ></i></button></td>
+                  <TextForm showForm={showForm} setShowForm={setShowForm} botID={botID} />
                 </tr>
               )
             })}
@@ -449,7 +449,7 @@ function TableGroup({ botID, delete_trained, add_data }) {
   const [TableGroupState, setTableGroupState] = useState([]);
 
                                                         
-  const [showWord, setShowWord] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
 
   const columns = React.useMemo(
@@ -495,13 +495,13 @@ function TableGroup({ botID, delete_trained, add_data }) {
     )
   }
 
-  const openWord = () => {
-    setShowWord(prev => !prev);
+  const openForm = () => {
+    setShowForm(prev => !prev);
 
   }
 
   useEffect(() => {
-    fetch('/bot/' + botID + '/customer')
+    fetch('/bot/' + botID + '/group')
       .then(res => res.json().then(data => {
         console.log(data)
 
@@ -510,7 +510,7 @@ function TableGroup({ botID, delete_trained, add_data }) {
             return {
               select: false,
               id: d._id.$oid,
-              Group: d.Group,
+              Group: d.name,
             };
           })
           

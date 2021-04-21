@@ -1,170 +1,181 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import styled from 'styled-components';
-import packageJson from '../../../package.json';
-import { useHistory } from 'react-router-dom'
+import { useSpring, animated } from 'react-spring';
+import { MdClose } from 'react-icons/md';
+import { Button, Container } from "react-bootstrap";
 
-const Styles = styled.div`
+
+const Background = styled.div`
+  width: 100%;
+  height: 100%;
+  background: blue;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background :rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const ModalWrapper = styled.div`
+  height: 30rem;
+  width: 25rem;
+  background-color: white;
+  padding: 3rem;
+  border-radius: 0.5rem;
+`;
+
+const ModalContent = styled.div`
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.8;
+
+  
+  .qa-comfirm {
+    padding: 5px 12px;
+    margin-top: 15px;
+    font-size: 19px;
+    border-radius: 25px;
+    border: 3px solid #ffc15e;
+    transition: 0.5s;
+    margin: 10px;
+    background-color: #ffc15e;
+    color: #fff;
+  }
+
+ .qa-comfirm:hover{
+    color: #000;
+  }
+
+
+  .input-question{
+    box-shadow: none;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #000;
+    outline: none;
+    margin-bottom: 10px;
+    font-size: 16px;
+    padding: 5px 0;
+
+  }
+
+  .input-answer{
+    box-shadow: none;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #000;
+    outline: none;
+    margin-bottom: 20px;
+    font-size: 16px;
+    padding: 5px 0;
+  }
+
+  form input{
+    width: 100%;
+  }
+
+  .group-Question{
+    margin-top: 5%;
+  }
+
+  .group-Answer{
+    margin-top: 2%;
+  }
 
 `;
 
-export default function TextForm(props) {
-    const dradAnddrop = () => {
-      
-        let list = [1,2,3,4,5,6,7,'']
-        let sourceElement = null
-      
-        const [sortedList, setSortedList] = React.useState(list)
-      
-        /* add a new entry at the end of the list.  */
-        const newLine = () => {
-          console.log(sortedList)
-          setSortedList(sortedList.concat(''))
-        }
-        
-        /* change opacity for the dragged item. 
-        remember the source item for the drop later */
-        const handleDragStart = (event) => {
-          event.target.style.opacity = 0.5
-          sourceElement = event.target
-          event.dataTransfer.effectAllowed = 'move'
-        }
-      
-        /* do not trigger default event of item while passing (e.g. a link) */
-        const handleDragOver = (event) => {
-          event.preventDefault()
-          event.dataTransfer.dropEffect = 'move' 
-        }
-      
-        /* add class .over while hovering other items */
-        const handleDragEnter = (event) => {
-          event.target.classList.add('over')    
-        }
-      
-        /* remove class .over when not hovering over an item anymore*/
-        const handleDragLeave = (event) => {
-          event.target.classList.remove('over')
-        }
-      
-        const handleDrop = (event) => {
-          /* prevent redirect in some browsers*/
-          event.stopPropagation()
-          
-          /* only do something if the dropped on item is 
-          different to the dragged item*/
-          if (sourceElement !== event.target) {
-      
-            /* remove dragged item from list */
-            const list = sortedList.filter((item, i) => 
-              i.toString() !== sourceElement.id)
-      
-            /* this is the removed item */
-            const removed = sortedList.filter((item, i) => 
-              i.toString() === sourceElement.id)[0]
-      
-            /* insert removed item after this number. */
-            let insertAt = Number(event.target.id)
-      
-            console.log('list with item removed', list)
-            console.log('removed:  line', removed)
-            console.log('insertAt index', insertAt)
-      
-            let tempList = []
-      
-            /* if dropped at last item, don't increase target id by +1. 
-               max-index is arr.length */
-            if (insertAt >= list.length) {
-              tempList = list.slice(0).concat(removed)
-              setSortedList(tempList)
-              event.target.classList.remove('over')
-            } else
-            if ((insertAt < list.length)) {
-            /* original list without removed item until the index it was removed at */
-              tempList = list.slice(0,insertAt).concat(removed)
-      
-              console.log('tempList', tempList)
-              console.log('insert the rest: ', list.slice(insertAt))
-      
-              /* add the remaining items to the list */
-              const newList = tempList.concat(list.slice(
-                insertAt))
-              console.log('newList', newList)
-      
-              /* set state to display on page */
-              setSortedList(newList)
-              event.target.classList.remove('over')
-            }
-          }
-          else console.log('nothing happened')
-          event.target.classList.remove('over') 
-        }
-      
-        const handleDragEnd = (event) => {
-          event.target.style.opacity = 1
-          console.log('-------------------------------------------------------------')
-        }
-      
-        /* log changes in current input field */
-        const handleChange = (event) => {
-          event.preventDefault()
-          console.log('event.target.value', event.target.value)
-      
-          /* create new list where everything stays the same except that the current
-          item replaces the existing value at this index */
-          const list = sortedList.map((item, i) => {
-            if (i !== Number(event.target.id)) { 
-              return item }
-            else return event.target.value   
-          })
-          setSortedList(list)
-        }
-      
-        /* filter list where only items with id unequal to current id's are allowed */
-        const handleDelete = (event) => {
-          event.preventDefault()
-          const list = sortedList.filter((item, i) => 
-            i !== Number(event.target.id))
-          console.log(event.target.id)
-          setSortedList(list)
-        }
-        
-        /* create list of items */
-        const listItems = () => {
-      
-          return sortedList.map((item, i) => (
-            <div key={i} className='dnd-list'>
-              <input           
-                id={i}
-                type='text'
-                className='input-item'  
-                draggable='true' 
-                onDragStart={handleDragStart} 
-                onDragOver={handleDragOver} 
-                onDragEnter={handleDragEnter}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                onDragEnd={handleDragEnd}
-                onChange={handleChange}
-                placeholder='Enter text here'
-                value={sortedList[i]}
-              />
-              <div id={i} className='delButton' onClick={handleDelete}>X</div>
-            </div>
-          )
-          )
-        }
-      
-        
-        console.log('sorted', sortedList)
-      
-        return (
-          <div className='page'>
-            <div className='container'>
-              <h1 style={{ color: "white", textAlign: "center" }}>Today</h1>
-              {listItems()}
-              <button className='addButton' onClick={() => newLine()}>+</button>
-            </div>
-          </div>
-        )
+const CloseModalButton = styled(MdClose)`
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  z-index: 10;
+`;
+
+
+export const TextForm = ({ showForm, setShowForm,botID}) => {
+  const modalRef = useRef();
+
+//   const addword =(id)=>{
+//     const data = {'question' : question,'answer' : answer ,'botID' : id}
+//     fetch('/bot/'+id+'/addword', {
+//     method : 'POST',
+//     headers : {
+//         "Access-Control-Allow-Origin": "*",
+//         'Content-Type':'application/json'
+//         },
+//     body: JSON.stringify(data)}).then(setShowWord(prev => !prev))
+//     window.location.reload("bot/"+id+'/trained');
+//   };
+
+  const animation = useSpring({
+    config: {
+      duration: 250
+    },
+    opacity: showForm ? 1 : 0,
+    transform: showForm ? `translateY(0%)` : `translateY(-100%)`
+  });
+
+  const closeModal = e => {
+    if (modalRef.current === e.target) {
+      setShowForm(false);
+      window.location.replace("/login")
+    }
+  };
+
+  const keyPress = useCallback(
+    e => {
+      if (e.key === 'Escape' && showForm) {
+        setShowForm(false);
+        console.log('I pressed');
       }
+    },
+    [setShowForm, showForm]
     
-}
+  );
+
+  useEffect(
+    () => {
+      document.addEventListener('keydown', keyPress);
+      return () => document.removeEventListener('keydown', keyPress);
+    },
+    [keyPress]
+  );
+  
+  return(
+    <div>
+    {showForm ? (
+        <Background onClick={closeModal} ref={modalRef}>
+          <animated.div style={animation}>
+            <Container>
+            <ModalWrapper showForm={showForm}>
+              <ModalContent>
+                <div>
+                    <button><i class="icon-facebook fab fa-facebook fa-2x"></i></button>
+                    <button><i class="icon-line fab fa-line fa-2x"></i></button>
+                </div>
+              </ModalContent>
+              <CloseModalButton
+                aria-label="Close modal"
+                onClick={() => setShowForm(prev => !prev)}
+              />
+            </ModalWrapper>
+            </Container>
+          </animated.div>
+        </Background>
+      ) : null}
+    </div>
+    );  
+};
+
+export default TextForm;
