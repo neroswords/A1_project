@@ -6,17 +6,21 @@ Resource          source-login.robot
 *** Variables ***
 ${URL}      http://localhost:3000/login
 ${BROWSER}        Chrome
+${valid_username}     admin
+${valid_password}     1234
 ${invalid_username}     pool
 ${invalid_password}     2323
 
 
 *** Test Cases ***
 Valid Login
+    [Documentation]         Test Login Page Functionality when valid username and password are entered
     Valid Login
-    [Teardown]    Close Browser
+    
     
 
 Invalid username
+    [Documentation]         Test Login Page Functionality when invalid username and valid password are entered
     Open Browser To Specific Page
     Input Username    ${invalid_username}
     Input Password   ${valid_password}
@@ -26,6 +30,7 @@ Invalid username
     
 
 Invalid password
+    [Documentation]         Test Login Page Functionality when valid username and invalid password are entered
     Open Browser To Specific Page
     Input Username    ${valid_username}
     Input Password   ${invalid_password}
@@ -34,6 +39,7 @@ Invalid password
     [Teardown]    Close Browser
 
 Blank username
+    [Documentation]         Test Login Page Functionality when only valid password is entered
     Open Browser To Specific Page
     
     Input Password   ${valid_password}
@@ -42,6 +48,7 @@ Blank username
     [Teardown]    Close Browser
 
 Blank password
+   [Documentation]         Test Login Page Functionality when only valid username is entered 
     Open Browser To Specific Page
     Input Username    ${valid_username}
     Submit Credentials
@@ -49,6 +56,7 @@ Blank password
     [Teardown]    Close Browser
 
 Register Button
+   [Documentation]         Test if Register link in Login page led to correct path
     Open Browser To Specific Page
     Click Register Link    li-regist
     Wait Until Page Contains        Register
