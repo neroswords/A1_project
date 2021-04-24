@@ -77,6 +77,14 @@ def handle_send_message_event(data):
     socketio.emit("message_from_response", {"message":data['message'], "userID":data['customerID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"displayName":bot_define['bot_name'],"type":"bot"},room=data['room'])
 
 
+@bot.route('/log/<botID>', methods=['GET', 'POST'])
+def history(botID):
+    purchased_collection = mongo.db.purchased
+    purchased_cursor = purchased_collection.find({'botID': ObjectId(botID)})
+    if request.method == 'GET':
+        listcursor = list(purchased_cursor)
+        data = dumps(listcursor, indent=2)
+        return data
 
 @bot.route('/<id>/connect', methods=['GET', 'POST'])
 # @login_required
@@ -133,9 +141,7 @@ def edit(id):
     if request.method == 'GET':
         bots_cursor = bots_collection.find({"_id": ObjectId(id)})
         listcursor = list(bots_cursor)
-        print(listcursor)
         data = dumps(listcursor, indent=2)
-        print(data)
         return data
 
     if request.method == 'POST':
@@ -340,106 +346,14 @@ def addword(botID):
 def item():
     return render_template('item_desc.html')
 
-# response = FlexSendMessage(
-                        #     alt_text='hello',
-                        #     contents=res
-                        # )
 
-# confirm_template_message = TemplateSendMessage(
-#                         alt_text='Confirm template',
-#                         template=ConfirmTemplate(
-#                             text='Are you sure?',
-#                             actions=[
-#                                 PostbackAction(
-#                                     label='postback',
-#                                     display_text='postback text',
-#                                     data='action=confirm&state=name'
-#                                 ),
-#                                 MessageAction(
-#                                     label='message',
-#                                     text='message text'
-#                                 )
-#                             ]
-#                         )
-#                     )
 
-def template(platform, botID):
-    training_collection = mongo.db.training
-    bot_collection = mongo.db.bots
-    customer_collection = mongo.db.customers
-    template_collection = mongo.db.template
-    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
-    if platform == "facebook":
-        if request.method == "POST":
-            bot = Bot(bot_define["page_facebook_access_token"])
-            payload = request.json
-            template_collection_define = template_collection.find(
-                {'botID': ObjectId(botID)})
-            # # print(template_collection_define["title"])
-            event = payload['entry'][0]['messaging']
-            # # print(event)
-            for msg in event:
-                # print("meg = ")
-                # print(msg)
-                text = msg['message']['text']
-                sender_id = msg['sender']['id']
-                # con_box = {
-                #     "attachment": {
-                #         "type": "template",
-                #         "payload": {
-                #             "template_type": "generic",
-                #             "elements": [
-
-                #             ]
-                #         }
-                #     }
-                # }
-                # for i in template_collection_define:
-                #     element = {"title": i["item_name"], "image_url": "https://f.ptcdn.info/266/072/000/qmysgv17vdVsmVcUtTko-o.jpg","subtitle": i["des"],
-                #                "default_action": {"type": "web_url", "url": "https://petersfancybrownhats.com/view?item=103",
-                #                                   "webview_height_ratio": "tall", }, "buttons": [{"type": "postback", "title": "ดูข้อมูล", "payload": "detail&"+str(i["_id"])},
-                #                                                                                  {"type": "postback", "title": "ใส่รถเข็น", "payload": "cart&"+str(i["_id"])},
-                #                                                                                  {"type": "postback", "title": "ซื้อเลย", "payload": "buy&"+str(i["_id"])}]}
-
- 
-                # con_box["attachment"]["payload"]["elements"].append(element)
-                # con_box["attachment"]["payload"]["elements"].append(element)
-                con_box = {
-               "attachment": {
-                    "type": "template",
-                    "payload": {
-                      "template_type": "button",
-                      "text": "click below to open webview",
-                      "buttons": [
-                        {
-                           "type":"web_url",
-                           "url":"https://elastic-wescoff-3f1163.netlify.app/",
-                           "title": "province",
-                           "messenger_extensions": "true",
-                           "webview_height_ratio": "tall"
-                        }
-                     ]
-                  }
-               }
-}
-               
-                print(bot.send_message(sender_id, con_box))
-                print("Sended")
-                break
-            return "Message received"
 
 
 @bot.route('/<botID>/additem', methods=["POST"])
 def additem(botID):
     inventory_collection = mongo.db.inventory
     template_collection = mongo.db.template
-    # if request.method == 'GET' :
-    #     bucket_cursor = bucket_collection.find({"_id" : ObjectId(id)})
-    #     listcursor = list(bucket_cursor)
-    #     print(bucket_cursor)
-    #     data = dumps(bucket_cursor,indent = 2)
-    #     print(data)
-    #     return data
     if request.method == 'POST':
         creator = request.form['creator']
         item_name = request.form['item_name']
@@ -450,14 +364,11 @@ def additem(botID):
         amount = request.form['amount']
         des = request.form['des']
         price = request.form['price']
-        print("PRICE = ",price)
         count = 0
-
         info_update = {'item_name': item_name, 'owner':  ObjectId(creator),
                        'type': item_type, 'amount': int(amount), 'des': des, 'botID': ObjectId(botID) ,'price':int(price)}
         info_pic = []
         for i in request.files:
-            print(i)
             file = request.files[i]
             filename = secure_filename(file.filename)
             filename = item_name+"&" + \
@@ -466,19 +377,10 @@ def additem(botID):
             file.save(destination)
             session['uploadFilePath'] = destination
             response = "success"
-            
             info_pic.append(filename)
-            
-            # info_pic = {'img'+str(count): filename}
-            # 
             count = count+1
         info_update.update({"img":info_pic})
-        print(info_update)
         inventory_collection.insert_one(info_update)
-        # info_update = {'item_name': item_name, 'owner':  ObjectId(creator),
-        #                'type': item_type, 'amount': amount, 'des': des, 'Img': filename}
-        # template_collection.insert_one({'item_name': item_name, 'owner':  ObjectId(creator),
-        #                                 'type': item_type, 'amount': amount, 'des': des, 'Img': filename, 'botID': ObjectId(botID)})
         return {'message': 'add bot successfully'}
     return "add bot unsuccessfully"
 
@@ -491,7 +393,6 @@ def getitem(botID):
     userinfo_cur = list(bucket_cursor)
     userinfo_cur.reverse()
     data = dumps(userinfo_cur, indent=2)
-    print(data[0])
     return data
 
 @bot.route('/<botID>/customer', methods=["GET","POST"])
@@ -512,17 +413,7 @@ def get_message(botID,customerID):
     data = dumps({"message":messages_list,"profile":customer}, indent=2)
     return data
 
-@bot.route('/<botID>/webhook', methods=["GET","POST"])
-def webhook_event(botID):
-    print(request.get_json())
 
 
-@bot.route('/test', methods=["GET"])
-def test():
-    return render_template("Item_Detail.html")
 
-
-@bot.route('/liff', methods=["GET"])
-def liff():
-    return render_template('item_desc.html')
 

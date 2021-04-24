@@ -43,6 +43,7 @@ from Project.route.merchant import merchant
 from Project.route.facebook import facebook
 from Project.route.inventory import inventory
 from Project.route.checkout import checkout
+from Project.route.sales import sales
 
 app.register_blueprint(profile, url_prefix='/profile')
 app.register_blueprint(bot, url_prefix='/bot')
@@ -54,6 +55,7 @@ app.register_blueprint(facebook, url_prefix='/facebook')
 app.register_blueprint(facebook, url_prefix='/template_facebook')
 app.register_blueprint(inventory, url_prefix='/inventory')
 app.register_blueprint(checkout, url_prefix='/checkout')
+app.register_blueprint(sales, url_prefix='/sales')
 
 # Talisman(app, content_security_policy={"default-src": "'unsafe-inline' 'self' *.omise.co"},)
 

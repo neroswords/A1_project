@@ -40,7 +40,7 @@ function History(props){
                         <h2 className='p-2 flex-grow-1 bd-highlight' id="history-header">History</h2> 
                     </div>    
                     <div className="show-history">
-                        <Visualize/>
+                        <Visualize botID={props.match.params.bot_id} />
                     </div>
                 </div>
             </div>
