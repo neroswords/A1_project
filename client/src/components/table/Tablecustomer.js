@@ -9,6 +9,13 @@ import {Link} from "react-router-dom";
 
 const Styles = styled.div`
 
+.table-show-all > div.container {
+    /* max-width: max-content; */
+    margin: 0;
+    padding: 0 20px;
+    min-width: 100% ;
+  }
+
   table {
     /* font-family: 'Roboto',sans-serif; */
     margin: 3% 0;
@@ -561,15 +568,16 @@ function Tablecustomer({ botID, delete_trained, add_data }) {
   console.log(TablecustomerState)
   return (
     <Styles>
-      <TableShow
-        columns={columns}
-        data={TablecustomerState}
-        updateMyData={updateMyData}
-        skipPageReset={skipPageReset}
-        delete_trained={delete_trained}
-        botID={botID}
-      />
-
+      <div className="table-show-all">
+        <TableShow
+          columns={columns}
+          data={TablecustomerState}
+          updateMyData={updateMyData}
+          skipPageReset={skipPageReset}
+          delete_trained={delete_trained}
+          botID={botID}
+        />
+      </div>
     </Styles>
   );
 }

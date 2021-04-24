@@ -33,9 +33,7 @@ body {
 } */
 
 
-.conatainer {
-  /* margin: auto; */
-}
+
 
 .Mainpage {
   margin-bottom: 5%;
@@ -49,3 +47,6 @@ body {
   cursor: pointer;
 }
 
+.ReactTable {
+  width:100% !important;
+}

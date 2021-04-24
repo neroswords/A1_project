@@ -4,6 +4,24 @@ import Chatbody from '../Components/Chat/Chatbody';
 import styled from 'styled-components';
 import { Redirect, Link } from 'react-router-dom';
 
+const Styles = styled.div`
+
+.chat-page{
+    display: flex;
+    min-height: 92vh; 
+}
+
+.chat-page .container-fluid{
+    padding: 50px;
+    width: 100%;
+    /* margin-top: 10px; */
+    /* margin-top: 2%; */
+    
+}
+
+
+`
+
 function Chat(props){
     const [customerList, setCustomerList] =  useState([])
     const [customer, setCustomer] =  useState(props.match.params.customer_id)
@@ -19,10 +37,10 @@ function Chat(props){
     },[])
 
     return(
-        
+        <Styles>
             <div className="chat-page">
                     <Navbar_member botID = {props.match.params.bot_id} path={"chat"} />
-                <div className="container">
+                <div className="container-fluid">
                     <div className="main-chatlist row">
                 
                         <div className="main-chatlist col-4">
@@ -108,7 +126,7 @@ function Chat(props){
                     
                 
             </div> 
-        
+        </Styles>
     )
 
     // const [messages,setMessages] = useState([]);
@@ -169,6 +187,7 @@ function Chat(props){
     //         <button onClick={()=> onClick()}>Send</button>
     //     </div>
     // );
+    
 }
 
 export default Chat;

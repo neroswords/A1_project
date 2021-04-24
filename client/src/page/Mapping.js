@@ -12,10 +12,9 @@ const Styles = styled.div`
     display: flex;
     min-height: 92vh;
 }
-.container {
-    margin-bottom: 2%;
-    margin-top: 2%;
-    overflow:hidden;
+.mapping-page .container-fluid {
+    padding: 40px;
+    width: 100%;
 }
 .mapping-title {
     padding: 4px;
@@ -25,13 +24,13 @@ const Styles = styled.div`
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
 }
 .showtablemap{
-    min-height: 70vh;
+    /* min-height: 70vh; */
     margin-top: 1%;
     background-color: white;
-    padding: 1%;
+    padding: 5px;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
     border-radius: 0.25rem;
-    /* border: 1px solid #ececec; */
+    overflow-x: auto;
 }
 ` 
 
@@ -42,7 +41,7 @@ function Mapping(props){
         
         <div className="mapping-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"mapping"} />
-            <div className="container">
+            <div className="container-fluid">
                 <div className="mapping-title">
                     <h2 className='p-2 flex-grow-1 bd-highlight' id="mapping-header">Mapping</h2>
                 </div>

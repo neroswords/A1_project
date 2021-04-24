@@ -9,9 +9,17 @@ import Delete_table from "../Delete_table";
 
 
 const Styles = styled.div`
+  .table-show-all > div.container {
+    /* max-width: max-content; */
+    margin: 0;
+    padding: 0 20px;
+    min-width: 100% ;
+  }
+
   table {
     /* font-family: 'Roboto',sans-serif; */
-    margin: 10px 0;
+    width: 100%;
+    margin: 1% 0;
     font-size: 1em;
     text-align: center;
     border: 1px solid #efeff5; 
@@ -552,18 +560,18 @@ function Table({ botID, delete_trained, add_data }) {
   const resetData = () => setTableState(originalData)
 
   return (
-
-
-    <Styles>
-      <TableShow
-        columns={columns}
-        data={TableState}
-        updateMyData={updateMyData}
-        skipPageReset={skipPageReset}
-        delete_trained={delete_trained}
-        botID={botID}
-      />
-
+    
+      <Styles>
+        <div className="table-show-all">
+        <TableShow
+          columns={columns}
+          data={TableState}
+          updateMyData={updateMyData}
+          skipPageReset={skipPageReset}
+          delete_trained={delete_trained}
+          botID={botID}
+        />
+      </div>
     </Styles>
   );
 }

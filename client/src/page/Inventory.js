@@ -10,10 +10,9 @@ const Styles = styled.div`
     display: flex;
     min-height:92vh;
 }
-.container {
-    margin-bottom: 2%;
-    margin-top: 2%;
-    overflow:hidden;
+.inventory-page .container-fluid {
+    padding: 40px;
+    width: 100%;
   }
 
   .inven-title{
@@ -86,7 +85,7 @@ function Inventory(props){
         <Styles>
             <div className="inventory-page" >
                <Navbar_member botID = {props.match.params.bot_id} path={"inventory"} />
-               <div className="container">
+               <div className="container-fluid">
                    <div className="inven-title">
                        <h2 className="p-2 flex-grow-1 bd-highlight" id="inventory-header">Inventories</h2>
                    </div> 

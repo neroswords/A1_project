@@ -10,18 +10,20 @@ const Styles = styled.div`
   .train-page {
     display: flex;
     min-height: 92vh;
+    /* width: 100%; */
   }
   
-  .container {
+  .train-page .container-fluid{
+    padding: 40px;
+    width: 100%;
     /* margin-top: 10px; */
-    margin-top: 2%;
-    overflow:hidden;
+    /* margin-top: 2%; */
+    
   }
   
   .training-title{
     /* font-family: 'Public Sans', sans-serif;    */
     padding: 4px;
-    width: 100% ;
     background-color: white;
     border-radius: 0.25rem;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
@@ -30,14 +32,15 @@ const Styles = styled.div`
 
 
   .showtablecon{
-    min-height: 70vh;
+    /* min-height: 70vh; */
     margin-top: 1%;
     background-color: white;
     padding: 5px;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
     border-radius: 0.25rem;
-
+    overflow-x: auto;
   }
+
 `
 
 function Train(props) {
@@ -74,10 +77,10 @@ function Train(props) {
     <Styles>
       <div className="train-page">
         <Navbar_member botID={props.match.params.bot_id} path={"training"} />
-        <div className="container">
-          <div className="training-title">
-            <h2 className="p-2 flex-grow-1 bd-highlight" id="training-header">Trainning</h2>
-          </div>
+        <div className="container-fluid">          
+            <div className="training-title">
+              <h2 className="p-2 flex-grow-1 bd-highlight" id="training-header">Trainning</h2>
+            </div>
           {/* <div className=" d-flex bd-highlight">
           
             <div className="p-2 bd-highlight">
@@ -87,11 +90,11 @@ function Train(props) {
             </div>
           </div> */}
           {/* <hr></hr> */}
-          <div className="showtablecon">
-          <Tablecon
-            botID={props.match.params.bot_id} delete_trained={delete_trained}
-          />
-          </div>
+            <div className="showtablecon">
+              <Tablecon
+              botID={props.match.params.bot_id} delete_trained={delete_trained}
+            />
+            </div>
         </div>
       </div>
       

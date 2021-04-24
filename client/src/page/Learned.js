@@ -8,10 +8,9 @@ const Styles = styled.div`
     display: flex;
     min-height: 92vh;
 }
-.container {
-    margin-bottom: 2%;
-    margin-top: 2%;
-    overflow:hidden;
+.learned-page .container-fluid {
+    padding: 40px;
+    width: 100%;
 }
 .learned-title{
     padding: 4px;
@@ -19,15 +18,17 @@ const Styles = styled.div`
     background-color: white;
     border-radius: 0.25rem;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    padding: 0 1%;
 }
 .showtable-learn{
-    min-height: 70vh;
+    /* min-height: 70vh; */
     margin-top: 1%;
     background-color: white;
-    padding: 1%;
+    padding: 5px;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
     border-radius: 0.25rem;
     /* border: 1px solid #ececec; */
+    overflow-x: auto;
 }
 `
 // const mapStateToProps = (state) =>{
@@ -79,7 +80,7 @@ function Learned(props){
         <Styles>
         <div className="learned-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"trained"}  />
-            <div className="container">
+            <div className="container-fluid">
                 <div className="learned-title d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight' id="trained-header">Trained</h2>
                 </div>
