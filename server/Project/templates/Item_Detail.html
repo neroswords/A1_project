@@ -218,7 +218,7 @@ img{
 }
   </style>
   <body onLoad="yourFunctionName()">
-    <form method='post' >
+    <form method='post' action='/facebook/{{botID}}/detail/{{itemId}}/{{userID}}'>
     <div class = "card-wrapper">
       <div class = "card">
         <!-- card left -->
@@ -267,7 +267,7 @@ img{
           </div>
           <div class = "purchase-info">
             <input name = "valueitem" id = "valueitem" type = "number" min = "0" value = "1" max = {{data[0]['amount']}}>
-            <button  type = "submit" class = "btn" value = "submit" onclick=closeTem() formaction='/facebook/{{botID}}/detail/{{itemId}}/{{userID}}'>
+            <button  type = "submit" class = "btn" value = "submit" onclick=closeTem() >
               Add to Cart <i class = "fas fa-shopping-cart"></i>
             </button>
           </div>

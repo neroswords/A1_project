@@ -354,6 +354,7 @@ def detail(botID, itemId, userID):
         data = list(inventory_cursor)
         return render_template('Item_Detail.html', data=data, botID=botID, itemId=itemId, userID=userID)
     if request.method == 'POST':
+        print("POSTTTTTTTTTTTTTT")
         item_Id = itemId
         cart_collection = mongo.db.carts
         bot_collection = mongo.db.bots
@@ -366,13 +367,15 @@ def detail(botID, itemId, userID):
         item_name = inventory_collection_define['item_name']
         price_per_ob = inventory_collection_define['price']
         img_name = inventory_collection_define['img'][0]
-        amount = 1
+        amount = valueitem
         total_ob = int(price_per_ob)*int(amount)
         flag = False
         
         if(cart_define != None):
             amount = cart_define['cart']
             old_price = cart_define['total']
+            print("oldprice = ",old_price)
+            print("total ob =",total_ob)
             price = 0
             for idx, val in enumerate(cart_define['cart']):
                 if(str(item_Id) == str(val['itemid'])):
@@ -392,20 +395,25 @@ def detail(botID, itemId, userID):
                 newvalues = {"$set": {"total":price}}
                 cart_collection.update_one(myquery, newvalues)
         if(not flag):
+            print("not flag")
             cart_collection_define = cart_collection.find(
                 {'botID': ObjectId(botID)})
             flag = False
             for i in cart_collection_define:
                 if(i['userID'] == userID):
                     info_update = {"$push": {'cart': {'itemid': ObjectId(
-                        itemId), 'amount': 1, 'item_name': item_name, 'price_per_ob': price_per_ob, 'total_ob': total_ob, 'img_name': img_name}}}
+                        itemId), 'amount': int(valueitem), 'item_name': item_name, 'price_per_ob': price_per_ob, 'total_ob': total_ob, 'img_name': img_name}}}
                     done = cart_collection.update_one(
                         {'userID': userID}, info_update)
-                    cart_collection.update_one({'userID': userID}, {'total':int(old_price)+total_ob})
+                    cart_collection.update_one({'userID': userID},{"$set": {"total":int(old_price)+total_ob}} )
+                    res = "ใส่สินค้า"+item_name+"ลงตระกร้าเรียบร้อยแล้วครับ"
                     flag = True
+                    print("res")
             if(not flag):
+                
                 cart = cart_collection.insert_one({'userID': userID, 'botID': ObjectId(
-                    botID),'total':total_ob,'cart': [{'itemid': ObjectId(itemId), 'amount': amount, 'item_name': item_name, 'price_per_ob': price_per_ob, 'total_ob': total_ob, 'img_name': img_name}]})
+                    botID),'total':total_ob,'cart': [{'itemid': ObjectId(itemId), 'amount': int(valueitem), 'item_name': item_name, 'price_per_ob': price_per_ob, 'total_ob': total_ob, 'img_name': img_name}]})
+        print("Done")
         res = "ใส่สินค้า"+item_name+"ลงตระกร้าเรียบร้อยแล้วครับ"
         bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
         bot = Bot(bot_define["page_facebook_access_token"], api_version="4.0")
