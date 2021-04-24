@@ -13,7 +13,7 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background :rgba(0, 0, 0, 0.8);
+  background :rgba(0, 0, 0, 0.2);
   position: fixed;
   top: 50%;
   left: 50%;
@@ -21,8 +21,8 @@ const Background = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-  width: 800px;
-  height: 500px;
+  height: 30rem;
+  width: 25rem;
   background-color: white;
   padding: 3rem;
   border-radius: 0.5rem;
@@ -103,46 +103,44 @@ const CloseModalButton = styled(MdClose)`
 `;
 
 
-export const AddWord = ({ showWord, setShowWord,botID}) => {
+export const TextForm = ({ showForm, setShowForm,botID}) => {
   const modalRef = useRef();
-  const [question, setQuestion] = useState('')
-  const [answer, setAnswer] = useState('')
 
-  const addword =(id)=>{
-    const data = {'question' : question,'answer' : answer ,'botID' : id}
-    fetch('/bot/'+id+'/addword', {
-    method : 'POST',
-    headers : {
-        "Access-Control-Allow-Origin": "*",
-        'Content-Type':'application/json'
-        },
-    body: JSON.stringify(data)}).then(setShowWord(prev => !prev))
-    window.location.reload("bot/"+id+'/trained');
-  };
+//   const addword =(id)=>{
+//     const data = {'question' : question,'answer' : answer ,'botID' : id}
+//     fetch('/bot/'+id+'/addword', {
+//     method : 'POST',
+//     headers : {
+//         "Access-Control-Allow-Origin": "*",
+//         'Content-Type':'application/json'
+//         },
+//     body: JSON.stringify(data)}).then(setShowWord(prev => !prev))
+//     window.location.reload("bot/"+id+'/trained');
+//   };
 
   const animation = useSpring({
     config: {
       duration: 250
     },
-    opacity: showWord ? 1 : 0,
-    transform: showWord ? `translateY(0%)` : `translateY(-100%)`
+    opacity: showForm ? 1 : 0,
+    transform: showForm ? `translateY(0%)` : `translateY(-100%)`
   });
 
   const closeModal = e => {
     if (modalRef.current === e.target) {
-      setShowWord(false);
-      // window.location.replace("/login")
+      setShowForm(false);
+      window.location.replace("/login")
     }
   };
 
   const keyPress = useCallback(
     e => {
-      if (e.key === 'Escape' && showWord) {
-        setShowWord(false);
+      if (e.key === 'Escape' && showForm) {
+        setShowForm(false);
         console.log('I pressed');
       }
     },
-    [setShowWord, showWord]
+    [setShowForm, showForm]
     
   );
 
@@ -156,32 +154,20 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
   
   return(
     <div>
-    {showWord ? (
+    {showForm ? (
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
             <Container>
-            <ModalWrapper showWord={showWord}>
+            <ModalWrapper showForm={showForm}>
               <ModalContent>
-                <article className="part Addword">
-                  <h1 name="addword-popup">
-                    Add your Question and Answer
-                  </h1>
-                  <form>
-                    <div className="group-Question">
-                      <label for="AddQuestion">Question</label>
-                      <input type="text" className="input-question" name="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question"></input>
-                    </div>
-                    <div className="group-Answer">
-                      <label for="AddAnswer">Answer</label>
-                      <input type="text" className="input-answer" name="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer"></input>
-                    </div>
-                  </form>
-                </article>
-              <Button className="qa-comfirm" variant="success" name="btn-addword-confirm" onClick = {() => addword(botID) }>Comfirm</Button>
+                <div>
+                    <button><i class="icon-facebook fab fa-facebook fa-2x"></i></button>
+                    <button><i class="icon-line fab fa-line fa-2x"></i></button>
+                </div>
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"
-                onClick={() => setShowWord(prev => !prev)}
+                onClick={() => setShowForm(prev => !prev)}
               />
             </ModalWrapper>
             </Container>
@@ -192,4 +178,4 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
     );  
 };
 
-export default AddWord;
+export default TextForm;

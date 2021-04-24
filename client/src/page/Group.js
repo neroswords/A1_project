@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from '../Components/Table/Table';
+import TableGroup from '../Components/Table/TableGroup';
 import Navbar_member from '../Components/Navbar/navbar_member';
 
 import styled from 'styled-components';
@@ -24,7 +24,7 @@ function Group(props){
                     <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group</h2>
                     {/* <div className="p-2 bd-highlight"><button className="btn btn-danger" type="button">Delete</button></div> */}
                 </div>
-                
+                <TableGroup botID = {props.match.params.bot_id} />
             </div>
 
         </div>
