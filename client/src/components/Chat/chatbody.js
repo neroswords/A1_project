@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import '../Chat/Chat.css';
 
-let endPoint = "https://924d6deb0e9e.ngrok.io";
+let endPoint = "http://127.0.0.1:200";
 
 let socket = io.connect(`${endPoint}`);
  
