@@ -22,7 +22,14 @@ class JSONEncoder(json.JSONEncoder):
 #         return str(x)
 #     else:
 #         return JSONEncoder(x)
-        
+
+class User:
+    def __init__(self, username, password,is_active):
+        self.username = username
+        self.password = password
+        self.is_active = is_active
+
+
 
 
 

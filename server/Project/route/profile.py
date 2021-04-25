@@ -124,3 +124,12 @@ def run_timer():
     sys.stdout.write("Timer complete") 
 
 
+# @profile.route('/<user_id>/check/<botID>',methods=['GET'])
+# def checkUser(user_id,botID):
+#     bot_collection = mongo.db.bots
+#     bot_cursor =  bot_collection.find({'$and': [{'owner': ObjectId(user_id)}, {'_id': ObjectId(botID)}]})
+#     print(bot_cursor)
+#     # list_cur = list(user_cursor[0]["access_token"]) 
+#     json_data = dumps(bot_cursor, indent = 2) 
+#     print(json_data)
+#     return json_data
