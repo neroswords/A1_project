@@ -235,12 +235,12 @@
 
   .btn-signup {
     margin-left: 0.5rem;
-    margin-right: 2rem;
+    margin-right: 1rem;
   }
 
   .btn-login a {
     padding: 0.5rem 1.5rem;
-    margin-top: 8%;
+    margin: 10% 0;
     border: 1px solid #232032;
     color: white;
     font-family: 'Public Sans', sans-serif;
@@ -257,9 +257,9 @@
 
   .btn-signup a {
     font-family: 'Public Sans', sans-serif;
-    /* padding: 0.5rem 1.5rem; */
+    padding: 0.5rem 1.5rem;
     font-size: 15px;
-    margin-top: 15%;
+    margin: 10% 0;
     border: 5;
     color: #14213D;
     background-color: transparent;
@@ -267,4 +267,15 @@
 
   .btn-signup a:hover{
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+  }
+
+  @media only screen and (min-width: 1900px){
+    .btn-login a {
+      margin-top: 20%;
+    }
+  
+    .btn-signup a {
+      margin-top: 20%;
+    }
+
   }

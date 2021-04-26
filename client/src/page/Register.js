@@ -28,8 +28,9 @@ const Styles = styled.div`
     font-family: 'Roboto', sans-serif;
   }
   
-  .card-regis .card-body {
+  .card-regis .card-body-regis {
     margin: 1rem;
+    padding: 1rem;
   }
   
   .form-regis input {
@@ -90,27 +91,27 @@ const Styles = styled.div`
     //     font-weight: 
     // }
 
-  .title_part {
+  .title_part-regis {
       margin-top: 4rem;
     }
 
-  .title_part  p{
+  .title_part-regis p{
     font-weight: bold;
     margin-top:5%;
   }
 
-  .title_part  .line{
+  .title_part-regis .line{
     border: 10;
     height: 4px;
     background-color: #fca311;
     width: 200px;
   }
 
-  input-icon{
+  /* .input-icon{
     display: flex;
     width: 100%;
     margin-bottom: 15px;
-  }
+  } */
 
   .form-check{
     margin-top: 10%;
@@ -217,13 +218,13 @@ flash = (e) =>{
           <Styles>
 
                 <div className="container">
-                      <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
+                      <div className="col-sm-11 col-md-10 col-lg-8 mx-auto">
                         <div className="card card-regis">
-                          <div className="card-body">
+                          <div className="card-body-regis">
                             <h5 className="card-title text-center">Register</h5>
                             <form className="form-regis" onSubmit={this.handleSubmit}>
-                            <div className="title_part">
-                                  <p className="col">Account infomation</p>
+                            <div className="title_part-regis">
+                                  <p className="">Account infomation</p>
                                   <div className="line"></div>
                             </div>
                                 <div className="my-3">

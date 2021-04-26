@@ -4,11 +4,12 @@ import styled from 'styled-components';
 import FlashMessage from 'react-flash-message'
 
 const Styles = styled.div`
-  .page {
+  .login-page {
         background: url(${process.env.PUBLIC_URL +'/images/b.png'});
         background-size: 30%;
         background-repeat: repeat-x;
         background-position: right top;
+        /* background-color: white; */
         position: cover;
         top: 0px;
         left: 0;
@@ -29,10 +30,11 @@ const Styles = styled.div`
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
   }
   
-  .card-signin .card-title {
+   .card-body h5 {
     margin-bottom: 2rem;
     font-weight: bold;
     font-size: 3rem;
+    text-align: center;
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
   }
@@ -175,12 +177,12 @@ class Login extends React.Component {
   render(){
       return(
           <Styles>
-            <div className="page">
+            <div className="login-page">
                 <div className="container">
                       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                         <div class="card card-signin my-5">
                           <div class="card-body">
-                            <h5 class="card-title text-center">Log in</h5>
+                            <h5 class="card-title-login">Log in</h5>
                             <form class="form-signin">
                                 <div class="form-floating ">
                                   <input type="text" class="form-control" name="username" id="floatingInput" value={this.state.username} onChange={this.handleChange} placeholder="Email" required/>
