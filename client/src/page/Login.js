@@ -18,12 +18,10 @@ const Styles = styled.div`
         width: 100%;
         height: 100%;
   }
-
   .container {
     margin-top:5%;
     font-family: 'Public Sans', sans-serif;
   }
-
   .card-signin {
     border: 0;
     border-radius: 1rem;
@@ -48,7 +46,6 @@ const Styles = styled.div`
     border-radius: 1rem;
     padding: 0.5rem;
   }
-
   .form-signin .btn {
     border-radius: 1rem;
     letter-spacing: .1rem;
@@ -59,18 +56,15 @@ const Styles = styled.div`
     align-items: center;
     margin-top: 10%;
   }
-
   .form-signin .row {
     margin-top: 5%;
     border-radius: 1rem;
   }
-
   .btn-login .btn {
     margin-top:15%;
     text-align: center;
     align-items: center;
   }
-
   @mixin transition($property: all, $duration: 0.5s, $ease: cubic-bezier(0.65,-0.25,0.25, 1.95)) {
     transition: $property $duration $ease;
   }
@@ -78,11 +72,9 @@ const Styles = styled.div`
   .detect-message{
     color : red;
   }
-
   .alert-message{
     margin-top: 10%;
   }
-
   .btn-login button {
     text-align: center;
     align-items: center;
@@ -120,13 +112,10 @@ const Styles = styled.div`
   //     justify-self: center;
   //   }
   // }
-
   .detect {
     background-color: white;
     color: red;
   }
-
-
 `;
 
 class Login extends React.Component {

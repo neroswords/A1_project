@@ -336,10 +336,17 @@ def addword(botID):
         question = trained_update['question']
         creator = trained_update['botID']
         ans = trained_update['answer']
-
-        trained_collection.insert_one(
-            {'question': question, 'botID':  ObjectId(creator), 'answer': ans})
-        return {"message": "add done"}
+        train = trained_collection.find({"botID": ObjectId(botID)})
+        train_info = list(train)
+        flag = True
+        for data in train_info:
+            if  data['question'] == question:
+                flag = False
+                return {'error':'This question already exists'}
+        if flag == True:
+            trained_collection.insert_one(
+                    {'question': question, 'botID':  ObjectId(creator), 'answer': ans})
+            return {"message": "add done"}
     return {"message": "ok"}
 
 @bot.route('/item',methods=["GET"])

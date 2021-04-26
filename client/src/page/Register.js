@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {Redirect} from 'react-router-dom';
 import FlashMessage from 'react-flash-message'
+import { faTerminal } from '@fortawesome/free-solid-svg-icons';
 
 const Styles = styled.div`
   .container {
@@ -158,7 +159,7 @@ class Register extends React.Component {
   handleChange (evt) {
     this.setState({ [evt.target.name]: evt.target.value });
   }
-
+ 
   handleSubmit = (e) => {
     e.preventDefault()
 
@@ -233,7 +234,7 @@ flash = (e) =>{
                                 </div>
                                 <div className="my-3">
                                   <label for="exampleInputEmail1" className="form-label">Username</label>
-                                  <input type="text" className="form-control" id="inputusername" name='username' minLength={5} maxLength={16} required value={this.state.username} onChange={this.handleChange}/>
+                                  <input type="text" className="form-control"pattern="[A-Za-z0-9]+" id="inputusername" name='username' minLength={5} maxLength={16} required value={this.state.username} onChange={this.handleChange}/>
                                   { this.state.showMessageUsername &&  
                                         <div className="container">
                                             <FlashMessage duration={4000}>
@@ -247,11 +248,11 @@ flash = (e) =>{
                                 <div className="row">
                                   <div className="col ">
                                     <label for="exampleInputPassword1" className="form-label">Password</label>
-                                    <input type="password" className="form-control" id="inputpassword" name='password' required  minLength={6} value={this.state.password} onChange={this.handleChange} /> 
+                                    <input type="password" className="form-control" pattern="[A-Za-z0-9]+" id="inputpassword" name='password' required  minLength={6} value={this.state.password} onChange={this.handleChange} /> 
                                   </div>
                                   <div className="col">
                                     <label for="exampleInputPassword1" className="form-label">Comfirm Password</label>
-                                    <input type="password" className="form-control" id="confirmpassword" name='confirm_password' minLength={6} value={this.state.confirm_password} onChange={this.handleChange} />  
+                                    <input type="password" className="form-control" pattern="[A-Za-z0-9]+" id="confirmpassword" name='confirm_password' minLength={6} value={this.state.confirm_password} onChange={this.handleChange} />  
                                   </div>
                                   { this.state.showMessagePassword &&  
                                       <div className="container">
@@ -270,11 +271,11 @@ flash = (e) =>{
                                   <div className="row my-3">
                                       <div className="col">
                                           <label for="inputFirstname" className="form-label">Firstname</label>
-                                          <input type="text" className="form-control" id="inputfirstname" required  name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
+                                          <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputfirstname" required  name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
                                       </div>
                                       <div className="col">
                                       <label for="inputLastname" className="form-label">Last name</label>
-                                          <input type="text" className="form-control" id="inputlastname" required name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
+                                          <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputlastname" required name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
                                       </div>
                                       <div className="col">
                                         <label for="exampleInputEmail1" className="form-label">Birthday</label>
@@ -284,16 +285,16 @@ flash = (e) =>{
                                   <div className="row">
                                     <div className="col my-3">
                                       <label for="exampleInputEmail1" className="form-label">Shop name</label>
-                                      <input type="text" className="form-control" id="inputshopname" required value={this.state.shop_name} name='shop_name' onChange={this.handleChange} />
+                                      <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputshopname" required value={this.state.shop_name} name='shop_name' onChange={this.handleChange} />
                                     </div>
                                     <div className="col my-3">
                                       <label for="exampleInputEmail1" className="form-label">Type of sale</label>
-                                      <input type="text" className="form-control" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' onChange={this.handleChange} />
+                                      <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' onChange={this.handleChange} />
                                     </div>
                                   </div>
                                   <div className="my-3">
                                     <label for="exampleFormControlTextarea1" className="form-label">Shop Address</label>
-                                    <textarea className="form-control" id="inputshopaddress" rows="2" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
+                                    <textarea className="form-control" pattern="[A-Za-z0-9]+"  id="inputshopaddress" rows="2" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
                                   </div>
                                 <div class="form-check">
                                   <input className="form-check-input" type="checkbox" value="" name="checkvalidate" required/>
