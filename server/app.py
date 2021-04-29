@@ -20,9 +20,5 @@ if __name__ == '__main__':
 #     http_server = WSGIServer(('',200), app)
 #     http_server.serve_forever()
     app.secret_key = 'mysecret'
-<<<<<<< HEAD
     socketio.run(app, port=200, debug=True)
-=======
-    socketio.run(app,port=200, debug=True)
->>>>>>> 2e5e9fb3dc5c381109784d3a421432fe8bdc49ab
 

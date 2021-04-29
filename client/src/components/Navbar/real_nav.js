@@ -27,44 +27,22 @@ function Nav() {
 function Normal_nav() {
   return (
     <Navbar_real>
-<<<<<<< HEAD
       {/* <Link to="#">
           <div className="btn-login btn-nav">
               <a className="btn" role="button" name="btn-home">Home</a>
           </div>
       </Link> */}
-=======
-      <Link to="#">
-        <div className="btn-login btn-nav">
-          <a className="btn" role="button" name="btn-home">
-            Home
-          </a>
-        </div>
-      </Link>
-
->>>>>>> 2e5e9fb3dc5c381109784d3a421432fe8bdc49ab
       {/* <Link to="#">
           <div className="btn-login btn-nav">
               <a className="btn" role="button">ABOUT</a>
           </div>
       </Link> */}
-<<<<<<< HEAD
      
       {/* <Link to="/login">
           <div className="btn-login btn-nav">
               <a className="btn" role="button" name="login">Log in</a>
           </div>
       </Link> */}
-=======
-
-      <Link to="/login">
-        <div className="btn-login btn-nav">
-          <a className="btn" role="button" name="login">
-            Log in
-          </a>
-        </div>
-      </Link>
->>>>>>> 2e5e9fb3dc5c381109784d3a421432fe8bdc49ab
       <Link to="/register">
         <div className="btn-signup btn-nav">
           <a className="btn" role="button" name="btn-regist">

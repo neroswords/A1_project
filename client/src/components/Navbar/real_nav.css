@@ -1,53 +1,3 @@
-<<<<<<< HEAD
-:root {
-  --bg:  white;
-   --bg-accent: #f4f4f4;
-   --text-color: #232032;
-   --nav-size: 60px;
-   --border: 1px solid ;
-   --border-radius: 8px;
-   --speed: 500ms; 
- }
-
-.navbar-nav-real ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  position: fixed;
-}
-
-.icon-button-real a {
-  color: var(--text-color);
-  text-decoration: none;
-}
-
-/* Top Navigation Bar */
-
-/* <nav> */
-.navbar-real {
-  font-family: 'Public Sans', sans-serif;
-  /* position: static; */
-  height: 8vh;
-  background-color: white;
-  /* background-color: transparent; */
-  padding: 0 1rem;
-  display: flex;
-  justify-content: space-between;
-  border-radius: 0.25rem;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-}
-.navbar-real ul {
-  right: auto;
-}
-
-.show-user {
-  width: calc(var(--nav-size) * 0.8);
-  align-items: center;
-  justify-content: center;
-  display: flex; 
-  text-align: -webkit-match-parent;
-  margin-right: 60%;
-=======
  :root {
     --bg:  white;
      --bg-accent: #f4f4f4;
@@ -251,7 +201,6 @@
     color: #232032;
     
   }
->>>>>>> 2e5e9fb3dc5c381109784d3a421432fe8bdc49ab
   
 }
 
