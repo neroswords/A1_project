@@ -202,7 +202,7 @@
     
   }
   
-}
+
 
 .click-show-user .click{
   background-color: #fca311;
@@ -395,7 +395,7 @@
 
 .btn-login a {
   padding: 0.5rem 1.5rem;
-  margin-top: 15%;
+  margin-top: 12%;
   border: 1px solid #232032;
   color: white;
   font-family: 'Public Sans', sans-serif;
@@ -414,7 +414,7 @@
   font-family: 'Public Sans', sans-serif;
   padding: 0.5rem 1rem;
   font-size: 15px;
-  margin-top: 15%;
+  margin-top: 12%;
   border: 5;
   color: #14213D;
   background-color: transparent;
