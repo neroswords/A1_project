@@ -1,69 +1,92 @@
-import './real_nav.css';
-import { ReactComponent as CaretIcon } from './icons/caret.svg';
-import {Link} from 'react-router-dom';
-import {isLoggedIn, deleteTokens} from '../auth';
-import React, { useState, useEffect, useRef } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import "./real_nav.css";
+import { ReactComponent as CaretIcon } from "./icons/caret.svg";
+import { Link } from "react-router-dom";
+import { isLoggedIn, deleteTokens } from "../auth";
+import React, { useState, useEffect, useRef } from "react";
+import { CSSTransition } from "react-transition-group";
+import io from "socket.io-client";
+import { Provider, useSelector, useDispatch } from "react-redux";
+import { mergeStyles } from "react-select";
+import { useDetectOutsideClick } from "../Botlist/button_nav";
+import CommunicationInvertColorsOff from "material-ui/svg-icons/communication/invert-colors-off";
+import { Info } from "material-ui-icons";
+import Notifier from "react-desktop-notification"
 
-
-function Nav(){
-  if(isLoggedIn()){
-    return Loged_in_nav(localStorage.getItem('username'));
-  }
-  else{
+let endPoint = "http://127.0.0.1:200";
+let socket = io.connect(`${endPoint}`);
+let flag = false
+let flag2 = false
+let nofy = false
+function Nav() {
+  if (isLoggedIn()) {
+    return Loged_in_nav(localStorage.getItem("username"));
+  } else {
     return Normal_nav();
   }
-
-
 }
-
-function Normal_nav(){
-  return(
+function Normal_nav() {
+  return (
     <Navbar_real>
       <Link to="#">
-          <div className="btn-login btn-nav">
-              <a className="btn" role="button" name="btn-home">Home</a>
-          </div>
+        <div className="btn-login btn-nav">
+          <a className="btn" role="button" name="btn-home">
+            Home
+          </a>
+        </div>
       </Link>
+
       {/* <Link to="#">
           <div className="btn-login btn-nav">
               <a className="btn" role="button">ABOUT</a>
           </div>
       </Link> */}
-     
+
       <Link to="/login">
-          <div className="btn-login btn-nav">
-              <a className="btn" role="button" name="login">Log in</a>
-          </div>
+        <div className="btn-login btn-nav">
+          <a className="btn" role="button" name="login">
+            Log in
+          </a>
+        </div>
       </Link>
       <Link to="/register">
-          <div className="btn-signup btn-nav">
-              <a className="btn" role="button" name="btn-regist">Register</a>
-          </div>
+        <div className="btn-signup btn-nav">
+          <a className="btn" role="button" name="btn-regist">
+            Register
+          </a>
+        </div>
       </Link>
-            <Link to="/login">
-          <div className="btn-login btn-nav">
-              <a className="btn" role="button">Log in</a>
-          </div>
+      <Link to="/login">
+        <div className="btn-login btn-nav">
+          <a className="btn" role="button">
+            Log in
+          </a>
+        </div>
       </Link>
-      </Navbar_real>
-    )
+    </Navbar_real>
+  );
 }
 
 function Loged_in_nav(props) {
-  const [main, setMain] = useState(window.location.hash)
-  
+  const [main, setMain] = useState(window.location.hash);
+
   return (
     <Navbar_real>
-        <div className= {"show-user " + (main == "#main" ? "click-show-user" :"")}>
-            <a className="click" href={"/bot_list/"+ localStorage.getItem('user_id')+"#main"}><i class="fas fa-user-circle"></i>{props}</a>
-        </div>
-      
-      <NavItem icon={<CaretIcon />}>
+      <div
+        className={"show-user " + (main == "#main" ? "click-show-user" : "")}
+      >
+        <a
+          className="click"
+          href={"/bot_list/" + localStorage.getItem("user_id") + "#main"}
+        >
+          <i class="fas fa-user-circle"></i>
+          {props}
+        </a>
+      </div>
+
+      <NavItem flag = {false}icon={<CaretIcon />}>
         <DropdownMenu></DropdownMenu>
       </NavItem>
     </Navbar_real>
-    
   );
 }
 
@@ -71,37 +94,258 @@ function Navbar_real(props) {
   return (
     <nav className="navbar-real">
       <a href="/">
-          <img href="/" src="/images/logo2.PNG" className="nav_brand"/>
-      </a>    
-          <ul className="navbar-nav-real">{props.children}</ul>
+        <img href="/" src="/images/logo2.PNG" className="nav_brand" />
+      </a>
+      <ul className="navbar-nav-real">{props.children}</ul>
     </nav>
   );
 }
 
-function NavItem(props) {
-  const [open, setOpen] = useState(false);
+ function NavItem(props,) {
 
-  return (
+  let numno = 0
+  let list = []
+  let alllist = []
+  const [noti, setNoti] = useState();
+  const [name, setName] = useState();
+  const [shownoti, setShownoti] = useState([]);
+  const [info, setInfo] = useState([]);
+
+  const dropdownRef = useRef(null);
+  const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
+   const onClick =  () => {
+    setIsActive(prev => !prev)
+    // let count = 0
+    //  fetch("/profile/" + localStorage.getItem("user_id") + "/notification", {
+    //   method: "POST",
+    //   headers: {
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Content-Type": "application/json",
+    //   },
+    //   body : 0
+    // })
+    //   console.log("DOIT")
+    // ,count = 0
+    // ,flag2 = false
+    // ,setNoti(" ")
+    // ,console.log("count= ",count)
+    // ,console.log("flag= ",flag2)
+    // ,console.log("state= ",noti)
+     
+
+  };
+
+  const OnopenForm = () => {
+    // openForm(botData._id.$oid)
+    onClick()
+    }
     
-    <li className="nav-item-real" >
-      <a href="#" className="icon-button-real" name="user-dropdown" onClick={() => setOpen(!open)}>
+
+
+  const [open, setOpen] = useState(false);
+  const [opennoti, setOpennoti] = useState(false);
+  const [callnumber, setCallnumber] = useState(false);
+
+  useEffect(() => {
+    getNoti()
+  }, [info.length]);
+  
+useEffect(() => {
+
+    getUpdate()
+
+  }, [opennoti]);
+
+  useEffect(() => {  //data
+    fetch('/profile/' + localStorage.getItem("user_id") + '/notification/get')
+    .then(response => response.json().then(inf => {
+        setInfo(inf)
+        setOpennoti(prev => !prev)
+    }))
+  
+  }, []);
+
+  useEffect(() => {
+    fetch('/profile/' + localStorage.getItem("user_id") + '/notification')
+    .then(res => res.json().then(data => {
+            setNoti(data)
+        }))
+  },[callnumber]);
+
+
+
+  const getNoti = () => {
+
+    let audio = new Audio("/test.mp3")
+    socket.on("connect", function (room) {
+      socket.emit("join_room_noti", {
+        userID: localStorage.getItem("user_id"),
+      });
+      });
+
+    socket.on("message_from_noti", msg =>{  
+        console.log("1")
+        console.log(msg)
+        let newList = info.filter((elements) => ((elements.sender_id != msg.sender_id) && (elements.botID.$oid != msg.botID)));
+        newList.unshift(msg)
+      
+        let count = 0;
+        newList.map(i =>{
+            if(i.readed == "unread")
+            {
+              count = count+1
+              // nofy = true
+            }
+          })
+          
+        setNoti(count)
+        setInfo(newList)
+        setOpennoti(prev => !prev)
+        // if (!audio.isPlaying && nofy == true)
+        // {
+        //     audio.play();
+        //     nofy = false
+        // }
+        // if (nofy == true){
+        //   Notifier.start("Message from",msg['message'],"www.google.com","validated image url");
+        //   nofy = false
+        //   }
+        // if(flag == false){
+        //     setCallnumber(prev => !prev)
+        //     flag = true
+        // }
+     
+
+  })
+
+  
+ 
+  }
+
+  const getUpdate =() =>{
+
+    setShownoti(info.map(msg => (
+      
+        <li> 
+               
+             
+               {/* <Link to={"/chat/"+msg['botID']['$oid']+"/live_chat/"+msg['sender_id']}  > */}
+               <div className={msg['readed'] == "read"? 'img-noti-iread': "img-noti-i"} onClick={()=>toggleClass(msg)} > 
+                {/* <div className={isActiveClass ? 'img-noti-i': 'img-noti-inew'} onClick={toggleClass(this)} > */}
+                  <img  src={msg['pictureUrl']}></img> 
+                    {msg['message']} {msg['botID']['$oid']}
+                    </div>
+                   {/* </Link> */}
+         
+            </li>
+            )
+   )
+   
+   )
+
+    flag = false    
+ 
+  }
+
+  const toggleClass = (msg) => {
+    setIsActive(prev => !prev)
+    
+    // for (var i in msg) {
+      msg['readed'] = "read"
+       fetch("/profile/" + localStorage.getItem("user_id") + "/notification/get", {
+          method: "POST",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+          body : JSON.stringify(msg)
+        }).then((response) => {
+          response.json().then((body) => {
+            setCallnumber(prev => !prev)
+          });
+        }).then(getUpdate());
+        
+
+
+      // if (shownoti[i].sender_id == msg.sender_id) {
+      //   shownoti[i].readed = "readed";
+      //   // fetch("/profile/" + localStorage.getItem("user_id") + "/notification/get", {
+      //   //   method: "POST",
+      //   //   headers: {
+      //   //     "Access-Control-Allow-Origin": "*",
+      //   //     "Content-Type": "application/json",
+      //   //   },
+      //   //   body : msg._id
+      //   // })
+      //    break; //Stop this loop, we found it!
+      // }
+    //}
+    window.location.href = "/chat/"+msg['botID']['$oid']+"/live_chat/"+msg['sender_id']
+    
+  };
+  return (
+    <li className="nav-item-real">
+      <div className="menu-continer">
+            <div onClick={onClick} className="menu-trigger">
+            <i class="far fa-bells">{noti}
+      </i>
+            </div>
+            <div
+                ref={dropdownRef}
+                className={`menu ${isActive ? "active" : "inactive"}`}
+                >
+                <ul>
+                {shownoti.length > 0 && 
+                          shownoti.map(msg => (
+                             <div className="chat__item ">
+                                  <p className="msg-all">{msg}</p>
+                            </div>  
+                        ))}
+            
+                    
+                    <li>
+                        <a onClick={OnopenForm}><i class="fas fa-link"></i> Connect </a>
+                    {/* <a href={'/bot/'+botData._id.$oid+'/connect'} ><i class="fas fa-link"></i> Connect</a> */}
+                    {/* <Facebookform showForm={showForm} setShowForm={setShowForm} showIdbot={showIdbot}></Facebookform> */}
+                    </li>
+                    <li>
+                       
+                    </li>
+                </ul>
+               
+            </div>
+        </div> 
+      {/* <a href="#" className="icon-button-real" name="user-dropdown" onClick={() => setOpennoti(!open)}>
+        <i class="far fa-bells">{noti}
+      </i>
+              </a> */}
+
+      <a
+        href="#"
+        className="icon-button-real"
+        name="user-dropdown"
+        onClick={() => setOpen(!open)}
+      >
         {props.icon}
       </a>
 
       {open && props.children}
     </li>
   );
-}
-
+  }
 
 function DropdownMenu() {
-  const [activeMenu, setActiveMenu] = useState('main');
-  const [username, setUsername] = useState(localStorage.getItem('user_id'));
+  const [activeMenu, setActiveMenu] = useState("main");
+  const [username, setUsername] = useState(localStorage.getItem("user_id"));
   const dropdownRef = useRef(null);
 
   function DropdownItem(props) {
     return (
-      <a href="#" className="menu-item-real"  onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}>
+      <a
+        href="#"
+        className="menu-item-real"
+        onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}
+      >
         <span className="icon-button-real">{props.leftIcon}</span>
         {props.children}
         <span className="icon-right-real">{props.rightIcon}</span>
@@ -110,13 +354,12 @@ function DropdownMenu() {
   }
 
   return (
-    
-    <div className="dropdown-real"  ref={dropdownRef}>
+    <div className="dropdown-real" ref={dropdownRef}>
       <CSSTransition
-      in={activeMenu === 'main'}
-      timeout={500}
-      classNames="menu-primary"
-      unmountOnExit
+        in={activeMenu === "main"}
+        timeout={500}
+        classNames="menu-primary"
+        unmountOnExit
       >
         <div className="menu-real">
           {/* <DropdownItem
@@ -131,45 +374,56 @@ function DropdownMenu() {
             goToMenu="animals">
             Animals
           </DropdownItem> */}
-           <a name="user-edit" onClick={() => {
-            window.location.replace("/profile/"+ localStorage.getItem('user_id')+"/edit")
-          }}>
-            <DropdownItem 
-              leftIcon= {<i class="fas fa-user"></i>}>
-                Edit Profile
+          <a
+            name="user-edit"
+            onClick={() => {
+              window.location.replace(
+                "/profile/" + localStorage.getItem("user_id") + "/edit"
+              );
+            }}
+          >
+            <DropdownItem leftIcon={<i class="fas fa-user"></i>}>
+              Edit Profile
             </DropdownItem>
           </a>
-          <a name="user-manage" onClick={() => {
-            window.location.replace("/bot_list/"+ localStorage.getItem('user_id'))
-          }}>
-            <DropdownItem 
-              leftIcon= {<i class="fas fa-robot"></i>}>
-                Manage Bot
+          <a
+            name="user-manage"
+            onClick={() => {
+              window.location.replace(
+                "/bot_list/" + localStorage.getItem("user_id")
+              );
+            }}
+          >
+            <DropdownItem leftIcon={<i class="fas fa-robot"></i>}>
+              Manage Bot
             </DropdownItem>
           </a>
 
-          <a onClick={() => {
-            window.location.replace('/manual')
-          }}>
-            <DropdownItem 
-              leftIcon= {<i class="fas fa-book-open"></i>}>        
+          <a
+            onClick={() => {
+              window.location.replace("/manual");
+            }}
+          >
+            <DropdownItem leftIcon={<i class="fas fa-book-open"></i>}>
               Manual
             </DropdownItem>
           </a>
-          <a name="signout" onClick={() => {
-            deleteTokens();
-            window.location.replace("/")
-          }}>
-            <DropdownItem 
-              leftIcon= {<i className="fas fa-sign-out-alt signout-icon" >
-                </i>}>
-                SIGN OUT
+          <a
+            name="signout"
+            onClick={() => {
+              deleteTokens();
+              window.location.replace("/");
+            }}
+          >
+            <DropdownItem
+              leftIcon={<i className="fas fa-sign-out-alt signout-icon"></i>}
+            >
+              SIGN OUT
             </DropdownItem>
           </a>
         </div>
       </CSSTransition>
     </div>
-
   );
 }
 
