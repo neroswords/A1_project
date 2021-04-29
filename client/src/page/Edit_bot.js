@@ -193,10 +193,10 @@ class Edit_bot extends React.Component {
                     <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
                       <div className="card card-bot">
                         <div className="card-body">
-                          <h5 className="card-title text-center">Create Bot form</h5>
+                          <h5 className="card-title text-center">Edit Bot form</h5>
                           <form className="form-bot" onSubmit={this.handleUploadImage}>
                                 <div className="title_part">
-                                        <p className="col">Bot infomation</p>
+                                        <p className="col">Bot information</p>
                                         <div className="line"></div>
                                 </div>
                                 <div className="row">
@@ -211,11 +211,11 @@ class Edit_bot extends React.Component {
                                         </div>  
                                         <div className=" group col-lg-6">
                                             <div className="">
-                                              <label  className="form-label">Bot Name</label>
-                                              <input type="text"  name="bot_name" value = {this.state.bot_name}  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
+                                              <label  className="form-label">Bot Name *</label>
+                                              <input type="text"  pattern="[A-Za-z0-9]+" name="bot_name" value = {this.state.bot_name}  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
                                             </div>
                                             <div class="mt-3">
-                                              <label for="inputgender" class="form-label">Gender</label>
+                                              <label for="inputgender" class="form-label">Gender * </label>
                                               <select id="inputgender" name="gender" value = {this.state.gender}  ref={(ref) => { this.gender = ref; }} onChange={this.handleChange} class="form-select">
                                                   <option selected>Choose...</option>
                                                   <option>Male </option>
@@ -223,8 +223,8 @@ class Edit_bot extends React.Component {
                                               </select>
                                             </div>
                                             <div className="mt-3">
-                                                <label for="inputFirstname" className="form-label">Age</label>
-                                                <input type="integer" name="age" className="form-control" id="inputfirstname" value = {this.state.age}   ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
+                                                <label for="inputFirstname" className="form-label">Age * </label>
+                                                <input type="number" pattern="^[0-9]"  min="1" step="1"  name="age" className="form-control" id="inputfirstname" value = {this.state.age}   ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
                                             </div>
                                         </div>
                                 </div>
@@ -250,7 +250,7 @@ class Edit_bot extends React.Component {
                             {/* <Lineform />                                 */}
 
                               <div className="btn-createbot">
-                                  <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Create ChatBot</button>
+                                  <button className="btn btn-success text-uppercase" onSubmit={this.handleUploadImage} type="submit">Edit Bot</button>
                               </div>
 
 

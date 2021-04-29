@@ -43,6 +43,7 @@ Mapping Details
     Wait Until Element Is Visible        id:mapping-load-header     10
     [Teardown]    Close Browser
 
+*** comment ***
 Mapping Details Page
     [Documentation]         Test if Mapping Details is shown correctly
     Valid Login

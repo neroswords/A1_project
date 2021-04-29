@@ -15,10 +15,10 @@ from gevent.pywsgi import WSGIServer
 # # """
 from Project import app,socketio
 # from gevent.pywsgi import WSGIServer
-from flask_socketio import SocketIO
 
 if __name__ == '__main__':
 #     http_server = WSGIServer(('',200), app)
 #     http_server.serve_forever()
     app.secret_key = 'mysecret'
     socketio.run(app, port=200, debug=True)
+

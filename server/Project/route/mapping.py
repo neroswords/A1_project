@@ -14,11 +14,6 @@ def create(botID):
             jsonn = request.get_json()
             new_map = mappings_collection.insert_one({'name': jsonn["name"],'node': jsonn["node"], 'botID' : ObjectId(botID), 'details' : jsonn["details"]})
             return {"massage" : "yes"}
-        # else:
-        #     map_query = mappings_collection.update_one({"botID" : ObjectId(botID), '_id': ObjectId(mapID)},
-        #     {'$set':{'name': jsonn["name"],'node': jsonn["node"], 'botID' : ObjectId(botID), 'details' : jsonn["details"]}})
-        #     return {"massage": "Update OK"}
-           
 
 
 @mapping.route('/<botID>',methods=["GET"])
@@ -31,26 +26,14 @@ def load_map(botID):
         listcursor = list(mappings_cursor)
         data = dumps(listcursor,indent = 2)
         return data
-
-# @mapping.route('/<botID>/mapping/<mapID>/save',methods=["POST"])
-# def save_map(botID,mapID): 
-
-#     mappings_collection = mongo.db.mappings
-#     if request.method == 'POST' :
-#             jsonn = request.get_json()
-#         #     map_query = mappings_collection.update_one({"botID" : ObjectId(botID), '_id': ObjectId(mapID)},
-#         #     {'$set':{'name': jsonn["name"],'node': jsonn["node"], 'botID' : ObjectId(botID), 'details' : jsonn["details"]}})
-#         #     return {"massage": "Update OK"}
-           
+    
 @mapping.route('/detail/<mapID>', methods=['GET'])
 def load__mapdetail(mapID):
-    # print(mapID)
     if request.method == 'GET' :
         mappings_collection = mongo.db.mappings
         mappings_cursor = mappings_collection.find({"_id" : ObjectId(mapID)})
         listcursor = list(mappings_cursor)
         data = dumps(listcursor,indent = 2)
-        # print(data)
         return data
 
         
@@ -62,7 +45,3 @@ def update(botID,mapID):
             jsonn = request.get_json()
             update_map = mappings_collection.update_one({"$and":[{'botID' : ObjectId(botID)},{'_id' : ObjectId(mapID)}]},{"$set":{'name': jsonn["name"],'node': jsonn["node"], 'details' : jsonn["details"]}})
             return {"massage" : "yes"}
-        # else:
-        #     map_query = mappings_collection.update_one({"botID" : ObjectId(botID), '_id': ObjectId(mapID)},
-        #     {'$set':{'name': jsonn["name"],'node': jsonn["node"], 'botID' : ObjectId(botID), 'details' : jsonn["details"]}})
-        #     return {"massage": "Update OK"}

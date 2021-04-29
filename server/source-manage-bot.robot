@@ -5,4 +5,3 @@ Go to Manage Bot Page
     Wait until Page Contains Element      name:bot_list
     Click Element       name:bot_list
     
-

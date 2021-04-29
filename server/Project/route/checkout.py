@@ -17,6 +17,8 @@ from Project.extensions import mongo, JSONEncoder
 from bson import ObjectId
 import json
 import datetime
+from Project.route.bot import push_message
+from Project.route.facebook import call_receipt
 
 checkout = Blueprint("checkout", __name__)
 
@@ -74,11 +76,13 @@ def process(chrg, botID, userID, already_redirected=False):
         cart_collection = mongo.db.carts
         customer_collection = mongo.db.customers
         purchased_collection = mongo.db.purchased
-        customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "tracking"}})
+        customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
         cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
         purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":datetime.datetime.now()})
         cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
-        return render_template("complete.html")
+        data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
+        push_message(data)
+        return redirect("https://liff.line.me/1655652942-zNpjoxYV/checkout/complete")
 
     # Check whether source is "econtext" before checking whether charge has `authorize_uri`.
     # Do not automatically redirect to `authorize_uri` for "econtext".
@@ -95,10 +99,19 @@ def process(chrg, botID, userID, already_redirected=False):
     if charge_is_pending_redirect:
         return redirect(chrg.authorize_uri)
 
-    if charge_is_pending_capture:
-        flash(
-            f"Order {order_id} successfully completed.  Your card will be charged soon."
-        )
+    if charge_is_pending_capture: #facebook
+        cart_collection = mongo.db.carts
+        customer_collection = mongo.db.customers
+        purchased_collection = mongo.db.purchased
+        timestamp = datetime.datetime.now()
+        customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
+        cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+        purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":timestamp,"purchased_time":str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second),"purchase_day": timestamp.day,"purchase_month": timestamp.month,"purchase_year": timestamp.year})
+        cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+        data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
+        receipt_define = purchased_collection.find_one(
+        {'$and': [{'userID': userID}, {'botID': ObjectId(botID)},{'purchased_date':timestamp}]})
+        call_receipt(userID,receipt_define['_id'],botID)
         return render_template("complete.html")
 
     if chrg.status == "expired":
@@ -169,7 +182,7 @@ def charge():
                 "cart": {"items": item_list},
                 "order_id": order_id,
             },
-            return_uri=url_for("checkout.order", order_id=order_id, _external=True),
+            return_uri=url_for("checkout.order", order_id=order_id,botID=botID,userID=userID, _external=True),
             ip=get_client_ip(),
             description=str(define_cart['cart']),
             capture=current_app.config.get("AUTO_CAPTURE"),
@@ -190,10 +203,23 @@ def charge():
 def complete():
     return render_template('complete.html')
 
+@checkout.route("/facebook/<botID>/<userID>", methods=['GET'])
+def FbCheck_out(botID,userID):
+    cart_collection = mongo.db.carts
+    cart_define = cart_collection.find_one({'$and':[{'userID':userID},{'botID':ObjectId(botID)}]})
+    return render_template(
+        'checkout_fb.html',
+        key=current_app.config.get("OMISE_PUBLIC_KEY"),
+        # cart=3000,
+        Price=cart_define['total']*100,
+        botID = botID,
+        currency=current_app.config.get("STORE_CURRENCY"),
+        customer=session.get("customer"),
+        userID=userID
+    )
+
 @checkout.route("/<botID>", methods=['GET'])
 def check_out(botID):
-    if request.args.get('liff.state') != None:
-        return render_template('checkout.html',liffId = "1655652942-zNpjoxYV")
     cart_collection = mongo.db.carts
     cart_define = cart_collection.find_one({'$and':[{'userID':request.args.get('customer')},{'botID':ObjectId(botID)}]})
     return render_template(
@@ -207,8 +233,9 @@ def check_out(botID):
         liffId = "1655652942-zNpjoxYV"
     )
 
-@checkout.route("/orders/<order_id>/complete")
-def order(order_id):
+
+@checkout.route("/orders/<order_id>/<botID>/<userID>/complete")
+def order(order_id,botID,userID):
     """
     Charge completion return URL.  Once the customer is redirected
     back to this site from the authorization page, we search for the
@@ -222,7 +249,7 @@ def order(order_id):
     try:
         search = omise.Search.execute("charge", **{"query": order_id})
         chrg = search[0]
-        return process(chrg, already_redirected=True)
+        return process(chrg, already_redirected=True,botID=botID,userID=userID)
     except IndexError as error:
         flash(f"Order {order_id} not found.")
         return redirect(url_for("checkout.check_out"))

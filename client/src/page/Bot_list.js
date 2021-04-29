@@ -56,8 +56,8 @@ export default function Bot_list(props) {
                     {/* <Navbar_member /> */}
                           <div class="container col-xl-9 col-lg-9 col-md-12 col-sm-12 col-xs-12">
                                     <div className="botlist-body" name="bot_list">
-                                        <Link className='link' to={'/bot/'+localStorage.getItem('user_id')+'/create_bot'}>
-                                        <div className="card-plus group">
+                                        <Link className='link' to={'/bot/'+localStorage.getItem('user_id')+'/create_bot'} >
+                                        <div className="card-plus group" name="create-bot">
                                             <div>
                                                 <p>Add new Bot</p>
                                             </div>    

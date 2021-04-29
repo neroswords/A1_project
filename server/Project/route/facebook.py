@@ -1,217 +1,102 @@
 from flask import Flask, request, abort, render_template, session, url_for, redirect, send_from_directory, send_file, Blueprint
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user, AnonymousUserMixin
 from pymessenger import Bot
+from pymessenger.user_profile import UserProfileApi
 from Project.Config import *
 from werkzeug.utils import secure_filename
+import datetime
+# from datetime import datetime
+import ast
 import json
+import time
+import string
+from django.core.serializers.json import DjangoJSONEncoder
 import requests
 from Project.message import item_list_flexmessage
-from Project.extensions import mongo, JSONEncoder
+from Project.extensions import mongo, JSONEncoder,server_url
 from Project.nlp import sentence_get_confident
-from Project.process import stateHandler,process_message
-from bson import ObjectId
+from Project.process_facebook import stateHandler
+from Project.process import process_message
+from bson import ObjectId,json_util
+from json import dumps,loads
 import os.path
-from bson.json_util import dumps, loads
-
+import bson.json_util
+# from bson.json_util import dumps, loads,json_util
+from .. import socketio
 facebook = Blueprint("facebook", __name__)
 
 
 def call_facebook(botID):
     bot_collection = mongo.db.bots
     cart_collection = mongo.db.carts
+    customer_collection = mongo.db.customers
     bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
     inventory_collection = mongo.db.inventory
     inventory_collection_define = inventory_collection.find(
         {'botID': ObjectId(botID)})
-    bot = Bot(bot_define["page_facebook_access_token"], api_version="4.0")
+    bot = Bot(bot_define["page_facebook_access_token"])
     payload = request.json
-    # print(payload)
     inventory_collection = mongo.db.inventory
     inventory_collection_define = inventory_collection.find(
         {'botID': ObjectId(botID)})
     event = payload['entry'][0]['messaging']
     for msg in event:
         sender_id = msg['sender']['id']
+        field = ['name', 'picture']
+        profile = bot.get_user_info(sender_id,fields = field)
         if('message' in payload['entry'][0]['messaging'][0].keys()):
             if('attachments' in payload['entry'][0]['messaging'][0]['message'].keys()):
-                response = "รับแต่ข้อความ"
-                break
-            text = msg['message']['text']
-            # template_collection_define = template_collection.find({'$and': [{'$or':
-            #                                                                  [
-            #                                                                      {'name': {
-            #                                                                          '$regex': kwargs['query']}},
-            #                                                                      {'tag': {
-            #                                                                          '$in': {'$regex': kwargs['query']}}}
-            #                                                                  ]
-            #                                                                  }, {'botID': ObjectId(kwargs['botID'])}
-            #                                                                 ]
-            #                                                        })
-            stop = False
-            for i in inventory_collection_define:
-                if(text in i['item_name'] or text in i['type']):
-                    print("HIHIHIHI")
-                    response = template("facebook", botID, text, sender_id)
-                    # bot.send_text_message(sender_id, response)
-                    stop = True
-                    break
-            if(not stop):
-                response = process_message(
-                    text, botID, bot_define['confident'])
-                print(response['message'])
-                response = response['message']
-                bot.send_text_message(sender_id, response)
-                break
+                res = {"message": "ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
+            elif('quick_reply' in payload['entry'][0]['messaging'][0]['message'].keys()):
+                message_type = 'q_postback'
+            else:
+                message_type = 'text'
         elif('postback' in payload['entry'][0]['messaging'][0].keys()):
-            t_post = payload['entry'][0]['messaging'][0]['postback']['payload']
-            t_post = t_post.split("&")
-            timestamp = msg['timestamp']
-            item_id = t_post[1]
-            inventory_collection = mongo.db.inventory
-            inventory_collection_define = inventory_collection.find_one({'_id': ObjectId(t_post[1])})
-            print("____________")
-            print(inventory_collection_define)
-            item_name = inventory_collection_define['item_name']
-            price_per_ob = inventory_collection_define['price']
-            img_name = inventory_collection_define['img'][0]
-            amount = 1
-            total_ob = int(price_per_ob)*int(amount)
-            flag = False
-            if("cart" in t_post):  # add cart
-                cart_define = cart_collection.find_one({'$and':[{"userID": sender_id},{'botID':ObjectId(botID)}]})
-                print("+++++++++++++")
-                print(cart_define)
-                print("+++++++++++++")
-                if(cart_define != None):
-                    for idx, val in enumerate(cart_define['cart']):
-                        amount = cart_define['cart']
-
-                        if( ObjectId(t_post[1]) == val['itemid']):
-                            amount[idx]["amount"] += 1 
-                            amount[idx]["total_ob"] = int(price_per_ob)*amount[idx]["amount"]
-                            print('total',total_ob)
-                            myquery = {"userID": sender_id,'botID':ObjectId(botID)}
-                            newvalues = {"$set":{"cart": amount }}
-                            cart_collection.update_one(myquery,newvalues)
-                            flag = True
-                            break
-                    # for idx, val in enumerate(newlist):
-                    #     if ObjectId(itemid) == val['itemid']:
-                    #         newlist[idx]['amount'] += 1
-                    #         myquery = {"userID": kwargs['sender_id'],'botID':ObjectId(kwargs['botID'])}
-                    #         newvalues = {"$set": {"cart": newlist}}
-                    #         cart_collection.update_one(myquery,newvalues)
-                    #         customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
-                    #         return {"message":"ใส่ "+define_item['item_name']+" ลงตระกร้าเรียบร้อยแล้วครับบ"}
-                        
-
-                    # if (str(t_post[1]) == str(i['cart'][count]['itemid']) and str(i['userID'])==str(sender_id)):
-                    #     amount = int(i['amount'])
-                    #     amount = amount+1
-                    #     info_update = {"$set": {'amount': amount}}
-                    #     done = cart_collection.update_one(
-                    #         {'item_id': ObjectId(item_id)}, info_update)
-                    #     print("IF")
-                    #     response = "เพิ่มสินค้าอีก 1 ชิ้นแล้วค่ะ"
-                    #     flag = True
-                    #     bot.send_text_message(sender_id, response)
-                    #     call_basket(botID,sender_id,bot)
-                    #     break
-
-                if(not flag):
-                    print("passed if 1")
-                    cart_collection_define = cart_collection.find(
-                        {'botID': ObjectId(botID)})
-                    flag = False
-                    for i in cart_collection_define:
-                        print("passed for")
-                        if(i['userID'] == sender_id):
-                            print("passed if")
-                            print(amount)
-                            print("passed if")
-                            info_update = {"$push": {'cart': {'itemid': ObjectId(
-                                item_id), 'amount': 1, 'timestamp': timestamp,'item_name':item_name,'price_per_ob':price_per_ob,'total_ob':total_ob,'img_name':img_name}}}
-                            done = cart_collection.update_one({'userID': sender_id}, info_update)
-                            flag = True
-                    if(not flag):
-                        print("passed else")
-                        cart = cart_collection.insert_one({'userID': sender_id, 'botID': ObjectId(
-                            botID), 'cart': [{'itemid': ObjectId(item_id), 'amount': amount, 'timestamp': timestamp,'item_name':item_name,'price_per_ob':price_per_ob,'total_ob':total_ob,'img_name':img_name}]})
-                    print("end if")
-                    response = "ใส่ตะกร้าแล้ว"
-                    bot.send_text_message(sender_id, response)
-                    call_basket(botID, sender_id, bot)
-                    break
-            if("detail" in t_post):  # see more
-                for i in inventory_collection_define:
-                    response = {
-                        "attachment": {
-                            "type": "image",
-                            "payload": {
-                                "url": "https://scontent.fbkk5-6.fna.fbcdn.net/v/t1.0-0/p526x296/143825331_1318519655180519_7870318405144231408_o.jpg?_nc_cat=101&ccb=2&_nc_sid=730e14&_nc_eui2=AeF06_4cd565Jp-vXIrA5zK1MdpurrvgN_kx2m6uu-A3-UzffIHVW-hHX_JWkyaNn_H4NoG259QkxPNuPGeKdtNh&_nc_ohc=FQAqoC-BwfsAX_5slEo&_nc_oc=AQlZ2LZE_eXl-H0kNfrlpdRy_ouWotl_WBvo0s9yA5h8kG3eCW80QNyiruVV_IP33b0&_nc_ht=scontent.fbkk5-6.fna&tp=6&oh=d72759d4a8aa42ce6380c6da80b300fa&oe=6047BF9E"
-                            }
-                        }
-                    }
-                    print(bot.send_message(sender_id, response))
-                    break
+            message_type = 'postback'
         else:
-            response = "รับแต่ข้อความ"
-            bot.send_text_message(sender_id, response)
-
-        # text = msg['message']['text']
-        # for i in template_collection_define:
-        #     if(text == i['type']):
-        #         print("5")
-        #         # template("facebook", botID)
-        #         break
-        #     else:
-        #         sender_id = msg['sender']['id']
-        #         response = "Test"
-        #         bot.send_text_message(sender_id, response)
-
-
-def template(platform, botID, text, sender_id):
-    training_collection = mongo.db.training
-    bot_collection = mongo.db.bots
-    customer_collection = mongo.db.customers
-    inventory_collection = mongo.db.inventory
-    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
-    bot = Bot(bot_define["page_facebook_access_token"])
-    inventory_collection_define = inventory_collection.find(
-        {'botID': ObjectId(botID)})
-    # # print(template_collection_define["title"])
-    con_box = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "generic",
-                "elements": [
-
-                ]
-            }
-        }
-    }
-    for i in inventory_collection_define:
-        if(text in i['item_name'] or text in i['type']):
-            element = {"title": i["item_name"], "image_url": "https://f.ptcdn.info/266/072/000/qmysgv17vdVsmVcUtTko-o.jpg", "subtitle": i["des"],
-                       "default_action": {"type": "web_url", "url": "https://petersfancybrownhats.com/view?item=103",
-                                          "webview_height_ratio": "tall", }, "buttons": [{"type": "postback", "title": "ดูข้อมูล", "payload": "detail&"+str(i["_id"])},
-                                                                                         {"type": "postback", "title": "ใส่รถเข็น", "payload": "cart&"+str(
-                                                                                          i["_id"])},
-                                                                                         ]}
-            con_box["attachment"]["payload"]["elements"].append(element)
-
-    # con_box = {
+            res = {"message": "ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
+        sender_define = customer_collection.find_one(
+            {'$and': [{'userID': sender_id}, {'botID': ObjectId(botID)}]})
+        if sender_define == None:
+            sender_define = {'userID': sender_id, 'type': "facebookUser",
+                             'state': 'none', 'botID': bot_define['_id'], 'status': 'open',"pictureUrl":profile['picture']['data']['url'],"display_name":profile['name']}
+            customer_collection.insert_one(sender_define)
+        if sender_define['status'] == 'open':
+            if message_type == 'text':
+                data = {"message": payload['entry'][0]
+                        ['messaging'][0]['message']['text'],"pictureUrl":profile['picture']['data']['url'],"display_name":profile['name']}
+                socketio.emit("message_from_webhook", {"message":data["message"], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"type":"facebookUser"},room=botID+'&'+sender_define['userID'])
+                res = stateHandler(
+                    sender_id=sender_define['userID'], botID=botID, message=data, confident=bot_define['confident'],platform='facebook')
+                save_message(message=data['message'],message_type="text",sender=profile['name'],sender_id=sender_define['userID'],sender_type="facebookUser",room=botID+'&'+sender_define['userID'])
+            elif message_type == 'postback':
+                data = {'postback': payload['entry'][0]
+                        ['messaging'][0]['postback']['payload']}
+                res = stateHandler(
+                    sender_id=sender_define['userID'], botID=botID, postback=data)
+            elif message_type == 'q_postback':
+                data = {'postback': payload['entry'][0]
+                        ['messaging'][0]['message']['quick_reply']}
+                res = stateHandler(
+                    sender_id=sender_define['userID'], botID=botID, postback=data)
+            else:
+                res = {"message": "ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
+            if "message" in res.keys():
+                socketio.emit("message_from_response", {"message":res['message'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'/images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
+                save_message(message=res['message'],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'])
+                response = print(bot.send_text_message(sender_id,res['message']))
+            elif 'btn_template' in res.keys():
+    #             con_box = {
     #     "attachment": {
     #         "type": "template",
     #         "payload": {
     #             "template_type": "button",
-    #             "text": "click below to open webview",
+    #             "text": "ได้ทำการเพิ่ม"+res['btn_template']+"ลงตะกร้าเรียบร้อย",
     #                 "buttons": [
     #                     {
     #                         "type": "web_url",
-    #                         "url": "https://elastic-wescoff-3f1163.netlify.app/",
-    #                         "title": "province",
+    #                         "url": server_url+"/facebook/"+botID+"/basket/"+sender_id,
+    #                         "title": "คลิ๊กเพื่อจัดการตะกร้า",
     #                         "messenger_extensions": "true",
     #                         "webview_height_ratio": "tall"
     #                     }
@@ -219,24 +104,110 @@ def template(platform, botID, text, sender_id):
     #         }
     #     }
     # }
+                call_basket(botID, sender_id, bot,res['btn_template'])
+            elif 'flex' in res.keys():
+                if res['type'] == "name":
+                    response = res['flex']
+                    # socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
+                    # save_message(message=res['message'],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'])
+                    print(bot.send_text_message(sender_id, response))
+                    quick_replies = confirm_name(response)
+                    print(bot.send_message(sender_id,{"text": "กรุณาตรวจทานชื่อของท่านหากผิดพลาดสามารถพิมพ์อีกครั้งได้เลย","quick_replies": quick_replies}))
+                elif res['type'] == 'address':
+                    response = res['flex']
+                            # socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
+                            # save_message(message=res['message'],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'])
+                    print(bot.send_text_message(sender_id, response))
+                    quick_replies = confirm_address(response)
+                    print(bot.send_message(sender_id,{"text": "กรุณาตรวจทานที่อยู่ของท่านหากผิดพลาดสามารถพิมพ์อีกครั้งได้เลย","quick_replies": quick_replies}))
+                response = res['flex']
+                print(bot.send_message(sender_id, response))
+            elif 'btn_payment' in res.keys():
+                response = call_payment(botID, sender_id, bot)
+                print(bot.send_message(sender_id, response))
+            elif 'receipt' in res.keys():
+                response = receipt()
+                print(bot.send_message(sender_id, response))
+           
+            # elif 'image' in res.keys():
+            #     response = ImageSendMessage(
+            #         original_content_url=res['image'],
+            #         preview_image_url=res['image']
+            #     )
+            # elif 'sticker' in res.keys():
+            #     response = StickerSendMessage(
+            #         package_id=res['sticker'],
+            #         sticker_id=res['sticker']
+            #     )
+            elif 'group' in res.keys():
+                response = []
+                for reply in res['group']:
+                    if "text" == reply['type']:
+                        print(bot.send_text_message(sender_id, reply["data"]))
+                    elif 'image' == reply['type']:
+                        print(bot.send_image_url(sender_id, server_url+"/images/bot/image_message/"+ reply["data"]))
+                       
+            # line_bot_api.reply_message(Reply_token, response)
+            
+            return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+        else:
+            return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
-    print(bot.send_message(sender_id, con_box))
-    print("Sended")
-    return con_box
+
+def save_message(message,message_type,sender,sender_id,sender_type,room):  #sender=Id(bot or user), sender_type=bot or facebookuser or lineuser, message_type = text or image
+    message_collection = mongo.db.messages
+    message_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now()})
 
 
-def call_basket(botID, sender_id, bot):
+def suggestion(platform, botID, text, sender_id):
+    template(platform, botID, text, sender_id)
+
+def confirm_address(response):
+    quick_replies = [
+                {
+                    "content_type":"text",
+                    "title":"ยืนยัน",
+                    "payload":"action=address&confirm=true&"+response,
+                    "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/LACMTA_Circle_Red_Line.svg/1200px-LACMTA_Circle_Red_Line.svg.png"
+                },
+                {
+                    "content_type":"text",
+                    "title":"ยกเลิก",
+                    "payload":"action=address&confirm=false&"+response,
+                    "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/LACMTA_Circle_Red_Line.svg/1200px-LACMTA_Circle_Red_Line.svg.png"
+                }
+                ]
+    return quick_replies
+
+def confirm_name(response):
+    quick_replies = [
+        {
+            "content_type":"text",
+            "title":"ยืนยัน",
+            "payload":"action=name&confirm=true&"+response,
+            "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/LACMTA_Circle_Red_Line.svg/1200px-LACMTA_Circle_Red_Line.svg.png"
+        },
+        {
+            "content_type":"text",
+            "title":"ยกเลิก",
+            "payload":"action=name&confirm=false&"+response,
+            "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/LACMTA_Circle_Red_Line.svg/1200px-LACMTA_Circle_Red_Line.svg.png"
+        }
+        ]
+    return quick_replies
+
+def call_basket(botID, sender_id, bot ,res):
     con_box = {
         "attachment": {
             "type": "template",
             "payload": {
                 "template_type": "button",
-                "text": "click below to open webview",
+                "text": res,
                     "buttons": [
                         {
                             "type": "web_url",
-                            "url": "https://dfcf167f4bdd.ngrok.io/facebook/"+botID+"/basket/",
-                            "title": "province",
+                            "url": server_url+"/facebook/"+botID+"/basket/"+sender_id,
+                            "title": "คลิ๊กเพื่อจัดการตะกร้า",
                             "messenger_extensions": "true",
                             "webview_height_ratio": "tall"
                         }
@@ -245,29 +216,251 @@ def call_basket(botID, sender_id, bot):
         }
     }
     print(bot.send_message(sender_id, con_box))
+    res={"confirm" : "confirmสินค้าเรียบร้อยแล้ว"}
+    return res
+
+def call_payment(botID, sender_id, bot):
+    con_box = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "button",
+                "text": "อีกอึดใจเดียวเท่านั้นสินค้าจะเป็นของคุณ",
+                    "buttons": [
+                        {
+                            "type": "web_url",
+                            "url": server_url+"/checkout/facebook/"+botID+"/"+sender_id,
+                            "title": "กดเพื่อจ่ายเงิน",
+                            "messenger_extensions": "true",
+                            "webview_height_ratio": "tall"
+                        }
+                    ]
+            }
+        }
+    }
+    print(bot.send_message(sender_id, con_box))
+    res={"confirm" : "confirmสินค้าเรียบร้อยแล้ว"}
+    return res
+def call_receipt(userID,receiptID,botID):
+    bot_collection = mongo.db.bots
+    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
+    bot = Bot(bot_define["page_facebook_access_token"])
+    body = receipt(userID,receiptID,botID)
 
 
-@facebook.route('/<botID>/basket/<userID>', methods=['GET'])
-def basket_facebook(botID,userID):
+def receipt(userID,receiptID,botID):
+    bot_collection = mongo.db.bots
+    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
+    bot = Bot(bot_define["page_facebook_access_token"])
+    customer_collection = mongo.db.customers
+    purchased_collection = mongo.db.purchased
+    customer_define = customer_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+    receipt_define = purchased_collection.find_one({"_id": ObjectId(receiptID)})
+    # timestamp = json.dumps(
+    # receipt_define['purchased_date'],
+    # sort_keys=True,
+    # indent=1,
+    # cls=DjangoJSONEncoder
+    # )
+    # timestamp = receipt_define['purchased_date'].total_seconds()*60
+    timestamp = datetime.datetime.timestamp(receipt_define['purchased_date'])
+    discount = (receipt_define['total']*50)/100
+    fake = "✽"
+    body = {"attachment":{
+  "type":"template",
+  "payload":{
+    "template_type":"receipt",
+    "recipient_name":customer_define['fullname'],
+    "order_number":str(receipt_define['_id']),
+    "currency":"THB",
+    "payment_method":"NA", 
+    "order_url":"http://petersapparel.parseapp.com/order?order_id=123456",     
+    "timestamp":int(timestamp),  
+    "address":{
+      "street_1":customer_define['address'],
+      "street_2":"",
+      "city":"-------------------",
+      "postal_code":"-------------------",
+      "state":"-------------------,",
+      "country":"TH"
+    },
+    "summary":{
+      "subtotal":receipt_define['total'],
+      "shipping_cost":0,
+      "total_tax":0,
+      "total_cost":receipt_define['total']-discount
+    },
+    "adjustments":[
+        {
+            "name":"Celebrate the soft opening -50% !!",
+            "amount": discount
+          }
+
+    ],
+    "elements":[
+   
+    ]
+  }
+}}
+    for i in receipt_define['cart']:
+        element = {
+        "title": i['item_name'],
+        "quantity":i['amount'],
+        "price":i['price_per_ob'],
+        "currency":"THB",
+        "image_url":server_url+"/images/bucket/"+i['img_name']
+             } 
+        body["attachment"]["payload"]["elements"].append(element)
+    print(bot.send_message(userID, body))
+    return body
+
+
+def call_detail(botID, itemId, userID, bot):
+    con_box = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "button",
+                "text": "กดเพื่อดูเพิ่มเติม",
+                    "buttons": [
+                        {
+                            "type": "web_url",
+                            "url": server_url+"/facebook/"+botID+"/detail/"+itemId+"/"+userID,
+                            "title": "คลิ๊ก",
+                            "messenger_extensions": "true",
+                            "webview_height_ratio": "tall"
+                        }
+                    ]
+            }
+        }
+    }
+    print(bot.send_message(userID, con_box))
+
+
+@facebook.route('/<botID>/basket/<userID>', methods=['GET', 'POST'])
+def basket_facebook(botID, userID):
+    cart_collection = mongo.db.carts
+    cart_cursor = cart_collection.find({'$and': [{"userID": userID}, {'botID': ObjectId(botID)}]})
     if request.method == 'GET':
-        print("GET")
-        cart_collection = mongo.db.carts
-        cart_cursor = cart_collection.find({"userID": userID})
-        cart_cursor = list(cart_cursor)
-        print(cart_cursor)
-        print("GET")
-        # print(cart_cursor[0]['cart'][0]['itemid'])
-
-        return render_template('basket_shop.html', data=cart_cursor)
+        data = list(cart_cursor)
+        return render_template('basket_shop.html', data=data,userID=userID,botID=botID)
 
 
-
-@facebook.route('/<botID>/detail/<itemId>', methods=['GET'])
-def call_detail(botID,itemId):
+@facebook.route('/<botID>/detail/<itemId>/<userID>', methods=['GET', 'POST'])
+def detail(botID, itemId, userID):
     if request.method == 'GET':
-        print("GET")
         inventory_collection = mongo.db.inventory
         inventory_cursor = inventory_collection.find({'_id': ObjectId(itemId)})
         data = list(inventory_cursor)
-        print(data)
-        return render_template('Item_Detail.html', data=data)
+        return render_template('Item_Detail.html', data=data, botID=botID, itemId=itemId, userID=userID)
+    if request.method == 'POST':
+        print("POSTTTTTTTTTTTTTT")
+        item_Id = itemId
+        cart_collection = mongo.db.carts
+        bot_collection = mongo.db.bots
+        inventory_collection = mongo.db.inventory
+        valueitem = request.form.get("valueitem")
+        cart_define = cart_collection.find_one(
+            {'$and': [{"userID": userID}, {'botID': ObjectId(botID)}]})
+        inventory_collection_define = inventory_collection.find_one(
+            {'_id': ObjectId(itemId)})
+        item_name = inventory_collection_define['item_name']
+        price_per_ob = inventory_collection_define['price']
+        img_name = inventory_collection_define['img'][0]
+        amount = valueitem
+        total_ob = int(price_per_ob)*int(amount)
+        flag = False
+        
+        if(cart_define != None):
+            amount = cart_define['cart']
+            old_price = cart_define['total']
+            print("oldprice = ",old_price)
+            print("total ob =",total_ob)
+            price = 0
+            for idx, val in enumerate(cart_define['cart']):
+                if(str(item_Id) == str(val['itemid'])):
+                    amount[idx]["amount"] = int(amount[idx]["amount"])+int(valueitem)
+                    amount[idx]["total_ob"] = int(
+                        price_per_ob)*int(amount[idx]["amount"])
+                    myquery = {"userID": userID,
+                               'botID': ObjectId(botID)}
+                    newvalues = {"$set": {"cart": amount,"total":int(amount[idx]["total_ob"])}}
+                    cart_collection.update_one(myquery, newvalues)
+                    flag = True
+                    break
+            for idx, val in enumerate(cart_define['cart']):
+                price += val['total_ob']
+                myquery = {"userID": userID,
+                               'botID': ObjectId(botID)}
+                newvalues = {"$set": {"total":price}}
+                cart_collection.update_one(myquery, newvalues)
+        if(not flag):
+            print("not flag")
+            cart_collection_define = cart_collection.find(
+                {'botID': ObjectId(botID)})
+            flag = False
+            for i in cart_collection_define:
+                if(i['userID'] == userID):
+                    info_update = {"$push": {'cart': {'itemid': ObjectId(
+                        itemId), 'amount': int(valueitem), 'item_name': item_name, 'price_per_ob': price_per_ob, 'total_ob': total_ob, 'img_name': img_name}}}
+                    done = cart_collection.update_one(
+                        {'userID': userID}, info_update)
+                    cart_collection.update_one({'userID': userID},{"$set": {"total":int(old_price)+total_ob}} )
+                    res = "ใส่สินค้า"+item_name+"ลงตระกร้าเรียบร้อยแล้วครับ"
+                    flag = True
+                    print("res")
+            if(not flag):
+                
+                cart = cart_collection.insert_one({'userID': userID, 'botID': ObjectId(
+                    botID),'total':total_ob,'cart': [{'itemid': ObjectId(itemId), 'amount': int(valueitem), 'item_name': item_name, 'price_per_ob': price_per_ob, 'total_ob': total_ob, 'img_name': img_name}]})
+        print("Done")
+        res = "ใส่สินค้า"+item_name+"ลงตระกร้าเรียบร้อยแล้วครับ"
+        bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
+        bot = Bot(bot_define["page_facebook_access_token"], api_version="4.0")
+        # bot.send_text_message(userID, res)
+        call_basket(botID, userID, bot,res)
+       
+        # print(bot.send_text_message(userID, aa))
+
+        return "OK"
+
+@facebook.route('/<botID>/detail/<userID>/confirm', methods=['GET', 'POST'])
+def to_confirm(botID, userID):
+    if request.method == 'POST':
+        bot_collection = mongo.db.bots
+        bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
+        bot = Bot(bot_define["page_facebook_access_token"])
+        customer_collection = mongo.db.customers
+        cart_collection = mongo.db.carts
+        flax2 = False
+        newdict = []
+        cart = []
+        for i in range(0,10):
+            newdict.append({"id": request.form.get("getId"+str(i)),"value": request.form.get("getValue"+str(i))})
+        newdict = [x for x in newdict if x["id"] != None]
+        carts_define = cart_collection.find_one({'$and': [{'userID': userID}, {'botID': ObjectId(botID)}]})
+        if newdict != []:
+            for idx, val in enumerate(carts_define['cart']):
+                flag = False
+                for val2 in newdict:
+                    if str(val['itemid']) == val2['id']:
+                        carts_define['cart'][idx]['amount'] = val2["value"]
+                        flag = True
+                        break
+                if(not flag):
+                    cart.append(idx)
+            for x in cart:
+                carts_define['cart'].pop(x)
+        else :
+            cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+            customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]},{"$set": {"state":"none"}})
+            txt = "ตะกร้าของคุณถูกลบเรียบร้อยแล้วครับ"
+            print(bot.send_text_message(userID, txt))
+            flax2 = True
+        if flax2 == False:
+            cart_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]},{"$set": carts_define})
+            customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]},{"$set": {"state":"name"}})
+            txt = "ขอชื่อนามสกุลด้วยครับ"
+            print(bot.send_text_message(userID, txt))
+        return "True"
+

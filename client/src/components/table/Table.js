@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useHistory } from "react";
 import styled from 'styled-components';
 import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination, useRowSelect } from 'react-table'
 import { matchSorter } from 'match-sorter'
@@ -10,9 +10,11 @@ import Delete_table from "../Delete_table";
 
 const Styles = styled.div`
   table {
+    /* font-family: 'Roboto',sans-serif; */
     margin: 10px 0;
-    font-size: 1.2em;
+    font-size: 1em;
     text-align: center;
+    border: 1px solid #efeff5; 
     tr {
       :last-child {
         td {
@@ -20,12 +22,20 @@ const Styles = styled.div`
         }
       }
     }
-    th,
+    th{
+      margin: 0;
+      /* padding: 12px 15px; */
+      border: 1px solid #efeff5;
+      background-color: #393939;
+      color: white;
+    }
     td {
+      font-family: 'Public Sans', sans-serif;
       margin: 0;
       padding: 12px 15px;
-      border-bottom: 1px solid #DADADA;
-      border-right: 1px solid #DADADA;
+      border: 1px solid #efeff5;
+      font-size: 16px;
+
       :last-child {
         border-right: 0;
       }
@@ -43,17 +53,17 @@ const Styles = styled.div`
   }
 }
 .table tbody tr:nth-of-type(even){
-        background-color: #e5e5e5;
+        background-color: #fafafc;
     }
 .button-trained-word .buttondeleteWord{
-    padding: 7px 15px !important;
+    padding: 7px 20px !important;
     font-size: 12px !important;
     border-radius: 25px !important;
     border: 1px solid #CD5C5C ;
     transition: 0.5s;
     background-color: #CD5C5C;
     color: #fff ;
-    margin-left: 15px;
+    margin-left: 1%;
   }
   .button-trained-word .buttondeleteWord:hover{
     color: #000;
@@ -71,19 +81,27 @@ const Styles = styled.div`
   color: #000;
 }
 .pagination{
-  margin-bottom: 15%;
+  justify-content:space-between;
+  width:100%;
+  margin-bottom: 0;
 }
 .parginate-text{
+  display:inline;
   padding-top: 7px;
   margin-right: 1%;
   margin-left: 1%;
 }
+
+.parginate-arrow{
+  text-align:right;
+}
+
 .pagination button{
   border-radius: 15px;
   width: 35px;
   height: 35px;
   background-color: transparent;
-  margin-left: .5%;
+  margin-left: 0.5%;
   border: none;
 }
 .pagination button:hover{
@@ -92,9 +110,9 @@ const Styles = styled.div`
   color: #000;
 }
 .searchBox{
-  width: 130px;
+  width: 190px;
   height: 30px;
-  border-radius: 25px;
+  border-radius: 1rem;
   border: .5px solid #A9A9A9;
 }
 input::placeholder{
@@ -104,7 +122,9 @@ input::placeholder{
   position:relative;
   float: right;
 }
-  
+.select-pagesize {
+  padding: 0 1%;
+}
 `;
 
 
@@ -400,40 +420,43 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
           </tbody>
         </table>
         <div className="pagination">
-          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-            {'<<'}
-          </button>{' '}
-          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-            {'<'}
-          </button>{' '}
-          <button onClick={() => nextPage()} disabled={!canNextPage}>
-            {'>'}
-          </button>{' '}
-          <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-            {'>>'}
-          </button>{' '}
-          <span className='parginate-text'>
-            Page{' '}
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>{' '}
-          </span>
-          <span>
-            {' '}
-
-          </span>{' '}
-          <select
-            value={pageSize}
-            onChange={e => {
-              setPageSize(Number(e.target.value))
-            }}
-          >
-            {[10, 25, 50].map(pageSize => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
+        <div className="parginate-tex col">
+              <span >
+                Page{' '}
+                <strong>
+                  {pageIndex + 1} of {pageOptions.length}
+                </strong>{' '}
+              </span>
+              <span>
+                {' '}
+              </span>{' '}
+              <select className="select-pagesize"
+                value={pageSize}
+                onChange={e => {
+                  setPageSize(Number(e.target.value))
+                }}
+              >
+                {[10, 25, 50].map(pageSize => (
+                  <option key={pageSize} value={pageSize}>
+                    Show {pageSize}
+                  </option>
+                ))}
+              </select>
+          </div>
+          <div className="parginate-arrow col">
+                <button  onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                  {<i class="fad fa-chevron-double-left"></i>}
+                </button>{' '}
+                <button  onClick={() => previousPage()} disabled={!canPreviousPage}>
+                  {<i class="fad fa-chevron-left"></i>}
+                </button>{' '}
+                <button  onClick={() => nextPage()} disabled={!canNextPage}>
+                  {<i class="fas fa-chevron-right"></i>}
+                </button>{' '}
+                <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                  {<i class="fas fa-chevron-double-right"></i>}
+                </button>{' '}
+          </div>
 
         </div>
       </Container>

@@ -11,6 +11,7 @@ const Styles = styled.div`
     font-family: 'Public Sans', sans-serif;
     margin-top: 2%;
   }
+
   .card-bot{
     border: 0;
     border-radius: 1rem;
@@ -85,8 +86,10 @@ const Styles = styled.div`
   .showimage img{
     border: 1px solid #ddd;
     border-radius: 50%;
-    width: 80%;
+    height: 150px;
+    width: 150px;
     text-align: center;
+    object-fit: cover;
   }
   
   .vertical-line {
@@ -230,7 +233,7 @@ _handleImageChange(e) {
           
               <div className="container">
                     <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
-                      <div className="card card-bot">
+                      <div className="card card-bot" id="create_bot">
                         <div className="card-body">
                           <h5 className="card-title text-center">Create Bot form</h5>
                           <form className="form-bot" onSubmit={this.handleUploadImage}>
@@ -290,7 +293,7 @@ _handleImageChange(e) {
                             {/* <Lineform />                                 */}
 
                               <div className="btn-createbot">
-                                  <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Create ChatBot</button>
+                                  <button name="btn-create-bot" className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Create ChatBot</button>
                               </div>
 
 

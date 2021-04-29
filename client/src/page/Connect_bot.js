@@ -44,9 +44,7 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
-  background :rgba(0, 0, 0, 0.8);
+  background : rgba(0, 0, 0, 0.2);
   position: fixed;
   top: 50%;
   left: 50%;
@@ -109,29 +107,6 @@ export function Connect_bot({ setShowForm, showForm, botID }) {
     }
   }
 
-//   const popupCenter = ({url, title, w, h}) => {
-//     // Fixes dual-screen position                             Most browsers      Firefox
-//     const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX;
-//     const dualScreenTop = window.screenTop !==  undefined   ? window.screenTop  : window.screenY;
-
-//     const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : window.screen.width;
-//     const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : window.screen.height;
-
-//     const systemZoom = width / window.screen.availWidth;
-//     const left = (width - w) / 2 / systemZoom + dualScreenLeft
-//     const top = (height - h) / 2 / systemZoom + dualScreenTop
-//     const newWindow = window.open(url, title, 
-//       `
-//       scrollbars=yes,
-//       width=${w / systemZoom}, 
-//       height=${h / systemZoom}, 
-//       top=${top}, 
-//       left=${left}
-//       `
-//     )
-
-//     // if (window.focus) newWindow.focus();
-// }
 
   const modalRef = useRef();
   const animation = useSpring({

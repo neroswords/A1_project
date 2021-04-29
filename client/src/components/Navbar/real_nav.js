@@ -14,6 +14,7 @@ function Nav(){
     return Normal_nav();
   }
 
+
 }
 
 function Normal_nav(){
@@ -40,19 +41,20 @@ function Normal_nav(){
               <a className="btn" role="button" name="btn-regist">Register</a>
           </div>
       </Link>
+            
       </Navbar_real>
     )
 }
 
 function Loged_in_nav(props) {
-
+  const [main, setMain] = useState(window.location.hash)
+  
   return (
-    
-    
     <Navbar_real>
-        <div className="show-user" >  
-          <a href={"/bot_list/"+ localStorage.getItem('user_id')} name="validate_user"><i class="fas fa-user"></i>{props}</a>
+        <div className= {"show-user " + (main == "#main" ? "click-show-user" :"")}>
+            <a className="click" name="validate_user" href={"/bot_list/"+ localStorage.getItem('user_id')+"#main"}><i class="fas fa-user-circle" ></i>{props}</a>
         </div>
+      
       <NavItem icon={<CaretIcon />}>
         <DropdownMenu></DropdownMenu>
       </NavItem>
@@ -64,10 +66,10 @@ function Loged_in_nav(props) {
 function Navbar_real(props) {
   return (
     <nav className="navbar-real">
-      <a href="/">
+      <a href="/" >
           <img href="/" src="/images/logo2.PNG" className="nav_brand"/>
       </a>    
-          <ul className="navbar-nav-real">{props.children}</ul>
+          <ul className="navbar-nav-real" >{props.children}</ul>
     </nav>
   );
 }
@@ -106,13 +108,6 @@ function DropdownMenu() {
   return (
     
     <div className="dropdown-real"  ref={dropdownRef}>
-
-      {/* <CSSTransition
-        in={activeMenu === 'main'}
-        timeout={500}
-        classNames="menu-primary"
-        unmountOnExit
-        onEnter={calcHeight}> */}
       <CSSTransition
       in={activeMenu === 'main'}
       timeout={500}
@@ -148,6 +143,7 @@ function DropdownMenu() {
                 Manage Bot
             </DropdownItem>
           </a>
+
           <a onClick={() => {
             window.location.replace('/manual')
           }}>

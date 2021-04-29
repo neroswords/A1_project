@@ -28,23 +28,7 @@
     color: black;
 }
 
-@media (min-width: 500px) {
-    .inven-list-body { 
-        grid-template-columns: repeat(2, 1fr); 
-        }
-}
 
-@media (min-width: 920px) {
-    .inven-list-body { 
-        grid-template-columns: repeat(3, 1fr); 
-        }
-}
-
-  @media (min-width: 1200px) {
-    .inven-list-body { 
-        grid-template-columns: repeat(4, 1fr); 
-    }
-  }
 
 .inven-card {
     background-color: white;

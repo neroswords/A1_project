@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { MdClose } from 'react-icons/md';
 import { Button, Container } from "react-bootstrap";
+import FlashMessage from 'react-flash-message'
 
 
 const Background = styled.div`
@@ -104,11 +105,19 @@ const CloseModalButton = styled(MdClose)`
 
 
 export const AddWord = ({ showWord, setShowWord,botID}) => {
+  const [message,setMessage] = useState('')
+  const [showMessage,setShowMessage] = useState(false)
   const modalRef = useRef();
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
 
+  const closePop = () =>{
+    // setFlash('')
+    setShowWord(prev => !prev)
+  }
+
   const addword =(id)=>{
+    
     const data = {'question' : question,'answer' : answer ,'botID' : id}
     fetch('/bot/'+id+'/addword', {
     method : 'POST',
@@ -116,8 +125,18 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
         "Access-Control-Allow-Origin": "*",
         'Content-Type':'application/json'
         },
-    body: JSON.stringify(data)}).then(setShowWord(prev => !prev))
-    window.location.reload("bot/"+id+'/trained');
+    body: JSON.stringify(data)}).then(res => res.json().then(data => {
+      if ("error" in data ){
+        console.log (data)
+        setMessage(data["error"])
+        setShowMessage(true)
+
+      }
+      else{
+        window.location.reload("bot/"+id+'/trained');
+      }
+    }))
+    // window.location.reload("bot/"+id+'/trained');
   };
 
   const animation = useSpring({
@@ -131,7 +150,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
   const closeModal = e => {
     if (modalRef.current === e.target) {
       setShowWord(false);
-      window.location.replace("/login")
+      // window.location.replace("/login")
     }
   };
 
@@ -153,6 +172,17 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
     },
     [keyPress]
   );
+
+  useEffect(
+    () => {
+      console.log(showWord)
+      if (showWord == false) {
+        
+        setShowMessage(false)
+      }
+    },
+    [showWord]
+  );
   
   return(
     <div>
@@ -169,19 +199,28 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
                   <form>
                     <div className="group-Question">
                       <label for="AddQuestion">Question</label>
-                      <input type="text" className="input-question" name="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question"></input>
+                      <input type="text" pattern="[A-Za-z0-9]+" className="input-question" name="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question"></input>
                     </div>
+                    { showMessage &&  
+                                  
+                                      <FlashMessage duration={4000}>
+                                        <div className="detect">
+                                          <strong>{message}</strong>
+                                        </div>  
+                                      </FlashMessage>
+                                  
+                      }
                     <div className="group-Answer">
                       <label for="AddAnswer">Answer</label>
-                      <input type="text" className="input-answer" name="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer"></input>
+                      <input type="text" pattern="[A-Za-z0-9]+" className="input-answer" name="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer"></input>
                     </div>
                   </form>
                 </article>
-              <Button className="qa-comfirm" variant="success" name="btn-addword-confirm" onClick = {() => addword(botID) }>Comfirm</Button>
+              <button type="submit" className="qa-comfirm" variant="success" name="btn-addword-confirm" onSubmit = {() => addword(botID) }>Comfirm</button>
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"
-                onClick={() => setShowWord(prev => !prev)}
+                onClick={() => closePop()}
               />
             </ModalWrapper>
             </Container>

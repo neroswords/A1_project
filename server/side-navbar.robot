@@ -64,6 +64,13 @@ Customer Information Menu
     Check Specific Link Functionality       name:menu-customer         id:customer-header
     [Teardown]    Close Browser
 
+Chat Menu
+    [Documentation]         Test if Chat Menu led to correct path
+    Valid Login
+    Go to Manage Bot Page
+    Check Specific Link Functionality       name:menu-chat         id:chat-header
+    [Teardown]    Close Browser
+
 *** Keywords ***
 Check Specific Link Functionality
     [Arguments]         ${li}   ${header}

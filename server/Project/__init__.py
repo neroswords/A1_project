@@ -13,10 +13,12 @@ from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
 from .extensions import mongo, Config
 from flask_talisman import Talisman
+from engineio.payload import Payload
 
+Payload.max_decode_packets = 250
 
 app = Flask(__name__, static_url_path='/static')
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", ping_timeout=5000, ping_interval=25000)
 
 UPLOAD_FOLDER = './Project/static/images'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -41,6 +43,7 @@ from Project.route.merchant import merchant
 from Project.route.facebook import facebook
 from Project.route.inventory import inventory
 from Project.route.checkout import checkout
+from Project.route.sales import sales
 
 app.register_blueprint(profile, url_prefix='/profile')
 app.register_blueprint(bot, url_prefix='/bot')
@@ -49,8 +52,10 @@ app.register_blueprint(merchant, url_prefix='/merchant')
 app.register_blueprint(mapping, url_prefix='/mapping')
 app.register_blueprint(merchant, url_prefix='/merchant')
 app.register_blueprint(facebook, url_prefix='/facebook')
+app.register_blueprint(facebook, url_prefix='/template_facebook')
 app.register_blueprint(inventory, url_prefix='/inventory')
 app.register_blueprint(checkout, url_prefix='/checkout')
+app.register_blueprint(sales, url_prefix='/sales')
 
 # Talisman(app, content_security_policy={"default-src": "'unsafe-inline' 'self' *.omise.co"},)
 
@@ -71,11 +76,15 @@ def serve_image(image_name):
 def serve_video(video_name):
     return send_from_directory(app.config['DOWNLOAD_FOLDER']+"/video/",video_name)
 
+@app.route('/')
+def serve_api():
+    # if request.args.get('liff.state') != None:
+    return render_template('loading.html')
+
 CORS(app, expose_headers='Authorization')
 
-# if __name__ == '__main__':
-# #     http_server = WSGIServer(('',200), app)
-# #     http_server.serve_forever()
-#     print("Test")
-#     app.secret_key = 'mysecret'
-#     socketio.run(app, port=200, debug=True)
+if __name__ == '__main__':
+#     http_server = WSGIServer(('',200), app)
+#     http_server.serve_forever()
+    app.secret_key = 'mysecret'
+    socketio.run(app, port=200, debug=True)
