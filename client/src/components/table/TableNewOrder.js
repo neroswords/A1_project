@@ -1,20 +1,22 @@
-import React, { useState, useEffect, useHistory } from "react";
+import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
 import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination, useRowSelect } from 'react-table'
 import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
-import { AddWord } from "./AddTable/AddWord";
+
 import { Button } from 'react-bootstrap';
+import {Link} from "react-router-dom";
 import Delete_table from "../Delete_table";
 
 
 const Styles = styled.div`
+
   table {
-    /* font-family: 'Roboto',sans-serif; */
+    font-family: 'Roboto',sans-serif;
     margin: 10px 0;
     font-size: 1em;
     text-align: center;
-    border: 1px solid #efeff5; 
+    border: 1px solid #efeff5;
     tr {
       :last-child {
         td {
@@ -22,6 +24,7 @@ const Styles = styled.div`
         }
       }
     }
+
     th{
       margin: 0;
       /* padding: 12px 15px; */
@@ -35,10 +38,11 @@ const Styles = styled.div`
       padding: 12px 15px;
       border: 1px solid #efeff5;
       font-size: 16px;
-
+      
       :last-child {
         border-right: 0;
       }
+
       input {
         font-size: 0.9rem;
         padding: 0;
@@ -46,15 +50,19 @@ const Styles = styled.div`
         border: 0;
       }
     }
+
   .trained-Word{
     background-color: transparent;
     border-radius: 25px;
     padding-left:15px;
   }
+
 }
+
 .table tbody tr:nth-of-type(even){
-        background-color: #fafafc;
+        background-color: #fafafc
     }
+
 .button-trained-word .buttondeleteWord{
     padding: 7px 20px !important;
     font-size: 12px !important;
@@ -65,10 +73,13 @@ const Styles = styled.div`
     color: #fff ;
     margin-left: 1%;
   }
+
+
   .button-trained-word .buttondeleteWord:hover{
     color: #000;
   }
-  .buttonaddWord{
+
+  .buttonaddMapping{
   padding: 7px 15px;
   font-size: 12px;
   border-radius: 25px;
@@ -77,14 +88,17 @@ const Styles = styled.div`
   background-color: #0078ff;
   color: #fff;
 }
-.buttonaddWord:hover{
+
+.buttonaddMapping:hover{
   color: #000;
 }
+
 .pagination{
   justify-content:space-between;
   width:100%;
   margin-bottom: 0;
 }
+
 .parginate-text{
   display:inline;
   padding-top: 7px;
@@ -95,7 +109,6 @@ const Styles = styled.div`
 .parginate-arrow{
   text-align:right;
 }
-
 .pagination button{
   border-radius: 15px;
   width: 35px;
@@ -104,31 +117,35 @@ const Styles = styled.div`
   margin-left: 0.5%;
   border: none;
 }
+
 .pagination button:hover{
   border-radius: 30px;
   background-color: #fca311;
   color: #000;
 }
+
 .searchBox{
   width: 190px;
   height: 30px;
-  border-radius: 1rem;
+  border-radius: 25px;
   border: .5px solid #A9A9A9;
+
 }
+
 input::placeholder{
   padding-left:15px;
+
 }
+
 .button-trained-word .SearchBar{
   position:relative;
   float: right;
 }
+
 .select-pagesize {
   padding: 0 1%;
 }
-
-/* .show-number-pagination{
-  z-index: -10;
-} */
+  
 `;
 
 
@@ -181,7 +198,7 @@ function GlobalFilter({
           fontSize: '0.8rem',
           // marginLeft: '1rem'
         }}
-      />
+      name="mapping-search" />
     </span>
   )
 }
@@ -224,7 +241,7 @@ const EditableCell = ({
 
   const onBlur = () => {
     updateMyData(index, id, value)
-    console.log("test")
+    // console.log("test")
   }
 
 
@@ -238,33 +255,16 @@ const EditableCell = ({
 }
 
 const defaultColumn = {
-  Cell: EditableCell
+  // Cell: EditableCell
 }
 
 
-function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained ,botID }) {
+function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID }) {
+  // console.log(data)
   const Ondelete = (e) => {
-    if(e.length > 0){
-      openDelete_table(e)
-    }
-    else{
-      alert('please select')
-    }
-    console.log(e.length)
-   
     // delete_trained(e)
-
+    openDelete_table(e)
   }
-
-  // const delete_table =(id)=>{
-  //   fetch('/train_bot/delete/training/id'+id,{
-  //     method : 'POST',
-  //     headers : {
-  //         "Access-Control-Allow-Origin": "*",
-  //         'Content-Type':'application/json'
-  //     },
-  //   });
-  // }
 
   const filterTypes = React.useMemo(
     () => ({
@@ -285,7 +285,6 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
 
   const defaultColumnFilter = React.useMemo(
     () => ({
-      // Let's set up our default Filter UI
       Filter: DefaultColumnFilter,
     }),
     []
@@ -297,9 +296,10 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
 
   const [showDelete_table, setShowDelete_table] = useState(false);
   const openDelete_table = (data) => {
-    console.log('111k')
     setShowDelete_table(prev => !prev);
+      
   }
+ 
 
   const {
     getTableProps,
@@ -342,58 +342,35 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
     hooks => {
       hooks.visibleColumns.push(columns => [
 
-        {
-          id: 'selection',
-          Header: ({ getToggleAllPageRowsSelectedProps }) => (
-            <div>
-              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
-
-            </div>
-          ),
-
-          Cell: ({ row }) => (
-
-            <div >
-
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-
-
-            </div>
-          ),
-
-        },
+        
         ...columns,
 
       ])
     }
 
   )
-
-  // const handleClick =()=> {
-  //   history.push('/bot/'+botID+'/trained')   
-  // }
-
+  // console.log(selectedFlatRows)
   return (
     <>
       <Container>
         <div className="button-trained-word">
-          <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
-          <button className="buttondeleteWord" onClick={() => Ondelete(selectedFlatRows)} >Delete</button>
+          {/* {console.log(botID)} */}
+          {/* <Link to ={'/bot/'+botID+'/mapping/create'} ><Button className='buttonaddMapping' >Create Mapping</Button></Link> */}
+          {/* <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button> */}
           <div className='SearchBar'>
-          <GlobalFilter
-            preGlobalFilteredRows={preGlobalFilteredRows}
-            globalFilter={state.globalFilter}
-            setGlobalFilter={setGlobalFilter}
-        />
-        </div>
-          <AddWord showWord={showWord} setShowWord={setShowWord} botID = {botID}/>
+            <GlobalFilter
+              preGlobalFilteredRows={preGlobalFilteredRows}
+              globalFilter={state.globalFilter}
+              setGlobalFilter={setGlobalFilter}
+            />
+          </div>
           <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table} selectedFlatRows={selectedFlatRows} id={botID} delete_trained={delete_trained}/>
         </div>
 
-        
-        
-        
-        <table {...getTableProps()} className="table" name="trained-table">
+
+
+
+        <table {...getTableProps()} className="table" name="mapping-table">
           <thead>
             {headerGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -402,7 +379,8 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
                     {column.render('Header')}
 
                   </th>
-                ))}
+                 
+                ))} <th>PDF</th>
               </tr>
 
             ))}
@@ -413,17 +391,34 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
                   textAlign: 'right',
                 }}
               >
+
               </th>
             </tr> */}
           </thead>
-          <tbody {...getTableBodyProps()} >
+          <tbody {...getTableBodyProps()}>
+          {/* {  console.log(page[0]) } */}
             {page.map((row, i) => {
               prepareRow(row)
-              return (
+              // console.log(row)
+              return (  
+                
                 <tr {...row.getRowProps()}>
+                   
                   {row.cells.map(cell => {
-                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                  })}
+                    //  console.log(cell.row.original.id)
+                    return (
+                    <><td {...cell.getCellProps()}>{cell.render('Cell')} </td>
+                    {/* <td><Link to ={'/bot/'+botID+'/mapping/'+cell.row.original.id} ><i className="far fa-edit" ></i></Link></td> */}
+                    </>
+                    )
+                    
+                  }
+                  
+                  )} 
+                  
+                      {/* <td><Link to ={'/bot/'+botID+'/mapping/details/'+row.original.id} name="mapping-details"><i className="far fa-edit" ></i></Link></td> */}
+                    <td><button>Download</button></td>
+                 
                 </tr>
               )
             })}
@@ -467,23 +462,6 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
                   {<i class="fas fa-chevron-double-right"></i>}
                 </button>{' '}
           </div>
-          {/* <p>Selected Rows: {Object.keys(selectedRowIds).length}</p> */}
-
-
-          {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedRowIds: selectedRowIds,
-              'selectedFlatRows[].original': selectedFlatRows.map(
-                d => d.original
-              ),
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre> */}
 
         </div>
       </Container>
@@ -494,34 +472,40 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
 
 
 
-function Table({ botID, delete_trained, add_data }) {
-  const [TableState, setTableState] = useState([]);
+function TableNewOrder({ botID, delete_trained, add_data }) {
+  const [TableNewOrderState, setTableNewOrderState] = useState([]);
 
-
+  // console.log(botID)                                               
 
   const [showWord, setShowWord] = useState(false);
-  const [showDelete_table, setShowDelete_table] = useState(false);
+
 
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Word',
-        accessor: 'Word', // accessor is the "key" in the data
+        Header: 'Date',
+        accessor: 'Date', // accessor is the "key" in the data
       },
       {
-        Header: 'ReplyWord',
-        accessor: 'ReplyWord',
-        filter: 'fuzzyText',
+        Header: 'Name',
+        accessor: 'Name',
+        // filter: 'fuzzyText',
       },
+      {
+        Header: 'Total',
+        accessor: 'Total',
+        // filter: 'fuzzyText',
+      },
+      
     ],
     []
   )
 
-  const [originalData] = React.useState(TableState)
+  const [originalData] = React.useState(TableNewOrderState)
   const [skipPageReset, setSkipPageReset] = React.useState(false)
 
   const updateMyData = (rowIndex, columnId, value) => {
-    setTableState(old =>
+    setTableNewOrderState(old =>
       old.map((row, index) => {
         if (index === rowIndex) {
           const editData = {
@@ -555,44 +539,45 @@ function Table({ botID, delete_trained, add_data }) {
   }
 
   useEffect(() => {
-    setSkipPageReset(false)
-    fetch('/train_bot/' + botID + '/trained')
+    fetch('/mapping/' + botID)
       .then(res => res.json().then(data => {
-        setTableState(
+        setTableNewOrderState(
           data.map(d => {
-
+            // console.log(d.details[0].answer)
             return {
+              
               select: false,
               id: d._id.$oid,
-              Word: d.question,
-              ReplyWord: d.answer
+              Name: d.name,
+              ReplyWord: d.details[0].answer,
+             
             };
           })
+          
+
         );
+
       }))
 
-  }
+  }, []);
 
-    , []);
-
-
-  const resetData = () => setTableState(originalData)
-
+ 
   return (
-
-
     <Styles>
       <TableShow
         columns={columns}
-        data={TableState}
+        data={TableNewOrderState}
         updateMyData={updateMyData}
         skipPageReset={skipPageReset}
         delete_trained={delete_trained}
         botID={botID}
+        // mapID ={TablemapState[0].id}
       />
 
     </Styles>
   );
 }
 
-export default Table;
+export default TableNewOrder;
+
+
