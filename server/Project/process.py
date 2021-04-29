@@ -237,7 +237,7 @@ def stateHandler(**kwargs):
         elif customer_define['state'] == "address":
             return {"flex":json.loads(address_flex(kwargs['message']['message'])),"alt":"ยืนยันที่อยู่"}
         elif customer_define['state'] == "none" or customer_define['state'] == "inCart" or customer_define['state'] == "tracking":
-            res = process_message(kwargs['message'],kwargs['botID'],kwargs['confident'],kwargs['sender_id'])
+            res = process_message(kwargs['message'],kwargs['botID'],kwargs['confident'],kwargs['sender_id'],"line")
     elif 'postback' in kwargs.keys():
         # if customer_define['state'] in ["none","inCart"]:
         res = commandsHandler(commands = kwargs['postback'], sender_id = kwargs['sender_id'], botID=kwargs['botID'])
