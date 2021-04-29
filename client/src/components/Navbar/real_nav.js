@@ -31,7 +31,11 @@ function Normal_nav(){
           </div>
       </Link> */}
      
-      
+      {/* <Link to="/login">
+          <div className="btn-login btn-nav">
+              <a className="btn" role="button" name="login">Log in</a>
+          </div>
+      </Link> */}
       <Link to="/register">
           <div className="btn-signup btn-nav">
               <a className="btn" role="button" name="btn-regist">Register</a>

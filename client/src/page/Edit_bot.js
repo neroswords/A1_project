@@ -14,11 +14,12 @@ const Styles = styled.div`
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
   }
   
-  .card-bot .card-title {
+  .card-bot .card-title-cretebot {
     margin-bottom: 2rem;
     font-size: 2rem;
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
+    text-align: center;
   }
   
   .card-bot .card-body {
@@ -81,8 +82,10 @@ const Styles = styled.div`
   .showimage img{
     border: 1px solid #ddd;
     border-radius: 50%;
-    width: 80%;
+    width: 170px;
+    height: 170px;
     text-align: center;
+    object-fit: cover;
   }
   
   .vertical-line {
@@ -190,10 +193,10 @@ class Edit_bot extends React.Component {
         <Styles>
           
               <div className="container">
-                    <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
+                    <div className="col-sm-10 col-md-9 col-lg-7 mx-auto">
                       <div className="card card-bot">
                         <div className="card-body">
-                          <h5 className="card-title text-center">Create Bot form</h5>
+                          <h5 className="card-title-cretebot ">Edit Bot form</h5>
                           <form className="form-bot" onSubmit={this.handleUploadImage}>
                                 <div className="title_part">
                                         <p className="col">Bot infomation</p>
@@ -250,7 +253,7 @@ class Edit_bot extends React.Component {
                             {/* <Lineform />                                 */}
 
                               <div className="btn-createbot">
-                                  <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Create ChatBot</button>
+                                  <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Update ChatBot</button>
                               </div>
 
 

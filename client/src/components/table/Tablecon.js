@@ -12,7 +12,7 @@ const Styles = styled.div`
   .table-show-all > div.container {
     /* max-width: max-content; */
     margin: 0;
-    padding: 0 20px;
+    padding: 20px;
     min-width: 100% ;
   }
 
@@ -56,6 +56,7 @@ const Styles = styled.div`
         margin: 0;
         border: 0;
         text-align: center;
+        /* width: 400px; */
       }
     }
 
@@ -63,7 +64,7 @@ const Styles = styled.div`
     background-color: transparent;
     border-radius: 25px;
     padding-left:15px;
-    /* width: 530px; */
+    width: 300px;
   }
 }
 
@@ -83,6 +84,7 @@ const Styles = styled.div`
     background-color: #CD5C5C;
     color: #fff ;
     margin-left: 1%;
+    margin-top: 5px;
   }
 
 
@@ -142,7 +144,7 @@ const Styles = styled.div`
   height: 30px;
   border-radius: 1rem;
   border: 0.5px solid #A9A9A9;
-
+  margin: 5px 0;
 }
 
 input::placeholder{

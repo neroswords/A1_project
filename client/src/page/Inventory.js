@@ -15,12 +15,17 @@ const Styles = styled.div`
     width: 100%;
   }
 
-  .inven-title{
+.inven-title{
     padding: 4px;
     width: 100% ;
     background-color: white;
     border-radius: 0.25rem;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    
+}
+
+.inven-title h2 {
+    font-weight:600;
 }
 
 .inventory-body {

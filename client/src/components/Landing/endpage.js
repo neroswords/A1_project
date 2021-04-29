@@ -10,6 +10,7 @@ const Styles = styled.div`
   .all-endpage{
     padding: 1% 10% 10% 10% ;
     /* align-items: center; */
+    margin-bottom: 50px;
   }
 
   #end-page {
@@ -37,10 +38,10 @@ const Styles = styled.div`
   .main-text-endpage span {
     text-align: center;
     /* margin-left: 90px; */
-    font-size: 22px;
+    font-size: 25px;
     color: #14213D;
     margin-bottom: 15%;
-    max-width: 20px;
+    max-width: 60px;
   }
 
   .btn-on-endpage button {
@@ -61,15 +62,25 @@ const Styles = styled.div`
     background-color: #fca311;
     // border: 2px solid #fca311;
   }
-    
-  @media only screen and (max-width: 650px){
-    /* .img-on-endpage img{
-      display: none;
-    } */
+   
+  .img-on-endpage img{
+    width: 70%;
+    position : absolute;
+    right: 110px;
   }
+
+  @media only screen and (max-width: 1200px){
   .img-on-endpage img {
-    width: 100%;
+    display: none;
   }
+}
+
+@media only screen and (max-width: 560px){
+  .main-text-endpage {
+    /* text-align: center; */
+  }
+}
+
 `;
 
 function regisBot(props){
@@ -92,11 +103,11 @@ function regisBot(props){
 export const Endpage = () => (
   <Styles>
     <div className="all-endpage">
-        <div className=" row">
-              <div className=" img-on-endpage col-lg-7 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+        <div className="row">
+              <div className="img-on-endpage col-lg-7 col-sm-12 col-md-12 col-lg-12 col-xl-7 .d-print-none">
                   <img src="./images/phone_group.png"/>
             </div>
-            <div className="main-text-endpage col-5 col-sm-12 col-xs-12 col-xl-6">
+            <div className="main-text-endpage col-5 col-sm-12 col-xs-12 col-xl-5">
                   <h1>Improve at every stage <br/> of your business growth</h1>
                   <span>No matter whether you’re a growing company ChatBot helps you communicate better with customers.</span>
                   <div class="btn-on-endpage">

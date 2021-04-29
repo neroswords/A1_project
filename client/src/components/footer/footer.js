@@ -47,10 +47,11 @@ const Styles = styled.div`
 
 .border {
     margin: 10px 0px;
-    height: 5px; 	
+    height: 10px; 	
     width: 70px; 	
     background-color: #fca311;
-    border: 2px solid transparent; 
+    /* border-style: none; */
+    /* border: 0px solid transparent;  */
 }
 
 .in-footer h4 {

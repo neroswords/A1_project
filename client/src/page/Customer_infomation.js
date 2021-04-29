@@ -18,6 +18,11 @@ const Styles = styled.div`
     background-color: white;
     border-radius: 0.25rem;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    
+}
+
+.customer-title h2 {
+    font-weight:600;
 }
 .show-customer{
     min-height: 70vh;

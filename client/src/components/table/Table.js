@@ -12,7 +12,7 @@ const Styles = styled.div`
   .table-show-all > div.container {
     /* max-width: max-content; */
     margin: 0;
-    padding: 0 20px;
+    padding: 20px;
     min-width: 100% ;
   }
 
@@ -48,6 +48,7 @@ const Styles = styled.div`
         border-right: 0;
       }
       input {
+        text-align: center;
         font-size: 0.9rem;
         padding: 0;
         margin: 0;
@@ -58,6 +59,7 @@ const Styles = styled.div`
     background-color: transparent;
     border-radius: 25px;
     padding-left:15px;
+    width: 400px;
   }
 }
 .table tbody tr:nth-of-type(even){

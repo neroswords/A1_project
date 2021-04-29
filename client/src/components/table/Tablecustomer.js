@@ -139,7 +139,7 @@ const Styles = styled.div`
   height: 30px;
   border-radius: 1rem;
   border: 0.5px solid #A9A9A9;
-
+  margin-bottom: 5%;
 }
 
 input::placeholder{

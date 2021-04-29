@@ -14,7 +14,7 @@ const Styles = styled.div`
     // background: url(${process.env.PUBLIC_URL +'/images/bg-home.png'}) no-repeat fixed bottom;
     background-size: 100%;
     margin-bottom: 20%;
-    margin-top: 25%;
+    margin-top: 240px;
 }
 
 .line {
@@ -104,7 +104,7 @@ li p {
     left: 0px;
     right: 0px;
     top:0px;
-    margin-top: 45%;
+    margin-top: 40%;
     z-index:-1;
 }
 
@@ -160,7 +160,7 @@ li p {
         
     }
     .title-cardlist h1{
-        font-size: 70px;
+        font-size: 60px;
         margin: 5%;
     }
 }

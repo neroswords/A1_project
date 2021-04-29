@@ -11,15 +11,22 @@ const Styles = styled.div`
 .learned-page .container-fluid {
     padding: 40px;
     width: 100%;
+    overflow:hidden;
 }
-.learned-title{
+
+.learned-title-page {
     padding: 4px;
     width: 100% ;
     background-color: white;
     border-radius: 0.25rem;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-    padding: 0 1%;
+    /* padding: 0 1%; */
 }
+
+.learned-title-page h2{
+    font-weight:600;
+}
+
 .showtable-learn{
     /* min-height: 70vh; */
     margin-top: 1%;
@@ -81,7 +88,7 @@ function Learned(props){
         <div className="learned-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"trained"}  />
             <div className="container-fluid">
-                <div className="learned-title d-flex bd-highlight">
+                <div className="learned-title-page d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight' id="trained-header">Trained</h2>
                 </div>
                 {/* <hr></hr> */}

@@ -16,10 +16,22 @@ const Styles = styled.div`
 } */
   .home > .row {
     --bs-gutter-x: 0 !important;
+    padding: 0 !important;
   }
+
+  .content-mainpage {
+    background-image: url("./images/page.png");
+    background-size: cover;
+    background-position: right;
+    height: 750px;
+    display: flex;
+    justify-content: space-between;
+    overflow:hidden
+  }
+
   #main-page {
     background-color: white;
-    margin: 20% ;
+    /* margin: 20% ; */
     /* margin-left: -100px; */
     /* display: grid; */
     /* grid-template-columns: 1fr 1fr; */
@@ -36,7 +48,7 @@ const Styles = styled.div`
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     color: #14213d;
-    margin-top: 30%;
+    /* margin-top: 30%; */
     margin-left: 20%;
   }
 
@@ -53,10 +65,19 @@ const Styles = styled.div`
     width: 70%;
     position: absolute;
     right: 0;
+    margin-right: 100px;
+    animation: mymove 5s infinite;
     /* margin-left: 45%; */
     /* margin-top: 3%; */
   }
-
+  @keyframes mymove {
+    0%   {top: 0px;}
+    25%  {top: 15px;}
+    100%   {top: 0px;}
+    /* 75%  {top: 50px} */
+    /* 100% {top: 100px;} */
+}
+/* 
   .img-bg-yellow{
     width: 90%;  
     top: 0px;
@@ -65,7 +86,7 @@ const Styles = styled.div`
     padding: 0 !important;
     margin: 0 !important;
     right: 0px !important;
-  }
+  } */
 
   @media only screen and (max-width: 400px){
     .main-textt h1 {
@@ -74,7 +95,7 @@ const Styles = styled.div`
       text-transform: uppercase;
       color: #14213d;
       margin-top: 25%;
-      margin-left: 20%;
+      /* margin-left: 20%; */
     }
 
   .main-textt p {
@@ -82,7 +103,7 @@ const Styles = styled.div`
       color: #14213d;
       line-height: 1.7;
       width: 15rem;
-      margin-left: 20%;
+      /* margin-left: 20%; */
       /* margin-top: 15%; */
     }
     .img-bg-yellow{
@@ -103,7 +124,7 @@ const Styles = styled.div`
       text-transform: uppercase;
       color: #14213d;
       margin-top: 25%;
-      margin-left: 20%;
+      /* margin-left: 20%; */
     }
 
   .main-textt p {
@@ -111,7 +132,7 @@ const Styles = styled.div`
       color: #14213d;
       line-height: 1.7;
       width: 30rem;
-      margin-left: 20%;
+      /* margin-left: 20%; */
       /* margin-top: 15%; */
     }
   }
@@ -122,16 +143,16 @@ const Styles = styled.div`
       font-family: 'Roboto', sans-serif;
       text-transform: uppercase;
       color: #14213d;
-      margin-top: 25%;
-      margin-left: 20%;
+      /* margin-top: 25%; */
+      /* margin-left: 20%; */
     }
 
   .main-textt p {
       font-size: 25px;
       color: #14213d;
       line-height: 1.7;
-      width: 40rem;
-      margin-left: 20%;
+      width: 35rem;
+      /* margin-left: 20%; */
       /* margin-top: 15%; */
     }
   }
@@ -141,8 +162,8 @@ const Styles = styled.div`
 export const Mainpage = () => (
   <Styles>
     <div className="home">
-    <div className="row">
-        <img className="img-bg-yellow" src="./images/page.png"/>
+    <div className="content-mainpage">
+        {/* <img className="img-bg-yellow" src="./images/page.png"/> */}
         <div className="main-textt col-5">
                   <h1>A1 Chatbot</h1>
                   <p>A1 chatbot is a web-application that can help manage online purchasing and selling. It also includes automated reply message, order management, and online shop system administration via bot which you can create by your own. </p>

@@ -14,22 +14,25 @@ const Styles = styled.div`
     border: 0;
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    padding: 4%;
   }
   
-  .card-bot .card-title {
+  .card-bot .card-title-add-item {
     margin-bottom: 2rem;
     font-size: 2rem;
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
+    text-align: center;
   }
   
-  .card-bot .card-body {
+  .card-bot .card-body-add-item {
     margin: 1rem;
   }
   
-  .title_addinv p{
+  .title_additem p{
       font-weight: bold;
       margin-top: 5%;
+      
   }
 
   .line-inv{
@@ -79,7 +82,7 @@ const Styles = styled.div`
     width: 40%;
     margin-top: 30%; */
     margin-top: 10%;
-    margin-left: -1%;
+    margin-left: -1.3%;
     justify-content:center;
     position: absolute;
     padding: 10px 20px;
@@ -125,6 +128,14 @@ const Styles = styled.div`
     transition: all 200ms ease-in;
     transform: scale(1.2);
   } */
+
+  @media only screen and (max-width: 760px){
+    .showimg-newinv{
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 5%;
+    }
+  }
 
   .upload-newinv{
     /* display:flex; */
@@ -280,18 +291,18 @@ export default class Add_item extends React.Component {
       return (
         <Styles>
           <div className="container">
-            <div className="col-sm-10 col-md-9 col-lg-7 mx-auto">
+            <div className="col-12 col-lg-8 mx-auto">
               <div className="card card-bot">
-                <div className="card-body">
-                  <h5 className="card-title text-center mt-3 mb-4">Create New Item</h5>
+                <div className="card-body-add-item">
+                  <h5 className="card-title-add-item mt-3 mb-4">Create New Item</h5>
                   <form className="form-additem" onSubmit={this.handleUploadImage}>
-                   <div className="title_addinv">
-                          <p className="col">Upload image</p>
+                   <div className="title_additem">
+                          <p className="">Upload image</p>
                           <div className="line-inv"></div>
                     </div> 
-                    <div className="showimg-newinv form-row d-flex justify-content-between">
-                          <div className="col showimg-newinv">
-                            <div className="col upload-newinv">
+                    <div className="showimg-newinv row d-flex justify-content-between">
+                          <div className="showimg-newinv">
+                            <div className="upload-newinv">
                                 <input ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
                             </div>
                               {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
@@ -301,8 +312,8 @@ export default class Add_item extends React.Component {
                     </div>  
                     
                           
-                          <div className="title_addinv">
-                            <p className="col">Item descriptions</p>
+                          <div className="title_additem">
+                            <p className="">Item descriptions</p>
                             <div className="line-inv"></div>
                           </div>
                           <div className="row">

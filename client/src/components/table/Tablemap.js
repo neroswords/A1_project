@@ -61,6 +61,7 @@ const Styles = styled.div`
     background-color: transparent;
     border-radius: 25px;
     padding-left:15px;
+    width: 500px;
   }
 
 }
@@ -86,13 +87,13 @@ const Styles = styled.div`
   }
 
   .buttonaddMapping{
-  padding: 7px 15px;
-  font-size: 12px;
-  border-radius: 25px;
-  border: 1px solid #0078ff;
-  transition: 0.5s;
-  background-color: #0078ff;
-  color: #fff;
+    padding: 7px 15px;
+    font-size: 12px;
+    border-radius: 25px;
+    border: 1px solid #0078ff;
+    transition: 0.5s;
+    background-color: #0078ff;
+    color: #fff;
 }
 
 .buttonaddMapping:hover{
@@ -135,7 +136,7 @@ const Styles = styled.div`
   height: 30px;
   border-radius: 25px;
   border: .5px solid #A9A9A9;
-
+  margin-bottom: 5%;
 }
 
 input::placeholder{

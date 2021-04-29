@@ -15,6 +15,7 @@ const Styles = styled.div`
 .mapping-page .container-fluid {
     padding: 40px;
     width: 100%;
+    overflow: hidden;
 }
 .mapping-title {
     padding: 4px;
@@ -22,9 +23,14 @@ const Styles = styled.div`
     background-color: white;
     border-radius: 0.25rem;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    
+}
+
+.mapping-title h2 {
+    font-weight:600;
 }
 .showtablemap{
-    /* min-height: 70vh; */
+    min-height: 70vh;
     margin-top: 1%;
     background-color: white;
     padding: 5px;
