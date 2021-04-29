@@ -20,13 +20,10 @@ UPLOAD_FOLDER_ITEMS = './Project/static/images/bucket'
 @inventory.route('/bot/<botID>/', methods=['GET'])
 def call_inventory(botID):
     if request.method == 'GET':
-        print("GET")
         inventory_collection = mongo.db.inventory
         inventory_cursor = inventory_collection.find({"botID": ObjectId(botID)})
         inventory_cursor = list(inventory_cursor)
-        print("GET")
         data = dumps(inventory_cursor, indent=2)
-        # print(cart_cursor[0]['cart'][0]['itemid'])
 
         return data
 
@@ -36,8 +33,6 @@ def call_inventory2(botID):
         inventory_collection = mongo.db.inventory
         inventory_cursor = inventory_collection.find_one({"_id": ObjectId(botID)})
         data = dumps(inventory_cursor, indent=2)
-        print(data)
-        # print(cart_cursor[0]['cart'][0]['itemid'])
 
         return data
 
@@ -48,9 +43,7 @@ def edit_inventory(botID,productID):
         inventory_cursor = inventory_collection.find_one(
         {'$and': [{'botID':  ObjectId(botID)}, {'_id': ObjectId(productID)}]})
         data = dumps(inventory_cursor, indent=2)
-        print(data)
         return data
-        # print(cart_cursor[0]['cart'][0]['itemid'])
     if request.method =='POST':
         inventory_collection = mongo.db.inventory
         creator = request.form['creator']
@@ -83,10 +76,6 @@ def edit_inventory(botID,productID):
             count = count+1
 
         info_update['$set']['img'] = info_update['$set']['img']+info_pic
-        print("sssssssssssssss")
-        print(info_update)
-        print("sssssssssssssss")
-        print(len(info_update))
         inventory_collection.update_one({'_id': ObjectId(productID)}, info_update)
         return {'message': 'add bot successfully'}
     # return "add bot unsuccessfully"

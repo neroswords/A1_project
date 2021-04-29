@@ -241,7 +241,6 @@ const EditableCell = ({
 
   const onBlur = () => {
     updateMyData(index, id, value)
-    console.log("test")
   }
 
 
@@ -373,7 +372,6 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     }
 
   )
-  console.log(selectedFlatRows)
   return (
     <>
       <Container>
@@ -567,7 +565,6 @@ function Tablecon({ botID, delete_trained, add_data }) {
 
 
   const resetData = () => setTableconState(originalData)
-  console.log(TableconState)
   return (
     <Styles>
       <TableShow

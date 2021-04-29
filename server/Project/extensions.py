@@ -1,5 +1,6 @@
 from flask_pymongo import PyMongo 
 import json
+import bson.objectid
 from bson import ObjectId
 import os
 from dotenv import dotenv_values
@@ -8,13 +9,29 @@ config = dotenv_values("./.env")
 
 mongo = PyMongo()
 
-server_url = 'https://ce0492d16750.ngrok.io'
+server_url = 'https://3e482c7a8675.ngrok.io'
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, ObjectId):
             return str(o)
         return json.JSONEncoder.default(self, o)
+
+# def JSONEncoder(x):
+#     if isinstance(x, bson.objectid.ObjectId):
+#         return str(x)
+#     else:
+#         return JSONEncoder(x)
+
+class User:
+    def __init__(self, username, password,is_active):
+        self.username = username
+        self.password = password
+        self.is_active = is_active
+
+
+
+
 
 class Config:
     """Basic Flask configuration.

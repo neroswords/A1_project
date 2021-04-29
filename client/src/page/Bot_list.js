@@ -7,7 +7,6 @@ import Connect_bot from "../Page/Connect_bot";
 
 export default function Bot_list(props) {
     const [botlist,setBotlist] = useState([]);
-    
     const delete_bot =(id)=>{
         fetch('/bot/delete/'+id, {
         method : 'POST',
@@ -36,8 +35,9 @@ export default function Bot_list(props) {
   
     useEffect(async () => {
         fetch('/profile/'+localStorage.getItem('user_id')).then(res => res.json().then(data => setBotlist(data)))
-        console.log(localStorage.getItem("access_token") )
+     
     },[])
+
 
  
     const card = botlist.map((bot) => 

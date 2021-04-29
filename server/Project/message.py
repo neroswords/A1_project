@@ -9,7 +9,6 @@ from linebot.models import (BubbleContainer, CarouselColumn, CarouselTemplate,
                             PostbackAction, StickerSendMessage,
                             TemplateSendMessage, URIAction)
 from pythainlp.tokenize import word_tokenize
-from Project.route.template_facebook import template_facebook
 from Project.extensions import mongo, server_url
 
 
@@ -53,59 +52,15 @@ def ReplyMessageFB(**kwargs):
     r = requests.post(LINE_API, headers=headers, data=data)
     return 200
 
-# def item_list_flexmessage(**kwargs):
-#     inventory_collection = mongo.db.inventory
-#     print(kwargs['query'])
-#     search_request = {'$and':[{'$or':
-#         [
-#             {'item_name': {'$regex': kwargs['query'].strip()}},
-#             {'tag': {'$regex': f".*{kwargs['query']}.*", '$options': 'i'}}
-#         ]
-#         },{'botID': ObjectId(kwargs['botID'])}
-#         ]
-#     }
-#     data = inventory_collection.find(search_request).limit(10)
-#     data_list = list(data)
-#     if len(data_list) == 0:
-#         return {"message":"ไม่พบผลการค้นหา"}
-#     else:
-#       full_content = []
-#       for part in data_list:
-#         full_content.append(CarouselColumn(
-#                 thumbnail_image_url='https://www.beartai.com/wp-content/uploads/2020/03/Untitled-1.png',
-#                 title='this is menu1',
-#                 text='description1',
-#                 actions=[
-#                     PostbackAction(
-#                         label='postback1',
-#                         display_text='postback text1',
-#                         data='action=buy&itemid=1'
-#                     ),
-#                     MessageAction(
-#                         label='message1',
-#                         text='message text1'
-#                     ),
-#                     URIAction(
-#                         label='uri1',
-#                         uri='http://example.com/1'
-#                     )
-#                 ]
-#             ))
-#       return {"flex":full_content}
 
 def item_list_flexmessage(**kwargs):
     inventory_collection = mongo.db.inventory
-    print("01")
-    print(kwargs)
     search_request = {'$and': [{'$or':
                                 [{'item_name': {'$regex': kwargs['query'].strip(), "$options":'i'}}, {'type': {'$regex': kwargs['query'].strip().lower(), "$options": 'i'}},
                                  ]}, {'botID': ObjectId(kwargs['botID'])}
                                ]
                       }
-    print(search_request)
     data = inventory_collection.find(search_request).limit(9)
-    print("02")
-    print("DATA = ", data)
     data_list = list(data)
     elements =  {
                 "attachment": {
@@ -119,30 +74,22 @@ def item_list_flexmessage(**kwargs):
                 }
             }
     if len(data_list) == 0:
-        print("03")
         return '''{"message":"ไม่พบผลการค้นหา"}'''
     else:
-        print("04")
         contents_block = ''''''
         for index in data_list:
             # server_url+"/images/bot/inventory/"+index['item_img'][0]
-            print(index)
             if "facebook" == kwargs['platform']:
-              print("pass facebook ja")
-              if index['amount'] <= 0:
-                print("05")
-                element = {"title": index["item_name"], "image_url": "https://9bfdab4a218f.ngrok.io/images/bucket/"+index['img'][0], "subtitle": "ราคา"+str(index["price"])+"บาท",
+              if index['amount'] >= 0:
+                element = {"title": index["item_name"], "image_url": server_url+"/images/bucket/"+index['img'][0], "subtitle": "ราคา"+str(index["price"])+"บาท",
                            "default_action": {"type": "web_url", "url": "https://petersfancybrownhats.com/view?item=103",
-                                              "webview_height_ratio": "tall", }, "buttons": [{"type": "web_url", "title": "ดูข้อมูล", "url": "https://9bfdab4a218f.ngrok.io/facebook/"+kwargs['botID']+"/detail/"+str(index["_id"])+"/"+kwargs['sender_id'],
+                                              "webview_height_ratio": "tall", }, "buttons": [{"type": "web_url", "title": "ดูข้อมูล", "url": server_url+"/facebook/"+kwargs['botID']+"/detail/"+str(index["_id"])+"/"+kwargs['sender_id'],
                                                                                               "messenger_extensions": "true",
                                                                                               "webview_height_ratio": "tall"},
                                                                                              {"type": "postback", "title": "ใส่รถเข็น", "payload": "cart&"+str(index["_id"])}, ]}
                 elements["attachment"]["payload"]["elements"].append(element)
-                print(elements)
-                print("pass elements")
             elif "line" == kwargs['platform']:
                 if index['amount'] <= 0:
-                  print("06")
                   contents = '''{
             "type": "bubble",
             "hero": {
@@ -208,7 +155,6 @@ def item_list_flexmessage(**kwargs):
             }
           }''' % (index['item_name'], index['price'], index['_id'])
                 else:
-                  print("07")
                   contents = '''{
             "type": "bubble",
             "hero": {
@@ -273,13 +219,11 @@ def item_list_flexmessage(**kwargs):
               ]
             }
           }''' % (index['item_name'], index['price'], index['_id'])
-                print("08")
                 if contents_block == "":
                     contents_block = contents
                 else:
                     contents_block = contents_block+','+contents
         if "line" == kwargs['platform']:
-          print("09")
           flex = '''
         [%s,
         {
@@ -309,7 +253,6 @@ def item_list_flexmessage(**kwargs):
         }]''' % (contents_block)
         elif "facebook" == kwargs['platform']:
           flex = json.dumps(elements)
-          print(type(flex))
     return flex
 
 

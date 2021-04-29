@@ -37,7 +37,6 @@ def checkVariable(ss2):
                     break
                 key.append(s2[i+j])
                 j+=1
-    # print(sentence_get_confident(ss1,ss2,list=invert))
     return flag, endflag, key
 
 def objectReader(ss,botID):
@@ -45,7 +44,7 @@ def objectReader(ss,botID):
     if s[0] == "<<":
         if s[-1] == ">>":
             key = ss.replace(">","").replace("<","")
-            groups_collection = mongo.db.groups
+            groups_collection = mongo.db.groups 
             object_define = groups_collection.find_one({'$and':[{'botID':ObjectId(botID)},{'name':key}]})
             return {"group":object_define['message']}
     return {"message":ss}
@@ -57,22 +56,18 @@ def isnotSymbol(string):
     # Pass the string in search
     # method of regex object.     
     if(regex.search(string) == None):
-        print("regex true") 
         return True
     else:
-        print("regex False") 
         return False
 
 def process_message(message,botID,min_conf,sender_id,platform):
     training_collection = mongo.db.training
     trained_collection = mongo.db.trained
     msg_token = word_tokenize(message['message'])
-    print(msg_token,"=aaa")
     max = 0
     ans = ''
     flag = True
     flag,ans = basicEventHandler(msg_token,botID,sender_id,platform)
-    print("proooo")
     if not flag:
         similar_trained_word = trained_collection.find({'botID': ObjectId(botID)})
         for word in similar_trained_word:
@@ -101,7 +96,6 @@ def process_message(message,botID,min_conf,sender_id,platform):
 
 #use with reg
 def basicEventHandler(msg,botID,sender_id,platform):
-    print("AAAAAAAAAAAAAAA")
     event_collection = mongo.db.events
     for key in msg:
         event_define = event_collection.find_one({'data_set': {'$in': [key]}}) #,"$options" :'i'
@@ -110,36 +104,27 @@ def basicEventHandler(msg,botID,sender_id,platform):
             break
     for x in ['ครับ', 'ค่ะ', 'ค่า', 'คะ', 'คับ', 'คร้าบ', 'ฮ่ะ', 'อ่ะ', 'อ่า', 'ป้ะ', 'ป่ะ', 'บ่', 'แมะ', 'มะ', 'ก๊า', 'ไหม', 'มั้ย', 'ค้า', 'หน่อย']:
         try:
-            print("3")
             msg.remove(x)
         except :
-            print("4")
             continue
         
     # event_define = event_collection.find_one({'data_set': {'$regex': key,"$options" :'i'}}) #####มาเช็คดีๆ
-    print("5")
     if event_define != None and event_define['type'] == 'search':
-        print("6")
-        print(msg)
         if isnotSymbol(''.join(msg)):
             item = json.loads(item_list_flexmessage(botID = botID, query=''.join(msg),platform=platform,sender_id = sender_id))
         else:
             item = {"message" : "การค้นหาผิดพลาด"}
-        print("7")
-        print(item)
-        print(type(item))
         if type(item) == list:
-            return True,{"flex":CarouselContainer(item),"alt":"ค้นหาสินค้า"}
+            return True,{"flex":CarouselContainer(item),"alt":"ค้นหาสินค้า","type":"none"}
         elif "message" in item.keys():
-            print("99")
             return True,item
         elif "facebook" == platform:
-            return True,{"flex":item}
+            return True,{"flex":item,"type":"none"}
     elif event_define != None and event_define['type'] == 'confirm_order':
         item = json.loads(invoice_flexmessage(botID = botID, sender_id=sender_id))
         if "message" in item.keys():
             return True,item
-        return True,{"flex":item, "alt": "ยืนยันรายการ"}
+        return True,{"flex":item, "alt": "ยืนยันรายการ","type":"none"}
     elif event_define != None and event_define['type'] == 'call_merchant':
         return True,{"group":[{"data":"ติดต่อแม่ค้าไปแล้วครับ กรุณารอสักครู่","type":"text"},{"data":"ระหว่างนี้เลือกซื้อของรอไปก่อนได้เลยครับบ","type":"text"}]}
     elif event_define != None and event_define['type'] == 'liff':
@@ -187,7 +172,9 @@ def commandsHandler(**kwargs):
                 newvalues = {"$push":{'cart':{'itemid': ObjectId(itemid),'price_per_ob':define_item['price'],'item_name':define_item['item_name'], 'amount': 1,'total_ob':define_item['price']}}}
                 cart_collection.update_one(myquery,newvalues)
                 cart_collection.update_one(myquery,{"$set": {"total":define_cart['total']+define_item['price']}})
+                
                 customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
+               
                 return {"message":"ใส่ "+define_item['item_name']+" ลงตระกร้าเรียบร้อยแล้วครับบ"}
     elif commands[0] == "action=confirm":
         commd = commands[1].split('=')
@@ -250,7 +237,7 @@ def stateHandler(**kwargs):
         elif customer_define['state'] == "address":
             return {"flex":json.loads(address_flex(kwargs['message']['message'])),"alt":"ยืนยันที่อยู่"}
         elif customer_define['state'] == "none" or customer_define['state'] == "inCart" or customer_define['state'] == "tracking":
-            res = process_message(kwargs['message'],kwargs['botID'],kwargs['confident'],kwargs['sender_id'])
+            res = process_message(kwargs['message'],kwargs['botID'],kwargs['confident'],kwargs['sender_id'],"line")
     elif 'postback' in kwargs.keys():
         # if customer_define['state'] in ["none","inCart"]:
         res = commandsHandler(commands = kwargs['postback'], sender_id = kwargs['sender_id'], botID=kwargs['botID'])

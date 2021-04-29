@@ -12,11 +12,11 @@
             {% if customer %}
             <input type="hidden" name="omiseCustomer" value={{ customer }}>
             <input name="botID" value="{{ botID }}" type="hidden">
-            <input name="userID" type="hidden" id="userID" >
+            <input name="userID" type="hidden" id="userID" value = "{{userID}}">
             {% else %}
             <input name="email" placeholder="Email">
             <input name="botID" value="{{ botID }}" type="hidden">
-            <input name="userID" type="hidden" id="userID" >
+            <input name="userID" type="hidden" id="userID" value = "{{userID}}">
             {% endif %}
             <script type="text/javascript" src="https://cdn.omise.co/omise.js"
                     data-key="{{ key }}"
