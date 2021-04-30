@@ -210,15 +210,19 @@ def charge():
     except omise.errors.BaseError as error:
         flash(f"An error occurred.  Please contact support.  Order ID: {order_id}")
         current_app.logger.error(f"OmiseError: {repr(error)}.")
-        return redirect("/checkout/"+botID)
+        return redirect("/checkout/"+botID+'/check')
     except Exception as e:
         flash("""An error occurred.  Please contact support.""")
         current_app.logger.error(repr(e))
-        return redirect("/checkout/"+botID)
+        return redirect("/checkout/"+botID+'/check')
 
-@checkout.route("/complete",methods=['GET'])
-def complete():
-    return render_template('complete.html')
+@checkout.route("/<botID>/complete",methods=['GET'])
+def complete(botID):
+    bot_collection = mongo.db.bots
+    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
+    return render_template('complete.html',liffId=bot_define['liff_id'])
+
+
 
 @checkout.route("/facebook/<botID>/<userID>", methods=['GET'])
 def FbCheck_out(botID,userID):
@@ -240,6 +244,17 @@ def FbCheck_out(botID,userID):
 def check_out(botID):
     cart_collection = mongo.db.carts
     cart_define = cart_collection.find_one({'$and':[{'userID':request.args.get('customer')},{'botID':ObjectId(botID)}]})
+    if cart_define == None:
+        return render_template(
+        'checkout.html',
+        key=current_app.config.get("OMISE_PUBLIC_KEY"),
+        # cart=3000,
+        # Price=cart_define['total']*100,
+        botID = botID,
+        currency=current_app.config.get("STORE_CURRENCY"),
+        customer=session.get("customer"),
+        liffId = "1655652942-zNpjoxYV"
+        )
     return render_template(
         'checkout.html',
         key=current_app.config.get("OMISE_PUBLIC_KEY"),

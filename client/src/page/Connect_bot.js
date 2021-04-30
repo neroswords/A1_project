@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import Facebookform from '../Components/Form/facebookform';
 import Lineform from '../Components/Form/lineform';
+import Etcform from '../Components/Form/etc';
 import { withRouter, Redirect } from 'react-router-dom'
 import { useSpring, animated } from 'react-spring';
 import { MdClose } from 'react-icons/md';
@@ -85,12 +86,14 @@ const ModalContent = styled.div`
 
 export function Connect_bot({ setShowForm, showForm, botID }) {
   const [platform, setplatform] = useState("facebook")
-  const renderSwitch = (platform, bot_id) => {
+  const renderSwitch = (platform) => {
     switch (platform) {
       case 'facebook':
-        return <Facebookform props={bot_id} />
+        return <Facebookform botID={botID} />
+      case 'etc':
+        return <Etcform botID={botID} />
       default:
-        return <Lineform props={bot_id} />
+        return <Lineform botID={botID} />
     }
   }
 
@@ -140,6 +143,7 @@ export function Connect_bot({ setShowForm, showForm, botID }) {
                     <div>
                       <button className="con-facebook btn btn-primary text-uppercase" onClick={() => setplatform("facebook")} type=""><i class="icon-facebook fab fa-facebook fa-2x"></i></button>
                       <button className="con-line btn btn-success btn-line text-uppercase" onClick={() => setplatform("line")} type=""><i class="icon-line fab fa-line fa-2x"></i></button>
+                      <button className="con-line btn btn-success btn-line text-uppercase" onClick={() => setplatform("etc")} type=""><i class="fas fa-filter"></i></button>
                     </div>
                     {renderSwitch(platform, botID)}
                   </ModalContent>
