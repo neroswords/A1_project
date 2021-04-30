@@ -19,10 +19,10 @@ import { Redirect } from 'react-router-dom';
 const Styles = styled.div` 
 .mapping-page {
     display: flex;
-    min-height : 92vh;
+    min-height: 92vh;
 }
 .container {
-    margin-top:2%
+    margin-top:2%;
 }
 .react-flow{
   max-height: 50vh;

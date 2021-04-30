@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Navbar_member from "../Components/Navbar/navbar_member";
-import { Link } from "react-router-dom";
-import DeleteModal from "../Components/delete_modal";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import Tablecon from "../Components/Table/Tablecon";
@@ -12,31 +10,31 @@ const Styles = styled.div`
     min-height: 92vh;
   }
   
-  .container {
-    /* margin-top: 10px; */
-    margin-top: 2%;
+  .train-page .container-fluid{
+    padding: 40px;
+    width: 100%; 
     overflow:hidden;
   }
   
-  .training-title{
-    /* font-family: 'Public Sans', sans-serif;    */
+  .training-title {
     padding: 4px;
     width: 100% ;
     background-color: white;
     border-radius: 0.25rem;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-    padding: 0 1%;
   }
 
+.training-title h2 {
+    font-weight:600;
+}
 
   .showtablecon{
-    min-height: 70vh;
+    /* min-height: 70vh; */
     margin-top: 1%;
     background-color: white;
     padding: 5px;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
     border-radius: 0.25rem;
-
   }
 `
 

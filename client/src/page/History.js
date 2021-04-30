@@ -2,6 +2,7 @@ import React from 'react'
 import Navbar_member from '../Components/Navbar/navbar_member';
 import styled from 'styled-components';
 import Visualize from "../Components/Graph/Visualize";
+import {Link} from "react-router-dom";
 
 const Styles = styled.div` 
 .history-page {
@@ -29,18 +30,61 @@ const Styles = styled.div`
     border-radius: 0.25rem;
     /* border: 1px solid #ececec; */
 }
-` 
-function History(props){
-    return(
+.CircleRight{
+    color: white;
+    
+}
+.MoreInfo{
+    color: white;
+    margin-left: 30%;
+}
+
+
+`
+function History(props) {
+    return (
         <Styles>
             <div className="history-page">
-                <Navbar_member botID = {props.match.params.bot_id} path={"history"} />
+                <Navbar_member botID={props.match.params.bot_id} path={"history"} />
                 <div className="container">
                     <div className="title-history">
-                        <h2 className='p-2 flex-grow-1 bd-highlight' id="history-header">History</h2> 
-                    </div>    
+                        <h2 className='p-2 flex-grow-1 bd-highlight' id="history-header">History</h2>
+                    </div>
+                    <div className="row p-3">
+                        <div class="small-box bg-info col-4">
+                            <div class="inner">
+                                <h3>150</h3>
+
+                                <p>New Orders</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <Link to={'/bot/'+ props.match.params.bot_id +'/history/new'}><a href="#" className="small-box-footer MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
+                        </div>
+
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3>53</h3>
+
+                                    <p>Total Order</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                                <Link><a href="#" className="small-box-footer MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+
                     <div className="show-history">
-                        <Visualize/>
+                        <Visualize botID={props.match.params.bot_id}/>
                     </div>
                 </div>
             </div>

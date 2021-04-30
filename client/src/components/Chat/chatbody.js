@@ -32,6 +32,9 @@ function Chatbody({botID,customerID}){
                   } else if (ele.sender_type == "lineUser"){
                     setMessages(messages=> [...messages,<div><p className="head-name from-cust msg">{ele.sender}</p><p className="msg customer-send">{ele.message}</p></div>])
                   }   
+                    else if (ele.sender_type == "facebookUser"){
+                    setMessages(messages=> [...messages,<div><p className="head-name from-cust msg">{ele.sender}</p><p className="msg customer-send">{ele.message}</p></div>])
+                  }   
             })
           })).then(scrollToBottom())
         }
@@ -64,6 +67,7 @@ function Chatbody({botID,customerID}){
               scrollToBottom()
           // setUserID([msg.userID]);
       })
+   
       socket.on("message_from_response", msg =>{
           setMessages([...messages,
               <div className="owner-msg col">
@@ -73,6 +77,8 @@ function Chatbody({botID,customerID}){
           
           // setUserID([msg.userID]);
       })
+
+   
   }
   
     const onChange = e => {
@@ -98,8 +104,8 @@ function Chatbody({botID,customerID}){
                         </div>
                       </div>
                     <div className="content__body">
-                      
-                        {messages.length > 0 && 
+  
+                    {messages.length > 0 && 
                           messages.map(msg => (
                              <div className="chat__item ">
                                   <p className="msg-all">{msg}</p>

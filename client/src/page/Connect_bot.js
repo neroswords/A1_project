@@ -4,10 +4,8 @@ import Facebookform from '../Components/Form/facebookform';
 import Lineform from '../Components/Form/lineform';
 import Etcform from '../Components/Form/etc';
 import { withRouter, Redirect } from 'react-router-dom'
-
 import { useSpring, animated } from 'react-spring';
 import { MdClose } from 'react-icons/md';
-import { Container } from "react-bootstrap";
 
 const Styles = styled.div`
   .container {
@@ -24,17 +22,6 @@ const Styles = styled.div`
     border-radius: 40px;
   }
   
-  .model-popup {
-    /* position: relative;
-    left: 50px;
-    right: 150px;
-    top: -250px;
-    z-index :1000;
-    background-color: black; */
-    /* background-color:black; */
-    /* width: 100%;
-    height: 100%; */
-  }  
 `;
 
 const Background = styled.div`
@@ -110,29 +97,6 @@ export function Connect_bot({ setShowForm, showForm, botID }) {
     }
   }
 
-//   const popupCenter = ({url, title, w, h}) => {
-//     // Fixes dual-screen position                             Most browsers      Firefox
-//     const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX;
-//     const dualScreenTop = window.screenTop !==  undefined   ? window.screenTop  : window.screenY;
-
-//     const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : window.screen.width;
-//     const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : window.screen.height;
-
-//     const systemZoom = width / window.screen.availWidth;
-//     const left = (width - w) / 2 / systemZoom + dualScreenLeft
-//     const top = (height - h) / 2 / systemZoom + dualScreenTop
-//     const newWindow = window.open(url, title, 
-//       `
-//       scrollbars=yes,
-//       width=${w / systemZoom}, 
-//       height=${h / systemZoom}, 
-//       top=${top}, 
-//       left=${left}
-//       `
-//     )
-
-//     // if (window.focus) newWindow.focus();
-// }
 
   const modalRef = useRef();
   const animation = useSpring({

@@ -1,5 +1,6 @@
 from flask_pymongo import PyMongo 
 import json
+import bson.objectid
 from bson import ObjectId
 import os
 from dotenv import dotenv_values
@@ -57,6 +58,22 @@ class JSONEncoder(json.JSONEncoder):
         if isinstance(o, ObjectId):
             return str(o)
         return json.JSONEncoder.default(self, o)
+
+# def JSONEncoder(x):
+#     if isinstance(x, bson.objectid.ObjectId):
+#         return str(x)
+#     else:
+#         return JSONEncoder(x)
+
+class User:
+    def __init__(self, username, password,is_active):
+        self.username = username
+        self.password = password
+        self.is_active = is_active
+
+
+
+
 
 class Config:
     """Basic Flask configuration.

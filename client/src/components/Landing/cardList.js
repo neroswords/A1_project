@@ -7,14 +7,14 @@ import { Container, Jumbotron as Jumbo } from 'react-bootstrap';
 const Styles = styled.div`
 .jumbo {
     align-items: center;
-    margin: 5% 0;
+    /* margin: 5% 0; */
 }
 
 .container {
     // background: url(${process.env.PUBLIC_URL +'/images/bg-home.png'}) no-repeat fixed bottom;
     background-size: 100%;
     margin-bottom: 20%;
-    margin-top: 45%;
+    margin-top: 240px;
 }
 
 .line {
@@ -27,16 +27,15 @@ const Styles = styled.div`
 }
 
 .card {
-  width: 20rem;
+  width: 100%;
   height: 35rem;
   margin-bottom: 5%;
   border-radius: 10px;
-  border: 0 solid #fca311;
+  border: 1px solid #d8d8d8;
   background: #fff;
-  padding: 3%;
-  box-shadow: 0 9px 15px rgba(0,0,0,.08), 0 9px 10px rgba(0,0,0,.05);
+  padding: 5%;
+  box-shadow: 2px 1px 10px #d8d8d8;
   transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
-//   cursor: pointer;
 }
 
 // .card:hover{
@@ -44,12 +43,14 @@ const Styles = styled.div`
 //   box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
 // }
 
-h1 {
-    font-size: 40px;
+  
+
+.title-cardlist h1 {
+    font-size: 50px;
     font-weight: 700;
-    margin-bottom: 40px;
     font-family: 'Roboto', sans-serif;
     text-align: center;
+    margin-bottom: 5%;
   }
 
 .card h5 {
@@ -84,7 +85,7 @@ li p {
 }
 
 .select {
-    margin-button: 15px;
+    margin-bottom: 15px;
 }
 
 .img-card img {
@@ -103,7 +104,7 @@ li p {
     left: 0px;
     right: 0px;
     top:0px;
-    margin-top: 45%;
+    margin-top: 40%;
     z-index:-1;
 }
 
@@ -132,32 +133,61 @@ li p {
     z-index:-1;
 }
 
-`;
+.section-about-feature {
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(3,6fr);
+    grid-gap: 20px;
+}
+
+
+@media only screen and (max-width: 700px){
+    .section-about-feature {
+        display:grid;
+        grid-template-columns:repeat(1,1fr);
+        grid-gap: 20px;  
+    }
+    .card {
+        height: 40rem;
+    }
+}
+
+@media only screen and (min-width: 1900px){
+    .section-about-feature {
+        display:grid;
+        grid-template-columns:repeat(3,3fr);
+        grid-gap: 20px;
+        
+    }
+    .title-cardlist h1{
+        font-size: 60px;
+        margin: 5%;
+    }
+}
+`
 
 export const CardList = () => (
     <Styles >
         <div className="svg-bg" >
-            <svg height="100%" width="100%"  className="wave1-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-  <path fill="#f6f6f6" fill-opacity="1" d="M0,128L48,154.7C96,181,192,235,288,229.3C384,224,480,160,576,133.3C672,107,768,117,864,128C960,139,1056,149,1152,154.7C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-</svg> 
-<svg height="100%" xmlns="http://www.w3.org/2000/svg" className="rec-svg" viewBox="0 0 1440 320"><path fill="#f6f6f6" fill-opacity="1" d="M0,320L0,0L1440,0L1440,320L0,320L0,320Z"></path></svg>
-<svg height="50%" xmlns="http://www.w3.org/2000/svg" className="rec-svg" viewBox="0 0 1440 320"><path fill="#f6f6f6" fill-opacity="1" d="M0,320L0,0L1440,0L1440,320L0,320L0,320Z"></path></svg>
-{/* <svg height="100%" xmlns="http://www.w3.org/2000/svg" className="rec-svg" viewBox="0 0 1440 320"><path fill="#f6f6f6" fill-opacity="1" d="M0,320L0,0L1440,0L1440,320L0,320L0,320Z"></path></svg> */}
-<svg height="100%" width="100%" className="wave2-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-  <path fill="#f6f6f6" fill-opacity="1" d="M0,128L48,154.7C96,181,192,235,288,229.3C384,224,480,160,576,133.3C672,107,768,117,864,128C960,139,1056,149,1152,154.7C1248,160,1344,160,1392,160L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
-</svg> 
-        
-        
+        <svg height="100%" width="100%"  className="wave1-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#f6f6f6" fill-opacity="1" d="M0,128L48,154.7C96,181,192,235,288,229.3C384,224,480,160,576,133.3C672,107,768,117,864,128C960,139,1056,149,1152,154.7C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+        </svg> 
+        <svg height="100%" xmlns="http://www.w3.org/2000/svg" className="rec-svg" viewBox="0 0 1440 320"><path fill="#f6f6f6" fill-opacity="1" d="M0,320L0,0L1440,0L1440,320L0,320L0,320Z"></path></svg>
+        <svg height="50%" xmlns="http://www.w3.org/2000/svg" className="rec-svg" viewBox="0 0 1440 320"><path fill="#f6f6f6" fill-opacity="1" d="M0,320L0,0L1440,0L1440,320L0,320L0,320Z"></path></svg>
+        {/* <svg height="100%" xmlns="http://www.w3.org/2000/svg" className="rec-svg" viewBox="0 0 1440 320"><path fill="#f6f6f6" fill-opacity="1" d="M0,320L0,0L1440,0L1440,320L0,320L0,320Z"></path></svg> */}
+        <svg height="100%" width="100%" className="wave2-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#f6f6f6" fill-opacity="1" d="M0,128L48,154.7C96,181,192,235,288,229.3C384,224,480,160,576,133.3C672,107,768,117,864,128C960,139,1056,149,1152,154.7C1248,160,1344,160,1392,160L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+        </svg> 
         </div>
 {/* <svg height="100%" width="100%" id="bg-svg" viewBox="0 0 1440 500" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150"><path d="M 0,500 C 0,500 0,166 0,166 C 116.57142857142858,188.10714285714286 233.14285714285717,210.21428571428572 349,202 C 464.85714285714283,193.78571428571428 580,155.25 705,149 C 830,142.75 964.8571428571429,168.7857142857143 1089,177 C 1213.142857142857,185.2142857142857 1326.5714285714284,175.60714285714283 1440,166 C 1440,166 1440,500 1440,500 Z" stroke="none" stroke-width="0" fill="#0693e388" class="transition-all duration-300 ease-in-out delay-150"></path><path d="M 0,500 C 0,500 0,333 0,333 C 118.10714285714286,294.5 236.21428571428572,256 349,280 C 461.7857142857143,304 569.2500000000001,390.5 683,392 C 796.7499999999999,393.5 916.7857142857142,310 1044,286 C 1171.2142857142858,262 1305.607142857143,297.5 1440,333 C 1440,333 1440,500 1440,500 Z" stroke="none" stroke-width="0" fill="#0693e3ff" class="transition-all duration-300 ease-in-out delay-150"></path></svg> */}
        
-<Container className="container"> 
+    <div className="container"> 
 
-        <div className="title">
+        <div className="title-cardlist">
             <h1>About Features</h1>
         </div>
-        <Jumbo className="jumbo col-lg-12 row justify-content-around">
-                <div className="card col-lg-6">
+        <div className="col-12 section-about-feature">
+                <div className="card">
                     <div className="img-card">
                         <img src="./images/chat.svg" />
                     </div>
@@ -174,7 +204,7 @@ export const CardList = () => (
                     </ul>
                 </div>
 
-                <div className="card col-lg-6">
+                <div className="card">
                     <div className="img-card">
                         <img src="./images/delivery-truck.svg" />
                     </div>
@@ -191,7 +221,7 @@ export const CardList = () => (
                     </ul>
                 </div>
 
-                <div className="card col-lg-6">
+                <div className="card">
                     <div className="img-card">
                         <img src="./images/statistics.svg"/>
                     </div>
@@ -206,8 +236,8 @@ export const CardList = () => (
                     </ul>
                 </div>
             
-        </Jumbo>
-        </Container>
+            </div>
+        </div>
     </Styles>
 )
 

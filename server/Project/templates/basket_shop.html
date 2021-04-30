@@ -143,6 +143,7 @@
 </style>
 
 <body class="bg-light">
+    <form method='post' action='/facebook/{{botID}}/detail/{{userID}}/confirm'>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-10 col-11 mx-auto">
@@ -159,27 +160,33 @@
                                     <img src="/images/bucket/{{i['img_name']}}" class="img-fluid"
                                         alt="cart img">
                                 </div>
-                                
                                 <div class="col-md-7 col-11 mx-auto px-4 mt-2">
                                     <div class="row">
                                         <div class="col-6 card-title">
                                             <h1 class="mb-4 product_name"> {{i['item_name']}}</h1>
+                                            
                                             {{price}} per one
-                                        </div>
                                         
+                                        </div>
                                         <div class="col-6">
                                             <ul class="pagination justify-content-end set_quantity">
                                                 <li class="page-item">
                                                     <button class="page-link "
-                                                        onclick="decreaseNumber('{{[loop.index-1]}}ft','{{[loop.index-1]}}2','{{price}}')">
+                                                        onclick="decreaseNumber('{{[loop.index-1]}}ft','{{[loop.index-1]}}2','{{price}}',event)">
                                                         <i class="fas fa-minus"></i> </button>
                                                 </li>
-                                                <li class="page-item"><input type="text" name="" class="page-link"
-                                                        value="{{i['amount']}}" id="{{[loop.index-1]}}ft">
+                                                <li class="page-item">
+                                                    <input type="text"  class="page-link"
+                                                        value="{{i['amount']}}" id="{{[loop.index-1]}}ft"  name="getValue{{loop.index-1}}">
+                                                        <!-- <input type="text"  id="{{[loop.index-1]}}ft"  name="getValue{{loop.index-1}}" class="page-link"
+                                                        value="{{i['amount']}}"> -->
+                                                        <input type="text"  id="getId{{loop.index-1}}" hidden name="getId{{loop.index-1}}" class="page-link"
+                                                        value="{{i['itemid']}}" > 
+                                                        
                                                 </li>
                                                 <li class="page-item">
                                                     <button class="page-link"
-                                                        onclick="increaseNumber('{{[loop.index-1]}}ft','{{[loop.index-1]}}2','{{price}}')">
+                                                        onclick="increaseNumber('{{[loop.index-1]}}ft','{{[loop.index-1]}}2','{{price}}',event)">
                                                         <i class="fas fa-plus"></i></button>
                                                 </li>
                                                 
@@ -221,7 +228,7 @@
                                 <p>The total amount of (including VAT)</p>
                                 <p>$<span id="total_cart_amt">0.00</span></p>
                             </div>
-                            <button onclick=closeTem() class="btn btn-primary text-uppercase">Checkout</button>
+                            <button  type = "submit" onclick=closeTem() class="btn btn-primary text-uppercase">Checkout</button>
                         </div>
                         <div class="discount_code mt-3 shadow">
                             <div class="card">
@@ -239,7 +246,7 @@
                                             <small id="error_trw" class="text-dark mt-3">A1Chatbot to buy</small>
                                         </div>
                                         <button class="btn btn-primary btn-sm mt-3"
-                                            onclick="discount_code()">Apply</button>
+                                            onclick="discount_code(event)">Apply</button>
                                     </div>
                                 </div>
                             </div>
@@ -256,6 +263,7 @@
             </div>
         </div>
     </div>
+</form>
 
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
@@ -265,8 +273,7 @@
         crossorigin="anonymous"></script>
 
     <script type="text/javascript">
-
-        function closeTem() {
+           function closeTem() {
             (function (d, s, id) {
                 var js, fjs = d.getElementsByTagName(s)[0];
                 if (d.getElementById(id)) { return; }
@@ -288,15 +295,15 @@
         }
         var i 
         var itemlist = []
-        for (i = 0; i < 2; i++) {
-        var itemprice = document.getElementById("["+i+"]2");
-        itemlist.push(itemprice)
- 
-        var product_total_amt = document.getElementById('product_total_amt');
-        var total_cart_amt = document.getElementById('total_cart_amt');
-        var shipping_charge = document.getElementById('shipping_charge');
-        product_total_amt.innerHTML = parseInt(product_total_amt.innerHTML)+parseInt(itemprice.innerHTML) ;
-        
+        for (i = 0; i < 2; i++) 
+        {
+            var itemprice = document.getElementById("["+i+"]2");
+            itemlist.push(itemprice)
+            var product_total_amt = document.getElementById('product_total_amt');
+            var total_cart_amt = document.getElementById('total_cart_amt');
+            var shipping_charge = document.getElementById('shipping_charge');
+            product_total_amt.innerHTML = parseInt(product_total_amt.innerHTML)+parseInt(itemprice.innerHTML) ;
+            console.log(product_total_amt)
         }
         console.log(product_total_amt.innerHTML )
         total_cart_amt.innerHTML = parseInt(product_total_amt.innerHTML) + parseInt(shipping_charge.innerHTML);
@@ -315,33 +322,36 @@
             total_cart_amt.innerHTML = parseInt(product_total_amt.innerHTML) + parseInt(shipping_charge.innerHTML);
             
         }
-
         var product_total_amt = document.getElementById('product_total_amt');
         var shipping_charge = document.getElementById('shipping_charge');
         var total_cart_amt = document.getElementById('total_cart_amt');
         var discountCode = document.getElementById('discount_code1');
-
-        const decreaseNumber = (incdec, itemprice,price ) => {
+        function decreaseNumber(incdec, itemprice,price,e){
+            console.log(incdec)
+            console.log(itemprice)
+            console.log(price)
+            e.preventDefault();
             var itemval = document.getElementById(incdec);
             var itemprice = document.getElementById(itemprice);
-            console.log(itemprice.innerHTML);;
-            if (itemval.value <= 0) {
-                itemval.value = 0;
+            if (itemval.value <= 1) {
+                itemval.value = 1;
                 alert('Negative quantity not allowed');
             } else {
-                console.log("____")
-                console.log(price)
                 itemval.value = parseInt(itemval.value) - 1;
                 itemval.style.background = '#fff';
                 itemval.style.color = '#000';
                 itemprice.innerHTML = parseInt(itemprice.innerHTML) -  parseInt(price);
-    
+
                 product_total_amt.innerHTML = parseInt(product_total_amt.innerHTML) -  parseInt(price) ;
                 total_cart_amt.innerHTML = parseInt(product_total_amt.innerHTML) + parseInt(shipping_charge.innerHTML);
             }
-        }
-        const increaseNumber = (incdec, itemprice,price ) => {
+        
 
+        }
+
+        function increaseNumber(incdec, itemprice,price,e ) {
+            
+            e.preventDefault();
             var itemval = document.getElementById(incdec);
             var itemprice = document.getElementById(itemprice);
             if (itemval.value >= 20) {
@@ -355,8 +365,10 @@
                 product_total_amt.innerHTML = parseInt(product_total_amt.innerHTML) + parseInt(price);
                 total_cart_amt.innerHTML = parseInt(product_total_amt.innerHTML) + parseInt(shipping_charge.innerHTML);
             }
+
         }
-        const discount_code = () => {
+        const discount_code = (e) => {
+            e.preventDefault();
             let totalamtcurr = parseInt(total_cart_amt.innerHTML);
             let error_trw = document.getElementById('error_trw');
             if (discountCode.value === 'A1Chatbot to buy') {

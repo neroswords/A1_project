@@ -7,7 +7,6 @@ import Connect_bot from "../Page/Connect_bot";
 
 export default function Bot_list(props) {
     const [botlist,setBotlist] = useState([]);
-    
     const delete_bot =(id)=>{
         fetch('/bot/delete/'+id, {
         method : 'POST',
@@ -36,8 +35,9 @@ export default function Bot_list(props) {
   
     useEffect(async () => {
         fetch('/profile/'+localStorage.getItem('user_id')).then(res => res.json().then(data => setBotlist(data)))
-        console.log(localStorage.getItem("access_token") )
+     
     },[])
+
 
  
     const card = botlist.map((bot) => 
@@ -54,7 +54,7 @@ export default function Bot_list(props) {
                     </div>
 
                     {/* <Navbar_member /> */}
-                          <div class="container col-xl-9 col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                          <div class="container col-9">
                                     <div className="botlist-body" name="bot_list">
                                         <Link className='link' to={'/bot/'+localStorage.getItem('user_id')+'/create_bot'}>
                                         <div className="card-plus group">

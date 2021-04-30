@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {Redirect} from 'react-router-dom';
 import FlashMessage from 'react-flash-message'
+import { faTerminal } from '@fortawesome/free-solid-svg-icons';
 
 const Styles = styled.div`
   .container {
@@ -21,15 +22,17 @@ const Styles = styled.div`
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
   }
   
-  .card-regis .card-title {
+  .card-title-regis {
     margin-bottom: 2rem;
     font-size: 2rem;
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
+    text-align: center;
   }
   
-  .card-regis .card-body {
+  .card-regis .card-body-regis {
     margin: 1rem;
+    padding: 1rem;
   }
   
   .form-regis input {
@@ -57,6 +60,11 @@ const Styles = styled.div`
   .btn-regis .btn {
     text-align: center;
     /* align-item: center; */
+  }
+
+  .req-icon{
+    color: red;
+    font-size: 1rem;
   }
 
   @mixin transition($property: all, $duration: 0.5s, $ease: cubic-bezier(0.65,-0.25,0.25, 1.95)) {
@@ -90,27 +98,27 @@ const Styles = styled.div`
     //     font-weight: 
     // }
 
-  .title_part {
+  .title_part-regis {
       margin-top: 4rem;
     }
 
-  .title_part  p{
+  .title_part-regis p{
     font-weight: bold;
     margin-top:5%;
   }
 
-  .title_part  .line{
+  .title_part-regis .line{
     border: 10;
     height: 4px;
     background-color: #fca311;
     width: 200px;
   }
 
-  input-icon{
+  /* .input-icon{
     display: flex;
     width: 100%;
     margin-bottom: 15px;
-  }
+  } */
 
   .form-check{
     margin-top: 10%;
@@ -157,14 +165,16 @@ class Register extends React.Component {
   handleChange (evt) {
     this.setState({ [evt.target.name]: evt.target.value });
   }
-
+ 
   handleSubmit = (e) => {
     e.preventDefault()
-
+    
     if(this.state.password !== this.state.confirm_password){
+      this.setState({showMessagePassword: false})
       this.setState({message:'your password and confirm was not match'})
       this.setState({showMessagePassword: true})
       this.scrollToTop()
+      console.log(this.state.showMessagePassword)
   }
   else{
     const profile = {
@@ -214,24 +224,25 @@ flash = (e) =>{
       else {
         return(
           <Styles>
-
                 <div className="container">
-                      <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
+                      <div className="col-sm-11 col-md-10 col-lg-8 mx-auto">
                         <div className="card card-regis">
-                          <div className="card-body">
-                            <h5 className="card-title text-center">Register</h5>
+                          <div className="card-body-regis">
+                            <h5 className="card-title-regis">Register</h5>
                             <form className="form-regis" onSubmit={this.handleSubmit}>
-                            <div className="title_part">
-                                  <p className="col">Account infomation</p>
+                            <div className="title_part-regis">
+                                  <p className="">Account infomation</p>
                                   <div className="line"></div>
                             </div>
                                 <div className="my-3">
                                   <label for="exampleInputEmail1" className="form-label">Email address</label>
+                                  <span className="req-icon"> *</span>
                                   <input type="email" className="form-control " id="inputemail" name='email' required value={this.state.email} onChange={this.handleChange} />
                                 </div>
                                 <div className="my-3">
                                   <label for="exampleInputEmail1" className="form-label">Username</label>
-                                  <input type="text" className="form-control" id="inputusername" name='username' minLength={5} maxLength={16} required value={this.state.username} onChange={this.handleChange}/>
+                                  <span className="req-icon"> *</span>
+                                  <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputusername" name='username' required minLength={5} maxLength={16} required value={this.state.username} onChange={this.handleChange}/>
                                   { this.state.showMessageUsername &&  
                                         <div className="container">
                                             <FlashMessage duration={4000}>
@@ -245,11 +256,13 @@ flash = (e) =>{
                                 <div className="row">
                                   <div className="col ">
                                     <label for="exampleInputPassword1" className="form-label">Password</label>
-                                    <input type="password" className="form-control" id="inputpassword" name='password' required  minLength={6} value={this.state.password} onChange={this.handleChange} /> 
+                                    <span className="req-icon"> *</span>
+                                    <input type="password" className="form-control" pattern="[A-Za-z0-9]+" id="inputpassword" name='password' required  minLength={6} value={this.state.password} onChange={this.handleChange} /> 
                                   </div>
                                   <div className="col">
                                     <label for="exampleInputPassword1" className="form-label">Comfirm Password</label>
-                                    <input type="password" className="form-control" id="confirmpassword" name='confirm_password' minLength={6} value={this.state.confirm_password} onChange={this.handleChange} />  
+                                    <span className="req-icon"> *</span>
+                                    <input type="password" className="form-control" pattern="[A-Za-z0-9]+" id="confirmpassword" name='confirm_password' minLength={6} value={this.state.confirm_password} onChange={this.handleChange} />  
                                   </div>
                                   { this.state.showMessagePassword &&  
                                       <div className="container">
@@ -261,37 +274,41 @@ flash = (e) =>{
                                       </div>
                                 }
                                 </div>
-                                <div className="title_part">
+                                <div className="title_part-regis">
                                   <p className="col">Personal infomation</p>
                                   <div className="line"></div>
                                 </div>
                                   <div className="row my-3">
                                       <div className="col">
                                           <label for="inputFirstname" className="form-label">Firstname</label>
-                                          <input type="text" className="form-control" id="inputfirstname" required  name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
+                                          <span className="req-icon"> *</span>
+                                          <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputfirstname" required  name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
                                       </div>
                                       <div className="col">
                                       <label for="inputLastname" className="form-label">Last name</label>
-                                          <input type="text" className="form-control" id="inputlastname" required name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
+                                      <span className="req-icon"> *</span>
+                                          <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputlastname" required name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
                                       </div>
                                       <div className="col">
                                         <label for="exampleInputEmail1" className="form-label">Birthday</label>
-                                        <input type="date" className="form-control" id="inputdate" required name='birthday' value={this.state.birthday} onChange={this.handleChange} />
+                                        <input type="date" className="form-control" id="inputdate" name='birthday' value={this.state.birthday} onChange={this.handleChange} />
                                        </div> 
                                   </div>
                                   <div className="row">
                                     <div className="col my-3">
                                       <label for="exampleInputEmail1" className="form-label">Shop name</label>
+                                      <span className="req-icon"> *</span>
                                       <input type="text" className="form-control" id="inputshopname" required value={this.state.shop_name} name='shop_name' onChange={this.handleChange} />
                                     </div>
                                     <div className="col my-3">
                                       <label for="exampleInputEmail1" className="form-label">Type of sale</label>
-                                      <input type="text" className="form-control" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' onChange={this.handleChange} />
+                                      <span className="req-icon"> *</span>
+                                      <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' required onChange={this.handleChange} />
                                     </div>
                                   </div>
                                   <div className="my-3">
                                     <label for="exampleFormControlTextarea1" className="form-label">Shop Address</label>
-                                    <textarea className="form-control" id="inputshopaddress" rows="2" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
+                                    <textarea className="form-control" id="inputshopaddress" rows="3" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
                                   </div>
                                 <div class="form-check">
                                   <input className="form-check-input" type="checkbox" value="" name="checkvalidate" required/>

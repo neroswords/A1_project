@@ -1,9 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
+*{
+  font-family: 'Montserrat';
+}
+
 body {
   background-color: #f9fafc;
+  /* font-family: 'Montserrat';font-family: 'Montserrat'; */
   /* background: url('http://127.0.0.1:200//images/etc/main.png') no-repeat fixed bottom; */
   background-position: absolute;
   background-size: 100%;
   margin-top: 0%;
+  width: 100%;
   /* background: url(${process.env.PUBLIC_URL +'/images/bg-home.png'}) no-repeat fixed bottom; */
   /* background-color: white; */
 }
@@ -33,10 +41,6 @@ body {
 } */
 
 
-.conatainer {
-  /* margin: auto; */
-}
-
 .Mainpage {
   margin-bottom: 5%;
 }
@@ -49,3 +53,6 @@ body {
   cursor: pointer;
 }
 
+.ReactTable {
+  width:100% !important;
+}

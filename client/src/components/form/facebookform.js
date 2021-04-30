@@ -41,7 +41,7 @@ const Styles = styled.div`
 
 .copy-link p::-webkit-scrollbar {
   /* width: 5px; */
-  height: 6px;
+  height: 10px;
 }
 
 .copy-link p::-webkit-scrollbar-track {
@@ -77,6 +77,7 @@ const Styles = styled.div`
     /* margin-left: -3%;
     margin-right: -8px; */
     margin: 0 -5% 0 0;
+    /* padding: */
     /* text-align:center; */
 } 
 
@@ -103,7 +104,7 @@ const Styles = styled.div`
 }
 
 #container-button .submit{
-    padding: 5px 20px;
+    padding: 5px 30px;
     margin-top: 15px;
     font-size: 19px;
     border-radius: 25px;
@@ -112,6 +113,7 @@ const Styles = styled.div`
     margin: 10px;
     background-color: #0078ff;
     color: #fff;
+    
 }
 
 #container-button .submit:hover{
@@ -194,7 +196,7 @@ export default function Facebookform({botID}) {
                                 <button type="button" className="copy-clipboard" onClick={() => {navigator.clipboard.writeText(webhook)}}><i className="fas fa-copy fa-xs copy-clipboard"></i></button>
                             </div>
                             <div className="input-Box">
-                            <div className="col-lg-12">
+                            <div className="ms-2">
                                 <label  className="form-label">Page Facebook access token</label>
                                 <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputpagefacebook" />
                             </div>
@@ -204,7 +206,7 @@ export default function Facebookform({botID}) {
                             </div>
                             </div>
                             <div id="container-button">
-                                <button className="cancle" type='button' onClick={() => {history.goBack()}} >Back</button>
+                                {/* <button className="cancle" type='button' onClick={() => {history.goBack()}} >Back</button> */}
                                 <button className="submit" type='submit'>Submit</button>
                             </div>
                         </form>

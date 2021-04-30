@@ -11,7 +11,7 @@
 }
 
 .botlist-body {
-   max-width: 1000px;
+   max-width: 1400px;
    margin: 0 auto;
    display: grid;
    grid-gap: 5px;
@@ -32,6 +32,9 @@
   .botlist-body { grid-template-columns: repeat(3, 1fr); }
 }
 
+@media (min-width: 1600px) {
+  .botlist-body { grid-template-columns: repeat(4, 1fr); }
+}
  .card-box {
   background-color: white;
   border-left: solid 20px #Fca311;
@@ -40,8 +43,8 @@
   border-radius: 18px;
   box-shadow: 0px 4.5px 14px rgba(0, 0, 0, 0.1);
   margin: auto;
-  margin-top: 50px;
-  margin-bottom : 10px;
+  margin-top: 35px;
+  margin-bottom : 5px;
   display: grid;
   grid-template-columns: 50% 1fr 1fr 1fr;
   transition: all 0.2s ease-out;
@@ -208,8 +211,8 @@
   box-shadow: 0px 4.5px 14px rgba(0, 0, 0, 0.1);
   border: 1px solid #A4DCF1;
   margin: auto;
-  margin-top: 50px;
-  margin-bottom : 10px;
+  margin-top: 35px;
+  margin-bottom : 5px;
   /* display: grid; */
   grid-template-columns: 50% 1fr 1fr 1fr;
   transition: all 0.2s ease-out;

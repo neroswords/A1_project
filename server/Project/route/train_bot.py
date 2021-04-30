@@ -13,11 +13,7 @@ def delete(id):
     trained_collection = mongo.db.trained
     if request.method == 'POST':
         message_data = request.get_json()
-        print(message_data)
-        # message_data = request.get_json()
-        # print(message_data)
         for message in message_data:
-            print(message)
             trained_collection.delete_one({'_id': ObjectId(message['id'])})
         return {"message":"delete successfully"}
 
@@ -25,13 +21,9 @@ def delete(id):
 @train_bot.route('/delete/training/<id>', methods=['POST'])
 def delete_training(id):
     training_collection = mongo.db.training
-    
-    if request.method == 'POST':
-        
+    if request.method == 'POST': 
         message_data = request.get_json()
-        print(message_data)
         for message in message_data:
-            print(message)
             training_collection.delete_one({'_id': ObjectId(message['id'])})
         
         return {"message":"delete successfully"}
@@ -53,13 +45,6 @@ def edit_trained():
              trained_collection.update_one({'_id': ObjectId(message_id)},
             {'$set':{'answer':edit_data['value']}})
     return "ok"
-        # message_data = request.get_json()
-        # print(message_data)
-        # for message in message_data:
-        #     print(message)
-        #     training_collection.delete_one({'_id': ObjectId(message['id'])})
-        
-        # return {"message":"delete successfully"}
 
 
 @train_bot.route('/<botID>/training',methods=["GET"])
@@ -74,7 +59,6 @@ def training(botID):
 @train_bot.route('/<botID>/trained',methods=["GET"])
 def trained(botID):
     if request.method == 'GET' :
-        print('0000000000000')
         trained_collection = mongo.db.trained
         trained_cursor = trained_collection.find({"botID" : ObjectId(botID)})
         listcursor = list(trained_cursor)
@@ -91,7 +75,6 @@ def addword(botID):
         question = trained_update['question']
         creator = trained_update['botID'] 
         ans = trained_update['answer']
-        
         trained_collection.insert_one({'question': question, 'botID':  ObjectId(creator), 'answer': ans})
         return {"message":"add done"}
     return {"message":"ok"}

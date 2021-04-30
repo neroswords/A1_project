@@ -7,69 +7,79 @@ import {isLoggedIn} from '../auth'
 // import Telephone from './images/Telephone.png';
 
 const Styles = styled.div`
-  .jumbo {
-    align-items: center;
+  .all-endpage{
+    padding: 1% 10% 10% 10% ;
+    /* align-items: center; */
+    margin-bottom: 50px;
   }
 
-  .container {
-    // background: url(${process.env.PUBLIC_URL +'/images/Background.png'}) no-repeat fixed bottom;
-    background-size: 100%;
-    // margin-top: 10%;
-    margin-bottom: 20%;
-}
-
-  #main {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  #end-page {
+    /* display: grid;
+    grid-template-columns: 2fr 2fr; */
   }
   
-  #main .main-text {
+.main-text-endpage {
     text-align: center;
     font-size: 20px;
     font-weight: 500;
     line-height: 1.25;
-    
   }
 
-  h1 {
-   
-
+  .main-text-endpage h1 {
     font-size: 40px;
     font-weight: 700;
     margin-bottom: 5%;
     margin-top: 16%;
+    /* margin-left: 90px; */
     font-family: 'Roboto',sans-serif;
     color: #14213D;
-
-
   }
 
-  span {
-    font-size: 17px;
+  .main-text-endpage span {
+    text-align: center;
+    /* margin-left: 90px; */
+    font-size: 25px;
     color: #14213D;
     margin-bottom: 15%;
+    max-width: 60px;
   }
 
-  .btn-regis button {
-
+  .btn-on-endpage button {
     color: white;
     font-weight: bold;
     padding: 15px 90px;
     border-radius: 30px;
     background-color: #14213d;
     border-style: none;
-    
+    margin: 5%;
   }
 
-  .btn-regis button:hover {
-    color: black;
+  .btn-on-endpage button:hover {
+    color: white;
     font-weight: bold;
     padding: 15px 90px;
     border-radius: 30px;
-    background-color: white;
+    background-color: #fca311;
     // border: 2px solid #fca311;
   }
-    
+   
+  .img-on-endpage img{
+    width: 70%;
+    position : absolute;
+    right: 110px;
+  }
+
+  @media only screen and (max-width: 1200px){
+  .img-on-endpage img {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 560px){
+  .main-text-endpage {
+    /* text-align: center; */
+  }
+}
 
 `;
 
@@ -77,7 +87,7 @@ function regisBot(props){
   if(isLoggedIn()){
     return(
       <Link to={'/bot_list/'+localStorage.getItem('user_id')}>
-        <button name="user-manage-bot" >Manage Bot</button>
+        <button name="user-manage-bot">Manage Bot</button>
       </Link>
     )
   }
@@ -92,20 +102,20 @@ function regisBot(props){
 
 export const Endpage = () => (
   <Styles>
-    <Container className="container">
-    <Jumbo fluid className="jumbo d-flex position-relative">
-        <section id="main">
-          <img src="./images/phone_group.png" width="90%"/>
-          <div className="main-text">
-            <h1>Improve at every stage <br/> of your business growth</h1>
-            <span>No matter whether you’re a growing company <br/> ChatBot helps you communicate better with customers.</span>
-            <div class="d-grid gap-2 col-6 mx-auto mt-5 btn-regis">
-              {regisBot()}
+    <div className="all-endpage">
+        <div className="row">
+              <div className="img-on-endpage col-lg-7 col-sm-12 col-md-12 col-lg-12 col-xl-7 .d-print-none">
+                  <img src="./images/phone_group.png"/>
             </div>
-          </div>
-          
-        </section>
-    </Jumbo>
-    </Container>
+            <div className="main-text-endpage col-5 col-sm-12 col-xs-12 col-xl-5">
+                  <h1>Improve at every stage <br/> of your business growth</h1>
+                  <span>No matter whether you’re a growing company ChatBot helps you communicate better with customers.</span>
+                  <div class="btn-on-endpage">
+                          {regisBot()}
+                  </div>
+              </div>
+        {/* <img className="img-bg-yellow-end" src="./images/page.png" width="50%"/> */}
+      </div>
+    </div>
   </Styles>
 ) 

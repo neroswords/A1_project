@@ -21,6 +21,7 @@ const Background = styled.div`
 `;
 
 const ModalWrapper = styled.div`
+  z-index: 10;
   width: 800px;
   height: 500px;
   background-color: white;
@@ -94,7 +95,7 @@ const ModalContent = styled.div`
 const CloseModalButton = styled(MdClose)`
   cursor: pointer;
   position: absolute;
-  top: 20px;
+  top: 25px;
   right: 20px;
   width: 32px;
   height: 32px;
@@ -107,7 +108,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
   const modalRef = useRef();
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
-
+  const [flash,setFlash] = useState('')
   const addword =(id)=>{
     const data = {'question' : question,'answer' : answer ,'botID' : id}
     fetch('/bot/'+id+'/addword', {
@@ -116,8 +117,13 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
         "Access-Control-Allow-Origin": "*",
         'Content-Type':'application/json'
         },
-    body: JSON.stringify(data)}).then(setShowWord(prev => !prev))
-    window.location.reload("bot/"+id+'/trained');
+    body: JSON.stringify(data)}).then(res=>res.json().then(data => {
+      if ("error" in data)
+      {
+        setFlash(data['error'])
+      }
+    }))
+    // window.location.reload("bot/"+id+'/trained');
   };
 
   const animation = useSpring({
@@ -131,7 +137,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
   const closeModal = e => {
     if (modalRef.current === e.target) {
       setShowWord(false);
-      window.location.replace("/login")
+      // window.location.replace("/login")
     }
   };
 
@@ -164,7 +170,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
               <ModalContent>
                 <article className="part Addword">
                   <h1 name="addword-popup">
-                    Add your Question and Answer
+                    Add your Question and Answer   {flash}
                   </h1>
                   <form>
                     <div className="group-Question">

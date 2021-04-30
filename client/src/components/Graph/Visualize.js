@@ -1,5 +1,5 @@
-import FileSaver from "file-saver";
-import React from "react";
+// import FileSaver from "file-saver";
+import React, { useEffect } from "react";
 import { useMeasure } from "react-use";
 import {
   CartesianGrid,
@@ -22,6 +22,7 @@ const Styles = styled.div`
   width: 800px;
   height: 800px;
   background-color: #fff;
+  
 }
 
 .head-selector{
@@ -58,70 +59,62 @@ const Styles = styled.div`
   
 }
 
-
 `;
 
-export const Visualize = () => {
+export const Visualize = ({ botID }) => {
   const [containerRef, { width: containerWidth }] = useMeasure();
-  // The chart that we want to download the PNG for.
   const [chart, setChart] = React.useState();
+  console.log(botID)
+  const [dataChart, setDataChart] = React.useState();
+
 
   const [loading, setLoading] = React.useState();
-  async function getData({value}){
-    console.log(value)
+  async function getData( event ) {
+    console.log(event.target.value)
     await setLoading(true)
-    // fetch('/train_bot/delete/training/',{
-    //   method : 'GET',
-    //   headers : {
-    //       "Access-Control-Allow-Origin": "*",
-    //       'Content-Type':'application/json'
-    //       },
-    //       body : JSON.stringify(type),
-    //   });
+      fetch('/sales/' + botID + '/' + event.target.value )
+      .then(res => res.json().then(data => {
+        setDataChart(data)
+
+      }))
     await setLoading(false)
   }
+  useEffect(() => {
+    fetch('/sales/' + botID + '/' + '/month' )
+      .then(res => res.json().then(data => {
+        setDataChart(data)
 
-  const handleDownload = React.useCallback(async () => {
-    // Send the chart to getPngData
-    // const pngData = await getPngData(chart);
-    // Use FileSaver to download the PNG
-    // FileSaver.saveAs(pngData, "test.png");
-  }, [chart]);
+      }))
 
+  }, []);
   const data = [
-    { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
-    { name: "Page B", uv: 3000, pv: 1398, amt: 2210 },
-    { name: "Page C", uv: 2000, pv: 9800, amt: 2290 },
-    { name: "Page D", uv: 2780, pv: 3908, amt: 2000 },
-    { name: "Page E", uv: 1890, pv: 4800, amt: 2181 },
-    { name: "Page F", uv: 2390, pv: 3800, amt: 2500 },
-    { name: "Page G", uv: 3490, pv: 4300, amt: 2100 },
-    { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
-    { name: "Page B", uv: 3000, pv: 1398, amt: 2210 },
-    { name: "Page C", uv: 2000, pv: 9800, amt: 2290 },
-    { name: "Page D", uv: 2780, pv: 3908, amt: 2000 },
-    { name: "Page E", uv: 1890, pv: 4800, amt: 2181 },
-    { name: "Page F", uv: 2390, pv: 3800, amt: 2500 },
-    { name: "Page G", uv: 3490, pv: 4300, amt: 2100 }
+    { name: "Page A", Line: 4000},
+    { name: "Page B", Line: 3000},
+    { name: "Page C", Line: 2000},
+    { name: "Page D", Line: 2780},
+    { name: "Page E", Line: 1890},
+    { name: "Page F", Line: 2390},
+    { name: "Page G", Line: 3490}
   ];
-  
-  
-  
-  return (
-    <div id="container" ref={containerRef}>
-      <br />
 
-      <div className="head-selector">  
-        <select onChange={getData} className="selector-option">
-          <option value="Week">Week</option>
-          <option value="Month">Month</option>
-          <option value="Year">Year</option>
+
+
+  return (
+
+    <div id="container-graph" ref={containerRef}>
+
+      <br />
+      <div className="head-selector">
+        <select  onChange={getData} className="selector-option">
+          <option value="daily">Today</option>
+          <option value="day">By Date</option>
+          <option value="month">By Month</option>
         </select>
       </div>
 
       <LineChart className="LineChart"
         ref={(ref) => setChart(ref)} // Save the ref of the chart
-        data={data}
+        data={dataChart}
         height={500}
         width={1000}
         margin={{ top: 5, right: 40, left: 20, bottom: 25 }}
@@ -130,21 +123,22 @@ export const Visualize = () => {
         <YAxis />
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip />
-        <Legend />
-        <Line
+        <Legend wrapperStyle={{ bottom: 5 }} />
+        {/* <Line
           type="monotone"
-          dataKey="pv"
+          dataKey="Facebook"
           stroke="#8884d8"
           activeDot={{ r: 8 }}
+        /> */}
+        <Line type="monotone" 
+        dataKey="income" 
+        stroke="#82ca9d" 
         />
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+        
       </LineChart>
-      <span style={{ float: "left" }}>
-        <button onClick={handleDownload}>Download</button>
-      </span>
-      <br />
-      
+
     </div>
+
   );
 };
 
