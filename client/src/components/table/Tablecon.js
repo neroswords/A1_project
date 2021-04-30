@@ -276,8 +276,13 @@ const defaultColumn = {
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID }) {
 
   const Ondelete = (e) => {
-    // delete_trained(e)
-    openDelete_table(e)
+    if(e.length > 0){
+      openDelete_table(e)
+    }
+    else{
+      alert('please select')
+    }
+    console.log(e.length)
   }
 
   const filterTypes = React.useMemo(

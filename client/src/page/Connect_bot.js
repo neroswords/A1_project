@@ -3,10 +3,8 @@ import styled from 'styled-components';
 import Facebookform from '../Components/Form/facebookform';
 import Lineform from '../Components/Form/lineform';
 import { withRouter, Redirect } from 'react-router-dom'
-
 import { useSpring, animated } from 'react-spring';
 import { MdClose } from 'react-icons/md';
-import { Container } from "react-bootstrap";
 
 const Styles = styled.div`
   .container {
@@ -23,17 +21,6 @@ const Styles = styled.div`
     border-radius: 40px;
   }
   
-  .model-popup {
-    /* position: relative;
-    left: 50px;
-    right: 150px;
-    top: -250px;
-    z-index :1000;
-    background-color: black; */
-    /* background-color:black; */
-    /* width: 100%;
-    height: 100%; */
-  }  
 `;
 
 const Background = styled.div`

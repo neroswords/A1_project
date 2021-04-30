@@ -30,8 +30,6 @@ const Styles = styled.div`
     color: black;
 }
 
-
-
 .copy-link p{
     font-size: 15px;
     color: black;

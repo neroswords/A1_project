@@ -2,6 +2,7 @@ import React from 'react'
 import Navbar_member from '../Components/Navbar/navbar_member';
 import styled from 'styled-components';
 import Visualize from "../Components/Graph/Visualize";
+import {Link} from "react-router-dom";
 
 const Styles = styled.div` 
 .history-page {
@@ -29,6 +30,16 @@ const Styles = styled.div`
     border-radius: 0.25rem;
     /* border: 1px solid #ececec; */
 }
+.CircleRight{
+    color: white;
+    
+}
+.MoreInfo{
+    color: white;
+    margin-left: 30%;
+}
+
+
 `
 function History(props) {
     return (
@@ -49,7 +60,7 @@ function History(props) {
                             <div class="icon">
                                 <i class="ion ion-bag"></i>
                             </div>
-                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <Link to={'/bot/'+ props.match.params.bot_id +'/history/new'}><a href="#" className="small-box-footer MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
                         </div>
 
                         <div class="col-lg-3 col-6">
@@ -57,12 +68,12 @@ function History(props) {
                                 <div class="inner">
                                     <h3>53</h3>
 
-                                    <p>Bounce Rate</p>
+                                    <p>Total Order</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                                <Link><a href="#" className="small-box-footer MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
                             </div>
                         </div>
 
@@ -73,7 +84,7 @@ function History(props) {
 
 
                     <div className="show-history">
-                        <Visualize />
+                        <Visualize botID={props.match.params.bot_id}/>
                     </div>
                 </div>
             </div>
