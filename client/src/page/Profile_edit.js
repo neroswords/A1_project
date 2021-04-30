@@ -19,11 +19,12 @@ const Styles = styled.div`
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
   }
   
-  .card-regis .card-title {
+  .card-regis .card-title-edit-profile {
     margin-bottom: 2rem;
     font-size: 2rem;
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
+    text-align: center;
   }
   
   .card-regis .card-body {
@@ -115,6 +116,9 @@ const Styles = styled.div`
     margin-bottom: 3%;
   }
   
+  .reg_proflie{
+    color: red;
+  }
 `;
 
 
@@ -196,10 +200,10 @@ componentDidMount ()  {
     return(
         <Styles>
               <div className="container">
-                    <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
+                    <div className="col-sm-10 col-md-9 col-lg-8 mx-auto">
                       <div className="card card-regis">
                         <div className="card-body">
-                          <h5 className="card-title text-center">Edit Profile</h5>
+                          <h5 className="card-title-edit-profile">Edit Profile</h5>
                           <form className="form-regis">
                           <div className="title_part">
                                 <p className="col">Account infomation</p>
@@ -207,10 +211,12 @@ componentDidMount ()  {
                           </div>
                               <div className="my-3">
                               <label for="exampleInputEmail1" className="form-label">Email address</label>
+                              <span className="reg_proflie"> *</span>
                               <input type="email" className="form-control " value = {this.state.email} id="inputemail" name='email' required value={this.state.email} onChange={this.handleChange} />
                               </div>
                               <div className="my-3">
                                 <label for="exampleInputEmail1" className="form-label">Username</label>
+                                
                                 <input type="text" className="form-control" value = {this.state.username} id="inputusername" name='username' disabled value={this.state.username} onChange={this.handleChange}/>
                               </div>
                               <div className="row">
@@ -230,11 +236,13 @@ componentDidMount ()  {
                                 <div className="row my-3">
                                     <div className="col">
                                         <label for="inputFirstname" className="form-label">Firstname</label>
-                                        <input type="text" className="form-control" value = {this.state.firstname} id="inputfirstname"  name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
+                                        <span className="reg_proflie"> *</span>
+                                        <input type="text" className="form-control" value = {this.state.firstname} id="inputfirstname"  name='firstname' value={this.state.firstname} required onChange={this.handleChange}/>
                                     </div>
                                     <div className="col">
                                     <label for="inputLastname" className="form-label">Last name</label>
-                                        <input type="text" className="form-control" value = {this.state.lastname} id="inputlastname"  name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
+                                    <span className="reg_proflie"> *</span>
+                                        <input type="text" className="form-control" value = {this.state.lastname} id="inputlastname"  name='lastname' value={this.state.lastname} required onChange={this.handleChange}/>
                                     </div>
                                     <div className="col">
                                       <label for="exampleInputEmail1" className="form-label">Birthday</label>
@@ -244,16 +252,18 @@ componentDidMount ()  {
                                 <div className="row">
                                   <div className="col my-3">
                                     <label for="exampleInputEmail1" className="form-label">Shop name</label>
-                                    <input type="text" className="form-control" id="inputshopname" value={this.state.shop_name} name='shop_name' onChange={this.handleChange} />
+                                    <span className="reg_proflie"> *</span>
+                                    <input type="text" className="form-control" id="inputshopname" value={this.state.shop_name} name='shop_name' required onChange={this.handleChange} />
                                   </div>
                                   <div className="col my-3">
                                     <label for="exampleInputEmail1" className="form-label">Type of sale</label>
-                                    <input type="text" className="form-control" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' onChange={this.handleChange} />
+                                    <span className="reg_proflie"> *</span>
+                                    <input type="text" className="form-control" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' required onChange={this.handleChange} />
                                   </div>
                                 </div>
                                 <div className="my-3">
                                   <label for="exampleFormControlTextarea1" className="form-label">Shop Address</label>
-                                  <textarea className="form-control" id="inputshopaddress" value = {this.state.shop_address} rows="2" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
+                                  <textarea className="form-control" id="inputshopaddress" value = {this.state.shop_address} rows="3" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
                                 </div>
                                 {/* <hr className="my-4"/>                            */}
                               <div className="btn-regis mt-5">

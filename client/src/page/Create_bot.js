@@ -18,11 +18,12 @@ const Styles = styled.div`
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
   }
   
-  .card-bot .card-title {
+  .card-bot .card-title-addbot {
     margin-bottom: 2rem;
     font-size: 2rem;
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
+    text-align: center;
   }
   
   .card-bot .card-body {
@@ -108,6 +109,10 @@ const Styles = styled.div`
 
   .upload-img label{
     cursor: pointer;
+  }
+
+  .req_infobot {
+    color: red;
   }
 `;
 
@@ -274,10 +279,10 @@ _handleImageChange(e) {
         <Styles>
           
               <div className="container">
-                    <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
+                    <div className="col-sm-10 col-md-9 col-lg-7 mx-auto">
                       <div className="card card-bot">
                         <div className="card-body">
-                          <h5 className="card-title text-center">Create Bot form</h5>
+                          <h5 className="card-title-addbot">Create Bot form</h5>
                           <form className="form-bot" onSubmit={this.handleUploadImage}>
                                 <div className="title_part">
                                         <p className="col">Bot infomation</p>
@@ -312,6 +317,8 @@ _handleImageChange(e) {
                                             </div>
                                             <div className="mt-3">
                                                 <label for="inputFirstname" className="form-label">Age</label>
+                                                <span className="req_infobot"> *</span>
+                                                <input type="integer" name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} required onChange={this.handleChange} />
                                                 <label  for="inputFirstname" className="form-label" >{this.state.errorMessage['age'] != "start" ? this.state.errorMessage['age'] : ""}</label>
                                                 <input min = "1" required type="number" name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
                                             </div>
