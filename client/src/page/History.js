@@ -69,11 +69,12 @@ function History(props) {
                                     <h3>53</h3>
 
                                     <p>Total Order</p>
+                                    <br></br>
                                 </div>
                                 <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
+                                    
                                 </div>
-                                <Link><a href="#" className="small-box-footer MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
+                                {/* <Link><a href="#" className="small-box-footer MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link> */}
                             </div>
                         </div>
 
