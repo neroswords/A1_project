@@ -74,7 +74,7 @@ function Train(props) {
     <Styles>
       <div className="train-page">
         <Navbar_member botID={props.match.params.bot_id} path={"training"} />
-        <div className="container">
+        <div className="container-fluid">
           <div className="training-title">
             <h2 className="p-2 flex-grow-1 bd-highlight" id="training-header">Trainning</h2>
           </div>

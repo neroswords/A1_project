@@ -147,7 +147,7 @@ function Dropdown({botData, deleteBot, openDelete_pop, openForm}){
                         <a href={'/bot/'+botData._id.$oid+'/edit_bot'}><i class="fas fa-pen"></i> edit</a>
                     </li>
                     <li>
-                        <a onClick={OnopenForm}><i class="fas fa-link"></i> Connect </a>
+                        <a href="#" onClick={OnopenForm}><i class="fas fa-link"></i> Connect </a>
                     {/* <a href={'/bot/'+botData._id.$oid+'/connect'} ><i class="fas fa-link"></i> Connect</a> */}
                     {/* <Facebookform showForm={showForm} setShowForm={setShowForm} showIdbot={showIdbot}></Facebookform> */}
                     </li>

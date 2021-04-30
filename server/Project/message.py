@@ -95,18 +95,15 @@ def ReplyMessageFB(**kwargs):
 
 def item_list_flexmessage(**kwargs):
     inventory_collection = mongo.db.inventory
-    print("01")
-    print(kwargs)
     search_request = {'$and': [{'$or':
                                 [{'item_name': {'$regex': kwargs['query'].strip(), "$options":'i'}}, {'type': {'$regex': kwargs['query'].strip().lower(), "$options": 'i'}},
                                  ]}, {'botID': ObjectId(kwargs['botID'])}
                                ]
                       }
-    print(search_request)
     data = inventory_collection.find(search_request).limit(9)
-    print("02")
-    print("DATA = ", data)
     data_list = list(data)
+    bot_collection = mongo.db.bots
+    bot_define = bot_collection.find_one({'_id': ObjectId(kwargs['botID'])})
     elements =  {
                 "attachment": {
                     "type": "template",
@@ -119,18 +116,13 @@ def item_list_flexmessage(**kwargs):
                 }
             }
     if len(data_list) == 0:
-        print("03")
         return '''{"message":"ไม่พบผลการค้นหา"}'''
     else:
-        print("04")
         contents_block = ''''''
         for index in data_list:
             # server_url+"/images/bot/inventory/"+index['item_img'][0]
-            print(index)
             if "facebook" == kwargs['platform']:
-              print("pass facebook ja")
               if index['amount'] <= 0:
-                print("05")
                 element = {"title": index["item_name"], "image_url": "https://9bfdab4a218f.ngrok.io/images/bucket/"+index['img'][0], "subtitle": "ราคา"+str(index["price"])+"บาท",
                            "default_action": {"type": "web_url", "url": "https://petersfancybrownhats.com/view?item=103",
                                               "webview_height_ratio": "tall", }, "buttons": [{"type": "web_url", "title": "ดูข้อมูล", "url": "https://9bfdab4a218f.ngrok.io/facebook/"+kwargs['botID']+"/detail/"+str(index["_id"])+"/"+kwargs['sender_id'],
@@ -138,16 +130,13 @@ def item_list_flexmessage(**kwargs):
                                                                                               "webview_height_ratio": "tall"},
                                                                                              {"type": "postback", "title": "ใส่รถเข็น", "payload": "cart&"+str(index["_id"])}, ]}
                 elements["attachment"]["payload"]["elements"].append(element)
-                print(elements)
-                print("pass elements")
             elif "line" == kwargs['platform']:
                 if index['amount'] <= 0:
-                  print("06")
                   contents = '''{
             "type": "bubble",
             "hero": {
               "type": "image",
-              "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_5_carousel.png",
+              "url": "https://da37df61a729.ngrok.io/images/bot/bot_pic/Avatar.jpg",
               "size": "full",
               "aspectRatio": "20:13",
               "aspectMode": "cover"
@@ -208,12 +197,11 @@ def item_list_flexmessage(**kwargs):
             }
           }''' % (index['item_name'], index['price'], index['_id'])
                 else:
-                  print("07")
                   contents = '''{
             "type": "bubble",
             "hero": {
               "type": "image",
-              "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_5_carousel.png",
+              "url": "%s/images/bot/items/%s",
               "size": "full",
               "aspectRatio": "20:13",
               "aspectMode": "cover"
@@ -267,19 +255,17 @@ def item_list_flexmessage(**kwargs):
                   "action": {
                     "type": "uri",
                     "label": "Description",
-                    "uri": "https://liff.line.me/1655652942-1EJmM0LZ"
+                    "uri": "https://liff.line.me/%s/product_info/%s"
                   }
                 }
               ]
             }
-          }''' % (index['item_name'], index['price'], index['_id'])
-                print("08")
+          }''' % (server_url,index['img'][0],index['item_name'], index['price'], index['_id'],bot_define['liff_id'], index['_id'])
                 if contents_block == "":
                     contents_block = contents
                 else:
                     contents_block = contents_block+','+contents
         if "line" == kwargs['platform']:
-          print("09")
           flex = '''
         [%s,
         {
@@ -309,11 +295,10 @@ def item_list_flexmessage(**kwargs):
         }]''' % (contents_block)
         elif "facebook" == kwargs['platform']:
           flex = json.dumps(elements)
-          print(type(flex))
     return flex
 
 
-def invoice_flexmessage(**kwargs):
+def invoice_flexmessage(platform="line",**kwargs):
     cart_collection = mongo.db.carts
     bot_collection = mongo.db.bots
     bot_define = bot_collection.find_one({'_id': ObjectId(kwargs['botID'])})
@@ -542,7 +527,7 @@ def confirm_flexmessage(sender_name):
           },
           {
             "type": "text",
-            "text": "*กดEnterหาถูกต้องหรือCancelเพื่อกลับไปซื้อของ",
+            "text": "*กดEnterหากถูกต้องหรือCancelเพื่อกลับไปซื้อของ",
             "size": "xxs",
             "offsetTop": "md"
           }
@@ -618,7 +603,7 @@ def address_flex(address):
         },
         {
           "type": "text",
-          "text": "*กดEnterหาถูกต้องหรือCancelเพื่อกลับไปซื้อของ",
+          "text": "*กดEnterหากถูกต้องหรือCancelเพื่อกลับไปซื้อของ",
           "size": "xxs",
           "offsetTop": "md",
           "style": "normal"
@@ -656,6 +641,8 @@ def address_flex(address):
     return flex
 
 def payment_flex(botID,customerID):
+  bot_collection = mongo.db.bots
+  bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
   flex = '''
   {
     "type": "bubble",
@@ -683,7 +670,7 @@ def payment_flex(botID,customerID):
           "action": {
             "type": "uri",
             "label": "Pay",
-            "uri": "https://liff.line.me/1655652942-zNpjoxYV/checkout/%s?customer=%s"
+            "uri": "https://liff.line.me/%s/checkout/%s"
           }
         },
         {
@@ -699,5 +686,78 @@ def payment_flex(botID,customerID):
       ],
       "flex": 0
     }
-  }'''%(botID,customerID)
+  }'''%(bot_define['liff_id'], customerID)
   return flex 
+
+def tel_flexmessage(tel):
+    flex = '''
+    {
+      "type": "bubble",
+      "header": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "ยืนยันเบอร์โทร",
+            "align": "center"
+          }
+        ]
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "%s",
+            "wrap": true,
+            "weight": "bold",
+            "offsetBottom": "lg"
+          },
+          {
+            "type": "separator"
+          },
+          {
+            "type": "text",
+            "text": "*พิมพ์เบอร์อีกครั้งได้หากต้องการแก้ไข",
+            "size": "xxs",
+            "offsetTop": "md"
+          },
+          {
+            "type": "text",
+            "text": "*กดEnterหากถูกต้องหรือCancelเพื่อกลับไปซื้อของ",
+            "size": "xxs",
+            "offsetTop": "md"
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "postback",
+              "label": "Confirm",
+              "data": "action=tel&confirm=true&data=%s"
+            },
+            "style": "primary",
+            "margin": "none",
+            "offsetStart": "none",
+            "offsetEnd": "none"
+          },
+          {
+            "type": "button",
+            "action": {
+              "type": "postback",
+              "label": "Cancel",
+              "data": "action=tel&confirm=false"
+            },
+            "style": "link"
+          }
+        ]
+      }
+    }''' % (tel,tel)
+    return flex

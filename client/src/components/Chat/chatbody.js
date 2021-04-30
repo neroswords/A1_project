@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client'
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
@@ -14,21 +14,26 @@ function Chatbody({botID,customerID}){
     const [messages,setMessages] = useState([]);
     const [message,setMessage] = useState("");
     const [username, setUsername] = useState("");
-  
+    const messagesEndRef = useRef(null)
+
+    const scrollToBottom = () => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "auto" })
+    }
+
     useEffect(() =>{
         if (customerID !=="main"){
+            join_room()
             setMessages([])
             fetch('/bot/'+botID+'/customer/'+customerID).then(res=> res.json().then(data=>{
                 setUsername(data.profile.display_name);
                 data.message.forEach(ele=>{ 
-                  console.log(ele)
                   if (ele.sender_type == "bot"){
                     setMessages(messages=> [...messages,<div><p className="head-name from-owner msg">{ele.sender}</p><p className="msg owner-send">{ele.message}</p></div>])
                   } else if (ele.sender_type == "lineUser"){
                     setMessages(messages=> [...messages,<div><p className="head-name from-cust msg">{ele.sender}</p><p className="msg customer-send">{ele.message}</p></div>])
                   }   
             })
-          }))
+          })).then(scrollToBottom())
         }
         
     },[customerID])
@@ -36,21 +41,27 @@ function Chatbody({botID,customerID}){
     
     useEffect(() =>{
         getMessages();
+        
     },[messages.length])
 
-    const getMessages = () =>{
+    const join_room = () =>{
       socket.on('connect', function (room) {
-          socket.emit('join_room', {
-              bot: botID,
-              customer:customerID
-          })
-      })
-      
+        socket.emit('join_room', {
+            bot: botID,
+            customer:customerID
+        })
+    })
+    }
+    
+    
+
+    const getMessages = () =>{
       socket.on("message_from_webhook", msg =>{
           setMessages([...messages,
               <div className="customer-msg col">
                   <p className="head-name from-cust msg">{msg.sender}</p><p className="msg customer-send">{msg.message}</p>
               </div>]);
+              scrollToBottom()
           // setUserID([msg.userID]);
       })
       socket.on("message_from_response", msg =>{
@@ -58,6 +69,8 @@ function Chatbody({botID,customerID}){
               <div className="owner-msg col">
                   <p className="head-name from-owner msg">{msg.sender}</p><p className="msg owner-send">{msg.message}</p>
               </div>]);
+              
+          
           // setUserID([msg.userID]);
       })
   }
@@ -92,6 +105,7 @@ function Chatbody({botID,customerID}){
                                   <p className="msg-all">{msg}</p>
                             </div>  
                         ))}
+                        <div ref={messagesEndRef} />
                     </div>
                       
                     

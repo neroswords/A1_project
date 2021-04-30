@@ -14,6 +14,7 @@ from flask_cors import CORS, cross_origin
 from .extensions import mongo, Config
 from flask_talisman import Talisman
 from engineio.payload import Payload
+from bson import ObjectId
 
 Payload.max_decode_packets = 250
 
@@ -43,6 +44,8 @@ from Project.route.merchant import merchant
 from Project.route.facebook import facebook
 from Project.route.inventory import inventory
 from Project.route.checkout import checkout
+from Project.route.sales import sales
+from Project.route.liff import liff
 
 app.register_blueprint(profile, url_prefix='/profile')
 app.register_blueprint(bot, url_prefix='/bot')
@@ -54,6 +57,8 @@ app.register_blueprint(facebook, url_prefix='/facebook')
 app.register_blueprint(facebook, url_prefix='/template_facebook')
 app.register_blueprint(inventory, url_prefix='/inventory')
 app.register_blueprint(checkout, url_prefix='/checkout')
+app.register_blueprint(liff, url_prefix='/liff')
+app.register_blueprint(sales, url_prefix='/sales')
 
 # Talisman(app, content_security_policy={"default-src": "'unsafe-inline' 'self' *.omise.co"},)
 
@@ -76,13 +81,15 @@ def serve_video(video_name):
 
 @app.route('/')
 def serve_api():
+    # bot_collection = mongo.db.bots
+    # bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
     # if request.args.get('liff.state') != None:
-    return render_template('loading.html')
+    return render_template('loading.html',liffId="1655652942-zNpjoxYV")
 
 CORS(app, expose_headers='Authorization')
 
-if __name__ == '__main__':
-#     http_server = WSGIServer(('',200), app)
-#     http_server.serve_forever()
-    app.secret_key = 'mysecret'
-    socketio.run(app, port=200, debug=True)
+# if __name__ == '__main__':
+# #     http_server = WSGIServer(('',200), app)
+# #     http_server.serve_forever()
+#     app.secret_key = 'mysecret'
+#     socketio.run(app, port=200, debug=True)

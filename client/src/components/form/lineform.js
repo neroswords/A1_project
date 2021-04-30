@@ -138,12 +138,11 @@ const Styles = styled.div`
 
 `;
 
-export default function Lineform(props) {
-    console.log(props)
+export default function Lineform({botID}) {
     const [access_token, setAccess_token] = useState('');
     const [channel_secret, setChannel_secret] = useState('');
     const [basic_id, setBasic_id] = useState('');
-    const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+props.props.bot_id+'/line');
+    const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+botID+'/line');
     const history = useHistory()
 
     const handleSubmit = (event) => {
@@ -155,7 +154,7 @@ export default function Lineform(props) {
             'creator':localStorage.getItem('user_id'),
             'platform': 'line'
             }
-        fetch('/bot/'+props.props.bot_id+'/connect', {
+        fetch('/bot/'+botID+'/connect', {
             method: 'POST',
             headers : {
                 "Access-Control-Allow-Origin": "*",
@@ -166,7 +165,7 @@ export default function Lineform(props) {
     }
 
     useEffect(() => {
-        fetch('/bot/'+props.props.bot_id+'/connect').then(
+        fetch('/bot/'+botID+'/connect').then(
             response => response.json()
           ).then(data =>{
             setAccess_token(data.access_token);
@@ -185,7 +184,7 @@ export default function Lineform(props) {
                                     <p className="col mb-4">Connect to Line</p>
                                 </div>
                                 <div className="copy-link">
-                                    <p>{packageJson.proxy}bot/webhook/{props.props.bot_id}/line</p>
+                                    <p>{packageJson.proxy}/bot/webhook/{botID}/line</p>
                                     <button type='button' className="copy-clipboard" onClick={() => {navigator.clipboard.writeText(webhook)}}><i className="fas fa-copy fa-xs"></i></button>
                                 </div>
                                 <div className="input-Box">

@@ -36,7 +36,6 @@ def call_facebook(botID):
         sender_id = msg['sender']['id']
         field = ['name', 'picture']
         profile = bot.get_user_info(sender_id,fields = field)
-        print(profile)
         if('message' in payload['entry'][0]['messaging'][0].keys()):
             if('attachments' in payload['entry'][0]['messaging'][0]['message'].keys()):
                 res = {"message": "ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
@@ -176,7 +175,9 @@ def basket_facebook(botID, userID):
         cart_cursor = list(cart_cursor)
         print(cart_cursor)
         print("GET")
+        data = json.loads(dumps(cart_cursor))
         # print(cart_cursor[0]['cart'][0]['itemid'])
+        print(data)
         return render_template('basket_shop.html', data=cart_cursor)
 
 

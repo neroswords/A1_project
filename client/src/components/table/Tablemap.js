@@ -140,6 +140,7 @@ input::placeholder{
 .button-trained-word .SearchBar{
   position:relative;
   float: right;
+  margin-bottom:1%;
 }
 
 .select-pagesize {

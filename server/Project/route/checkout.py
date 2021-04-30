@@ -75,13 +75,16 @@ def process(chrg, botID, userID, already_redirected=False):
         cart_collection = mongo.db.carts
         customer_collection = mongo.db.customers
         purchased_collection = mongo.db.purchased
+        bot_collection = mongo.db.bots
+        bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
         customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
         cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
-        purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":datetime.datetime.now()})
+        date = datetime.datetime.now()
+        purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":date,"purchased_time":str(date.hour)+":"+str(date.minute)+":"+str(date.second),"purchased_month":date.month,"purchased_year":date.year,"purchased_day":date.day,"userType":"lineUser","status":"waited"})
         cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
         data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
         push_message(data)
-        return redirect("https://liff.line.me/1655652942-zNpjoxYV/checkout/complete")
+        return redirect("https://liff.line.me/"+bot_define['liff_id']+"/complete")
 
     # Check whether source is "econtext" before checking whether charge has `authorize_uri`.
     # Do not automatically redirect to `authorize_uri` for "econtext".
@@ -183,20 +186,35 @@ def charge():
     except omise.errors.BaseError as error:
         flash(f"An error occurred.  Please contact support.  Order ID: {order_id}")
         current_app.logger.error(f"OmiseError: {repr(error)}.")
-        return redirect("/checkout/"+botID)
+        return redirect("/checkout/"+botID+'/check')
     except Exception as e:
         flash("""An error occurred.  Please contact support.""")
         current_app.logger.error(repr(e))
-        return redirect("/checkout/"+botID)
+        return redirect("/checkout/"+botID+'/check')
 
-@checkout.route("/complete",methods=['GET'])
-def complete():
-    return render_template('complete.html')
+@checkout.route("/<botID>/complete",methods=['GET'])
+def complete(botID):
+    bot_collection = mongo.db.bots
+    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
+    return render_template('complete.html',liffId=bot_define['liff_id'])
+
+
 
 @checkout.route("/<botID>", methods=['GET'])
 def check_out(botID):
     cart_collection = mongo.db.carts
     cart_define = cart_collection.find_one({'$and':[{'userID':request.args.get('customer')},{'botID':ObjectId(botID)}]})
+    if cart_define == None:
+        return render_template(
+        'checkout.html',
+        key=current_app.config.get("OMISE_PUBLIC_KEY"),
+        # cart=3000,
+        # Price=cart_define['total']*100,
+        botID = botID,
+        currency=current_app.config.get("STORE_CURRENCY"),
+        customer=session.get("customer"),
+        liffId = "1655652942-zNpjoxYV"
+        )
     return render_template(
         'checkout.html',
         key=current_app.config.get("OMISE_PUBLIC_KEY"),

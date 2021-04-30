@@ -186,7 +186,6 @@ class Register extends React.Component {
       },
       body: JSON.stringify(profile)
     }).then((res)=>res.json()).then(data=>{
-      console.log(data)
       if(data.message){
         this.setState({redirect:true})
       }

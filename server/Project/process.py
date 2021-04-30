@@ -3,7 +3,7 @@ from pythainlp.tokenize import word_tokenize
 import re 
 from bson import ObjectId
 from Project.extensions import mongo
-from Project.message import invoice_flexmessage,item_list_flexmessage,confirm_flexmessage,address_flex, payment_flex
+from Project.message import invoice_flexmessage,item_list_flexmessage,confirm_flexmessage,address_flex, payment_flex, tel_flexmessage
 import json
 from linebot.models import CarouselContainer
 
@@ -63,16 +63,14 @@ def isnotSymbol(string):
         print("regex False") 
         return False
 
-def process_message(message,botID,min_conf,sender_id,platform):
+def process_message(message,botID,min_conf,sender_id,platform="line"):
     training_collection = mongo.db.training
     trained_collection = mongo.db.trained
     msg_token = word_tokenize(message['message'])
-    print(msg_token,"=aaa")
     max = 0
     ans = ''
     flag = True
     flag,ans = basicEventHandler(msg_token,botID,sender_id,platform)
-    print("proooo")
     if not flag:
         similar_trained_word = trained_collection.find({'botID': ObjectId(botID)})
         for word in similar_trained_word:
@@ -101,7 +99,6 @@ def process_message(message,botID,min_conf,sender_id,platform):
 
 #use with reg
 def basicEventHandler(msg,botID,sender_id,platform):
-    print("AAAAAAAAAAAAAAA")
     event_collection = mongo.db.events
     for key in msg:
         event_define = event_collection.find_one({'data_set': {'$in': [key]}}) #,"$options" :'i'
@@ -110,28 +107,19 @@ def basicEventHandler(msg,botID,sender_id,platform):
             break
     for x in ['ครับ', 'ค่ะ', 'ค่า', 'คะ', 'คับ', 'คร้าบ', 'ฮ่ะ', 'อ่ะ', 'อ่า', 'ป้ะ', 'ป่ะ', 'บ่', 'แมะ', 'มะ', 'ก๊า', 'ไหม', 'มั้ย', 'ค้า', 'หน่อย']:
         try:
-            print("3")
             msg.remove(x)
         except :
-            print("4")
             continue
         
     # event_define = event_collection.find_one({'data_set': {'$regex': key,"$options" :'i'}}) #####มาเช็คดีๆ
-    print("5")
     if event_define != None and event_define['type'] == 'search':
-        print("6")
-        print(msg)
         if isnotSymbol(''.join(msg)):
             item = json.loads(item_list_flexmessage(botID = botID, query=''.join(msg),platform=platform,sender_id = sender_id))
         else:
             item = {"message" : "การค้นหาผิดพลาด"}
-        print("7")
-        print(item)
-        print(type(item))
         if type(item) == list:
             return True,{"flex":CarouselContainer(item),"alt":"ค้นหาสินค้า"}
         elif "message" in item.keys():
-            print("99")
             return True,item
         elif "facebook" == platform:
             return True,{"flex":item}
@@ -151,6 +139,7 @@ def commandsHandler(**kwargs):
     cart_collection = mongo.db.carts
     customer_collection = mongo.db.customers
     inventory_collection = mongo.db.inventory
+    mappings_collection = mongo.db.mappings
     customer_define = customer_collection.find_one({'$and':[{'userID':kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]})
     commands = kwargs['commands']['postback'].split("&")
     define_cart = cart_collection.find_one({'$and':[{'userID':kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]})
@@ -177,7 +166,7 @@ def commandsHandler(**kwargs):
                         newlist[idx]['total_ob'] += newlist[idx]['price_per_ob']
                         total += newlist[idx]['price_per_ob']
                         if define_item['amount'] < newlist[idx]['amount'] :
-                            return {"message":"ขออภัยครับ สินค้าชิ้นนี่หมดแล้ว"}
+                            return {"message":"ขออภัยครับ สินค้าชิ้นนี้มีไม่พอกับความต้องการของคุณ"}
                         myquery = {'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]}
                         newvalues = {"$set": {"cart": newlist,"total": total}}
                         cart_collection.update_one(myquery,newvalues)
@@ -207,7 +196,6 @@ def commandsHandler(**kwargs):
                 myquery = { '$and': [{"userID": kwargs['sender_id']}, {"botID": ObjectId(kwargs['botID'])}]}
                 newvalues = { "$set": {"fullname": commands[2].split('=')[1],"state":"address"}}
                 customer_collection.update_one(myquery,newvalues)
-                # customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": })
                 if 'address' in customer_define.keys():
                     return {"flex":json.loads(address_flex(customer_define['address'])),"alt":"ยืนยันที่อยู่"}
                 return {'message':'ระบุที่อยู่ที่ต้องการจัดส่ง'}
@@ -220,12 +208,25 @@ def commandsHandler(**kwargs):
             commd = commands[1].split('=')
             if commd[1] == "true":
                 myquery = { '$and': [{"userID": kwargs['sender_id']}, {"botID": ObjectId(kwargs['botID'])}]}
-                newvalues = { "$set": {"address": commands[2].split('=')[1],"state":"payment"}}
+                newvalues = { "$set": {"address": commands[2].split('=')[1],"state":"tel"}}
                 customer_collection.update_one(myquery, newvalues)
-                # customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"payment"}})
-                return {'flex': json.loads(payment_flex(kwargs['botID'], kwargs['sender_id'])),"alt":"การจ่ายเงิน"}
+                if 'tel' in customer_define.keys():
+                    return {'flex': json.loads(tel_flexmessage(customer_define['tel'])),"alt":"ยืนยันเบอร์โทร"}
+                return {'message':'โปรดกรอกเบอร์โทรของคุณ'}
             elif commd[1] == "false":
                 customer_collection.update_one({'$and': [{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
+                return {'message':'เชิญเลือกซื้อของต่อได้เลยครับ'}
+        else: return {"message":"เกิดข้อผิดพลาดโปรดลองใหม่หรือทำกระบวนการที่ทำอยู่ให้เสร็จก่อนครับ"}
+    elif commands[0] == "action=tel":
+        if customer_define['state'] == 'tel':
+            commd = commands[1].split('=')
+            if commd[1] == "true":
+                myquery = { '$and': [{"userID": kwargs['sender_id']}, {"botID": ObjectId(kwargs['botID'])}]}
+                newvalues = { "$set": {"tel": commands[2].split('=')[1],"state":"payment"}}
+                customer_collection.update_one(myquery,newvalues)
+                return {"flex":json.loads(payment_flex(kwargs['botID'], kwargs['sender_id'])),"alt":"การจ่ายเงิน"}
+            elif commd[1] == "false":
+                customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
                 return {'message':'เชิญเลือกซื้อของต่อได้เลยครับ'}
         else: return {"message":"เกิดข้อผิดพลาดโปรดลองใหม่หรือทำกระบวนการที่ทำอยู่ให้เสร็จก่อนครับ"}
     elif commands[0] == "action=payment":
@@ -249,9 +250,10 @@ def stateHandler(**kwargs):
             return {"flex":json.loads(confirm_flexmessage(kwargs['message']['message'])),"alt":"ยืนยันชื่อ-นามสกุล"}
         elif customer_define['state'] == "address":
             return {"flex":json.loads(address_flex(kwargs['message']['message'])),"alt":"ยืนยันที่อยู่"}
+        elif customer_define['state'] == "tel":
+            return {"flex":json.loads(tel_flexmessage(kwargs['message']['message'])),"alt":"ยืนยันเบอร์โทร"}
         elif customer_define['state'] == "none" or customer_define['state'] == "inCart" or customer_define['state'] == "tracking":
             res = process_message(kwargs['message'],kwargs['botID'],kwargs['confident'],kwargs['sender_id'])
     elif 'postback' in kwargs.keys():
-        # if customer_define['state'] in ["none","inCart"]:
         res = commandsHandler(commands = kwargs['postback'], sender_id = kwargs['sender_id'], botID=kwargs['botID'])
     return res

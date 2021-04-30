@@ -7,6 +7,7 @@ import { Redirect, Link } from 'react-router-dom';
 function Chat(props){
     const [customerList, setCustomerList] =  useState([])
     const [customer, setCustomer] =  useState(props.match.params.customer_id)
+    const [toggleState, setToggleState] = useState()
 
     useEffect(() => {
         setCustomer(props.match.params.customer_id);
@@ -53,7 +54,7 @@ function Chat(props){
                             </div> */}
                             <div className="chatlist-user">
                                 { customerList.map((customer) => (
-                                    
+                                    (toggleState == "All") ?(
                                     <Link to={"/chat/"+ props.match.params.bot_id+"/live_chat/"+customer.userID} className="chatlist-msg">
                                         <li className={"msg-user row " + (props.match.params.customer_id == customer.userID ? "select-user-list":"")}>
                                             <div className="user-list-pic col-lg-3 col-sm-1">
@@ -79,7 +80,7 @@ function Chat(props){
                                             </div>
                                         </li>
                                     </Link>
-                                    
+                                    ) : (hi)
                                     ))
                                 }
                                 </div>
