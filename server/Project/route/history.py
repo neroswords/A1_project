@@ -14,7 +14,7 @@ import os.path
 from bson.json_util import dumps, loads
 
 log = Blueprint("history",__name__)
-
+ 
 @log.route('/<botID>', methods=['GET', 'POST'])
 def historyy(botID):
     purchased_collection = mongo.db.purchased
