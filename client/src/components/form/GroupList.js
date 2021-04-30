@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GroupForm from './GroupForm';
 import Todo from './Todo';
 
-function GroupList() {
-
+function GroupList({groupID, botID}) {
   const [todos, setTodos] = useState([]);
   // const [file, setFile] = useState([]);
 
@@ -16,6 +15,20 @@ function GroupList() {
 
     setTodos(newTodos);
     console.log(...todos);
+    console.log(todo)
+
+    fetch('/train_bot/'+botID+'/group'+groupID, {
+      method : 'POST',
+      headers : {
+          "Access-Control-Allow-Origin": "*",
+          'Content-Type':'application/json'
+          },
+      body: JSON.stringify(todo)}).then(res=>res.json().then(data => {
+        if ("error" in data)
+        {
+          // setFlash(data['error'])
+        }
+      }))
   };
 
   const updateTodo = (todoId, newValue) => {
@@ -36,11 +49,24 @@ function GroupList() {
     let updatedTodos = todos.map(todo => {
       if (todo.id === id) {
         todo.isComplete = !todo.isComplete;
+        console.log(todo)
+        console.log(todos)
       }
       return todo;
     });
     setTodos(updatedTodos);
   };
+
+  useEffect(() => {
+    fetch('/train_bot/' + botID + '/group/'+groupID)
+      .then(res => res.json().then(data => {
+        console.log(data)
+
+        
+
+      }))
+
+  }, []);
 
   return (
     <>

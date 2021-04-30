@@ -398,13 +398,14 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
           <tbody {...getTableBodyProps()}>
             {page.map((row, i) => {
               prepareRow(row)
+              console.log(row)
               return (
                 <tr {...row.getRowProps()}>
                   {row.cells.map(cell => {
                     return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                   })}
                   {/* <td><button onClick={openForm}><i className="far fa-edit" ></i></button></td> */}
-                  <td><Link to ={'/bot/'+botID+'/group/text'}><i className="far fa-edit" ></i></Link></td>
+                  <td><Link to ={'/bot/'+botID+'/group/' +row.original.id}><i className="far fa-edit" ></i></Link></td>
                   {/* <TextForm showForm={showForm} setShowForm={setShowForm} botID={botID} /> */}
                 </tr>
               )
@@ -474,6 +475,7 @@ function TableGroup({ botID, delete_trained, add_data }) {
         accessor: 'Group', // accessor is the "key" in the data
       },
       
+      
     ],
     []
   )
@@ -522,6 +524,7 @@ function TableGroup({ botID, delete_trained, add_data }) {
 
         setTableGroupState(
           data.map(d => {
+            console.log(d)
             return {
               select: false,
               id: d._id.$oid,

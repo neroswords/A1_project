@@ -22,11 +22,19 @@ function GroupForm(props) {
     const handleSubmit = e => {
         e.preventDefault();
 
-        props.onSubmit({
+        if(input == ''){
+            alert("please input yout text")
+        }
+        else{
+            props.onSubmit({
             id: Math.floor(Math.random() * 10000),
             text: input,
         });
-        setInput('');
+            setInput('');
+        }
+        
+
+        
     };
 
 
@@ -88,7 +96,7 @@ function GroupForm(props) {
                                     />
                                     <button onClick={handleSubmit} className='todo-button'>
                                         Add
-                        </button>
+                                    </button>
                                 </>
                             )}
 

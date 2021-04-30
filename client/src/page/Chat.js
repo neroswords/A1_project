@@ -87,7 +87,6 @@ const Styles = styled.div`
 function Chat(props){
     const [customerList, setCustomerList] =  useState([])
     const [customer, setCustomer] =  useState(props.match.params.customer_id)
-    const [toggleState, setToggleState] = useState()
 
     const [toggleState, setToggleState] = useState("All");
     const toggleTab = (index) => {

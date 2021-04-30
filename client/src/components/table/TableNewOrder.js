@@ -539,18 +539,18 @@ function TableNewOrder({ botID, delete_trained, add_data }) {
   }
 
   useEffect(() => {
-    fetch('/mapping/' + botID)
+    fetch('/history/' + botID + '/waited')
       .then(res => res.json().then(data => {
         setTableNewOrderState(
           data.map(d => {
-            // console.log(d.details[0].answer)
+            console.log(d)
             return {
-              
               select: false,
               id: d._id.$oid,
-              Name: d.name,
-              ReplyWord: d.details[0].answer,
-             
+              Date: d.purchased_date.$date,
+              Name: d.userID,
+              Total: d.total
+
             };
           })
           

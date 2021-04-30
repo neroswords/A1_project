@@ -200,7 +200,7 @@ function DragText(props){
     return(
         <div>
             <Styles>
-              <GroupList />
+              <GroupList groupID={props.match.params.group_id} botID={props.match.params.bot_id}/>
             </Styles>
         </div>
     )
