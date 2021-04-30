@@ -10,7 +10,7 @@ import { mergeStyles } from "react-select";
 import { useDetectOutsideClick } from "../Botlist/button_nav";
 import CommunicationInvertColorsOff from "material-ui/svg-icons/communication/invert-colors-off";
 import { Info } from "material-ui-icons";
-import Notifier from "react-desktop-notification"
+// import Notifier from "react-desktop-notification"
 
 let endPoint = "http://127.0.0.1:200";
 let socket = io.connect(`${endPoint}`);

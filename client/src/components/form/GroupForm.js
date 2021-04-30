@@ -35,13 +35,19 @@ function GroupForm(props) {
         e.preventDefault();
 
         console.log(file);
-
-        props.onSubmit({
+        if(file == null){
+            alert('please select file')
+        }
+        else{
+            props.onSubmit({
+            
             id: Math.floor(Math.random() * 10000),
             text: file.name,
             file: file
         });
         setFile();
+        }
+        
 
     }
 
