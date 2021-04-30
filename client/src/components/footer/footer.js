@@ -2,14 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Styles = styled.div`
-.main-footer{
+
+.main-footerrr{
     font-family: 'Athiti', sans-serif;
     color:white;
     background-color: #353a44;
     padding-top: 3em;
+    margin: 0;
     position: relative;
     bottom: 0;
     width: 100%;
+}
 
 .list-social i {
     cursor: pointer;
@@ -18,7 +21,7 @@ const Styles = styled.div`
     margin-right: 20px;
     border: 1px solid white;
     border-radius: 100%;
-    padding 3px 6px;
+    padding: 3px 6px;
     background-color: white;
 }
 
@@ -44,13 +47,14 @@ const Styles = styled.div`
 
 .border {
     margin: 10px 0px;
-    height: 5px; 	
+    height: 10px; 	
     width: 70px; 	
     background-color: #fca311;
-    border: 2px solid #fca311; 
+    /* border-style: none; */
+    /* border: 0px solid transparent;  */
 }
 
- h4 {
+.in-footer h4 {
     font-weight: bold;
 }
 
@@ -76,12 +80,13 @@ const Styles = styled.div`
     color: white;
 }
 
-`;
+`
 
 function Footer(){
     return (
       <Styles>
-        <div className="main-footer">
+        <>
+        <div className="main-footerrr">
             <div className="container">
                 <div className="row">
                 
@@ -129,6 +134,7 @@ function Footer(){
                 </div>
             </div>
         </div>
+        </>
       </Styles>
     )
 }   
