@@ -186,6 +186,25 @@ const Styles = styled.div`
     height: 150px;
     
   }
+  @media only screen and (max-width: 760px){
+    .showimg-newinv{
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 5%;
+    }
+  }
+
+  .upload-newinv{
+    /* display:flex; */
+    
+    background-color: #feecd1;
+    border: 2px dashed #fca311;
+    border-radius : 0.75rem;
+    text-align:center;
+    width: 150px;
+    height: 150px;
+    
+  }
 
   .req-icon{
     color: red;
