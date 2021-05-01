@@ -19,11 +19,12 @@ const Styles = styled.div`
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
   }
   
-  .card-bot .card-title {
+  .card-bot .card-title-addbot {
     margin-bottom: 2rem;
     font-size: 2rem;
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
+    text-align: center;
   }
   
   .card-bot .card-body {
@@ -110,6 +111,10 @@ const Styles = styled.div`
   .upload-img label{
     cursor: pointer;
   }
+
+  .req_infobot {
+    color: red;
+  }
 `;
 
 
@@ -158,7 +163,10 @@ class Create_bot extends React.Component {
   }
   handleChange (evt) {
      this.setState({ [evt.target.name]: evt.target.value });
-   
+     const field = evt.target.name
+     if(field == "bot_name" ){
+        this.setState({showMessage: false})
+     }
     // if ( this.state.bot_name == null){
     //   this.setState({
     //     errorMessage: {...this.state.errorMessage, bot_name: 'Type your bot name (do not be empty)'},
@@ -247,7 +255,9 @@ _handleImageChange(e) {
           //body : JSON.stringify(form),
           body: data,
         }).then((response) => {
+          console.log(response)
           response.json().then((body) => {
+            console.log("Ma")
             this.setState({ imageURL: `/${body.file}` });
             this.setState({ bot_id : data.id})
             this.setState({ redirect: true }) 
@@ -262,27 +272,29 @@ _handleImageChange(e) {
         }
         else{
           const data = new FormData();
-        data.append('file', this.uploadInput.files[0]);
-        data.append('bot_name',this.bot_name.value);
-        data.append('gender' ,this.gender.value);
-        data.append('age' ,this.age.value);
-        data.append('creator' , localStorage.getItem('user_id'))
-    
-        fetch('/bot/create', {
-          method: 'POST',
-          // headers : {
-          //   "Access-Control-Allow-Origin": "*",
-          //   //'Content-Type':'application/json'
-          // },
-          //body : JSON.stringify(form),
-          body: data,
-        }).then((response) => {
-          response.json().then((body) => {
-            this.setState({ imageURL: `/${body.file}` });
-            this.setState({ bot_id : data.id})
-            this.setState({ redirect: true }) 
+          data.append('file', this.uploadInput.files[0]);
+          data.append('bot_name',this.bot_name.value);
+          data.append('gender' ,this.gender.value);
+          data.append('age' ,this.age.value);
+          data.append('creator' , localStorage.getItem('user_id'))
+      
+          fetch('/bot/create', {
+            method: 'POST',
+            // headers : {
+            //   "Access-Control-Allow-Origin": "*",
+            //   //'Content-Type':'application/json'
+            // },
+            //body : JSON.stringify(form),
+            body: data,
+          }).then((response) => {
+            console.log(response)
+            response.json().then((body) => {
+              console.log("Ma")
+              this.setState({ imageURL: `/${body.file}` });
+              this.setState({ bot_id : data.id})
+              this.setState({ redirect: true }) 
+            });
           });
-        });
         }
       }
       
@@ -313,7 +325,7 @@ _handleImageChange(e) {
                     <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
                       <div className="card card-bot" id="create_bot">
                         <div className="card-body">
-                          <h5 className="card-title text-center">Create Bot form</h5>
+                          <h5 className="card-title-addbot">Create Bot form</h5>
                           <form className="form-bot" onSubmit={this.handleUploadImage}>
                                 <div className="title_part">
                                         <p className="col">Bot infomation</p>
@@ -334,12 +346,13 @@ _handleImageChange(e) {
                                             <div className="">
                                    
                                               <label  className="form-label">Bot Name</label>  
+                                              <span className="req_infobot"> *</span>
                                               <label  className="form-label" >{this.state.errorMessage['bot_name'] != "start" ? this.state.errorMessage['bot_name'] : ""}</label>
                                               <input type="text"   name="bot_name" required  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
                                             </div>
                                             { this.state.showMessage &&  
                                         <div className="container">
-                                            <FlashMessage duration={4000}>
+                                            <FlashMessage duration={40000}>
                                               <div className="error">
                                                 <strong>* {this.state.message}</strong>
                                               </div>  
@@ -348,6 +361,7 @@ _handleImageChange(e) {
                                   }
                                             <div class="mt-3">
                                               <label for="inputgender" class="form-label">Gender</label>
+                                              <span className="req_infobot"> *</span>
                                               <label for="inputgender" class="form-label" >{this.state.errorMessage['gender'] == "Please Select your option" ? this.state.errorMessage['gender'] : ""}</label>
                                               <select id="inputgender" name="gender" required  ref={(ref) => { this.gender = ref; }} onChange={this.handleChange} class="form-select">
                                                   <option disabled selected>Select your option</option>
@@ -357,8 +371,9 @@ _handleImageChange(e) {
                                             </div>
                                             <div className="mt-3">
                                                 <label for="inputFirstname" className="form-label">Age</label>
-                                                <label  for="inputFirstname" className="form-label" >{this.state.errorMessage['age'] != "start" ? this.state.errorMessage['age'] : ""}</label>
+                                                <span className="req_infobot"> *</span>
                                                 <input required type="text" pattern="\d*"  min="1" step="1"  name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
+                                                
                                             </div>
                                         </div>
                                 </div>

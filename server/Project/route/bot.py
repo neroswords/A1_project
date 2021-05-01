@@ -1,4 +1,3 @@
-
 from flask import Flask, request, abort, render_template, session,url_for,redirect,send_from_directory,send_file,Blueprint,current_app
 from pymessenger import Bot
 from Project.Config import *
@@ -24,6 +23,7 @@ from flask_socketio import send, emit, join_room, leave_room
 from .. import socketio
 import datetime
 from reportlab.pdfgen.canvas import Canvas
+
 
 bot = Blueprint("bot",__name__)
 UPLOAD_FOLDER = './Project/static/images/bot/bot_pic'
@@ -85,16 +85,6 @@ def push_message(data):
     line_bot_api = LineBotApi(bot_define['access_token'])
     line_bot_api.push_message(data['customerID'], TextSendMessage(text=data['message']))
     save_message(message=data["message"],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(data['botID']),sender_type="bot",room=data['botID']+'&'+data['customerID'],botId=data['_id'],userID=bot_define['owner'])
-
-
-def push_message(data):
-    bot_collection = mongo.db.bots
-    customer_collection = mongo.db.customers
-    bot_define = bot_collection.find_one({'_id': ObjectId(data['botID'])})
-    customer_define = customer_collection.find_one({'$and':[{'userID':data['customerID']},{'botID': ObjectId(data['botID'])}]})
-    line_bot_api = LineBotApi(bot_define['access_token'])
-    line_bot_api.push_message(data['customerID'], TextSendMessage(text=data['message']))
-    save_message(message=data["message"],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(data['botID']),sender_type="bot",room=data['botID']+'&'+data['customerID'])
 
 
 @socketio.on('join_room')
@@ -173,9 +163,13 @@ def create():
             file.save(destination)
             session['uploadFilePath'] = destination
             response = "success"
-        new_bot = bots_collection.insert_one({'bot_name': bot_name, 'gender': gender, 'owner': ObjectId(
-            creator), 'age': age, 'Img': filename, 'confident': 0.6})
-        #id = JSONEncoder().encode(new_bot.inserted_id).replace('"','')
+        
+        
+        new_bot = bots_collection.insert_one({'bot_name': bot_name, 'gender': gender, 'owner': ObjectId(creator), 'age': age, 'Img': filename, 'confident': 0.6})
+        mappings_collection = mongo.db.mappings
+        bot_id = new_bot.inserted_id
+        mapping = {}
+        mappings_collection.insert_one(mapping)
         return {'message': 'add bot successfully'}
     return "add bot unsuccessfully"
 
@@ -194,6 +188,8 @@ def edit(id):
         bot_name = request.form['bot_name']
         gender = request.form['gender']
         age = request.form['age']
+        file = request.files
+        # print(file)
 
         if "file" not in request.files:
             filename = "Avatar.jpg"
@@ -202,14 +198,18 @@ def edit(id):
                                     'owner':  ObjectId(creator), 'gender': gender, 'age': age}}
         else:
             file = request.files['file']
+            # print(file)
             filename = secure_filename(file.filename)
+            
             filename = creator+"&"+bot_name+os.path.splitext(filename)[1]
+            print(filename)
             destination = "/".join([UPLOAD_FOLDER, filename])
             file.save(destination)
             session['uploadFilePath']=destination
             response="success"
-            info_update = { "$set": {'bot_name': bot_name, 'owner':  ObjectId(creator), 'gender': gender, 'age': age, 'Img' : filename}}
 
+            info_update = { "$set": {'bot_name': bot_name, 'owner':  ObjectId(creator), 'gender': gender, 'age': age, 'Img' : filename}}
+        # print(info_update)
         done = bots_collection.update_one({'_id': ObjectId(id)}, info_update)
         return {'message': 'add bot successfully'}
     return {'message': 'add bot unsuccessfully'}
@@ -285,10 +285,16 @@ def webhook(platform, botID):
                 elif message_type == 'postback':
                     data = {'postback':payload['events'][0]['postback']['data']}
                     res = stateHandler(sender_id=sender_define['userID'], botID=botID, postback= data)
+                elif message_type == 'image':
+                    data = {"image":payload['events'][0]['message']['contentProvider']['originalContentUrl']}
+                    socketio.emit("message_from_webhook", {"message":data["image"],"message_type":message_type, "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"type":"customer"},room=botID+'&'+sender_define['userID'])
+                    save_message(message=data['image'],message_type=message_type,sender=profile.display_name,sender_id=sender_define['userID'],sender_type="lineUser",room=botID+'&'+sender_define['userID'])
+                    res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
                 else:
                     save_message(message="unavailable to show content",message_type="text",sender=profile.display_name,sender_id=sender_define['userID'],sender_type="lineUser",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
                     socketio.emit("message_from_webhook", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"type":"customer"},room=botID+'&'+sender_define['userID'])
                     res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
+                    
                 # if "message" in data.keys():
                 #     res = process_message(data,botID,bot_define['confident'],sender_define['userID'])
 
@@ -321,7 +327,7 @@ def webhook(platform, botID):
                     response = []
                     for reply in res['group']:
                         if "text" == reply['type']:
-                            socketio.emit("message_from_response", {"message":reply["data"], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
+                            socketio.emit("message_from_response", {"message":reply["data"],"message_type":"text", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
                             response.append(TextSendMessage(text = reply["data"]))
                             save_message(message=reply["data"],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
                         elif 'flex' in res.keys():
@@ -383,6 +389,16 @@ def trained(botID):
         listcursor.reverse()
         data = dumps(listcursor, indent=2)
         return data
+
+@bot.route('/<botID>/group', methods=["GET"])
+def group(botID):
+    if request.method == 'GET':
+        groups_collection = mongo.db.groups
+        listcursor = list(groups_collection.find({"botID": ObjectId(botID)}))
+        listcursor.reverse()
+        data = dumps(listcursor, indent=2)
+        return data
+
 
 
 @bot.route('/<botID>/addword', methods=["POST"])
@@ -464,10 +480,10 @@ def customer_list(botID):
     customer_collection = mongo.db.customers
     customer_cur = customer_collection.find({"botID": ObjectId(botID)})
     customer_list = list(customer_cur)
-    print(customer_list)
+    # print(customer_list)
     customer_list.sort(key = lambda x:x['date'],reverse=True)
     print("sort")
-    print(customer_list)
+    # print(customer_list)
     data = dumps(customer_list, indent=2)
     return data
 

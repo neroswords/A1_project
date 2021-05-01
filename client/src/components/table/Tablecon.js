@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
-import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination, useRowSelect } from 'react-table'
+import  { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination, useRowSelect,useResizeColumns } from 'react-table'
 import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
 import { AddWord } from "./AddTable/AddWord";
@@ -9,9 +9,17 @@ import Delete_table from "../Delete_table";
 
 const Styles = styled.div`
 
+  .table-show-all > div.container {
+    /* max-width: max-content; */
+    margin: 0;
+    padding: 20px;
+    min-width: 100% ;
+  }
+
   table {
     /* font-family: 'Roboto',sans-serif; */
-    margin: 3% 0;
+    width: 100%;
+    margin: 1% 0;
     font-size: 1em;
     text-align: center;
     border: 1px solid #efeff5;
@@ -29,7 +37,7 @@ const Styles = styled.div`
       border: 1px solid #efeff5;
       background-color: #393939;
       color: white;
-      width: 500px;
+      /* width: 500px; */
     }
     td {
       font-family: 'Public Sans', sans-serif;
@@ -47,7 +55,8 @@ const Styles = styled.div`
         padding: 0;
         margin: 0;
         border: 0;
-        /* text-align: center; */
+        text-align: center;
+        /* width: 400px; */
       }
     }
 
@@ -55,13 +64,16 @@ const Styles = styled.div`
     background-color: transparent;
     border-radius: 25px;
     padding-left:15px;
+    width: 300px;
   }
-
 }
 
 .table tbody tr:nth-of-type(even){
         background-color: #fafafc;
     }
+
+
+
 
 .button-trained-word .buttondeleteWord{
     padding: 7px 20px !important;
@@ -72,6 +84,7 @@ const Styles = styled.div`
     background-color: #CD5C5C;
     color: #fff ;
     margin-left: 1%;
+    margin-top: 5px;
   }
 
 
@@ -131,7 +144,7 @@ const Styles = styled.div`
   height: 30px;
   border-radius: 1rem;
   border: 0.5px solid #A9A9A9;
-
+  margin: 5px 0;
 }
 
 input::placeholder{
@@ -146,6 +159,8 @@ input::placeholder{
 .select-pagesize {
   padding: 0 1%;
 }
+
+
 `;
 
 
@@ -259,10 +274,15 @@ const defaultColumn = {
 
 
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID }) {
-  
+
   const Ondelete = (e) => {
-    // delete_trained(e)
-    openDelete_table(e)
+    if(e.length > 0){
+      openDelete_table(e)
+    }
+    else{
+      alert('please select')
+    }
+    console.log(e.length)
   }
 
   const filterTypes = React.useMemo(
@@ -343,6 +363,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
         {
           id: 'selection',
+
           Header: ({ getToggleAllPageRowsSelectedProps }) => (
             <div>
               <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
@@ -368,7 +389,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
   )
   return (
-    <>
+    
       <Container>
         <div className="button-trained-word">
           <Button className='buttonaddWord' name="btn-addword" onClick={openWord}>Add Word</Button>
@@ -383,8 +404,6 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
           <AddWord showWord={showWord} setShowWord={setShowWord} botID = {botID}/>
           <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table} selectedFlatRows={selectedFlatRows} id={botID} delete_trained={delete_trained}/>
         </div>
-
-
 
 
         <table {...getTableProps()} className="table" name="training-table">
@@ -466,7 +485,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
         </div>
       </Container>
-    </>
+    
   )
 }
 
@@ -483,6 +502,7 @@ function Tablecon({ botID, delete_trained, add_data }) {
 
   const columns = React.useMemo(
     () => [
+      
       {
         Header: 'Word',
         accessor: 'Word', // accessor is the "key" in the data
@@ -491,10 +511,13 @@ function Tablecon({ botID, delete_trained, add_data }) {
         Header: 'ReplyWord',
         accessor: 'ReplyWord',
         filter: 'fuzzyText',
+       
+        
       },
       {
         Header: 'Confidence',
         accessor: 'Confidence',
+        
       },
     ],
     []
@@ -562,15 +585,17 @@ function Tablecon({ botID, delete_trained, add_data }) {
   const resetData = () => setTableconState(originalData)
   return (
     <Styles>
-      <TableShow
-        columns={columns}
-        data={TableconState}
-        updateMyData={updateMyData}
-        skipPageReset={skipPageReset}
-        delete_trained={delete_trained}
-        botID={botID}
-      />
-
+      <div className="table-show-all">
+        <TableShow 
+          
+          columns={columns}
+          data={TableconState}
+          updateMyData={updateMyData}
+          skipPageReset={skipPageReset}
+          delete_trained={delete_trained}
+          botID={botID}
+        />
+      </div>
     </Styles>
   );
 }

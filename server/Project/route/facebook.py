@@ -181,9 +181,34 @@ def call_facebook(botID):
         else:
             return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
+def call_payment(botID, sender_id, bot):
+    con_box = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "button",
+                "text": "อีกอึดใจเดียวเท่านั้นสินค้าจะเป็นของคุณ",
+                    "buttons": [
+                        {
+                            "type": "web_url",
+                            "url": server_url+"/checkout/facebook/"+botID+"/"+sender_id,
+                            "title": "กดเพื่อจ่ายเงิน",
+                            "messenger_extensions": "true",
+                            "webview_height_ratio": "tall"
+                        }
+                    ]
+            }
+        }
+    }
+    print(bot.send_message(sender_id, con_box))
+    res={"confirm" : "confirmสินค้าเรียบร้อยแล้ว"}
+    return res
 
-def suggestion(platform, botID, text, sender_id):
-    template(platform, botID, text, sender_id)
+def call_receipt(userID,receiptID,botID):
+    bot_collection = mongo.db.bots
+    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
+    bot = Bot(bot_define["page_facebook_access_token"])
+    body = receipt(userID,receiptID,botID)
 
 
 def suggestion(platform, botID, text, sender_id):
@@ -286,34 +311,7 @@ def call_payment(botID, sender_id, bot):
     print(bot.send_message(sender_id, con_box))
     res={"confirm" : "confirmสินค้าเรียบร้อยแล้ว"}
     return res
-def call_receipt(userID,receiptID,botID):
-    bot_collection = mongo.db.bots
-    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
-    bot = Bot(bot_define["page_facebook_access_token"])
-    body = receipt(userID,receiptID,botID)
 
-def call_payment(botID, sender_id, bot):
-    con_box = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "button",
-                "text": "อีกอึดใจเดียวเท่านั้นสินค้าจะเป็นของคุณ",
-                    "buttons": [
-                        {
-                            "type": "web_url",
-                            "url": server_url+"/checkout/facebook/"+botID+"/"+sender_id,
-                            "title": "กดเพื่อจ่ายเงิน",
-                            "messenger_extensions": "true",
-                            "webview_height_ratio": "tall"
-                        }
-                    ]
-            }
-        }
-    }
-    print(bot.send_message(sender_id, con_box))
-    res={"confirm" : "confirmสินค้าเรียบร้อยแล้ว"}
-    return res
 def call_receipt(userID,receiptID,botID):
     bot_collection = mongo.db.bots
     bot_define = bot_collection.find_one({'_id': ObjectId(botID)})

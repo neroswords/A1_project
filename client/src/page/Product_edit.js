@@ -139,9 +139,28 @@ const Styles = styled.div`
     height: 150px;
     
   }
+  @media only screen and (max-width: 760px){
+    .showimg-newinv{
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 5%;
+    }
+  }
+
+  .upload-newinv{
+    /* display:flex; */
+    
+    background-color: #feecd1;
+    border: 2px dashed #fca311;
+    border-radius : 0.75rem;
+    text-align:center;
+    width: 150px;
+    height: 150px;
+    
+  }
 
 `;
-let fileimg = {}
+let fileimg = []
 export default class Product_edit extends React.Component {
   constructor(props) {
     super(props);
@@ -197,20 +216,27 @@ export default class Product_edit extends React.Component {
     
     let i
     for (i = 0; i < e.target.files.length; i++) {
-      let reader = new FileReader();
-      fileimg[i] = this.uploadInput.files[i]
-      if (!fileimg) {
-        return
+      if(e.target.files[i].type != "image/jpeg" && e.target.files[i].type != "image/png"){
+        console.log(this.uploadInput)
+        alert("Only PNG or JPG is accepted")
       }
-      reader.onloadend = () => {
-        this.setState({
-          file: fileimg[i],
-          imagesPreviewUrl: [...this.state.imagesPreviewUrl, reader.result]
-        });
+      else{
+        let reader = new FileReader();
+        fileimg.push(this.uploadInput.files[i])
+        if (!fileimg) {
+          return
+        }
+        reader.onloadend = () => {
+          this.setState({
+            file: this.uploadInput.files[i],
+            imagesPreviewUrl: [...this.state.imagesPreviewUrl, reader.result]
+          });
+        }
+        reader.readAsDataURL(this.uploadInput.files[i])
       }
-      reader.readAsDataURL(fileimg[i])
-    }
 
+      }
+      
 
   }
   handleUploadImage(ev) {
@@ -226,39 +252,40 @@ export default class Product_edit extends React.Component {
     }
     else{
       const data = new FormData();
-    var file = []
-    for (i = 0; i < this.uploadInput.files.length; i++) {
+      
+      for (i = 0; i < fileimg.length; i++) {
       
       // file.push(this.uploadInput.files[i])
       
-      data.append('file' + [i], this.uploadInput.files[i]);
-    }
+          data.append('file' + [i], fileimg[i]);
+      }
 
 
     // data.append('file', file);
-    data.append('item_name', this.item_name.value);
-    data.append('type', JSON.stringify(this.state.value));
-    data.append('amount', this.amount.value);
-    data.append('creator', localStorage.getItem('user_id'))
-    console.log(this.state.Image)
-    data.append('Image', this.state.Image)
-    data.append('des', this.des.value);
-    data.append('price', this.price.value);
-    fetch('/inventory/'+this.props.match.params.bot_id+'/product_edit/'+this.props.match.params.product_id, {
-      method: 'POST',
-      // headers : {
-      //   "Access-Control-Allow-Origin": "*",
-      //   'Content-Type':'application/json'
-      // },
-      // body : JSON.stringify(json5),
-      body : data
-    }).then((response) => {
-      response.json().then((body) => {
-        this.setState({ imageURL: `/${body.file}` });
-        this.setState({ bot_id: data.id })
-        this.setState({ redirect: true })
+      data.append('item_name', this.item_name.value);
+      data.append('type', JSON.stringify(this.state.value));
+      data.append('amount', this.amount.value);
+      data.append('creator', localStorage.getItem('user_id'))
+      console.log(this.state.Image)
+      data.append('Image', this.state.Image)
+      data.append('des', this.des.value);
+      data.append('price', this.price.value);
+      fetch('/inventory/'+this.props.match.params.bot_id+'/product_edit/'+this.props.match.params.product_id, {
+        method: 'POST',
+        // headers : {
+        //   "Access-Control-Allow-Origin": "*",
+        //   'Content-Type':'application/json'
+        // },
+        // body : JSON.stringify(json5),
+        body : data
+      }).then((response) => {
+        response.json().then((body) => {
+          this.setState({ imageURL: `/${body.file}` });
+          this.setState({ bot_id: data.id })
+          fileimg = []
+          this.setState({ redirect: true })
+        });
       });
-    });
     }
     
 
@@ -314,7 +341,7 @@ export default class Product_edit extends React.Component {
       return (
         <Styles>
           <div className="container">
-            <div className="col-sm-10 col-md-9 col-lg-7 mx-auto">
+            <div className="col-sm-10 col-md-9 col-lg-8 mx-auto">
               <div className="card card-bot">
                 <div className="card-body">
                   <h5 className="card-title text-center mt-3 mb-4">Edit Item</h5>
@@ -326,7 +353,7 @@ export default class Product_edit extends React.Component {
                     <div className="showimg-newinv form-row d-flex justify-content-between">
                           <div className="col showimg-newinv">
                             <div className="col upload-newinv">
-                                <input ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
+                                <input accept="image/x-png,image/gif,image/jpeg" ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
                             </div>
                               {this.state.url_preview.map((url_preview) => {
                     

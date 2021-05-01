@@ -6,92 +6,173 @@ import styled from 'styled-components';
 
 const Styles = styled.div`
 
-  
-  .home .jumbo {
-    align-items: center;
-    font-family: 'Public Sans', sans-serif;
+  /* .home .container {
+    background-size: 100%;
+    background-color: white;
+    margin-bottom: 10%;
+    position: relative;
+    overflow: hidden;
     
-      
-    
-    
+} */
+  .home > .row {
+    --bs-gutter-x: 0 !important;
+    padding: 0 !important;
   }
 
-  .home .container {
-   
-    background-size: 100%;
-    margin-bottom: 15%;
-    position: relative;
-}
+  .content-mainpage {
+    background-image: url("./images/page.png");
+    background-size: cover;
+    background-position: right;
+    height: 750px;
+    display: flex;
+    justify-content: space-between;
+    overflow:hidden
+  }
 
   #main-page {
-    margin-top: 150px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    background-color: white;
+    /* margin: 20% ; */
+    /* margin-left: -100px; */
+    /* display: grid; */
+    /* grid-template-columns: 1fr 1fr; */
   }
   
-  #main-page .main-text {
+  #main-page .main-textt {
     font-size: 20px;
     font-weight: 500;
     line-height: 1.25;
-  }
+  } 
 
-  h1 {
-    font-size: 80px;
+  .main-textt h1 {
+    font-size: 60px;
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     color: #14213d;
+    /* margin-top: 30%; */
+    margin-left: 20%;
   }
 
-  .main-text p {
-    font-size: 18px;
+  .main-textt p {
+    font-size: 20px;
     color: #14213d;
     line-height: 1.7;
-    width: 21rem;
-    margin-top: 15%;
+    width: 30rem;
+    margin-left: 20%;
+    /* margin-top: 15%; */
   }
 
-  .img-main .img-phone {
-    width: 40%;
+  .img-main-phone img {
+    width: 70%;
     position: absolute;
-    margin-left: 45%;
-    margin-top: 3%;
+    right: 0;
+    margin-right: 100px;
+    animation: mymove 5s infinite;
+    /* margin-left: 45%; */
+    /* margin-top: 3%; */
   }
-
-   .img-bg {
+  @keyframes mymove {
+    0%   {top: 0px;}
+    25%  {top: 15px;}
+    100%   {top: 0px;}
+    /* 75%  {top: 50px} */
+    /* 100% {top: 100px;} */
+}
+/* 
+  .img-bg-yellow{
+    width: 90%;  
     top: 0px;
     position: absolute;
     z-index: -1;
-    right:0px;
+    padding: 0 !important;
+    margin: 0 !important;
+    right: 0px !important;
+  } */
+
+  @media only screen and (max-width: 400px){
+    .main-textt h1 {
+      font-size: 40px;
+      font-family: 'Roboto', sans-serif;
+      text-transform: uppercase;
+      color: #14213d;
+      margin-top: 25%;
+      /* margin-left: 20%; */
+    }
+
+  .main-textt p {
+      font-size: 14px;
+      color: #14213d;
+      line-height: 1.7;
+      width: 15rem;
+      /* margin-left: 20%; */
+      /* margin-top: 15%; */
+    }
+    .img-bg-yellow{
+      width: 100%;  
+      /* top: 0px;
+      position: absolute;
+      z-index: -1;
+      padding: 0 !important;
+      margin: 0 !important;
+      right: 0px !important; */
+    }
   }
-`;
+
+  @media only screen and (min-width: 1400px){
+    .main-textt h1 {
+      font-size: 60px;
+      font-family: 'Roboto', sans-serif;
+      text-transform: uppercase;
+      color: #14213d;
+      margin-top: 25%;
+      /* margin-left: 20%; */
+    }
+
+  .main-textt p {
+      font-size: 20px;
+      color: #14213d;
+      line-height: 1.7;
+      width: 30rem;
+      /* margin-left: 20%; */
+      /* margin-top: 15%; */
+    }
+  }
+
+  @media only screen and (min-width: 1900px){
+    .main-textt h1 {
+      font-size: 80px;
+      font-family: 'Roboto', sans-serif;
+      text-transform: uppercase;
+      color: #14213d;
+      /* margin-top: 25%; */
+      /* margin-left: 20%; */
+    }
+
+  .main-textt p {
+      font-size: 25px;
+      color: #14213d;
+      line-height: 1.7;
+      width: 35rem;
+      /* margin-left: 20%; */
+      /* margin-top: 15%; */
+    }
+  }
+`
 
 
 export const Mainpage = () => (
   <Styles>
-     
-            
-        
-    <div className="home" >
-    
-    <div className="img-main" >
-            <img className="img-phone" src="./images/tel.png" width="40%" />
-
-          </div>
-          <img className="img-bg" src="./images/page.png" width="100%" />
-    <Container className="container">
-    <Jumbo fluid className="jumbo d-flex position-relative">
-        <section id="main-page">
-        
-          <div className="main-text">
-            <h1>A1 Chatbot</h1>
-            <p>A1 chatbot is a web-application that can help manage online purchasing and selling. It also includes automated reply message, order management, and online shop system administration via bot which you can create by your own. </p>
-          </div>
-          
-          
-        </section>
-    </Jumbo>
-    </Container>
+    <div className="home">
+    <div className="content-mainpage">
+        {/* <img className="img-bg-yellow" src="./images/page.png"/> */}
+        <div className="main-textt col-5">
+                  <h1>A1 Chatbot</h1>
+                  <p>A1 chatbot is a web-application that can help manage online purchasing and selling. It also includes automated reply message, order management, and online shop system administration via bot which you can create by your own. </p>
+        </div>
+        <div className="img-main-phone col-7">
+                <img className="img-phone" src="./images/tel.png" />
+        </div>
     </div>
+   </div> 
   </Styles>
 ) 
 

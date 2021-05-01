@@ -22,6 +22,7 @@ const Background = styled.div`
 `;
 
 const ModalWrapper = styled.div`
+  z-index: 10;
   width: 800px;
   height: 500px;
   background-color: white;
@@ -95,7 +96,7 @@ const ModalContent = styled.div`
 const CloseModalButton = styled(MdClose)`
   cursor: pointer;
   position: absolute;
-  top: 20px;
+  top: 25px;
   right: 20px;
   width: 32px;
   height: 32px;
@@ -214,7 +215,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
               <ModalContent>
                 <article className="part Addword">
                   <h1 name="addword-popup">
-                    Add your Question and Answer
+                    Add your Question and Answer   
                   </h1>
                   <form>
                     <div className="group-Question">

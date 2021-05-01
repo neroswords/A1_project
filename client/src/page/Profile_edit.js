@@ -21,11 +21,12 @@ const Styles = styled.div`
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
   }
   
-  .card-regis .card-title {
+  .card-regis .card-title-edit-profile {
     margin-bottom: 2rem;
     font-size: 2rem;
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
+    text-align: center;
   }
   
   .card-regis .card-body {
@@ -117,8 +118,7 @@ const Styles = styled.div`
     margin-bottom: 3%;
   }
   
-  .error {
-    background-color: white;
+  .reg_proflie{
     color: red;
   }
 `;
@@ -140,7 +140,14 @@ class Profile_edit extends React.Component {
       shop_type : '',
       shop_address : '',
       message : '',
-      showMessage: false,
+      messageShopname : '',
+      messageFirstname : '',
+      messageLastname : '',
+      showMessageUsername: false,
+      showMessagePassword: false,
+      showMessageShopname: false,
+      showMessageFirstname: false,
+      showMessageLastname: false
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -149,6 +156,19 @@ class Profile_edit extends React.Component {
   handleChange (evt) {
     this.setState({message:''})
     this.setState({ [evt.target.name]: evt.target.value });
+    const field = evt.target.name
+    if(field == "firstname"){
+      this.setState({showMessageFirstname: false})
+    }
+    else if(field == "lastname"){
+      this.setState({showMessageLastname: false})
+    }
+    else if(field == "shop_name"){
+      this.setState({showMessageShopname: false})
+    }
+    else{
+      return
+    }
   }
 
   handleSubmit = (e) => {
@@ -161,15 +181,35 @@ class Profile_edit extends React.Component {
     }
     else{
       const snLength = this.state.shop_name.replace(/^\s+|\s+$/gm,'').length
-      
-      console.log(snLength)
-      
-      if (snLength == 0){
-        this.setState({message:'Please enter Shop name'})
-        this.setState({showMessage: true})
-        
-          
+    const fnLength = this.state.firstname.replace(/^\s+|\s+$/gm,'').length
+    const lnLength = this.state.lastname.replace(/^\s+|\s+$/gm,'').length
+    if (fnLength == 0 ){
+      this.setState({messageFirstname:'Please enter First name'})
+      this.setState({showMessageFirstname: true})
+      if(lnLength == 0){
+        this.setState({messageLastname:'Please enter Last name'})
+        this.setState({showMessageLastname: true})
+        if(snLength == 0){
+          this.setState({messageShopname:'Please enter Shop name'})
+          this.setState({showMessageShopname: true})
+        }
+      }  
+    }
+    
+    else if (lnLength == 0){
+      this.setState({messageLastname:'Please enter Last name'})
+      this.setState({showMessageLastname: true})
+      if(snLength == 0){
+        this.setState({messageShopname:'Please enter Shop name'})
+        this.setState({showMessageShopname: true})
       }
+      
+    }
+    else if (snLength == 0){
+      this.setState({messageShopname:'Please enter Shop name'})
+      this.setState({showMessageShopname: true})
+      
+    }
       else{
           const profile = {
             email: this.state.email,
@@ -222,7 +262,7 @@ componentDidMount ()  {
     return(
         <Styles>
               <div className="container">
-                    <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
+                    <div className="col-sm-10 col-md-9 col-lg-8 mx-auto">
                       <div className="card card-regis">
                         <div className="card-body">
                           <h5 className="card-title text-center">Edit Profile</h5>
@@ -233,6 +273,7 @@ componentDidMount ()  {
                           </div>
                               <div className="my-3">
                               <label for="exampleInputEmail1" className="form-label">Email address</label>
+                              <span className="reg_proflie"> *</span>
                               <input type="email" className="form-control " value = {this.state.email} id="inputemail" name='email' required value={this.state.email} onChange={this.handleChange} />
                               </div>
                               <div className="my-3">
@@ -249,11 +290,31 @@ componentDidMount ()  {
                                 <div className="row my-3">
                                     <div className="col">
                                         <label for="inputFirstname" className="form-label">Firstname</label>
-                                        <input type="text" pattern="[A-Za-z]+" className="form-control" value = {this.state.firstname} id="inputfirstname"  name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
+                                        <span className="reg_proflie"> *</span>
+                                        <input type="text" className="form-control" value = {this.state.firstname} id="inputfirstname"  name='firstname' value={this.state.firstname} required onChange={this.handleChange}/>
+                                        { this.state.showMessageFirstname &&  
+                                      <div className="container">
+                                          <FlashMessage duration={40000}>
+                                            <div className="error">
+                                              <strong>* {this.state.messageFirstname}</strong>
+                                            </div>  
+                                          </FlashMessage>
+                                      </div>
+                                  }
                                     </div>
                                     <div className="col">
                                     <label for="inputLastname" className="form-label">Last name</label>
-                                        <input type="text" className="form-control" value = {this.state.lastname} id="inputlastname"  name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
+                                    <span className="reg_proflie"> *</span>
+                                        <input type="text"  className="form-control" value = {this.state.lastname} id="inputlastname"  name='lastname' value={this.state.lastname} required onChange={this.handleChange}/>
+                                        { this.state.showMessageLastname &&  
+                                      <div className="container">
+                                          <FlashMessage duration={40000}>
+                                            <div className="error">
+                                              <strong>* {this.state.messageLastname}</strong>
+                                            </div>  
+                                          </FlashMessage>
+                                      </div>
+                                }
                                     </div>
                                     <div className="col">
                                       <label for="exampleInputEmail1" className="form-label">Birthday</label>
@@ -263,13 +324,23 @@ componentDidMount ()  {
                                 <div className="row">
                                   <div className="col my-3">
                                     <label for="exampleInputEmail1" className="form-label">Shop name</label>
-                                    
-                                    <input type="text" className="form-control"  id="inputshopname" value={this.state.shop_name} name='shop_name' onChange={this.handleChange} />
+                                    <span className="reg_proflie"> *</span>
+                                    <input type="text" className="form-control" id="inputshopname" value={this.state.shop_name} name='shop_name' required onChange={this.handleChange} />
+                                    { this.state.showMessageShopname &&  
+                                      <div className="container">
+                                          <FlashMessage duration={40000}>
+                                            <div className="error">
+                                              <strong>* {this.state.messageShopname}</strong>
+                                            </div>  
+                                          </FlashMessage>
+                                      </div>
+                                }
                                   </div>
 
                                   <div className="col my-3">
                                     <label for="exampleInputEmail1" className="form-label">Type of sale</label>
-                                    <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' onChange={this.handleChange} />
+                                    <span className="reg_proflie"> *</span>
+                                    <input type="text" pattern="[A-Za-z0-9]+" className="form-control" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' required onChange={this.handleChange} />
                                   </div>
                                 </div>
                                 { this.state.showMessage &&  

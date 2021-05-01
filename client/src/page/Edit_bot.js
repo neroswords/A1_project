@@ -15,11 +15,12 @@ const Styles = styled.div`
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
   }
   
-  .card-bot .card-title {
+  .card-bot .card-title-cretebot {
     margin-bottom: 2rem;
     font-size: 2rem;
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
+    text-align: center;
   }
   
   .card-bot .card-body {
@@ -82,8 +83,10 @@ const Styles = styled.div`
   .showimage img{
     border: 1px solid #ddd;
     border-radius: 50%;
-    width: 80%;
+    width: 170px;
+    height: 170px;
     text-align: center;
+    object-fit: cover;
   }
   
   .vertical-line {
@@ -117,8 +120,13 @@ class Edit_bot extends React.Component {
   
  
   handleChange (evt) {
+    
     this.setState({ [evt.target.name]: evt.target.value });
-    console.log(this.state)
+    const field = evt.target.name
+     if(field == "bot_name" ){
+        this.setState({showMessage: false})
+     }
+    // console.log(this.state)
   }
   _handleImageChange(e) {
     e.preventDefault();
@@ -129,12 +137,12 @@ class Edit_bot extends React.Component {
       return
     }
     else{
-      let file = e.target.files[0];
+      let fileimg = e.target.files[0];
       let type = e.target.files[0].type;
-      console.log(type)
+      // console.log(type)
       
-      console.log("File = "+JSON.stringify(file))
-      if (!file){
+      // console.log(fileimg)
+      if (!fileimg){
         return
       }
 
@@ -145,11 +153,11 @@ class Edit_bot extends React.Component {
       else{
         reader.onloadend = () => {
         this.setState({
-          file: file,
+          file: fileimg,
           imagePreviewUrl: reader.result
           });      
         }
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(fileimg)
       }
     }
     
@@ -157,18 +165,20 @@ class Edit_bot extends React.Component {
   }
   handleUploadImage(ev) {
     ev.preventDefault();
-    console.log(ev)
+    // console.log(ev)
     const files = ev.target[0].files[0]
     const BotnameLength = this.state.bot_name.replace(/^\s+|\s+$/gm,'').length
-    
+    console.log(files)
+    console.log(this.uploadInput.files[0])
     if (BotnameLength == 0){
       this.setState({message:'Please enter Bot name'})
       this.setState({showMessage: true})
+      console.log("show")
 
     }
     else{
       if(!files){
-      
+        console.log(this.state.Image)
       const data = new FormData();
       data.append('file', this.uploadInput.files[0]);
       data.append('bot_name',this.bot_name.value);
@@ -193,8 +203,9 @@ class Edit_bot extends React.Component {
       });
       }
       else{
+        console.log(this.state.Image)
         const type = ev.target[0].files[0].type;
-        console.log(type)
+        // console.log(type)
         if( type != "image/jpeg" && type != "image/png"){
               alert("Only PNG or JPG is accepted")
             }
@@ -208,6 +219,7 @@ class Edit_bot extends React.Component {
             data.append('age' ,this.age.value);
             data.append('creator' , localStorage.getItem('user_id'))
             data.append('Image' , this.state.Image)
+            console.log(data)
             fetch('/bot/'+this.props.match.params.bot_id+'/edit', {
               method: 'POST',
               // headers : {
@@ -218,6 +230,7 @@ class Edit_bot extends React.Component {
               body: data,
             }).then((response) => {
               response.json().then((body) => {
+                console.log(body.file)
                 this.setState({ imageURL: `/${body.file}` });
                 this.setState({ bot_id : data.id})
                 this.setState({ redirect: true }) 
@@ -247,7 +260,8 @@ class Edit_bot extends React.Component {
     render() {
     const { redirect,bot_id } = this.state;
     if (redirect) {
-      return <Redirect to={"/bot_list/"+ localStorage.getItem('user_id')} />
+      window.location.assign("/bot_list/"+ localStorage.getItem('user_id'))
+      // return <Redirect to={"/bot_list/"+ localStorage.getItem('user_id')} />
     }
     else {
       let {imagePreviewUrl} = this.state;
@@ -260,10 +274,10 @@ class Edit_bot extends React.Component {
         <Styles>
           
               <div className="container">
-                    <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
+                    <div className="col-sm-10 col-md-9 col-lg-7 mx-auto">
                       <div className="card card-bot">
                         <div className="card-body">
-                          <h5 className="card-title text-center">Edit Bot form</h5>
+                          <h5 className="card-title-cretebot ">Edit Bot form</h5>
                           <form className="form-bot" onSubmit={this.handleUploadImage}>
                                 <div className="title_part">
                                         <p className="col">Bot information</p>
@@ -286,7 +300,7 @@ class Edit_bot extends React.Component {
                                             </div>
                                             { this.state.showMessage &&  
                                         <div className="container">
-                                            <FlashMessage duration={4000}>
+                                            <FlashMessage duration={40000}>
                                               <div className="error">
                                                 <strong>* {this.state.message}</strong>
                                               </div>  

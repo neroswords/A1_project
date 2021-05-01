@@ -1,9 +1,9 @@
 .chat-page {
     display: flex;
-    min-height: 92vh;
+    min-height: 80vh;
 }
 
-.chat-page .container{
+.chat-page .container-fluid{
     margin-top: 2%;
     overflow:hidden;
     background-color: #ffffff;
@@ -16,7 +16,7 @@
 
 .main-chatlist {
     /* border-right: 1px solid #ebe7fb; */
-    padding: 10px 0 0 10px;
+    /* padding: 10px 0 0 10px; */
     border-right: 1px solid #ebe7fb;
   }
   
@@ -46,7 +46,7 @@
     background-color: #ecefff;
     border-radius: 5px;
     margin-bottom: 5%;
-    margin-right: 8%;
+    margin-right: 4%;
   }
   
   .search_wrap input {
@@ -78,7 +78,7 @@
     border-radius: 5px;
     /* font-family: 'Public Sans', sans-serif; */
     margin-top: 2%;
-    height: 80%;
+    height: 60vh;
     overflow-y: auto;
     overflow-x: hidden;
     margin-right: 4%;
@@ -94,16 +94,18 @@
   .chatlist-user::-webkit-scrollbar{
     width: 8px;
     height: 8px;
+    
   }
   
   .chatlist-user::-webkit-scrollbar-thumb{
     background-color: rgba(0, 0, 0, 0.4);;
     border-radius: 10px;
-  
+    
   }
   
   .user-list{
     background-color : rgba(0, 0, 0, 0.2);
+    /* margin-left: 89%; */
   }
   
   .user-list-pic img{
@@ -123,9 +125,9 @@
   }
   
   .msg-user{
-    margin: 0 0.1%;
-    padding: 2% 2% 2% 0;
-    width: 95%;
+    margin: 5px;
+    padding: 5px;
+    /* width: 95%; */
     max-height: 60%;
     min-height: 20px;
     display: grid;
@@ -146,6 +148,7 @@
   .select-user-list{
     background-color: #e3e9ff;
     border-radius: 0.55rem;
+    
   }
 
   .user-list-text{
@@ -155,6 +158,7 @@
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical; 
     /* max-width: 500px;  */
+    font-weight: 600;
     overflow: hidden;
     /* padding: 2%; */
   }
@@ -167,7 +171,7 @@
     position: relative;
     display: flex;
     margin-top: -17px;
-    margin-left: 25px;
+    margin-left: 20px;
     width:15px;
     height: 15px;
     border-radius: 100%;
@@ -185,10 +189,101 @@
     color: #1877f2;
   }
   
+  .bloc-tabs {
+    display: flex;
+    margin-right : 40px;
+  }
+  
+
   .tabs{
     display:inline-block;
   }
 
+  .tabs {
+    padding: 6px;
+    text-align: center;
+    width: 50%;
+    /* background: rgba(128, 128, 128, 0.075); */
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.274);
+    box-sizing: content-box;
+    position: relative;
+    outline: none;
+    font-size: 15px;
+}
+.tabs:not(:last-child){
+    border-right: 1px solid rgba(0, 0, 0, 0.274);
+}
+
+.active-tabs {
+    background: white;
+    border-bottom: 1px solid transparent;
+    font-size: 15px;
+}
+
+.active-tabs span {}
+
+.active-tabs-line i{
+
+    color: #009B00;
+    border-bottom: 1px solid transparent;
+}
+
+.active-tabs-facebook i{
+  color: #0078ff;
+  border-bottom: 1px solid transparent;
+}
+
+.active-tabs::before {
+    display: block;
+    padding: 80px 20px 10px;
+    background: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    text-align: center;
+    border-radius: 0;
+    border: none;
+    border-bottom: 2px solid #fff;
+    margin-right: 0;
+    overflow: hidden;
+    z-index: 1;
+    position: relative;
+    transition: all 0.3s ease 0s;
+}
+
+.content-tabs {
+    flex-grow : 1;
+}
+
+.content {
+    background: white;
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.content h2 {
+    padding: 0px 0 5px 0px;
+}
+
+.content hr {
+    width: 100px;
+    height: 2px;
+    background: #222;
+    margin-bottom: 5px;
+}
+
+.content p {
+    width: 100%;
+    height: 100%;
+}
+
+.active-content {
+    display: block;
+}
 
 
 
@@ -202,20 +297,23 @@
     align-items: center;
 }
 
-
-
 .content__header {
   /* padding-bottom: 15px; */
   border-bottom: 1px solid #ebe7fb;
   /* color: #00B900; */
-  min-height: 40px;
+  min-height: 20px;
+  font-weight: 600;
 }
 
 
+.content__header p {
+  margin-top: 0 !important;
+  margin-bottom: 5px;
+}
 
 .content__body {
-  min-height: 65vh;
-  max-height: 65vh;
+  min-height: 60vh;
+  max-height: 60vh;
   overflow: auto;
   margin-top: 2%;
   margin-right: 2%;
@@ -272,7 +370,7 @@
 
 .sendNewMessage input {
   flex-grow: 1;
-  padding: 0 5%;
+  /* padding: 0 5%; */
   width: 90%;
   background-color: transparent;
   border: none;
@@ -329,7 +427,7 @@
   position: relative;
   display: flex;
   align-items: flex-end;
-  margin-bottom: 10%;
+  margin-bottom: 11%;
 
 }
 
@@ -384,3 +482,5 @@
   /* margin-top: 2%; */
   margin-left: 2%;
 }
+
+

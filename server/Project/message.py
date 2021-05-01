@@ -62,6 +62,8 @@ def item_list_flexmessage(**kwargs):
                       }
     data = inventory_collection.find(search_request).limit(9)
     data_list = list(data)
+    bot_collection = mongo.db.bots
+    bot_define = bot_collection.find_one({'_id': ObjectId(kwargs['botID'])})
     elements =  {
                 "attachment": {
                     "type": "template",
@@ -94,7 +96,7 @@ def item_list_flexmessage(**kwargs):
             "type": "bubble",
             "hero": {
               "type": "image",
-              "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_5_carousel.png",
+              "url": "https://da37df61a729.ngrok.io/images/bot/bot_pic/Avatar.jpg",
               "size": "full",
               "aspectRatio": "20:13",
               "aspectMode": "cover"
@@ -159,7 +161,7 @@ def item_list_flexmessage(**kwargs):
             "type": "bubble",
             "hero": {
               "type": "image",
-              "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_5_carousel.png",
+              "url": "%s/images/bot/items/%s",
               "size": "full",
               "aspectRatio": "20:13",
               "aspectMode": "cover"
@@ -213,12 +215,12 @@ def item_list_flexmessage(**kwargs):
                   "action": {
                     "type": "uri",
                     "label": "Description",
-                    "uri": "https://liff.line.me/1655652942-1EJmM0LZ"
+                    "uri": "https://liff.line.me/%s/product_info/%s"
                   }
                 }
               ]
             }
-          }''' % (index['item_name'], index['price'], index['_id'])
+          }''' % (server_url,index['img'][0],index['item_name'], index['price'], index['_id'],bot_define['liff_id'], index['_id'])
                 if contents_block == "":
                     contents_block = contents
                 else:
@@ -256,7 +258,7 @@ def item_list_flexmessage(**kwargs):
     return flex
 
 
-def invoice_flexmessage(**kwargs):
+def invoice_flexmessage(platform="line",**kwargs):
     cart_collection = mongo.db.carts
     bot_collection = mongo.db.bots
     bot_define = bot_collection.find_one({'_id': ObjectId(kwargs['botID'])})
@@ -485,7 +487,7 @@ def confirm_flexmessage(sender_name):
           },
           {
             "type": "text",
-            "text": "*กดEnterหาถูกต้องหรือCancelเพื่อกลับไปซื้อของ",
+            "text": "*กดEnterหากถูกต้องหรือCancelเพื่อกลับไปซื้อของ",
             "size": "xxs",
             "offsetTop": "md"
           }
@@ -561,7 +563,7 @@ def address_flex(address):
         },
         {
           "type": "text",
-          "text": "*กดEnterหาถูกต้องหรือCancelเพื่อกลับไปซื้อของ",
+          "text": "*กดEnterหากถูกต้องหรือCancelเพื่อกลับไปซื้อของ",
           "size": "xxs",
           "offsetTop": "md",
           "style": "normal"
@@ -599,6 +601,8 @@ def address_flex(address):
     return flex
 
 def payment_flex(botID,customerID):
+  bot_collection = mongo.db.bots
+  bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
   flex = '''
   {
     "type": "bubble",
@@ -626,7 +630,7 @@ def payment_flex(botID,customerID):
           "action": {
             "type": "uri",
             "label": "Pay",
-            "uri": "https://liff.line.me/1655652942-zNpjoxYV/checkout/%s?customer=%s"
+            "uri": "https://liff.line.me/%s/checkout/%s"
           }
         },
         {
@@ -642,5 +646,78 @@ def payment_flex(botID,customerID):
       ],
       "flex": 0
     }
-  }'''%(botID,customerID)
+  }'''%(bot_define['liff_id'], customerID)
   return flex 
+
+def tel_flexmessage(tel):
+    flex = '''
+    {
+      "type": "bubble",
+      "header": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "ยืนยันเบอร์โทร",
+            "align": "center"
+          }
+        ]
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "%s",
+            "wrap": true,
+            "weight": "bold",
+            "offsetBottom": "lg"
+          },
+          {
+            "type": "separator"
+          },
+          {
+            "type": "text",
+            "text": "*พิมพ์เบอร์อีกครั้งได้หากต้องการแก้ไข",
+            "size": "xxs",
+            "offsetTop": "md"
+          },
+          {
+            "type": "text",
+            "text": "*กดEnterหากถูกต้องหรือCancelเพื่อกลับไปซื้อของ",
+            "size": "xxs",
+            "offsetTop": "md"
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "postback",
+              "label": "Confirm",
+              "data": "action=tel&confirm=true&data=%s"
+            },
+            "style": "primary",
+            "margin": "none",
+            "offsetStart": "none",
+            "offsetEnd": "none"
+          },
+          {
+            "type": "button",
+            "action": {
+              "type": "postback",
+              "label": "Cancel",
+              "data": "action=tel&confirm=false"
+            },
+            "style": "link"
+          }
+        ]
+      }
+    }''' % (tel,tel)
+    return flex

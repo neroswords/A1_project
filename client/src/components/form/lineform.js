@@ -30,8 +30,6 @@ const Styles = styled.div`
     color: black;
 }
 
-
-
 .copy-link p{
     font-size: 15px;
     color: black;
@@ -42,16 +40,19 @@ const Styles = styled.div`
 
 .copy-link p::-webkit-scrollbar {
   /* width: 5px; */
-  height: 6px;
+  height: 10px;
+  cursor: pointer;
 }
 
 .copy-link p::-webkit-scrollbar-track {
   box-shadow: inset 0 0 1px gray; 
   border-radius: 0.5rem;
+  cursor: pointer;
 }
 .copy-link p::-webkit-scrollbar-thumb {
   background: #dddddd; 
   border-radius: 0.5rem;
+  cursor: pointer;
 }
 
 .copy-link i{
@@ -104,8 +105,8 @@ const Styles = styled.div`
 }
 
 #container-button .submit{
-    padding: 5px 20px;
-    margin-top: 15px;
+    padding: 5px 30px;
+    /* margin-top: px; */
     font-size: 19px;
     border-radius: 25px;
     border: 3px solid #34a853;
@@ -138,12 +139,11 @@ const Styles = styled.div`
 
 `;
 
-export default function Lineform(props) {
-    console.log(props)
+export default function Lineform({botID}) {
     const [access_token, setAccess_token] = useState('');
     const [channel_secret, setChannel_secret] = useState('');
     const [basic_id, setBasic_id] = useState('');
-    const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+props.props.bot_id+'/line');
+    const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+botID+'/line');
     const history = useHistory()
 
     const handleSubmit = (event) => {
@@ -155,7 +155,7 @@ export default function Lineform(props) {
             'creator':localStorage.getItem('user_id'),
             'platform': 'line'
             }
-        fetch('/bot/'+props.props.bot_id+'/connect', {
+        fetch('/bot/'+botID+'/connect', {
             method: 'POST',
             headers : {
                 "Access-Control-Allow-Origin": "*",
@@ -166,7 +166,7 @@ export default function Lineform(props) {
     }
 
     useEffect(() => {
-        fetch('/bot/'+props.props.bot_id+'/connect').then(
+        fetch('/bot/'+botID+'/connect').then(
             response => response.json()
           ).then(data =>{
             setAccess_token(data.access_token);
@@ -179,17 +179,17 @@ export default function Lineform(props) {
             <Styles>
                 <div className="container">
                     <div className="row my-3">
-                        <div className="group line-card col-lg-12">
+                        <div className="group line-card ">
                             <form className="line" onSubmit={ handleSubmit }>
                                 <div className="row">
                                     <p className="col mb-4">Connect to Line</p>
                                 </div>
                                 <div className="copy-link">
-                                    <p>{packageJson.proxy}bot/webhook/{props.props.bot_id}/line</p>
+                                    <p>{packageJson.proxy}/bot/webhook/{botID}/line</p>
                                     <button type='button' className="copy-clipboard" onClick={() => {navigator.clipboard.writeText(webhook)}}><i className="fas fa-copy fa-xs"></i></button>
                                 </div>
                                 <div className="input-Box">
-                                <div className="col-lg-12">
+                                <div className="ms-2">
                                     <label  className="form-label">Channel secret</label>
                                     <input type="text" pattern="[A-Za-z0-9]+" value={channel_secret} onChange={e => setChannel_secret(e.target.value)} className="form-control" id="inputpagefacebook"/>
                                 </div>
@@ -203,8 +203,8 @@ export default function Lineform(props) {
                                 </div>
                                 </div>
                                 <div id="container-button">
-                                    <button className="cancle" type='button' onClick={() => {history.goBack()}} >Back</button>
-                                    <button className="submit" type='submit'>Submit</button>
+                                    {/* <button className="cancle" type='button' onClick={() => {history.goBack()}} >Back</button> */}
+                                    <button className="submit" type='submit'>Connect</button>
                                 </div>
                             </form>
                         </div>  

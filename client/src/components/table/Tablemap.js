@@ -11,6 +11,12 @@ import Delete_table from "../Delete_table";
 
 const Styles = styled.div`
 
+.table-show-all > div.container {
+    /* max-width: max-content; */
+    margin: 0;
+    padding: 0 20px;
+    min-width: 100% ;
+  }
   table {
     font-family: 'Roboto',sans-serif;
     margin: 10px 0;
@@ -55,6 +61,7 @@ const Styles = styled.div`
     background-color: transparent;
     border-radius: 25px;
     padding-left:15px;
+    width: 500px;
   }
 
 }
@@ -80,13 +87,13 @@ const Styles = styled.div`
   }
 
   .buttonaddMapping{
-  padding: 7px 15px;
-  font-size: 12px;
-  border-radius: 25px;
-  border: 1px solid #0078ff;
-  transition: 0.5s;
-  background-color: #0078ff;
-  color: #fff;
+    padding: 7px 15px;
+    font-size: 12px;
+    border-radius: 25px;
+    border: 1px solid #0078ff;
+    transition: 0.5s;
+    background-color: #0078ff;
+    color: #fff;
 }
 
 .buttonaddMapping:hover{
@@ -129,7 +136,7 @@ const Styles = styled.div`
   height: 30px;
   border-radius: 25px;
   border: .5px solid #A9A9A9;
-
+  margin-bottom: 5%;
 }
 
 input::placeholder{
@@ -140,6 +147,7 @@ input::placeholder{
 .button-trained-word .SearchBar{
   position:relative;
   float: right;
+  margin-bottom:1%;
 }
 
 .select-pagesize {
@@ -342,26 +350,26 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     hooks => {
       hooks.visibleColumns.push(columns => [
 
-        {
-          id: 'selection',
-          Header: ({ getToggleAllPageRowsSelectedProps }) => (
-            <div>
-              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+        // {
+        //   id: 'selection',
+        //   Header: ({ getToggleAllPageRowsSelectedProps }) => (
+        //     <div>
+        //       <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
 
-            </div>
-          ),
+        //     </div>
+        //   ),
 
-          Cell: ({ row }) => (
+        //   Cell: ({ row }) => (
 
-            <div >
+        //     <div >
 
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+        //       <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
 
 
-            </div>
-          ),
+        //     </div>
+        //   ),
 
-        },
+        // },
         ...columns,
 
       ])
@@ -580,16 +588,17 @@ function Tablemap({ botID, delete_trained, add_data }) {
  
   return (
     <Styles>
-      <TableShow
-        columns={columns}
-        data={TablemapState}
-        updateMyData={updateMyData}
-        skipPageReset={skipPageReset}
-        delete_trained={delete_trained}
-        botID={botID}
-        // mapID ={TablemapState[0].id}
-      />
-
+      <div className="table-show-all">
+        <TableShow
+          columns={columns}
+          data={TablemapState}
+          updateMyData={updateMyData}
+          skipPageReset={skipPageReset}
+          delete_trained={delete_trained}
+          botID={botID}
+          // mapID ={TablemapState[0].id}
+        />
+      </div>
     </Styles>
   );
 }

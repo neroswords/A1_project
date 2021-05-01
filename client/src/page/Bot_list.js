@@ -54,7 +54,7 @@ export default function Bot_list(props) {
                     </div>
 
                     {/* <Navbar_member /> */}
-                          <div class="container col-xl-9 col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                          <div class="container col-9">
                                     <div className="botlist-body" name="bot_list">
                                         <Link className='link' to={'/bot/'+localStorage.getItem('user_id')+'/create_bot'} >
                                         <div className="card-plus group" name="create-bot">
@@ -109,6 +109,7 @@ function Dropdown({botData, deleteBot, openDelete_pop, openForm}){
     <div>
     <div class="card-box">
         <Link to={'/bot/'+botData._id.$oid+'/training' } >
+            {/* <p>{botData.Img}</p> */}
             <img src={'/images/bot/bot_pic/'+botData.Img} class="bot-img"/>
         </Link>
         <div class="info-bot">
@@ -147,7 +148,7 @@ function Dropdown({botData, deleteBot, openDelete_pop, openForm}){
                         <a href={'/bot/'+botData._id.$oid+'/edit_bot'}><i class="fas fa-pen"></i> edit</a>
                     </li>
                     <li>
-                        <a onClick={OnopenForm}><i class="fas fa-link"></i> Connect </a>
+                        <a href="#" onClick={OnopenForm}><i class="fas fa-link"></i> Connect </a>
                     {/* <a href={'/bot/'+botData._id.$oid+'/connect'} ><i class="fas fa-link"></i> Connect</a> */}
                     {/* <Facebookform showForm={showForm} setShowForm={setShowForm} showIdbot={showIdbot}></Facebookform> */}
                     </li>
