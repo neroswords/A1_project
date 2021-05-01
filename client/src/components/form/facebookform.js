@@ -137,10 +137,10 @@ const Styles = styled.div`
 }
 `;
 
-export default function Facebookform(props) {
+export default function Facebookform({botID}) {
     const [access_token, setAccess_token] = useState('');
     const [verify_token, setVerify_token] = useState('');
-    const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+props.props.bot_id+'/facebook')
+    const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+botID+'/facebook')
     const history = useHistory()
 
     const handleSubmit = (event) => {
@@ -151,7 +151,7 @@ export default function Facebookform(props) {
             'creator':localStorage.getItem('user_id'),
             'platform':'facebook'
         }
-        fetch('/bot/'+props.props.bot_id+'/connect', {
+        fetch('/bot/'+botID+'/connect', {
             method: 'POST',
             headers : {
                 "Access-Control-Allow-Origin": "*",
@@ -173,7 +173,7 @@ export default function Facebookform(props) {
     }
 
     useEffect(() => {
-        fetch('/bot/'+props.props.bot_id+'/connect').then(
+        fetch('/bot/'+botID+'/connect').then(
             response => response.json()
           ).then(data =>{
             setAccess_token(data.page_facebook_access_token);
@@ -192,7 +192,7 @@ export default function Facebookform(props) {
                                 {/* <i className="col fab fa-facebook"></i> */}
                             </div>
                             <div className="copy-link">
-                                <p>{packageJson.proxy}bot/webhook/{props.props.bot_id}/facebook</p>
+                                <p>{packageJson.proxy}/bot/webhook/{botID}/facebook</p>
                                 <button type="button" className="copy-clipboard" onClick={() => {navigator.clipboard.writeText(webhook)}}><i className="fas fa-copy fa-xs copy-clipboard"></i></button>
                             </div>
                             <div className="input-Box">

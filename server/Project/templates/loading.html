@@ -50,7 +50,6 @@
   }
 }
 .content .image{
-  background: url("bg.png") no-repeat;
   height: 100vh;
   background-size: cover;
   background-position: center;
@@ -94,7 +93,7 @@
 <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
         <script src="{{ url_for('static', filename='js/liff-checkout.js') }}"></script>
         <script language="javascript">
-            main(window.location.href)
+            main(window.location.href,'{{ liffId }}')
   </script>
   </body>
 </html>
