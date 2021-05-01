@@ -166,7 +166,10 @@ export const Mainpage = () => (
         {/* <img className="img-bg-yellow" src="./images/page.png"/> */}
         <div className="main-textt col-5">
                   <h1>A1 Chatbot</h1>
-                  <p>A1 chatbot is a web-application that can help manage online purchasing and selling. It also includes automated reply message, order management, and online shop system administration via bot which you can create by your own. </p>
+                  {/* <p>A1 chatbot is a web-application that can help manage online purchasing and selling. It also includes automated reply message, order management, and online shop system administration via bot which you can create by your own. </p> */}
+                  <p>A1 chatebot เป็นเว็ปแอปพลิเคชันที่สามารถช่วยจัดการการซื้อและขายออนไลน์ 
+                    นอกจากนี้ยังรวมถึงข้อความตอบกลับอัตโนมัติการจัดการคำสั่งซื้อและการดูแลระบบร้านค้าออนไลน์ผ่านบอทซึ่งคุณสามารถสร้างได้ด้วยตัวเอง</p>
+
         </div>
         <div className="img-main-phone col-7">
                 <img className="img-phone" src="./images/tel.png" />

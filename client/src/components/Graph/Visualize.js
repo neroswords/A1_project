@@ -14,51 +14,43 @@ import {
 import styled from 'styled-components';
 
 const Styles = styled.div`
-#container {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 10px;
-  width: 800px;
-  height: 800px;
-  background-color: #fff;
-  
-}
 
 .head-selector{
-  display: flex;
-  justify-content: flex-end;
+  margin-left: 17%;
 }
-.selector-option{
-  width: 100px;
-  height: 100px;
+
+.header-text{
+  text-align:center;
+}
+.showgraph-type{
+  position: absolute;
+  right: 10%;
+  margin-top: -6%;
+  width: 160px;
+  height: 70px;
+  border: 3px solid #fca311 ;
+  border-radius: 1rem;
+}
+
+.showgraph-text{
+  margin-left: 15px;
+  margin-top: 8px;
 }
 
 
-@media screen and (min-width: 400px) {
-  .LineChart{
-      width: 100px;
-      height: 50px;
+@media only screen and (max-width: 1600px) {
+  .LineChart {
+    margin-left: 10%;
+    
   }
-  
 }
 
-@media screen and (min-width: 641px) and (max-width: 960px) {
-  .LineChart{
-      width: 500px;
-      height: 500px;
+@media screen and (max-width: 1980px) and (min-width: 1700px) {
+  .LineChart {
+    margin-left: 20%;
+    
   }
-  
 }
-
-@media screen and (max-width: 960px) {
-  .LineChart{
-      width: 500px;
-      height: 500px;
-  }
-  
-}
-
 `;
 
 export const Visualize = ({ botID }) => {
@@ -69,10 +61,12 @@ export const Visualize = ({ botID }) => {
 
 
   const [loading, setLoading] = React.useState();
-  async function getData( event ) {
-    console.log(event.target.value)
+  const [head, setHead] = React.useState();
+
+  async function getData(event) {
+    setHead(event.target.value)
     await setLoading(true)
-      fetch('/sales/' + botID + '/' + event.target.value )
+    fetch('/sales/' + botID + '/' + event.target.value)
       .then(res => res.json().then(data => {
         setDataChart(data)
 
@@ -80,7 +74,7 @@ export const Visualize = ({ botID }) => {
     await setLoading(false)
   }
   useEffect(() => {
-    fetch('/sales/' + botID + '/' + '/month' )
+    fetch('/sales/' + botID + '/' + '/month')
       .then(res => res.json().then(data => {
         setDataChart(data)
 
@@ -88,57 +82,94 @@ export const Visualize = ({ botID }) => {
 
   }, []);
   const data = [
-    { name: "Page A", Line: 4000},
-    { name: "Page B", Line: 3000},
-    { name: "Page C", Line: 2000},
-    { name: "Page D", Line: 2780},
-    { name: "Page E", Line: 1890},
-    { name: "Page F", Line: 2390},
-    { name: "Page G", Line: 3490}
+    { name: "Page A", Line: 4000 },
+    { name: "Page B", Line: 3000 },
+    { name: "Page C", Line: 2000 },
+    { name: "Page D", Line: 2780 },
+    { name: "Page E", Line: 1890 },
+    { name: "Page F", Line: 2390 },
+    { name: "Page G", Line: 3490 }
   ];
 
 
+  const header = () => {
+    if (head == 'daily') {
+      return (<h3>Daily</h3>)
+    }
+    else if (head == 'day') {
+      return (<h3>By Date</h3>)
+
+    } else if (head == 'month') {
+      return (<h3>By Month</h3>)
+    }
+
+  }
+
+  const showType = () => {
+    if (head == 'daily') {
+      return (<a>เวลา</a>)
+    }
+    else if (head == 'day') {
+      return (<a>วัน</a>)
+
+    } else if (head == 'month') {
+      return (<a>เดือน</a>)
+    } 
+
+  }
+
 
   return (
+    <Styles>
+      <div id="container-graph" ref={containerRef}>
 
-    <div id="container-graph" ref={containerRef}>
+        <br />
+        <div className="head-selector">
+          <select onChange={getData} className="selector-option">
+            <option value="daily">Today</option>
+            <option value="day">By Date</option>
+            <option value="month">By Month</option>
+          </select>
+        
+        </div>
 
-      <br />
-      <div className="head-selector">
-        <select  onChange={getData} className="selector-option">
-          <option value="daily">Today</option>
-          <option value="day">By Date</option>
-          <option value="month">By Month</option>
-        </select>
-      </div>
+        <h3 className="header-text" >{header()}</h3>
 
-      <LineChart className="LineChart"
-        ref={(ref) => setChart(ref)} // Save the ref of the chart
-        data={dataChart}
-        height={500}
-        width={1000}
-        margin={{ top: 5, right: 40, left: 20, bottom: 25 }}
-      >
-        <XAxis dataKey="name" />
-        <YAxis />
-        <CartesianGrid strokeDasharray="3 3" />
-        <Tooltip />
-        <Legend wrapperStyle={{ bottom: 5 }} />
-        {/* <Line
+        
+
+        <LineChart className="LineChart"
+          ref={(ref) => setChart(ref)} // Save the ref of the chart
+          data={dataChart}
+          height={500}
+          width={1000}
+          margin={{ top: 5, right: 40, left: 20, bottom: 25 }}
+
+        >
+          <XAxis dataKey="name" />
+          <YAxis />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Tooltip />
+          <Legend wrapperStyle={{ bottom: 5 }} />
+          {/* <Line
           type="monotone"
           dataKey="Facebook"
           stroke="#8884d8"
           activeDot={{ r: 8 }}
         /> */}
-        <Line type="monotone" 
-        dataKey="income" 
-        stroke="#82ca9d" 
-        />
-        
-      </LineChart>
+          <Line type="monotone"
+            dataKey="income (Baht)"
+            stroke="#82ca9d"
+          />
 
-    </div>
-
+        </LineChart>
+        <div className='showgraph-type'>
+            <div className='showgraph-text'>
+              <a>x: {showType()}</a><br></br>
+              <a>y: รายรับ (บาท) </a>
+            </div>
+        </div>
+      </div>
+    </Styles>
   );
 };
 

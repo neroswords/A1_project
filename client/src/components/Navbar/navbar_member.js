@@ -427,20 +427,41 @@ function Navbar_member({ botID, customer_id, path  }) {
               <Link to={"/chat/" + botID + "/live_chat/main"} class="nav-check">
                 <div className="fa-group">
                   <div className="fa-secondary">
-                  <i class="fas fa-comments-alt"></i>
+                  <i className="fas fa-comments-alt"></i>
                   </div>
                 </div>
               </Link> ) : (
               <Link to={"/chat/" + botID + "/live_chat/main"} class="nav-link-c">
                <div className="fa-group">
                   <div className="fa-secondary">
-                    <i class="far fa-comments-alt"></i>
+                    <i className="far fa-comments-alt"></i>
                   </div>
                 </div>
                 </Link>
               )
             }
             </li>
+
+            <li className="nav-item-c">
+            { path=="dashboard" ? (
+              <Link to={"/bot/" + botID + "/customer_infomation"} class="nav-check">
+                <div className="fa-group">
+                  <div className="fa-secondary">
+                    <i className="fas fa-user-chart"></i>
+                  </div>
+                </div>
+              </Link> ) : (
+              <Link to={"/bot/" + botID + "/dashboard"} class="nav-link-c">
+               <div className="fa-group">
+                  <div className="fa-secondary">
+                    <i className="far fa-user-chart"></i>
+                  </div>
+                </div>
+                </Link>
+              )
+            }
+            </li>
+
 
           </ul>
         </nav>
@@ -637,6 +658,28 @@ function Navbar_member({ botID, customer_id, path  }) {
             }
             </li>
 
+          <li className="nav-item2">
+            { path=="dashboard" ? (
+              <Link to={"/bot/" + botID + "/dashboard"} onClick={onSubmit} class="nav-check-open" name="menu-customer">
+                <div className="fa-group">
+                  <div className="fa-secondary">
+                      <i className="fas fa-user-chart"></i>
+                  </div>
+                </div>
+                <span className="link-text">Dashcoard</span>
+              </Link> ) : (
+              <Link to={"/bot/" + botID + "/dashboard"} onClick={onSubmit} class="nav-link2" name="menu-customer">
+                  <div className="fa-group">
+                      <div className="fa-secondary">
+                          <i className="fas fa-user-chart"></i>
+                      </div>
+                  </div>
+                  <span className="link-text">Dashboard</span>
+              </Link>
+              )
+            }
+            </li>
+            
           </ul>
         </nav>
       )}

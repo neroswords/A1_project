@@ -338,7 +338,10 @@ export default class Add_item extends React.Component {
                                 <input accept="image/x-png,image/gif,image/jpeg" ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
                             </div>
                               {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
-                                return <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
+                                
+                                return <form>
+                                      <button><i class="far fa-times-circle"></i></button><img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
+                                      </form>
                               })}
                           </div>  
                     </div>  

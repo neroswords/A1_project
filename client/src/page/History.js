@@ -9,10 +9,10 @@ const Styles = styled.div`
     display: flex;
     min-height: 92vh;
 }
-.container {
-    margin-bottom: 2%;
-    margin-top: 2%;
-    overflow:hidden;
+.container-fluid {
+   padding: 40px;
+   width: 100%;
+   overflow: hidden;
 }
 .title-history{
     padding: 4px;
@@ -20,6 +20,10 @@ const Styles = styled.div`
     background-color: white;
     border-radius: 0.25rem;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.title-history h2{ 
+   font-weight: 600;
 }
 .show-history{
     min-height: 70vh;
@@ -61,15 +65,15 @@ function History(props) {
         <Styles>
             <div className="history-page">
                 <Navbar_member botID={props.match.params.bot_id} path={"history"} />
-                <div className="container">
+                <div className="container-fluid">
                     <div className="title-history">
                         <h2 className='p-2 flex-grow-1 bd-highlight' id="history-header">History</h2>
                     </div>
+
                     <div className="row p-3">
                         <div className="small-box bg-info col-4">
                             <div className="inner">
                                 <h3>{history.waited}</h3>
-
                                 <p>New Orders</p>
                             </div>
                             <div className="icon">
@@ -82,7 +86,6 @@ function History(props) {
                             <div className="small-box bg-success">
                                 <div className="inner">
                                     <h3>{history.total}</h3>
-
                                     <p>Total Order</p>
                                     <br></br>
                                 </div>

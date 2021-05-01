@@ -31,6 +31,7 @@ import Product_edit from './Page/Product_edit';
 import Chat from './Page/Chat';
 import NewOrder from './Page/NewOrder';
 import DragText from './Page/DragText';
+import Dashboard from './Page/Dashboard';
 function App() {
   return (
     <Router>
@@ -62,7 +63,7 @@ function App() {
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/inventory/product_detail/:product_id" component={ Product_detail } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/inventory/product_edit/:product_id" component={ Product_edit } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/chat/:bot_id/live_chat/:customer_id" component={ Chat } />
-            
+            <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/dashboard" component={ Dashboard } />
 
           </Switch>
     </Router>
