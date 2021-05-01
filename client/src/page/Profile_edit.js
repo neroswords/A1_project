@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Link} from "react-router-dom";
+import FlashMessage from 'react-flash-message'
+
 const Styles = styled.div`
   .container {
     font-family: 'Public Sans', sans-serif;
@@ -144,47 +146,107 @@ class Profile_edit extends React.Component {
       birthday : '',
       shop_name : '',
       shop_type : '',
-      shop_address : ''
+      shop_address : '',
+      message : '',
+      messageShopname : '',
+      messageFirstname : '',
+      messageLastname : '',
+      showMessageUsername: false,
+      showMessagePassword: false,
+      showMessageShopname: false,
+      showMessageFirstname: false,
+      showMessageLastname: false
     };
     this.handleChange = this.handleChange.bind(this);
   }
   
 
   handleChange (evt) {
+    this.setState({message:''})
     this.setState({ [evt.target.name]: evt.target.value });
+    const field = evt.target.name
+    if(field == "firstname"){
+      this.setState({showMessageFirstname: false})
+    }
+    else if(field == "lastname"){
+      this.setState({showMessageLastname: false})
+    }
+    else if(field == "shop_name"){
+      this.setState({showMessageShopname: false})
+    }
+    else{
+      return
+    }
   }
 
   handleSubmit = (e) => {
+    
+    // this.setState({showMessage: true})
     e.preventDefault()
-
+    
     if(this.state.password !== this.state.confirm_password){
       console.log('errors');
-  }
-  else{
-    const profile = {
-        email: this.state.email,
-        username: this.state.username,
-        password : this.state.password,
-        firstname : this.state.firstname,
-        lastname : this.state.lastname,
-        birthday : this.state.birthday,
-        shop_name : this.state.shop_name,
-        shop_type : this.state.shop_type,
-        shop_address : this.state.shop_address
+    }
+    else{
+      const snLength = this.state.shop_name.replace(/^\s+|\s+$/gm,'').length
+    const fnLength = this.state.firstname.replace(/^\s+|\s+$/gm,'').length
+    const lnLength = this.state.lastname.replace(/^\s+|\s+$/gm,'').length
+    if (fnLength == 0 ){
+      this.setState({messageFirstname:'Please enter First name'})
+      this.setState({showMessageFirstname: true})
+      if(lnLength == 0){
+        this.setState({messageLastname:'Please enter Last name'})
+        this.setState({showMessageLastname: true})
+        if(snLength == 0){
+          this.setState({messageShopname:'Please enter Shop name'})
+          this.setState({showMessageShopname: true})
+        }
+      }  
+    }
+    
+    else if (lnLength == 0){
+      this.setState({messageLastname:'Please enter Last name'})
+      this.setState({showMessageLastname: true})
+      if(snLength == 0){
+        this.setState({messageShopname:'Please enter Shop name'})
+        this.setState({showMessageShopname: true})
       }
-      fetch('/profile/'+localStorage.getItem('user_id')+'/edit', {
-      method : 'POST',
-      headers : {
-            "Access-Control-Allow-Origin": "*",
-            'Content-Type':'application/json'
-      },
-      body: JSON.stringify(profile)
-    })
-  
-    window.location.replace("/login")
+      
+    }
+    else if (snLength == 0){
+      this.setState({messageShopname:'Please enter Shop name'})
+      this.setState({showMessageShopname: true})
+      
+    }
+      else{
+          const profile = {
+            email: this.state.email,
+            username: this.state.username,
+            password : this.state.password,
+            firstname : this.state.firstname,
+            lastname : this.state.lastname,
+            birthday : this.state.birthday,
+            shop_name : this.state.shop_name,
+            shop_type : this.state.shop_type,
+            shop_address : this.state.shop_address
+          }
+          fetch('/profile/'+localStorage.getItem('user_id')+'/edit', {
+          method : 'POST',
+          headers : {
+                "Access-Control-Allow-Origin": "*",
+                'Content-Type':'application/json'
+          },
+          body: JSON.stringify(profile)
+        })
+      alert("Edit Profile Successfully")
+      window.location.replace("/login")
+    }
+    
           }
 
   }
+
+
 componentDidMount ()  {
   fetch('/profile/'+localStorage.getItem('user_id')+'/edit').then((response) => {
       response.json().then((data) => {
@@ -212,11 +274,8 @@ componentDidMount ()  {
                       <div className="card card-regis">
                         
                         <div className="card-body">
-                        {/* <Link  className="button-close-edit-proflie">
-                              <i className="fas fa-times"></i>
-                        </Link> */}
-                          <h5 className="card-title-edit-profile">Edit Profile</h5>
-                          <form className="form-regis">
+                          <h5 className="card-title text-center">Edit Profile</h5>
+                          <form className="form-regis"  onSubmit={this.handleSubmit}>
                           <div className="title_part">
                                 <p className="col">Account infomation</p>
                                 <div className="line"></div>
@@ -228,18 +287,10 @@ componentDidMount ()  {
                               </div>
                               <div className="my-3">
                                 <label for="exampleInputEmail1" className="form-label">Username</label>
-                                
-                                <input type="text" className="form-control" value = {this.state.username} id="inputusername" name='username' disabled value={this.state.username} onChange={this.handleChange}/>
+                                <input type="text" className="form-control" value = {this.state.username} pattern="[A-Za-z0-9]+" id="inputusername" name='username' disabled value={this.state.username} onChange={this.handleChange}/>
                               </div>
                               <div className="row">
-                                {/* <div className="col ">
-                                  <label for="exampleInputPassword1" className="form-label">Password</label>
-                                  <input type="password" className="form-control"  id="inputpassword" name='password'  value={this.state.password} onChange={this.handleChange} /> 
-                                </div>
-                                <div className="col">
-                                  <label for="exampleInputPassword1" className="form-label">Comfirm Password</label>
-                                  <input type="password" className="form-control" id="confirmpassword" name='confirm_password' value={this.state.confirm_password} onChange={this.handleChange} />  
-                                </div> */}
+                                
                               </div>
                               <div className="title_part">
                                 <p className="col">Personal infomation</p>
@@ -250,11 +301,29 @@ componentDidMount ()  {
                                         <label for="inputFirstname" className="form-label">Firstname</label>
                                         <span className="reg_proflie"> *</span>
                                         <input type="text" className="form-control" value = {this.state.firstname} id="inputfirstname"  name='firstname' value={this.state.firstname} required onChange={this.handleChange}/>
+                                        { this.state.showMessageFirstname &&  
+                                      <div className="container">
+                                          <FlashMessage duration={40000}>
+                                            <div className="error">
+                                              <strong>* {this.state.messageFirstname}</strong>
+                                            </div>  
+                                          </FlashMessage>
+                                      </div>
+                                  }
                                     </div>
                                     <div className="col">
                                     <label for="inputLastname" className="form-label">Last name</label>
                                     <span className="reg_proflie"> *</span>
-                                        <input type="text" className="form-control" value = {this.state.lastname} id="inputlastname"  name='lastname' value={this.state.lastname} required onChange={this.handleChange}/>
+                                        <input type="text"  className="form-control" value = {this.state.lastname} id="inputlastname"  name='lastname' value={this.state.lastname} required onChange={this.handleChange}/>
+                                        { this.state.showMessageLastname &&  
+                                      <div className="container">
+                                          <FlashMessage duration={40000}>
+                                            <div className="error">
+                                              <strong>* {this.state.messageLastname}</strong>
+                                            </div>  
+                                          </FlashMessage>
+                                      </div>
+                                }
                                     </div>
                                     <div className="col">
                                       <label for="exampleInputEmail1" className="form-label">Birthday</label>
@@ -266,25 +335,45 @@ componentDidMount ()  {
                                     <label for="exampleInputEmail1" className="form-label">Shop name</label>
                                     <span className="reg_proflie"> *</span>
                                     <input type="text" className="form-control" id="inputshopname" value={this.state.shop_name} name='shop_name' required onChange={this.handleChange} />
+                                    { this.state.showMessageShopname &&  
+                                      <div className="container">
+                                          <FlashMessage duration={40000}>
+                                            <div className="error">
+                                              <strong>* {this.state.messageShopname}</strong>
+                                            </div>  
+                                          </FlashMessage>
+                                      </div>
+                                }
                                   </div>
+
                                   <div className="col my-3">
                                     <label for="exampleInputEmail1" className="form-label">Type of sale</label>
                                     <span className="reg_proflie"> *</span>
-                                    <input type="text" className="form-control" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' required onChange={this.handleChange} />
+                                    <input type="text" pattern="[A-Za-z0-9]+" className="form-control" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' required onChange={this.handleChange} />
                                   </div>
                                 </div>
+                                { this.state.showMessage &&  
+                                      <div className="container">
+                                          <FlashMessage duration={40000}>
+                                            <div className="error">
+                                              <strong>{this.state.message}</strong>
+                                            </div>  
+                                          </FlashMessage>
+                                      </div>
+                                }
                                 <div className="my-3">
                                   <label for="exampleFormControlTextarea1" className="form-label">Shop Address</label>
-                                  <textarea className="form-control" id="inputshopaddress" value = {this.state.shop_address} rows="3" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
+                                  <textarea className="form-control" id="inputshopaddress"  value = {this.state.shop_address} rows="2" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
                                 </div>
                                 {/* <hr className="my-4"/>                            */}
                               <div className="btn-regis mt-5">
-                                  <button className="btn btn-primary text-uppercase btn-inregis" type="submit" onClick={this.handleSubmit} >Submit</button>
+                                  <button className="btn btn-primary text-uppercase btn-inregis" type="submit"  >Submit</button>
                               </div>
                               {/* <hr className="my-4"/>
                               <div align="center">
                                 <span> Already have an account ? </span>
                                 <a  href="/Login" >Log in</a> 
+                                 onSubmit={this.handleSubmit}
                               </div> */}
                           </form>
                           

@@ -69,7 +69,7 @@ function Loged_in_nav(props) {
       <div
         className={"show-user " + (main == "#main" ? "click-show-user" : "")}
       >
-        <a
+        <a name="validate-user" 
           className="click"
           href={"/bot_list/" + localStorage.getItem("user_id") + "#main"}
         >
@@ -81,6 +81,7 @@ function Loged_in_nav(props) {
       <NavItem flag = {false}icon={<CaretIcon />}>
         <DropdownMenu></DropdownMenu>
       </NavItem>
+      
     </Navbar_real>
   );
 }

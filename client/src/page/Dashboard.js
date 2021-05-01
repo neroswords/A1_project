@@ -70,7 +70,7 @@ const Styles = styled.div`
 `
 
 
-function History(props) {
+function Dashboard(props) {
 
     const [history, setHistoryState] = useState([]);
 
@@ -96,8 +96,7 @@ function History(props) {
                     </div>
                 
                     <div className="show-history">
-                        {/* <Visualize botID={props.match.params.bot_id}/> */}
-                        <DashboardBot />
+                        <DashboardBot botID={props.match.params.bot_id}/>
                     </div>
                 </div>
             </div>
@@ -105,4 +104,4 @@ function History(props) {
     );
 }
 
-export default History;
+export default Dashboard;

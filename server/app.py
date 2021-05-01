@@ -21,4 +21,3 @@ if __name__ == '__main__':
 #     http_server.serve_forever()
     app.secret_key = 'mysecret'
     socketio.run(app, port=200, debug=True)
-

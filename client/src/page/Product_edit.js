@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 // import { Multiselect } from 'multiselect-react-dropdown';
 import 'react-widgets/dist/css/react-widgets.css';
-import { Multiselect } from 'react-widgets' ;
+import { Multiselect } from 'react-widgets' 
+import FlashMessage from 'react-flash-message'
 
 const Styles = styled.div`
   .container {
@@ -166,6 +167,25 @@ const Styles = styled.div`
     width: 140px;
     
   }
+  @media only screen and (max-width: 760px){
+    .showimg-newinv{
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 5%;
+    }
+  }
+
+  .upload-newinv{
+    /* display:flex; */
+    
+    background-color: #feecd1;
+    border: 2px dashed #fca311;
+    border-radius : 0.75rem;
+    text-align:center;
+    width: 150px;
+    height: 150px;
+    
+  }
 
   .req-icon{
     color: red;
@@ -207,7 +227,7 @@ const Styles = styled.div`
 
 
 `;
-let file = {}
+let fileimg = []
 export default class Product_edit extends React.Component {
   constructor(props) {
     super(props);
@@ -225,6 +245,8 @@ export default class Product_edit extends React.Component {
       value: [],
       price: '',
       url_preview: [],
+      message : '',
+      showMessage: false,
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -258,23 +280,30 @@ export default class Product_edit extends React.Component {
 
   _handleImageChange(e) {
     e.preventDefault();
-
+    
     let i
     for (i = 0; i < e.target.files.length; i++) {
-      let reader = new FileReader();
-      file[i] = this.uploadInput.files[i]
-      if (!file) {
-        return
+      if(e.target.files[i].type != "image/jpeg" && e.target.files[i].type != "image/png"){
+        console.log(this.uploadInput)
+        alert("Only PNG or JPG is accepted")
       }
-      reader.onloadend = () => {
-        this.setState({
-          file: file[i],
-          imagesPreviewUrl: [...this.state.imagesPreviewUrl, reader.result]
-        });
+      else{
+        let reader = new FileReader();
+        fileimg.push(this.uploadInput.files[i])
+        if (!fileimg) {
+          return
+        }
+        reader.onloadend = () => {
+          this.setState({
+            file: this.uploadInput.files[i],
+            imagesPreviewUrl: [...this.state.imagesPreviewUrl, reader.result]
+          });
+        }
+        reader.readAsDataURL(this.uploadInput.files[i])
       }
-      reader.readAsDataURL(file[i])
-    }
 
+      }
+      
 
   }
   handleUploadImage(ev) {
@@ -282,40 +311,50 @@ export default class Product_edit extends React.Component {
 
 
     var i
-    const data = new FormData();
-    var file = []
-    for (i = 0; i < this.uploadInput.files.length; i++) {
+    const itemnameLength = this.state.item_name.replace(/^\s+|\s+$/gm,'').length
+    if (itemnameLength == 0){
+      this.setState({message:'Please enter Item name'})
+      this.setState({showMessage: true})
+
+    }
+    else{
+      const data = new FormData();
+      
+      for (i = 0; i < fileimg.length; i++) {
       
       // file.push(this.uploadInput.files[i])
       
-      data.append('file' + [i], this.uploadInput.files[i]);
-    }
+          data.append('file' + [i], fileimg[i]);
+      }
 
 
     // data.append('file', file);
-    data.append('item_name', this.item_name.value);
-    data.append('type', JSON.stringify(this.state.value));
-    data.append('amount', this.amount.value);
-    data.append('creator', localStorage.getItem('user_id'))
-    console.log(this.state.Image)
-    data.append('Image', this.state.Image)
-    data.append('des', this.des.value);
-    data.append('price', this.price.value);
-    fetch('/inventory/'+this.props.match.params.bot_id+'/product_edit/'+this.props.match.params.product_id, {
-      method: 'POST',
-      // headers : {
-      //   "Access-Control-Allow-Origin": "*",
-      //   'Content-Type':'application/json'
-      // },
-      // body : JSON.stringify(json5),
-      body : data
-    }).then((response) => {
-      response.json().then((body) => {
-        this.setState({ imageURL: `/${body.file}` });
-        this.setState({ bot_id: data.id })
-        this.setState({ redirect: true })
+      data.append('item_name', this.item_name.value);
+      data.append('type', JSON.stringify(this.state.value));
+      data.append('amount', this.amount.value);
+      data.append('creator', localStorage.getItem('user_id'))
+      console.log(this.state.Image)
+      data.append('Image', this.state.Image)
+      data.append('des', this.des.value);
+      data.append('price', this.price.value);
+      fetch('/inventory/'+this.props.match.params.bot_id+'/product_edit/'+this.props.match.params.product_id, {
+        method: 'POST',
+        // headers : {
+        //   "Access-Control-Allow-Origin": "*",
+        //   'Content-Type':'application/json'
+        // },
+        // body : JSON.stringify(json5),
+        body : data
+      }).then((response) => {
+        response.json().then((body) => {
+          this.setState({ imageURL: `/${body.file}` });
+          this.setState({ bot_id: data.id })
+          fileimg = []
+          this.setState({ redirect: true })
+        });
       });
-    });
+    }
+    
 
   }
     componentDidMount ()  {
@@ -384,7 +423,7 @@ export default class Product_edit extends React.Component {
                     <div className="showimg-newinv form-row d-flex justify-content-between">
                           <div className="showimg-newinv">
                             <div className="upload-newinv">
-                                <input ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
+                                <input accept="image/x-png,image/gif,image/jpeg" ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
                             </div>
                               {this.state.url_preview.map((url_preview) => {
                                 return [ (
@@ -418,11 +457,20 @@ export default class Product_edit extends React.Component {
                                 <label className="form-label">Item name</label>
                                 <span className="req-icon"> *</span>
                                 <input type="text" name="item_name" value={this.state.item_name} ref={(ref) => { this.item_name = ref; }} onChange={this.handleChange} className="form-control"required />
-                              </div>                        
+                              </div>          
+                              { this.state.showMessage &&  
+                                        <div className="container">
+                                            <FlashMessage duration={4000}>
+                                              <div className="error">
+                                                <strong>* {this.state.message}</strong>
+                                              </div>  
+                                            </FlashMessage>
+                                        </div>
+                                  }                
                               <div className="col">
                                 <label className="form-label">Price</label>
                                 <span className="req-icon"> *</span>
-                                <input type="text" name="price" value={this.state.price} ref={(ref) => { this.price = ref; }} onChange={this.handleChange} className="form-control"required />
+                                <input type="number" min="0" step="any" name="price" value={this.state.price} ref={(ref) => { this.price = ref; }} onChange={this.handleChange} className="form-control"required />
                               </div>
                           </div>
                           {/* <div class="mt-3"  onKeyDown ={((e) => this.Onend(e))}> */}
@@ -444,7 +492,7 @@ export default class Product_edit extends React.Component {
                             <div className="col mt-2">
                               <label for="inputAmout" className="form-label" required>Amount</label>
                               <span className="req-icon"> *</span>
-                              <input type="integer" name="amount" className="form-control" id="inputfirstname" value={this.state.amount} ref={(ref) => { this.amount = ref; }} onChange={this.handleChange} />
+                              <input type="text" pattern="\d*"  name="amount" className="form-control" id="inputfirstname" value={this.state.amount} ref={(ref) => { this.amount = ref; }} onChange={this.handleChange} />
                             </div>
                          </div> 
                           <div className="mt-2">
@@ -454,7 +502,7 @@ export default class Product_edit extends React.Component {
                     
                     <hr className="mt-5"></hr>
                     <div className="btn-submitinv">
-                      <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Submit Edit</button>
+                      <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Edit</button>
                     </div>
                   </form>
 

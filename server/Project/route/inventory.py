@@ -59,7 +59,7 @@ def edit_inventory(botID,productID):
         count = 0
 
         info_update = {"$set": {'item_name': item_name,
-                       'type': item_type, 'amount': int(amount), 'des': des, 'botID': ObjectId(botID) ,'price':int(price),'img':Image}}
+                       'type': item_type, 'amount': int(amount), 'des': des, 'botID': ObjectId(botID) ,'price':float(price),'img':Image}}
         info_pic = []
         for i in request.files:
 

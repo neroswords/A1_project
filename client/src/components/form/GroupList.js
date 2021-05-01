@@ -70,9 +70,7 @@ function GroupList({groupID, botID}) {
 
   return (
     <>
-      <div className="title-group">
-        <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group</h2>
-      </div>
+      
       <div className='todo-app'>
         <GroupForm onSubmit={addTodo} />
         <Todo

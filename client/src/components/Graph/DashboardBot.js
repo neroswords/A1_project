@@ -38,7 +38,7 @@ const Styles = styled.div`
 }
 `;
 
-export const Accession = ({ botID }) => {
+export const DashboardBot = ({ botID }) => {
   const [containerRef, { width: containerWidth }] = useMeasure();
   const [chart, setChart] = React.useState();
   console.log(botID)
@@ -57,14 +57,7 @@ export const Accession = ({ botID }) => {
       }))
     await setLoading(false)
   }
-  // useEffect(() => {
-  //   fetch('/bot/' + botID + '/' + '/month' )
-  //     .then(res => res.json().then(data => {
-  //       setDataChart(data)
-
-  //     }))
-
-  // }, []);
+  
   const data = [
     { name: "Page A", Line: 4000},
     { name: "Page B", Line: 3000},
@@ -136,4 +129,4 @@ export const Accession = ({ botID }) => {
   );
 };
 
-export default Accession;
+export default DashboardBot;

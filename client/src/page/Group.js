@@ -13,7 +13,6 @@ const Styles = styled.div`
     width: 100%;
     overflow:hidden;
 }
-
 .group-title{
     padding: 4px;
     width: 100% ;

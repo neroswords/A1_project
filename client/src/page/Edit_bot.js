@@ -1,7 +1,8 @@
   
 import React from 'react';
 import styled from 'styled-components';
-import {Link, withRouter, Redirect} from 'react-router-dom'
+import {Link,withRouter, Redirect} from 'react-router-dom'
+import FlashMessage from 'react-flash-message'
 
 const Styles = styled.div`
   .container {
@@ -122,6 +123,8 @@ class Edit_bot extends React.Component {
       bot_id:'',
       imageURL: '',
       Image: '',
+      message : '',
+      showMessage: false,
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -129,52 +132,129 @@ class Edit_bot extends React.Component {
   
  
   handleChange (evt) {
+    
     this.setState({ [evt.target.name]: evt.target.value });
-    console.log(this.state)
+    const field = evt.target.name
+     if(field == "bot_name" ){
+        this.setState({showMessage: false})
+     }
+    // console.log(this.state)
   }
   _handleImageChange(e) {
     e.preventDefault();
-
+    
     let reader = new FileReader();
-    let file = e.target.files[0];
-    console.log("File = "+JSON.stringify(file))
-    if (!file){
+    // console.log(e.target.files[0])
+    if(e.target.files[0] == undefined){
       return
     }
-    reader.onloadend = () => {
-      this.setState({
-        file: file,
-        imagePreviewUrl: reader.result
-        });      
+    else{
+      let fileimg = e.target.files[0];
+      let type = e.target.files[0].type;
+      // console.log(type)
+      
+      // console.log(fileimg)
+      if (!fileimg){
+        return
+      }
+
+      if( type != "image/jpeg" && type != "image/png"){
+        alert("Only PNG or JPG is accepted")
+        
+      }
+      else{
+        reader.onloadend = () => {
+        this.setState({
+          file: fileimg,
+          imagePreviewUrl: reader.result
+          });      
+        }
+      reader.readAsDataURL(fileimg)
+      }
     }
-    reader.readAsDataURL(file)
+    
+    
   }
   handleUploadImage(ev) {
     ev.preventDefault();
-    
+    // console.log(ev)
+    const files = ev.target[0].files[0]
+    const BotnameLength = this.state.bot_name.replace(/^\s+|\s+$/gm,'').length
+    console.log(files)
+    console.log(this.uploadInput.files[0])
+    if (BotnameLength == 0){
+      this.setState({message:'Please enter Bot name'})
+      this.setState({showMessage: true})
+      console.log("show")
 
-    const data = new FormData();
-    data.append('file', this.uploadInput.files[0]);
-    data.append('bot_name',this.bot_name.value);
-    data.append('gender' ,this.gender.value);
-    data.append('age' ,this.age.value);
-    data.append('creator' , localStorage.getItem('user_id'))
-    data.append('Image' , this.state.Image)
-    fetch('/bot/'+this.props.match.params.bot_id+'/edit', {
-      method: 'POST',
-      // headers : {
-      //   "Access-Control-Allow-Origin": "*",
-      //   //'Content-Type':'application/json'
-      // },
-      //body : JSON.stringify(form),
-      body: data,
-    }).then((response) => {
-      response.json().then((body) => {
-        this.setState({ imageURL: `/${body.file}` });
-        this.setState({ bot_id : data.id})
-        this.setState({ redirect: true }) 
+    }
+    else{
+      if(!files){
+        console.log(this.state.Image)
+      const data = new FormData();
+      data.append('file', this.uploadInput.files[0]);
+      data.append('bot_name',this.bot_name.value);
+      data.append('gender' ,this.gender.value);
+      data.append('age' ,this.age.value);
+      data.append('creator' , localStorage.getItem('user_id'))
+      data.append('Image' , this.state.Image)
+      fetch('/bot/'+this.props.match.params.bot_id+'/edit', {
+        method: 'POST',
+        // headers : {
+        //   "Access-Control-Allow-Origin": "*",
+        //   //'Content-Type':'application/json'
+        // },
+        //body : JSON.stringify(form),
+        body: data,
+      }).then((response) => {
+        response.json().then((body) => {
+          this.setState({ imageURL: `/${body.file}` });
+          this.setState({ bot_id : data.id})
+          this.setState({ redirect: true }) 
+        });
       });
-    });
+      }
+      else{
+        console.log(this.state.Image)
+        const type = ev.target[0].files[0].type;
+        // console.log(type)
+        if( type != "image/jpeg" && type != "image/png"){
+              alert("Only PNG or JPG is accepted")
+            }
+            else{
+              
+              console.log(BotnameLength)
+              const data = new FormData();
+            data.append('file', this.uploadInput.files[0]);
+            data.append('bot_name',this.bot_name.value);
+            data.append('gender' ,this.gender.value);
+            data.append('age' ,this.age.value);
+            data.append('creator' , localStorage.getItem('user_id'))
+            data.append('Image' , this.state.Image)
+            console.log(data)
+            fetch('/bot/'+this.props.match.params.bot_id+'/edit', {
+              method: 'POST',
+              // headers : {
+              //   "Access-Control-Allow-Origin": "*",
+              //   //'Content-Type':'application/json'
+              // },
+              //body : JSON.stringify(form),
+              body: data,
+            }).then((response) => {
+              response.json().then((body) => {
+                console.log(body.file)
+                this.setState({ imageURL: `/${body.file}` });
+                this.setState({ bot_id : data.id})
+                this.setState({ redirect: true }) 
+              });
+            });
+            }
+      }
+    }
+    
+    
+    
+    
   }
      componentDidMount ()  {
     fetch('/bot/'+this.props.match.params.bot_id+'/edit').then((response) => {
@@ -192,7 +272,8 @@ class Edit_bot extends React.Component {
     render() {
     const { redirect,bot_id } = this.state;
     if (redirect) {
-      return <Redirect to={"/bot_list/"+ localStorage.getItem('user_id')} />
+      window.location.assign("/bot_list/"+ localStorage.getItem('user_id'))
+      // return <Redirect to={"/bot_list/"+ localStorage.getItem('user_id')} />
     }
     else {
       let {imagePreviewUrl} = this.state;
@@ -216,7 +297,7 @@ class Edit_bot extends React.Component {
                           <h5 className="card-title-cretebot ">Edit Bot form</h5>
                           <form className="form-bot" onSubmit={this.handleUploadImage}>
                                 <div className="title_part">
-                                        <p className="col">Bot infomation</p>
+                                        <p className="col">Bot information</p>
                                         <div className="line"></div>
                                 </div>
                                 <div className="row">
@@ -226,7 +307,7 @@ class Edit_bot extends React.Component {
                                           </div>
                                           <div className="mt-3">                                           
                                               <label for="uploadimage">Upload Proflie</label>
-                                              <input  ref={(ref) => { this.uploadInput = ref; }} onChange={(e)=>this._handleImageChange(e)} type="file"  />
+                                              <input accept="image/x-png,image/gif,image/jpeg" ref={(ref) => { this.uploadInput = ref; }} onChange={(e)=>this._handleImageChange(e)} type="file"  />
                                             </div>
                                         </div>  
                                         <div className=" group col-lg-6">
@@ -235,6 +316,15 @@ class Edit_bot extends React.Component {
                                               <span className="req-icon"> *</span>
                                               <input type="text"  name="bot_name" value = {this.state.bot_name}  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
                                             </div>
+                                            { this.state.showMessage &&  
+                                        <div className="container">
+                                            <FlashMessage duration={40000}>
+                                              <div className="error">
+                                                <strong>* {this.state.message}</strong>
+                                              </div>  
+                                            </FlashMessage>
+                                        </div>
+                                  }
                                             <div class="mt-3">
                                               <label for="inputgender" class="form-label">Gender</label>
                                               <span className="req-icon"> *</span>
@@ -247,7 +337,7 @@ class Edit_bot extends React.Component {
                                             <div className="mt-3">
                                                 <label for="inputFirstname" className="form-label">Age</label>
                                                 <span className="req-icon"> *</span>
-                                                <input type="integer" name="age" className="form-control" id="inputfirstname" value = {this.state.age}   ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
+                                                <input type="text" pattern="\d*"  min="1" step="1"  name="age" className="form-control" id="inputfirstname" value = {this.state.age}   ref={(ref) => { this.age = ref; }} onChange={this.handleChange} no-float/>
                                             </div>
                                         </div>
                                 </div>
@@ -273,7 +363,7 @@ class Edit_bot extends React.Component {
                             {/* <Lineform />                                 */}
 
                               <div className="btn-createbot">
-                                  <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Update ChatBot</button>
+                                  <button className="btn btn-success text-uppercase" onSubmit={this.handleUploadImage} type="submit">Edit Bot</button>
                               </div>
 
 

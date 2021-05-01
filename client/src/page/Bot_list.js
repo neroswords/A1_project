@@ -58,8 +58,8 @@ export default function Bot_list(props) {
                     {/* <Navbar_member /> */}
                           <div class="container col-9">
                                     <div className="botlist-body" name="bot_list">
-                                        <Link className='link' to={'/bot/'+localStorage.getItem('user_id')+'/create_bot'}>
-                                        <div className="card-plus group">
+                                        <Link className='link' to={'/bot/'+localStorage.getItem('user_id')+'/create_bot'} >
+                                        <div className="card-plus group" name="create-bot">
                                             <div>
                                                 <p>Add new Bot</p>
                                             </div>    
@@ -111,6 +111,7 @@ function Dropdown({botData, deleteBot, openDelete_pop, openForm}){
     <div>
     <div class="card-box">
         <Link to={'/bot/'+botData._id.$oid+'/training' } >
+            {/* <p>{botData.Img}</p> */}
             <img src={'/images/bot/bot_pic/'+botData.Img} class="bot-img"/>
         </Link>
         <div class="info-bot">

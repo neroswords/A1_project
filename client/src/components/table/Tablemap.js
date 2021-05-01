@@ -351,26 +351,26 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     hooks => {
       hooks.visibleColumns.push(columns => [
 
-        {
-          id: 'selection',
-          Header: ({ getToggleAllPageRowsSelectedProps }) => (
-            <div>
-              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+        // {
+        //   id: 'selection',
+        //   Header: ({ getToggleAllPageRowsSelectedProps }) => (
+        //     <div>
+        //       <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
 
-            </div>
-          ),
+        //     </div>
+        //   ),
 
-          Cell: ({ row }) => (
+        //   Cell: ({ row }) => (
 
-            <div >
+        //     <div >
 
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+        //       <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
 
 
-            </div>
-          ),
+        //     </div>
+        //   ),
 
-        },
+        // },
         ...columns,
 
       ])
