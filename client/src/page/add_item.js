@@ -375,6 +375,7 @@ export default class Add_item extends React.Component {
                                 <input ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
                             </div>
                               {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
+<<<<<<< HEAD
                                 return (
                                   <div className="preview-img">
                                     <button className="btn-delete-img">
@@ -383,6 +384,13 @@ export default class Add_item extends React.Component {
                                       <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
                                 </div>
                               )})}
+=======
+                                
+                                return <form>
+                                      <button><i class="far fa-times-circle"></i></button><img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
+                                      </form>
+                              })}
+>>>>>>> 612ad6dae11cce9e4a2b7d554a4e0fa5cb0b566d
                           </div>  
                     </div>  
                     
