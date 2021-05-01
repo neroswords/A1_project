@@ -8,12 +8,11 @@ const Styles = styled.div`
     display: flex;
     min-height: 92vh;
 }
-.container {
-    margin-bottom: 2%;
-    margin-top: 2%;
-    overflow:hidden;
+.container-fluid {
+   padding: 40px;
+   width: 100%;
+   overflow: hidden;
 }
-
 .group-title{
     padding: 4px;
     width: 100% ;
@@ -21,6 +20,11 @@ const Styles = styled.div`
     border-radius: 0.25rem;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
 }
+
+.group-title h2{ 
+   font-weight: 600;
+}box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+
 
 .showtable-group{
     min-height: 70vh;
@@ -32,7 +36,7 @@ const Styles = styled.div`
     /* border: 1px solid #ececec; */
 }
 
-` 
+`
 
 function Group(props){
     const delete_trained =(data)=>{
@@ -60,7 +64,7 @@ function Group(props){
         <Styles>
         <div className="group-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"group"} />
-            <div className="container">
+            <div className="container-fluid">
                 <div className="group-title container-top d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group</h2>
                     {/* <div className="p-2 bd-highlight"><button className="btn btn-danger" type="button">Delete</button></div> */}
