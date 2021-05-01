@@ -108,8 +108,8 @@ export const Endpage = () => (
                   <img src="./images/phone_group.png"/>
             </div>
             <div className="main-text-endpage col-5 col-sm-12 col-xs-12 col-xl-5">
-                  <h1>Improve at every stage <br/> of your business growth</h1>
-                  <span>No matter whether you’re a growing company ChatBot helps you communicate better with customers.</span>
+                  <h1>ปรับปรุงในทุกขั้นตอน <br/> ของการเติบโตทางธุรกิจของคุณ</h1>
+                  <span>ไม่ว่าคุณจะเป็น บริษัท ที่กำลังเติบโต ChatBot จะช่วยให้คุณสื่อสารกับลูกค้าได้ดีขึ้น</span>
                   <div class="btn-on-endpage">
                           {regisBot()}
                   </div>
