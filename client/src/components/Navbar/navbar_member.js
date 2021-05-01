@@ -638,7 +638,7 @@ function Navbar_member({ botID, customer_id, path  }) {
 
             <li className="nav-item2">
             { path=="chat" ? (
-              <Link to={"/chat/" + botID + "/live_chat/main" } onClick={onSubmit} class="nav-check-open">
+              <Link to={"/chat/" + botID + "/live_chat/main" } onClick={onSubmit} class="nav-check-open" name="menu-chat" >
                 <div className="fa-group">
                   <div className="fa-secondary">
                     <i class="fas fa-comments-alt"></i>
@@ -646,7 +646,7 @@ function Navbar_member({ botID, customer_id, path  }) {
                 </div>
                 <span className="link-text">Chat</span>
               </Link> ) : (
-              <Link to={"/chat/" + botID + "/live_chat/main"} onClick={onSubmit} class="nav-link2">
+              <Link to={"/chat/" + botID + "/live_chat/main"} onClick={onSubmit} class="nav-link2" name="menu-chat" >
                   <div className="fa-group">
                       <div className="fa-secondary">
                       <i class="far fa-comments-alt"></i>

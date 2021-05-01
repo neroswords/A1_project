@@ -207,7 +207,7 @@ export default function Facebookform({botID}) {
                             </div>
                             <div id="container-button">
                                 {/* <button className="cancle" type='button' onClick={() => {history.goBack()}} >Back</button> */}
-                                <button className="submit" type='submit'>Submit</button>
+                                <button className="submit" type='submit'>Connect</button>
                             </div>
                         </form>
                     </div>

@@ -69,7 +69,7 @@ function Loged_in_nav(props) {
       <div
         className={"show-user " + (main == "#main" ? "click-show-user" : "")}
       >
-        <a
+        <a name="validate-user" 
           className="click"
           href={"/bot_list/" + localStorage.getItem("user_id") + "#main"}
         >
@@ -81,6 +81,7 @@ function Loged_in_nav(props) {
       <NavItem flag = {false}icon={<CaretIcon />}>
         <DropdownMenu></DropdownMenu>
       </NavItem>
+      
     </Navbar_real>
   );
 }
@@ -233,10 +234,10 @@ useEffect(() => {
                   <img className="msg-noti-all" src={msg['pictureUrl']}></img>
 
                     <div className="noti-show-info-user">
-                    {msg['readed'] == "unread"? <div className="noti-new-word"><p>NEW</p></div>: " "}
-
+                    {msg['readed'] == "unread"? <div className="noti-show-new"><p>NEW</p></div>: " "}
                     <p className="noti-show-name">{msg['sender']}</p>  
                     <p className="noti-show-msg">{msg['message']}</p>
+                    <p className="noti-show-time">11.20 น.</p>
                     {/* {msg['message']} {msg['botID']['$oid']} */}
 
                     </div> 
