@@ -298,7 +298,7 @@ useEffect(() => {
             <div onClick={onClick} className="menu-trigger-noti">
               <i class="fas fa-comments-alt"></i>
             </div>
-              <div className="number-noti"><span className="show-number">{noti}</span></div>
+              <div className="number-noti"><p className="show-number">{noti}</p></div>
             <div
                 ref={dropdownRef}
                 className={`menu ${isActive ? "active" : "inactive"}`}

@@ -560,10 +560,13 @@ p.noti-each-msg {
   background-color: #f40000;
   border-radius: 100%;
   z-index: 1000;
-  padding: 0 8px;
+  padding: 0 6px;
+
 }
 
-.show-number{
-  font-size: 11px;
-  font-weight: 900;
+p.show-number{
+  /* padding: 0px 3px; */
+  font-size: 12px;
+  font-weight: 700;
+  margin: 0px !important;
 }
