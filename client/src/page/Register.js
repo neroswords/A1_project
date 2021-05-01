@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {Redirect} from 'react-router-dom';
 import FlashMessage from 'react-flash-message'
+import { faTerminal } from '@fortawesome/free-solid-svg-icons';
 
 const Styles = styled.div`
   .container {
@@ -142,7 +143,8 @@ class Register extends React.Component {
       redirect : false,
       message : '',
       showMessageUsername: false,
-      showMessagePassword: false
+      showMessagePassword: false,
+      showMessageShopname: false
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -157,17 +159,25 @@ class Register extends React.Component {
   handleChange (evt) {
     this.setState({ [evt.target.name]: evt.target.value });
   }
-
+ 
   handleSubmit = (e) => {
     e.preventDefault()
 
     if(this.state.password !== this.state.confirm_password){
-      this.setState({message:'your password and confirm was not match'})
+      this.setState({message:'your password and confirm password was not match'})
       this.setState({showMessagePassword: true})
       this.scrollToTop()
   }
   else{
-    const profile = {
+    const snLength = this.state.shop_name.replace(/^\s+|\s+$/gm,'').length
+    if (snLength == 0){
+      this.setState({message:'Please enter Shop name'})
+      this.setState({showMessageShopname: true})
+      
+        
+    }
+    else{
+      const profile = {
         email: this.state.email,
         username: this.state.username,
         password : this.state.password,
@@ -196,6 +206,8 @@ class Register extends React.Component {
         this.scrollToTop()
       }
     }).then(this.setState({showMessageUsername: false})).then(this.setState({showMessagePassword: false}))
+    }
+    
   }
 }
 flash = (e) =>{
@@ -232,12 +244,12 @@ flash = (e) =>{
                                 </div>
                                 <div className="my-3">
                                   <label for="exampleInputEmail1" className="form-label">Username</label>
-                                  <input type="text" className="form-control" id="inputusername" name='username' minLength={5} maxLength={16} required value={this.state.username} onChange={this.handleChange}/>
+                                  <input type="text" className="form-control"pattern="[A-Za-z0-9]+" id="inputusername" name='username' minLength={5} maxLength={16} required value={this.state.username} onChange={this.handleChange}/>
                                   { this.state.showMessageUsername &&  
                                         <div className="container">
                                             <FlashMessage duration={4000}>
                                               <div className="error">
-                                                <strong>Error : {this.state.message}</strong>
+                                                <strong>* {this.state.message}</strong>
                                               </div>  
                                             </FlashMessage>
                                         </div>
@@ -246,17 +258,22 @@ flash = (e) =>{
                                 <div className="row">
                                   <div className="col ">
                                     <label for="exampleInputPassword1" className="form-label">Password</label>
-                                    <input type="password" className="form-control" id="inputpassword" name='password' required  minLength={6} value={this.state.password} onChange={this.handleChange} /> 
+                                    <input type="password" className="form-control" pattern="[A-Za-z0-9]+" id="inputpassword" name='password' required  minLength={6} value={this.state.password} onChange={this.handleChange} /> 
+                                    <div className="col ">
+                                    <span for="examplePassword" className="ex-password">*  A combination of upper,lowercase letters,numbers or special characters (more than 5 character)</span>
+                                    
+                                  </div>
+                                  
                                   </div>
                                   <div className="col">
                                     <label for="exampleInputPassword1" className="form-label">Comfirm Password</label>
-                                    <input type="password" className="form-control" id="confirmpassword" name='confirm_password' minLength={6} value={this.state.confirm_password} onChange={this.handleChange} />  
+                                    <input type="password" className="form-control" pattern="[A-Za-z0-9]+" id="confirmpassword" name='confirm_password' minLength={6} value={this.state.confirm_password} onChange={this.handleChange} />  
                                   </div>
                                   { this.state.showMessagePassword &&  
                                       <div className="container">
                                           <FlashMessage duration={4000}>
                                             <div className="error">
-                                              <strong>Error : {this.state.message}</strong>
+                                              <strong>* {this.state.message}</strong>
                                             </div>  
                                           </FlashMessage>
                                       </div>
@@ -269,11 +286,11 @@ flash = (e) =>{
                                   <div className="row my-3">
                                       <div className="col">
                                           <label for="inputFirstname" className="form-label">Firstname</label>
-                                          <input type="text" className="form-control" id="inputfirstname" required  name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
+                                          <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputfirstname" required  name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
                                       </div>
                                       <div className="col">
                                       <label for="inputLastname" className="form-label">Last name</label>
-                                          <input type="text" className="form-control" id="inputlastname" required name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
+                                          <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputlastname" required name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
                                       </div>
                                       <div className="col">
                                         <label for="exampleInputEmail1" className="form-label">Birthday</label>
@@ -283,16 +300,25 @@ flash = (e) =>{
                                   <div className="row">
                                     <div className="col my-3">
                                       <label for="exampleInputEmail1" className="form-label">Shop name</label>
-                                      <input type="text" className="form-control" id="inputshopname" required value={this.state.shop_name} name='shop_name' onChange={this.handleChange} />
+                                      <input type="text" className="form-control"  id="inputshopname" required value={this.state.shop_name} name='shop_name' onChange={this.handleChange} />
                                     </div>
                                     <div className="col my-3">
                                       <label for="exampleInputEmail1" className="form-label">Type of sale</label>
-                                      <input type="text" className="form-control" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' onChange={this.handleChange} />
+                                      <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' onChange={this.handleChange} />
                                     </div>
                                   </div>
+                                  { this.state.showMessageShopname &&  
+                                      <div className="container">
+                                          <FlashMessage duration={40000}>
+                                            <div className="error">
+                                              <strong>* {this.state.message}</strong>
+                                            </div>  
+                                          </FlashMessage>
+                                      </div>
+                                }
                                   <div className="my-3">
                                     <label for="exampleFormControlTextarea1" className="form-label">Shop Address</label>
-                                    <textarea className="form-control" id="inputshopaddress" rows="2" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
+                                    <textarea className="form-control" pattern="[A-Za-z0-9]+"  id="inputshopaddress" rows="2" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>
                                   </div>
                                 <div class="form-check">
                                   <input className="form-check-input" type="checkbox" value="" name="checkvalidate" required/>

@@ -111,12 +111,31 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
 
+  console.log(showMessage)
   const closePop = () =>{
     // setFlash('')
     setShowWord(prev => !prev)
   }
 
+  function handleClick(e) {
+    e.preventDefault();
+    console.log('The link was clicked.');
+    const qLength = question.replace(/^\s+|\s+$/gm,'').length
+    const aLength = answer.replace(/^\s+|\s+$/gm,'').length
+    console.log(qLength)
+    
+    if (qLength == 0 || aLength == 0 ){
+      console.log("null")
+      setMessage("Please fill question or answer")
+      setShowMessage(true)
+    }
+    else{
+      addword(botID)
+    }
+  }
+
   const addword =(id)=>{
+    
     
     const data = {'question' : question,'answer' : answer ,'botID' : id}
     fetch('/bot/'+id+'/addword', {
@@ -126,8 +145,9 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
         'Content-Type':'application/json'
         },
     body: JSON.stringify(data)}).then(res => res.json().then(data => {
+      // console.log(data)
       if ("error" in data ){
-        console.log (data)
+        
         setMessage(data["error"])
         setShowMessage(true)
 
@@ -175,7 +195,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
 
   useEffect(
     () => {
-      console.log(showWord)
+      // console.log(showWord)
       if (showWord == false) {
         
         setShowMessage(false)
@@ -199,7 +219,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
                   <form>
                     <div className="group-Question">
                       <label for="AddQuestion">Question</label>
-                      <input type="text" pattern="[A-Za-z0-9]+" className="input-question" name="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question"></input>
+                      <input type="text" pattern="[A-Za-z0-9]+" className="input-question" id="question" name="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question"></input>
                     </div>
                     { showMessage &&  
                                   
@@ -212,11 +232,11 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
                       }
                     <div className="group-Answer">
                       <label for="AddAnswer">Answer</label>
-                      <input type="text" pattern="[A-Za-z0-9]+" className="input-answer" name="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer"></input>
+                      <input type="text" pattern="[A-Za-z0-9]+" className="input-answer" name="input-answer" id="answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer"></input>
                     </div>
                   </form>
                 </article>
-              <button type="submit" className="qa-comfirm" variant="success" name="btn-addword-confirm" onSubmit = {() => addword(botID) }>Comfirm</button>
+              <button type="submit" className="qa-comfirm" variant="success" name="btn-addword-confirm" onClick={handleClick} >Comfirm</button>
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"

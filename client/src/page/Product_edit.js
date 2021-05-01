@@ -5,6 +5,7 @@ import { withRouter, Redirect } from 'react-router-dom'
 // import { Multiselect } from 'multiselect-react-dropdown';
 import 'react-widgets/dist/css/react-widgets.css';
 import { Multiselect } from 'react-widgets' 
+import FlashMessage from 'react-flash-message'
 
 const Styles = styled.div`
   .container {
@@ -140,7 +141,7 @@ const Styles = styled.div`
   }
 
 `;
-let file = {}
+let fileimg = {}
 export default class Product_edit extends React.Component {
   constructor(props) {
     super(props);
@@ -158,6 +159,8 @@ export default class Product_edit extends React.Component {
       value: [],
       price: '',
       url_preview: [],
+      message : '',
+      showMessage: false,
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -191,21 +194,21 @@ export default class Product_edit extends React.Component {
 
   _handleImageChange(e) {
     e.preventDefault();
-
+    
     let i
     for (i = 0; i < e.target.files.length; i++) {
       let reader = new FileReader();
-      file[i] = this.uploadInput.files[i]
-      if (!file) {
+      fileimg[i] = this.uploadInput.files[i]
+      if (!fileimg) {
         return
       }
       reader.onloadend = () => {
         this.setState({
-          file: file[i],
+          file: fileimg[i],
           imagesPreviewUrl: [...this.state.imagesPreviewUrl, reader.result]
         });
       }
-      reader.readAsDataURL(file[i])
+      reader.readAsDataURL(fileimg[i])
     }
 
 
@@ -215,7 +218,14 @@ export default class Product_edit extends React.Component {
 
 
     var i
-    const data = new FormData();
+    const itemnameLength = this.state.item_name.replace(/^\s+|\s+$/gm,'').length
+    if (itemnameLength == 0){
+      this.setState({message:'Please enter Item name'})
+      this.setState({showMessage: true})
+
+    }
+    else{
+      const data = new FormData();
     var file = []
     for (i = 0; i < this.uploadInput.files.length; i++) {
       
@@ -249,6 +259,8 @@ export default class Product_edit extends React.Component {
         this.setState({ redirect: true })
       });
     });
+    }
+    
 
   }
     componentDidMount ()  {
@@ -305,7 +317,7 @@ export default class Product_edit extends React.Component {
             <div className="col-sm-10 col-md-9 col-lg-7 mx-auto">
               <div className="card card-bot">
                 <div className="card-body">
-                  <h5 className="card-title text-center mt-3 mb-4">Create New Item</h5>
+                  <h5 className="card-title text-center mt-3 mb-4">Edit Item</h5>
                   <form className="form-additem" onSubmit={this.handleUploadImage}>
                    <div className="title_addinv">
                           <p className="col">Upload image</p>
@@ -334,12 +346,21 @@ export default class Product_edit extends React.Component {
                           </div>
                           <div className="row">
                               <div className="col">
-                                <label className="form-label">Item name</label>
+                                <label className="form-label">Item name *</label>
                                 <input type="text" name="item_name" value={this.state.item_name} ref={(ref) => { this.item_name = ref; }} onChange={this.handleChange} className="form-control"required />
-                              </div>                        
+                              </div>          
+                              { this.state.showMessage &&  
+                                        <div className="container">
+                                            <FlashMessage duration={4000}>
+                                              <div className="error">
+                                                <strong>* {this.state.message}</strong>
+                                              </div>  
+                                            </FlashMessage>
+                                        </div>
+                                  }                
                               <div className="col">
-                                <label className="form-label">Price</label>
-                                <input type="text" name="price" value={this.state.price} ref={(ref) => { this.price = ref; }} onChange={this.handleChange} className="form-control"required />
+                                <label className="form-label">Price *</label>
+                                <input type="number" min="0" step="any" name="price" value={this.state.price} ref={(ref) => { this.price = ref; }} onChange={this.handleChange} className="form-control"required />
                               </div>
                           </div>
                           {/* <div class="mt-3"  onKeyDown ={((e) => this.Onend(e))}> */}
@@ -358,8 +379,8 @@ export default class Product_edit extends React.Component {
                               
                             </div>
                             <div className="col mt-2">
-                              <label for="inputAmout" className="form-label" required>Amount</label>
-                              <input type="integer" name="amount" className="form-control" id="inputfirstname" value={this.state.amount} ref={(ref) => { this.amount = ref; }} onChange={this.handleChange} />
+                              <label for="inputAmout" className="form-label" required>Amount *</label>
+                              <input type="text" pattern="\d*"  name="amount" className="form-control" id="inputfirstname" value={this.state.amount} ref={(ref) => { this.amount = ref; }} onChange={this.handleChange} />
                             </div>
                          </div> 
                           <div className="mt-2">
@@ -369,7 +390,7 @@ export default class Product_edit extends React.Component {
                     
                     <hr className="mt-5"></hr>
                     <div className="btn-submitinv">
-                      <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Submit</button>
+                      <button className="btn btn-success text-uppercase" onSubmit={this.handleUploadImage} type="submit">Submit</button>
                     </div>
                   </form>
 

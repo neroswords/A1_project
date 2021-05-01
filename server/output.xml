@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 3.2.2 (Python 3.7.4rc1 on win32)" generated="20210426 22:35:14.346" rpa="false">
-<suite id="s1" name="Manage-Bot" source="C:\Users\HP\Desktop\A1_project\server\manage-bot.robot">
-<test id="s1-t1" name="Manage Bot Page">
+<robot generator="Robot 3.2.2 (Python 3.7.4rc1 on win32)" generated="20210430 14:41:38.552" rpa="false">
+<suite id="s1" name="Test-Login" source="C:\Users\HP\Desktop\A1_project\server\test-login.robot">
+<test id="s1-t1" name="Valid Login">
 <kw name="Valid Login" library="source-login">
 <kw name="Open Browser" library="Selenium2Library">
 <doc>Opens a new browser instance to the optional ``url``.</doc>
 <arguments>
-<arg>http://localhost:3000/login</arg>
+<arg>http://103.212.180.236:3000/login</arg>
 <arg>Chrome</arg>
 </arguments>
-<msg timestamp="20210426 22:35:14.581" level="INFO">Opening browser 'Chrome' to base url 'http://localhost:3000/login'.</msg>
-<status status="PASS" starttime="20210426 22:35:14.580" endtime="20210426 22:35:19.115"></status>
+<msg timestamp="20210430 14:41:38.803" level="INFO">Opening browser 'Chrome' to base url 'http://103.212.180.236:3000/login'.</msg>
+<status status="PASS" starttime="20210430 14:41:38.803" endtime="20210430 14:41:41.836"></status>
 </kw>
 <kw name="Input Username" library="source-login">
 <arguments>
@@ -22,10 +22,10 @@
 <arg>username</arg>
 <arg>${username}</arg>
 </arguments>
-<msg timestamp="20210426 22:35:19.116" level="INFO">Typing text 'admin' into text field 'username'.</msg>
-<status status="PASS" starttime="20210426 22:35:19.115" endtime="20210426 22:35:19.240"></status>
+<msg timestamp="20210430 14:41:41.837" level="INFO">Typing text 'admin' into text field 'username'.</msg>
+<status status="PASS" starttime="20210430 14:41:41.837" endtime="20210430 14:41:41.980"></status>
 </kw>
-<status status="PASS" starttime="20210426 22:35:19.115" endtime="20210426 22:35:19.240"></status>
+<status status="PASS" starttime="20210430 14:41:41.836" endtime="20210430 14:41:41.980"></status>
 </kw>
 <kw name="Input Password" library="source-login">
 <arguments>
@@ -37,78 +37,61 @@
 <arg>password</arg>
 <arg>${password}</arg>
 </arguments>
-<msg timestamp="20210426 22:35:19.241" level="INFO">Typing text '1234' into text field 'password'.</msg>
-<status status="PASS" starttime="20210426 22:35:19.241" endtime="20210426 22:35:19.334"></status>
+<msg timestamp="20210430 14:41:41.982" level="INFO">Typing text '1234' into text field 'password'.</msg>
+<status status="PASS" starttime="20210430 14:41:41.981" endtime="20210430 14:41:42.126"></status>
 </kw>
-<status status="PASS" starttime="20210426 22:35:19.240" endtime="20210426 22:35:19.334"></status>
+<status status="PASS" starttime="20210430 14:41:41.980" endtime="20210430 14:41:42.126"></status>
 </kw>
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks the button identified by ``locator``.</doc>
 <arguments>
 <arg>btn-login</arg>
 </arguments>
-<msg timestamp="20210426 22:35:19.334" level="INFO">Clicking button 'btn-login'.</msg>
-<status status="PASS" starttime="20210426 22:35:19.334" endtime="20210426 22:35:19.398"></status>
+<msg timestamp="20210430 14:41:42.127" level="INFO">Clicking button 'btn-login'.</msg>
+<status status="PASS" starttime="20210430 14:41:42.127" endtime="20210430 14:41:42.217"></status>
 </kw>
 <kw name="Wait Until Page Contains Element" library="Selenium2Library">
 <doc>Waits until the element ``locator`` appears on the current page.</doc>
 <arguments>
 <arg>name:validate_user</arg>
 </arguments>
-<status status="PASS" starttime="20210426 22:35:19.398" endtime="20210426 22:35:20.880"></status>
+<kw name="Capture Page Screenshot" library="Selenium2Library">
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<msg timestamp="20210430 14:41:54.189" level="INFO" html="yes">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-3.png"&gt;&lt;img src="selenium-screenshot-3.png" width="800px"&gt;&lt;/a&gt;</msg>
+<status status="PASS" starttime="20210430 14:41:47.299" endtime="20210430 14:41:54.189"></status>
 </kw>
-<kw name="Wait Until Page Contains Element" library="Selenium2Library">
-<doc>Waits until the element ``locator`` appears on the current page.</doc>
-<arguments>
-<arg>name:user-manage-bot</arg>
-</arguments>
-<status status="PASS" starttime="20210426 22:35:20.880" endtime="20210426 22:35:20.905"></status>
+<msg timestamp="20210430 14:41:54.191" level="FAIL">Element 'name:validate_user' did not appear in 5 seconds.</msg>
+<status status="FAIL" starttime="20210430 14:41:42.218" endtime="20210430 14:41:54.191"></status>
 </kw>
-<status status="PASS" starttime="20210426 22:35:14.580" endtime="20210426 22:35:20.905"></status>
+<status status="FAIL" starttime="20210430 14:41:38.802" endtime="20210430 14:41:54.191"></status>
 </kw>
-<kw name="Go to Manage Bot Page">
-<kw name="Click Link" library="Selenium2Library">
-<doc>Clicks a link identified by ``locator``.</doc>
-<arguments>
-<arg>user-dropdown</arg>
-</arguments>
-<msg timestamp="20210426 22:35:20.906" level="INFO">Clicking link 'user-dropdown'.</msg>
-<status status="PASS" starttime="20210426 22:35:20.906" endtime="20210426 22:35:21.643"></status>
-</kw>
-<kw name="Click Element" library="Selenium2Library">
-<doc>Click the element identified by ``locator``.</doc>
-<arguments>
-<arg>user-manage</arg>
-</arguments>
-<msg timestamp="20210426 22:35:21.643" level="INFO">Clicking element 'user-manage'.</msg>
-<status status="PASS" starttime="20210426 22:35:21.643" endtime="20210426 22:35:21.995"></status>
-</kw>
-<kw name="Wait Until Page Contains Element" library="Selenium2Library">
-<doc>Waits until the element ``locator`` appears on the current page.</doc>
-<arguments>
-<arg>name:bot_list</arg>
-</arguments>
-<status status="PASS" starttime="20210426 22:35:21.995" endtime="20210426 22:35:22.015"></status>
-</kw>
-<status status="PASS" starttime="20210426 22:35:20.906" endtime="20210426 22:35:22.015"></status>
-</kw>
-<doc>Test if Manage bot page has a correct path</doc>
-<status status="PASS" starttime="20210426 22:35:14.579" endtime="20210426 22:35:22.016" critical="yes"></status>
+<doc>Test Login Page Functionality when valid username and password are entered</doc>
+<status status="FAIL" starttime="20210430 14:41:38.801" endtime="20210430 14:41:54.192" critical="yes">Element 'name:validate_user' did not appear in 5 seconds.</status>
 </test>
-<test id="s1-t2" name="Create Bot Page">
-<kw name="Valid Login" library="source-login">
+<test id="s1-t2" name="Invalid username">
+<kw name="Open Browser To Specific Page" library="source-login">
 <kw name="Open Browser" library="Selenium2Library">
 <doc>Opens a new browser instance to the optional ``url``.</doc>
 <arguments>
-<arg>http://localhost:3000/login</arg>
-<arg>Chrome</arg>
+<arg>${URL}</arg>
+<arg>${BROWSER}</arg>
 </arguments>
-<msg timestamp="20210426 22:35:22.020" level="INFO">Opening browser 'Chrome' to base url 'http://localhost:3000/login'.</msg>
-<status status="PASS" starttime="20210426 22:35:22.020" endtime="20210426 22:35:25.740"></status>
+<msg timestamp="20210430 14:41:54.197" level="INFO">Opening browser 'Chrome' to base url 'http://103.212.180.236:3000/login'.</msg>
+<status status="PASS" starttime="20210430 14:41:54.196" endtime="20210430 14:41:57.876"></status>
+</kw>
+<kw name="Title Should Be" library="Selenium2Library">
+<doc>Verifies that the current page title equals ``title``.</doc>
+<arguments>
+<arg>React App</arg>
+</arguments>
+<msg timestamp="20210430 14:41:57.881" level="INFO">Page title is 'React App'.</msg>
+<status status="PASS" starttime="20210430 14:41:57.876" endtime="20210430 14:41:57.881"></status>
+</kw>
+<status status="PASS" starttime="20210430 14:41:54.196" endtime="20210430 14:41:57.883"></status>
 </kw>
 <kw name="Input Username" library="source-login">
 <arguments>
-<arg>admin</arg>
+<arg>${invalid_username}</arg>
 </arguments>
 <kw name="Input Text" library="Selenium2Library">
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
@@ -116,14 +99,14 @@
 <arg>username</arg>
 <arg>${username}</arg>
 </arguments>
-<msg timestamp="20210426 22:35:25.742" level="INFO">Typing text 'admin' into text field 'username'.</msg>
-<status status="PASS" starttime="20210426 22:35:25.742" endtime="20210426 22:35:25.958"></status>
+<msg timestamp="20210430 14:41:57.885" level="INFO">Typing text 'pool' into text field 'username'.</msg>
+<status status="PASS" starttime="20210430 14:41:57.884" endtime="20210430 14:41:58.033"></status>
 </kw>
-<status status="PASS" starttime="20210426 22:35:25.741" endtime="20210426 22:35:25.958"></status>
+<status status="PASS" starttime="20210430 14:41:57.883" endtime="20210430 14:41:58.034"></status>
 </kw>
 <kw name="Input Password" library="source-login">
 <arguments>
-<arg>1234</arg>
+<arg>${valid_password}</arg>
 </arguments>
 <kw name="Input Text" library="Selenium2Library">
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
@@ -131,113 +114,60 @@
 <arg>password</arg>
 <arg>${password}</arg>
 </arguments>
-<msg timestamp="20210426 22:35:25.960" level="INFO">Typing text '1234' into text field 'password'.</msg>
-<status status="PASS" starttime="20210426 22:35:25.959" endtime="20210426 22:35:26.161"></status>
+<msg timestamp="20210430 14:41:58.038" level="INFO">Typing text '1234' into text field 'password'.</msg>
+<status status="PASS" starttime="20210430 14:41:58.037" endtime="20210430 14:41:58.155"></status>
 </kw>
-<status status="PASS" starttime="20210426 22:35:25.958" endtime="20210426 22:35:26.162"></status>
+<status status="PASS" starttime="20210430 14:41:58.036" endtime="20210430 14:41:58.155"></status>
 </kw>
+<kw name="Submit Credentials" library="source-login">
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks the button identified by ``locator``.</doc>
 <arguments>
 <arg>btn-login</arg>
 </arguments>
-<msg timestamp="20210426 22:35:26.162" level="INFO">Clicking button 'btn-login'.</msg>
-<status status="PASS" starttime="20210426 22:35:26.162" endtime="20210426 22:35:26.267"></status>
+<msg timestamp="20210430 14:41:58.156" level="INFO">Clicking button 'btn-login'.</msg>
+<status status="PASS" starttime="20210430 14:41:58.156" endtime="20210430 14:41:58.257"></status>
 </kw>
-<kw name="Wait Until Page Contains Element" library="Selenium2Library">
-<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20210430 14:41:58.156" endtime="20210430 14:41:58.257"></status>
+</kw>
+<kw name="Wait Until Page Contains" library="Selenium2Library">
+<doc>Waits until ``text`` appears on the current page.</doc>
 <arguments>
-<arg>name:validate_user</arg>
+<arg>Username is not valid</arg>
 </arguments>
-<status status="PASS" starttime="20210426 22:35:26.268" endtime="20210426 22:35:28.633"></status>
-</kw>
-<kw name="Wait Until Page Contains Element" library="Selenium2Library">
-<doc>Waits until the element ``locator`` appears on the current page.</doc>
-<arguments>
-<arg>name:user-manage-bot</arg>
-</arguments>
-<status status="PASS" starttime="20210426 22:35:28.633" endtime="20210426 22:35:28.653"></status>
-</kw>
-<status status="PASS" starttime="20210426 22:35:22.018" endtime="20210426 22:35:28.654"></status>
-</kw>
-<kw name="Go to Manage Bot Page">
-<kw name="Click Link" library="Selenium2Library">
-<doc>Clicks a link identified by ``locator``.</doc>
-<arguments>
-<arg>user-dropdown</arg>
-</arguments>
-<msg timestamp="20210426 22:35:28.656" level="INFO">Clicking link 'user-dropdown'.</msg>
-<status status="PASS" starttime="20210426 22:35:28.655" endtime="20210426 22:35:29.703"></status>
-</kw>
-<kw name="Click Element" library="Selenium2Library">
-<doc>Click the element identified by ``locator``.</doc>
-<arguments>
-<arg>user-manage</arg>
-</arguments>
-<msg timestamp="20210426 22:35:29.704" level="INFO">Clicking element 'user-manage'.</msg>
-<status status="PASS" starttime="20210426 22:35:29.703" endtime="20210426 22:35:30.138"></status>
-</kw>
-<kw name="Wait Until Page Contains Element" library="Selenium2Library">
-<doc>Waits until the element ``locator`` appears on the current page.</doc>
-<arguments>
-<arg>name:bot_list</arg>
-</arguments>
-<status status="PASS" starttime="20210426 22:35:30.138" endtime="20210426 22:35:30.165"></status>
-</kw>
-<status status="PASS" starttime="20210426 22:35:28.655" endtime="20210426 22:35:30.165"></status>
-</kw>
-<kw name="Check Specific Link Functionality">
-<arguments>
-<arg>name:create-bot</arg>
-<arg>id:create_bot</arg>
-</arguments>
-<kw name="Wait Until Element Is Visible" library="Selenium2Library">
-<doc>Waits until the element ``locator`` is visible.</doc>
-<arguments>
-<arg>${li}</arg>
-<arg>20</arg>
-</arguments>
-<status status="PASS" starttime="20210426 22:35:30.167" endtime="20210426 22:35:30.272"></status>
-</kw>
-<kw name="Click Element" library="Selenium2Library">
-<doc>Click the element identified by ``locator``.</doc>
-<arguments>
-<arg>${li}</arg>
-</arguments>
-<msg timestamp="20210426 22:35:30.273" level="INFO">Clicking element 'name:create-bot'.</msg>
-<status status="PASS" starttime="20210426 22:35:30.273" endtime="20210426 22:35:30.473"></status>
-</kw>
-<kw name="Wait Until Element Is Visible" library="Selenium2Library">
-<doc>Waits until the element ``locator`` is visible.</doc>
-<arguments>
-<arg>${header}</arg>
-<arg>20</arg>
-</arguments>
-<status status="PASS" starttime="20210426 22:35:30.473" endtime="20210426 22:35:30.563"></status>
-</kw>
-<status status="PASS" starttime="20210426 22:35:30.166" endtime="20210426 22:35:30.564"></status>
+<status status="PASS" starttime="20210430 14:41:58.258" endtime="20210430 14:41:58.491"></status>
 </kw>
 <kw name="Close Browser" library="Selenium2Library" type="teardown">
 <doc>Closes the current browser.</doc>
-<status status="PASS" starttime="20210426 22:35:30.564" endtime="20210426 22:35:33.278"></status>
+<status status="PASS" starttime="20210430 14:41:58.492" endtime="20210430 14:42:00.660"></status>
 </kw>
-<doc>Test if Create bot button led to correct path</doc>
-<status status="PASS" starttime="20210426 22:35:22.017" endtime="20210426 22:35:33.278" critical="yes"></status>
+<doc>Test Login Page Functionality when invalid username and valid password are entered</doc>
+<status status="PASS" starttime="20210430 14:41:54.195" endtime="20210430 14:42:00.661" critical="yes"></status>
 </test>
-<test id="s1-t3" name="Create Bot Page Functionality">
-<kw name="Valid Login" library="source-login">
+<test id="s1-t3" name="Invalid password">
+<kw name="Open Browser To Specific Page" library="source-login">
 <kw name="Open Browser" library="Selenium2Library">
 <doc>Opens a new browser instance to the optional ``url``.</doc>
 <arguments>
-<arg>http://localhost:3000/login</arg>
-<arg>Chrome</arg>
+<arg>${URL}</arg>
+<arg>${BROWSER}</arg>
 </arguments>
-<msg timestamp="20210426 22:35:33.282" level="INFO">Opening browser 'Chrome' to base url 'http://localhost:3000/login'.</msg>
-<status status="PASS" starttime="20210426 22:35:33.282" endtime="20210426 22:35:38.698"></status>
+<msg timestamp="20210430 14:42:00.665" level="INFO">Opening browser 'Chrome' to base url 'http://103.212.180.236:3000/login'.</msg>
+<status status="PASS" starttime="20210430 14:42:00.664" endtime="20210430 14:42:03.888"></status>
+</kw>
+<kw name="Title Should Be" library="Selenium2Library">
+<doc>Verifies that the current page title equals ``title``.</doc>
+<arguments>
+<arg>React App</arg>
+</arguments>
+<msg timestamp="20210430 14:42:03.895" level="INFO">Page title is 'React App'.</msg>
+<status status="PASS" starttime="20210430 14:42:03.888" endtime="20210430 14:42:03.896"></status>
+</kw>
+<status status="PASS" starttime="20210430 14:42:00.664" endtime="20210430 14:42:03.896"></status>
 </kw>
 <kw name="Input Username" library="source-login">
 <arguments>
-<arg>admin</arg>
+<arg>${valid_username}</arg>
 </arguments>
 <kw name="Input Text" library="Selenium2Library">
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
@@ -245,14 +175,14 @@
 <arg>username</arg>
 <arg>${username}</arg>
 </arguments>
-<msg timestamp="20210426 22:35:38.699" level="INFO">Typing text 'admin' into text field 'username'.</msg>
-<status status="PASS" starttime="20210426 22:35:38.699" endtime="20210426 22:35:38.813"></status>
+<msg timestamp="20210430 14:42:03.899" level="INFO">Typing text 'admin' into text field 'username'.</msg>
+<status status="PASS" starttime="20210430 14:42:03.898" endtime="20210430 14:42:04.057"></status>
 </kw>
-<status status="PASS" starttime="20210426 22:35:38.698" endtime="20210426 22:35:38.813"></status>
+<status status="PASS" starttime="20210430 14:42:03.897" endtime="20210430 14:42:04.057"></status>
 </kw>
 <kw name="Input Password" library="source-login">
 <arguments>
-<arg>1234</arg>
+<arg>${invalid_password}</arg>
 </arguments>
 <kw name="Input Text" library="Selenium2Library">
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
@@ -260,156 +190,231 @@
 <arg>password</arg>
 <arg>${password}</arg>
 </arguments>
-<msg timestamp="20210426 22:35:38.814" level="INFO">Typing text '1234' into text field 'password'.</msg>
-<status status="PASS" starttime="20210426 22:35:38.813" endtime="20210426 22:35:38.897"></status>
+<msg timestamp="20210430 14:42:04.060" level="INFO">Typing text '2323' into text field 'password'.</msg>
+<status status="PASS" starttime="20210430 14:42:04.059" endtime="20210430 14:42:04.180"></status>
 </kw>
-<status status="PASS" starttime="20210426 22:35:38.813" endtime="20210426 22:35:38.897"></status>
+<status status="PASS" starttime="20210430 14:42:04.058" endtime="20210430 14:42:04.181"></status>
 </kw>
+<kw name="Submit Credentials" library="source-login">
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks the button identified by ``locator``.</doc>
 <arguments>
 <arg>btn-login</arg>
 </arguments>
-<msg timestamp="20210426 22:35:38.897" level="INFO">Clicking button 'btn-login'.</msg>
-<status status="PASS" starttime="20210426 22:35:38.897" endtime="20210426 22:35:38.971"></status>
+<msg timestamp="20210430 14:42:04.183" level="INFO">Clicking button 'btn-login'.</msg>
+<status status="PASS" starttime="20210430 14:42:04.182" endtime="20210430 14:42:04.264"></status>
 </kw>
-<kw name="Wait Until Page Contains Element" library="Selenium2Library">
-<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20210430 14:42:04.181" endtime="20210430 14:42:04.265"></status>
+</kw>
+<kw name="Wait Until Page Contains" library="Selenium2Library">
+<doc>Waits until ``text`` appears on the current page.</doc>
 <arguments>
-<arg>name:validate_user</arg>
+<arg>Username or password wrong</arg>
 </arguments>
-<status status="PASS" starttime="20210426 22:35:38.971" endtime="20210426 22:35:40.686"></status>
+<status status="PASS" starttime="20210430 14:42:04.267" endtime="20210430 14:42:04.743"></status>
 </kw>
-<kw name="Wait Until Page Contains Element" library="Selenium2Library">
-<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<kw name="Close Browser" library="Selenium2Library" type="teardown">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20210430 14:42:04.744" endtime="20210430 14:42:06.977"></status>
+</kw>
+<doc>Test Login Page Functionality when valid username and invalid password are entered</doc>
+<status status="PASS" starttime="20210430 14:42:00.663" endtime="20210430 14:42:06.977" critical="yes"></status>
+</test>
+<test id="s1-t4" name="Blank username">
+<kw name="Open Browser To Specific Page" library="source-login">
+<kw name="Open Browser" library="Selenium2Library">
+<doc>Opens a new browser instance to the optional ``url``.</doc>
 <arguments>
-<arg>name:user-manage-bot</arg>
+<arg>${URL}</arg>
+<arg>${BROWSER}</arg>
 </arguments>
-<status status="PASS" starttime="20210426 22:35:40.686" endtime="20210426 22:35:40.706"></status>
+<msg timestamp="20210430 14:42:06.984" level="INFO">Opening browser 'Chrome' to base url 'http://103.212.180.236:3000/login'.</msg>
+<status status="PASS" starttime="20210430 14:42:06.983" endtime="20210430 14:42:10.397"></status>
 </kw>
-<status status="PASS" starttime="20210426 22:35:33.282" endtime="20210426 22:35:40.706"></status>
-</kw>
-<kw name="Go to Manage Bot Page">
-<kw name="Click Link" library="Selenium2Library">
-<doc>Clicks a link identified by ``locator``.</doc>
+<kw name="Title Should Be" library="Selenium2Library">
+<doc>Verifies that the current page title equals ``title``.</doc>
 <arguments>
-<arg>user-dropdown</arg>
+<arg>React App</arg>
 </arguments>
-<msg timestamp="20210426 22:35:40.710" level="INFO">Clicking link 'user-dropdown'.</msg>
-<status status="PASS" starttime="20210426 22:35:40.709" endtime="20210426 22:35:41.588"></status>
+<msg timestamp="20210430 14:42:10.407" level="INFO">Page title is 'React App'.</msg>
+<status status="PASS" starttime="20210430 14:42:10.397" endtime="20210430 14:42:10.407"></status>
 </kw>
-<kw name="Click Element" library="Selenium2Library">
-<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" starttime="20210430 14:42:06.981" endtime="20210430 14:42:10.408"></status>
+</kw>
+<kw name="Input Password" library="source-login">
 <arguments>
-<arg>user-manage</arg>
-</arguments>
-<msg timestamp="20210426 22:35:41.589" level="INFO">Clicking element 'user-manage'.</msg>
-<status status="PASS" starttime="20210426 22:35:41.589" endtime="20210426 22:35:41.886"></status>
-</kw>
-<kw name="Wait Until Page Contains Element" library="Selenium2Library">
-<doc>Waits until the element ``locator`` appears on the current page.</doc>
-<arguments>
-<arg>name:bot_list</arg>
-</arguments>
-<status status="PASS" starttime="20210426 22:35:41.886" endtime="20210426 22:35:41.905"></status>
-</kw>
-<status status="PASS" starttime="20210426 22:35:40.708" endtime="20210426 22:35:41.905"></status>
-</kw>
-<kw name="Check Specific Link Functionality">
-<arguments>
-<arg>name:create-bot</arg>
-<arg>id:create_bot</arg>
-</arguments>
-<kw name="Wait Until Element Is Visible" library="Selenium2Library">
-<doc>Waits until the element ``locator`` is visible.</doc>
-<arguments>
-<arg>${li}</arg>
-<arg>20</arg>
-</arguments>
-<status status="PASS" starttime="20210426 22:35:41.906" endtime="20210426 22:35:41.939"></status>
-</kw>
-<kw name="Click Element" library="Selenium2Library">
-<doc>Click the element identified by ``locator``.</doc>
-<arguments>
-<arg>${li}</arg>
-</arguments>
-<msg timestamp="20210426 22:35:41.939" level="INFO">Clicking element 'name:create-bot'.</msg>
-<status status="PASS" starttime="20210426 22:35:41.939" endtime="20210426 22:35:42.027"></status>
-</kw>
-<kw name="Wait Until Element Is Visible" library="Selenium2Library">
-<doc>Waits until the element ``locator`` is visible.</doc>
-<arguments>
-<arg>${header}</arg>
-<arg>20</arg>
-</arguments>
-<status status="PASS" starttime="20210426 22:35:42.027" endtime="20210426 22:35:42.124"></status>
-</kw>
-<status status="PASS" starttime="20210426 22:35:41.906" endtime="20210426 22:35:42.124"></status>
-</kw>
-<kw name="Input Specific field">
-<arguments>
-<arg>name:bot_name</arg>
-<arg>${bot_name}</arg>
+<arg>${valid_password}</arg>
 </arguments>
 <kw name="Input Text" library="Selenium2Library">
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
 <arguments>
-<arg>${field}</arg>
-<arg>${value}</arg>
+<arg>password</arg>
+<arg>${password}</arg>
 </arguments>
-<msg timestamp="20210426 22:35:42.127" level="INFO">Typing text 'hoxy' into text field 'name:bot_name'.</msg>
-<status status="PASS" starttime="20210426 22:35:42.126" endtime="20210426 22:35:42.255"></status>
+<msg timestamp="20210430 14:42:10.410" level="INFO">Typing text '1234' into text field 'password'.</msg>
+<status status="PASS" starttime="20210430 14:42:10.410" endtime="20210430 14:42:10.606"></status>
 </kw>
-<status status="PASS" starttime="20210426 22:35:42.125" endtime="20210426 22:35:42.255"></status>
+<status status="PASS" starttime="20210430 14:42:10.409" endtime="20210430 14:42:10.606"></status>
 </kw>
-<kw name="Select From List By Label" library="Selenium2Library">
-<doc>Selects options from selection list ``locator`` by ``labels``.</doc>
-<arguments>
-<arg>name:gender</arg>
-<arg>${gender}</arg>
-</arguments>
-<msg timestamp="20210426 22:35:42.256" level="INFO">Selecting options from selection list 'name:gender' by label Male.</msg>
-<status status="PASS" starttime="20210426 22:35:42.256" endtime="20210426 22:35:42.371"></status>
-</kw>
-<kw name="Input Specific field">
-<arguments>
-<arg>name:age</arg>
-<arg>${age}</arg>
-</arguments>
-<kw name="Input Text" library="Selenium2Library">
-<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<arguments>
-<arg>${field}</arg>
-<arg>${value}</arg>
-</arguments>
-<msg timestamp="20210426 22:35:42.375" level="INFO">Typing text '20' into text field 'name:age'.</msg>
-<status status="PASS" starttime="20210426 22:35:42.374" endtime="20210426 22:35:42.491"></status>
-</kw>
-<status status="PASS" starttime="20210426 22:35:42.372" endtime="20210426 22:35:42.492"></status>
-</kw>
+<kw name="Submit Credentials" library="source-login">
 <kw name="Click Button" library="Selenium2Library">
 <doc>Clicks the button identified by ``locator``.</doc>
 <arguments>
-<arg>btn-create-bot</arg>
+<arg>btn-login</arg>
 </arguments>
-<msg timestamp="20210426 22:35:42.493" level="INFO">Clicking button 'btn-create-bot'.</msg>
-<status status="PASS" starttime="20210426 22:35:42.492" endtime="20210426 22:35:42.597"></status>
+<msg timestamp="20210430 14:42:10.608" level="INFO">Clicking button 'btn-login'.</msg>
+<status status="PASS" starttime="20210430 14:42:10.608" endtime="20210430 14:42:10.747"></status>
 </kw>
-<doc>Test validation of Create Bot Functionality</doc>
-<status status="PASS" starttime="20210426 22:35:33.281" endtime="20210426 22:35:42.598" critical="yes"></status>
+<status status="PASS" starttime="20210430 14:42:10.607" endtime="20210430 14:42:10.748"></status>
+</kw>
+<kw name="Wait Until Page Contains" library="Selenium2Library">
+<doc>Waits until ``text`` appears on the current page.</doc>
+<arguments>
+<arg>Please Enter Username</arg>
+</arguments>
+<kw name="Capture Page Screenshot" library="Selenium2Library">
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<msg timestamp="20210430 14:42:15.947" level="INFO" html="yes">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-4.png"&gt;&lt;img src="selenium-screenshot-4.png" width="800px"&gt;&lt;/a&gt;</msg>
+<status status="PASS" starttime="20210430 14:42:15.801" endtime="20210430 14:42:15.947"></status>
+</kw>
+<msg timestamp="20210430 14:42:15.948" level="FAIL">Text 'Please Enter Username' did not appear in 5 seconds.</msg>
+<status status="FAIL" starttime="20210430 14:42:10.749" endtime="20210430 14:42:15.948"></status>
+</kw>
+<kw name="Close Browser" library="Selenium2Library" type="teardown">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20210430 14:42:15.950" endtime="20210430 14:42:18.139"></status>
+</kw>
+<doc>Test Login Page Functionality when only valid password is entered</doc>
+<status status="FAIL" starttime="20210430 14:42:06.980" endtime="20210430 14:42:18.140" critical="yes">Text 'Please Enter Username' did not appear in 5 seconds.</status>
 </test>
-<doc>Test Manage bot page Functionality.</doc>
-<status status="PASS" starttime="20210426 22:35:14.348" endtime="20210426 22:35:42.605"></status>
+<test id="s1-t5" name="Blank password">
+<kw name="Open Browser To Specific Page" library="source-login">
+<kw name="Open Browser" library="Selenium2Library">
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<arguments>
+<arg>${URL}</arg>
+<arg>${BROWSER}</arg>
+</arguments>
+<msg timestamp="20210430 14:42:18.144" level="INFO">Opening browser 'Chrome' to base url 'http://103.212.180.236:3000/login'.</msg>
+<status status="PASS" starttime="20210430 14:42:18.143" endtime="20210430 14:42:21.805"></status>
+</kw>
+<kw name="Title Should Be" library="Selenium2Library">
+<doc>Verifies that the current page title equals ``title``.</doc>
+<arguments>
+<arg>React App</arg>
+</arguments>
+<msg timestamp="20210430 14:42:21.810" level="INFO">Page title is 'React App'.</msg>
+<status status="PASS" starttime="20210430 14:42:21.805" endtime="20210430 14:42:21.810"></status>
+</kw>
+<status status="PASS" starttime="20210430 14:42:18.143" endtime="20210430 14:42:21.810"></status>
+</kw>
+<kw name="Input Username" library="source-login">
+<arguments>
+<arg>${valid_username}</arg>
+</arguments>
+<kw name="Input Text" library="Selenium2Library">
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<arguments>
+<arg>username</arg>
+<arg>${username}</arg>
+</arguments>
+<msg timestamp="20210430 14:42:21.813" level="INFO">Typing text 'admin' into text field 'username'.</msg>
+<status status="PASS" starttime="20210430 14:42:21.812" endtime="20210430 14:42:21.970"></status>
+</kw>
+<status status="PASS" starttime="20210430 14:42:21.811" endtime="20210430 14:42:21.971"></status>
+</kw>
+<kw name="Submit Credentials" library="source-login">
+<kw name="Click Button" library="Selenium2Library">
+<doc>Clicks the button identified by ``locator``.</doc>
+<arguments>
+<arg>btn-login</arg>
+</arguments>
+<msg timestamp="20210430 14:42:21.972" level="INFO">Clicking button 'btn-login'.</msg>
+<status status="PASS" starttime="20210430 14:42:21.972" endtime="20210430 14:42:22.114"></status>
+</kw>
+<status status="PASS" starttime="20210430 14:42:21.971" endtime="20210430 14:42:22.115"></status>
+</kw>
+<kw name="Wait Until Page Contains" library="Selenium2Library">
+<doc>Waits until ``text`` appears on the current page.</doc>
+<arguments>
+<arg>Please enter Password</arg>
+</arguments>
+<kw name="Capture Page Screenshot" library="Selenium2Library">
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<msg timestamp="20210430 14:42:27.339" level="INFO" html="yes">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-5.png"&gt;&lt;img src="selenium-screenshot-5.png" width="800px"&gt;&lt;/a&gt;</msg>
+<status status="PASS" starttime="20210430 14:42:27.189" endtime="20210430 14:42:27.339"></status>
+</kw>
+<msg timestamp="20210430 14:42:27.340" level="FAIL">Text 'Please enter Password' did not appear in 5 seconds.</msg>
+<status status="FAIL" starttime="20210430 14:42:22.116" endtime="20210430 14:42:27.340"></status>
+</kw>
+<kw name="Close Browser" library="Selenium2Library" type="teardown">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20210430 14:42:27.341" endtime="20210430 14:42:29.569"></status>
+</kw>
+<doc>Test Login Page Functionality when only valid username is entered</doc>
+<status status="FAIL" starttime="20210430 14:42:18.142" endtime="20210430 14:42:29.570" critical="yes">Text 'Please enter Password' did not appear in 5 seconds.</status>
+</test>
+<test id="s1-t6" name="Register Button">
+<kw name="Open Browser To Specific Page" library="source-login">
+<kw name="Open Browser" library="Selenium2Library">
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<arguments>
+<arg>${URL}</arg>
+<arg>${BROWSER}</arg>
+</arguments>
+<msg timestamp="20210430 14:42:29.574" level="INFO">Opening browser 'Chrome' to base url 'http://103.212.180.236:3000/login'.</msg>
+<status status="PASS" starttime="20210430 14:42:29.574" endtime="20210430 14:42:32.892"></status>
+</kw>
+<kw name="Title Should Be" library="Selenium2Library">
+<doc>Verifies that the current page title equals ``title``.</doc>
+<arguments>
+<arg>React App</arg>
+</arguments>
+<msg timestamp="20210430 14:42:32.901" level="INFO">Page title is 'React App'.</msg>
+<status status="PASS" starttime="20210430 14:42:32.892" endtime="20210430 14:42:32.901"></status>
+</kw>
+<status status="PASS" starttime="20210430 14:42:29.573" endtime="20210430 14:42:32.901"></status>
+</kw>
+<kw name="Click Register Link">
+<arguments>
+<arg>li-regist</arg>
+</arguments>
+<kw name="Click Link" library="Selenium2Library">
+<doc>Clicks a link identified by ``locator``.</doc>
+<arguments>
+<arg>${link}</arg>
+</arguments>
+<msg timestamp="20210430 14:42:32.903" level="INFO">Clicking link 'li-regist'.</msg>
+<status status="PASS" starttime="20210430 14:42:32.903" endtime="20210430 14:42:33.802"></status>
+</kw>
+<status status="PASS" starttime="20210430 14:42:32.902" endtime="20210430 14:42:33.802"></status>
+</kw>
+<kw name="Wait Until Page Contains" library="Selenium2Library">
+<doc>Waits until ``text`` appears on the current page.</doc>
+<arguments>
+<arg>Register</arg>
+</arguments>
+<status status="PASS" starttime="20210430 14:42:33.803" endtime="20210430 14:42:33.824"></status>
+</kw>
+<kw name="Close Browser" library="Selenium2Library" type="teardown">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20210430 14:42:33.824" endtime="20210430 14:42:37.590"></status>
+</kw>
+<doc>Test if Register link in Login page led to correct path</doc>
+<status status="PASS" starttime="20210430 14:42:29.572" endtime="20210430 14:42:37.590" critical="yes"></status>
+</test>
+<doc>Test Login page Functionality.</doc>
+<status status="FAIL" starttime="20210430 14:41:38.554" endtime="20210430 14:42:37.595"></status>
 </suite>
 <statistics>
 <total>
-<stat pass="3" fail="0">Critical Tests</stat>
-<stat pass="3" fail="0">All Tests</stat>
+<stat pass="3" fail="3">Critical Tests</stat>
+<stat pass="3" fail="3">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat pass="3" fail="0" id="s1" name="Manage-Bot">Manage-Bot</stat>
+<stat pass="3" fail="3" id="s1" name="Test-Login">Test-Login</stat>
 </suite>
 </statistics>
 <errors>

@@ -242,19 +242,15 @@ const Styles = styled.div`
 function Navbar_member({ botID, customer_id, path  }) {
   const stetus = useSelector(state => state.tr)
   const [change, setchange] = useState(stetus);
- 
   // setchange(ichange)
   const dispatch = useDispatch()
   // const stetus = useSelector(state => state.auth)
   const Change = (e) => {
-  
     if (change == true) {
       setchange(false);
     } else if (change == false){
       setchange(true);
     }
- 
- 
   };
   // const testChange = (e) => {
   //   e.preventDefault();

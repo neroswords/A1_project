@@ -191,15 +191,15 @@ export default function Lineform(props) {
                                 <div className="input-Box">
                                 <div className="col-lg-12">
                                     <label  className="form-label">Channel secret</label>
-                                    <input type="text" value={channel_secret} onChange={e => setChannel_secret(e.target.value)} className="form-control" id="inputpagefacebook"/>
+                                    <input type="text" pattern="[A-Za-z0-9]+" value={channel_secret} onChange={e => setChannel_secret(e.target.value)} className="form-control" id="inputpagefacebook"/>
                                 </div>
                                 <div className="col-lg-12 mt-3">
                                     <label  className="form-label">Channel access token</label>
-                                    <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputbotname"/>
+                                    <input type="text" pattern="[A-Za-z0-9]+" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputbotname"/>
                                 </div>
                                 <div className="col-lg-12 mt-3">
                                     <label  className="form-label">Basic ID</label>
-                                    <input type="text" value={basic_id} onChange={e => setBasic_id(e.target.value)} className="form-control" id="inputbotname"/>
+                                    <input type="text" pattern="[A-Za-z0-9]+" value={basic_id} onChange={e => setBasic_id(e.target.value)} className="form-control" id="inputbotname"/>
                                 </div>
                                 </div>
                                 <div id="container-button">

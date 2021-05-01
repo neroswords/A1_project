@@ -72,17 +72,34 @@ def process(chrg, botID, userID, already_redirected=False):
     )
 
     if chrg.status == "successful":
+        print("LINE ZONE")
         flash(f"Order {order_id} successfully completed.")
         cart_collection = mongo.db.carts
         customer_collection = mongo.db.customers
         purchased_collection = mongo.db.purchased
-        customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
-        cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
-        purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":datetime.datetime.now()})
-        cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
-        data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
-        push_message(data)
-        return redirect("https://liff.line.me/1655652942-zNpjoxYV/checkout/complete")
+        customer_define = customer_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+        if customer_define['type'] == "lineUser":
+            customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
+            cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+            purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":datetime.datetime.now()})
+            cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+            data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
+            push_message(data)
+            return redirect("https://liff.line.me/1655652942-zNpjoxYV/checkout/complete")
+        elif customer_define['type'] == "facebookUser":
+            cart_collection = mongo.db.carts
+            customer_collection = mongo.db.customers
+            purchased_collection = mongo.db.purchased
+            timestamp = datetime.datetime.now()
+            customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
+            cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+            purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":timestamp,"purchased_time":str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second),"purchase_day": timestamp.day,"purchase_month": timestamp.month,"purchase_year": timestamp.year})
+            cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+            data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
+            receipt_define = purchased_collection.find_one(
+            {'$and': [{'userID': userID}, {'botID': ObjectId(botID)},{'purchased_date':timestamp}]})
+            call_receipt(userID,receipt_define['_id'],botID)
+            return render_template("complete.html")
 
     # Check whether source is "econtext" before checking whether charge has `authorize_uri`.
     # Do not automatically redirect to `authorize_uri` for "econtext".
@@ -100,18 +117,18 @@ def process(chrg, botID, userID, already_redirected=False):
         return redirect(chrg.authorize_uri)
 
     if charge_is_pending_capture: #facebook
-        cart_collection = mongo.db.carts
-        customer_collection = mongo.db.customers
-        purchased_collection = mongo.db.purchased
-        timestamp = datetime.datetime.now()
-        customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
-        cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
-        purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":timestamp,"purchased_time":str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second),"purchase_day": timestamp.day,"purchase_month": timestamp.month,"purchase_year": timestamp.year})
-        cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
-        data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
-        receipt_define = purchased_collection.find_one(
-        {'$and': [{'userID': userID}, {'botID': ObjectId(botID)},{'purchased_date':timestamp}]})
-        call_receipt(userID,receipt_define['_id'],botID)
+        # cart_collection = mongo.db.carts
+        # customer_collection = mongo.db.customers
+        # purchased_collection = mongo.db.purchased
+        # timestamp = datetime.datetime.now()
+        # customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
+        # cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+        # purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":timestamp,"purchased_time":str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second),"purchase_day": timestamp.day,"purchase_month": timestamp.month,"purchase_year": timestamp.year})
+        # cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+        # data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
+        # receipt_define = purchased_collection.find_one(
+        # {'$and': [{'userID': userID}, {'botID': ObjectId(botID)},{'purchased_date':timestamp}]})
+        # call_receipt(userID,receipt_define['_id'],botID)
         return render_template("complete.html")
 
     if chrg.status == "expired":

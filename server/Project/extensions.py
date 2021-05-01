@@ -9,7 +9,7 @@ config = dotenv_values("./.env")
 
 mongo = PyMongo()
 
-server_url = 'https://81e528381375.ngrok.io'
+server_url = 'https://3e482c7a8675.ngrok.io'
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -22,7 +22,14 @@ class JSONEncoder(json.JSONEncoder):
 #         return str(x)
 #     else:
 #         return JSONEncoder(x)
-        
+
+class User:
+    def __init__(self, username, password,is_active):
+        self.username = username
+        self.password = password
+        self.is_active = is_active
+
+
 
 
 

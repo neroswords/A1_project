@@ -4,7 +4,7 @@ Library           Selenium2Library
 Resource          source-login.robot
 
 *** Variables ***
-${URL}      http://localhost:3000/login
+${URL}      http://103.212.180.236:3000/login
 ${BROWSER}        Chrome
 ${valid_username}     admin
 ${valid_password}     1234

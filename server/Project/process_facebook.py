@@ -18,6 +18,8 @@ def stateHandler(**kwargs):
             return {"flex":kwargs['message']['message'],"type":"name"}
         elif customer_define['state'] == "address":
             return {"flex":kwargs['message']['message'],"type":"address"}
+        elif customer_define['state'] == "phone":
+            return {"flex":kwargs['message']['message'],"type":"phone"}
         elif customer_define['state'] == "none" or customer_define['state'] == "inCart":
             res = process_message(kwargs['message'],kwargs['botID'],kwargs['confident'],kwargs['sender_id'],kwargs['platform'])
     elif 'postback' in kwargs.keys():
@@ -40,19 +42,20 @@ def commandsHandler(**kwargs):
         if customer_define['state'] == 'none' or customer_define['state'] == 'inCart':
             itemid = str(commands[1])
             inventory_collection_define = inventory_collection.find_one({'_id': ObjectId(itemid)})
-            img_name = inventory_collection_define['img'][0]
+            
             define_item = inventory_collection.find_one({'$and':[{'botID':ObjectId(kwargs['botID'])},{"_id": ObjectId(itemid)}]})
             if define_item == None :
                 return {"message":"เกิดข้อผิดพลาดในระบบ หรือสินค้านี้ถูกนำออกจากรายการแล้ว"}
             if define_item['amount'] <= 0 :
                 return {"message":"ขออภัยครับ สินค้าชิ้นนี่หมดแล้ว"}
             if define_cart == None :
-                
+                img_name = inventory_collection_define['img'][0]
                 cart_collection.insert_one({'cart':[{'itemid': ObjectId(itemid),'item_name':define_item['item_name'],'price_per_ob':define_item['price'], 'amount': 1,'total_ob':define_item['price'],'img_name': img_name}], 'userID': kwargs['sender_id'], 'botID': ObjectId(kwargs['botID']),'total':define_item['price']})
                 customer_collection.update_one({"userID": kwargs['sender_id']},{"$set": {"state":"inCart"}})
                 return {"btn_template":"ใส่สินค้า "+define_item['item_name']+" ลงตระกร้าเรียบร้อยแล้วครับ"}
 
             else:
+                img_name = inventory_collection_define['img'][0]
                 newlist = define_cart['cart']
                 total = define_cart['total']
                 price = 0
@@ -120,10 +123,29 @@ def commandsHandler(**kwargs):
             commd = commands[1].split('=')
             if commd[1] == "true":
                 myquery = { '$and': [{"userID": kwargs['sender_id']}, {"botID": ObjectId(kwargs['botID'])}]}
-                newvalues = { "$set": {"address": commands[2],"state":"payment"}}
+                newvalues = { "$set": {"address": commands[2],"state":"phone"}}
                 customer_collection.update_one(myquery, newvalues)
                 # customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"payment"}})
-                return {'btn_payment': 'ไปจ่ายเงิน'}
+                if 'phone' in customer_define.keys():
+                    return {"flex":customer_define['phone'],"type":"phone"}
+                return {'message':'กรุณาระบุที่เบอร์มือถือของท่าน'}
+            elif commd[1] == "false":
+                customer_collection.update_one({'$and': [{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"phone"}})
+                return {'message':'เชิญเลือกซื้อของต่อได้เลยครับ'}
+        else: return {"message":"เกิดข้อผิดพลาดโปรดลองใหม่หรือทำกระบวนการที่ทำอยู่ให้เสร็จก่อนครับ"}
+    elif commands[0] == "action=phone":
+        if customer_define['state'] == 'phone':
+            commd = commands[1].split('=')
+            if commd[1] == "true":
+                if commands[2].isnumeric():
+                        
+                    myquery = { '$and': [{"userID": kwargs['sender_id']}, {"botID": ObjectId(kwargs['botID'])}]}
+                    newvalues = { "$set": {"phone": commands[2],"state":"payment"}}
+                    customer_collection.update_one(myquery, newvalues)
+                # customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"payment"}})
+                    return {'btn_payment': 'ไปจ่ายเงิน'}
+                else:
+                    return {'messages' : "กรุณาระบุแค่ตัวเลขเท่านั้น ไม่ต้องมีเครื่องหมายพิเศษ"}
             elif commd[1] == "false":
                 customer_collection.update_one({'$and': [{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"none"}})
                 return {'message':'เชิญเลือกซื้อของต่อได้เลยครับ'}

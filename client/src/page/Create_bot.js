@@ -5,6 +5,7 @@ import {withRouter, Redirect} from 'react-router-dom'
 import ReactFileReader from 'react-file-reader';
 import Facebookform  from '../Components/Form/facebookform';
 import Lineform  from '../Components/Form/lineform';
+import FlashMessage from 'react-flash-message'
 
 const Styles = styled.div`
   .container {
@@ -124,13 +125,17 @@ class Create_bot extends React.Component {
       redirect: false,
       bot_id:'',
       imageURL: '',
-      file:''
+      file:'',
+      errorMessage :{ "bot_name":"start","gender":"start","age":"start"},
+      message : '',
+      showMessage: false,
     };
     
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handlelineChange = this.handlelineChange.bind(this);
     this.handlefacebookChange = this.handlefacebookChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    // this.process = this.process.bind(this);
   }
   renderSwitch(param) {
     switch(param) {
@@ -152,8 +157,15 @@ class Create_bot extends React.Component {
     console.log(this.state.platform)
   }
   handleChange (evt) {
-    this.setState({ [evt.target.name]: evt.target.value });
-    console.log(this.state)
+     this.setState({ [evt.target.name]: evt.target.value });
+   
+    // if ( this.state.bot_name == null){
+    //   this.setState({
+    //     errorMessage: {...this.state.errorMessage, bot_name: 'Type your bot name (do not be empty)'},
+    //     isError: {...this.state.isError, bot_name: true}
+    //   });
+    //   return false;
+    // }
   }
   handleFile = (e) => {
   const content = e.target.result;
@@ -166,52 +178,118 @@ class Create_bot extends React.Component {
 //   console.log('handle uploading-', this.state.file);
 // }
 
+  
 _handleImageChange(e) {
   e.preventDefault();
 
   let reader = new FileReader();
-  let file = e.target.files[0];
-  if (!file){
-    this.setState({
-      imagePreviewUrl: ""
-    });
+  if(e.target.files[0] == undefined){
     return
   }
-
-  reader.onloadend = () => {
-    this.setState({
-      file: file,
-      imagePreviewUrl: reader.result
-    });
+  else{
+    let file = e.target.files[0];
+  let type = e.target.files[0].type;
+  console.log(type)
+  if (!file){
+    
+    return
   }
+  else{
+    if( type != "image/jpeg" && type != "image/png"){
+          alert("Only PNG or JPG is accepted")
+    return
+    }
+    else{
+      reader.onloadend = () => {
+        this.setState({
+          file: file,
+          imagePreviewUrl: reader.result
+        });
+      }
+    
+      reader.readAsDataURL(file)
+    }
+  }
+  }
+  
 
-  reader.readAsDataURL(file)
+ 
+  
 }
   handleUploadImage(ev) {
     ev.preventDefault();
+    // let type = ev.target.files[0].type;
+    
+    const files = ev.target[0].files[0]
+    const BotnameLength = this.state.bot_name.replace(/^\s+|\s+$/gm,'').length
+    
+ 
+    if (BotnameLength == 0){
+      this.setState({message:'Please enter Bot name'})
+      this.setState({showMessage: true})
 
-    const data = new FormData();
-    data.append('file', this.uploadInput.files[0]);
-    data.append('bot_name',this.bot_name.value);
-    data.append('gender' ,this.gender.value);
-    data.append('age' ,this.age.value);
-    data.append('creator' , localStorage.getItem('user_id'))
+    }
+    else {
+      if(!files){
+        const data = new FormData();
+        data.append('file', this.uploadInput.files[0]);
+        data.append('bot_name',this.bot_name.value);
+        data.append('gender' ,this.gender.value);
+        data.append('age' ,this.age.value);
+        data.append('creator' , localStorage.getItem('user_id'))
+    
+        fetch('/bot/create', {
+          method: 'POST',
+          // headers : {
+          //   "Access-Control-Allow-Origin": "*",
+          //   //'Content-Type':'application/json'
+          // },
+          //body : JSON.stringify(form),
+          body: data,
+        }).then((response) => {
+          response.json().then((body) => {
+            this.setState({ imageURL: `/${body.file}` });
+            this.setState({ bot_id : data.id})
+            this.setState({ redirect: true }) 
+          });
+        });
+      }
+      else{
+        const type = ev.target[0].files[0].type;
+        console.log(type)
+        if( type != "image/jpeg" && type != "image/png"){
+              alert("Only PNG or JPG is accepted")
+        }
+        else{
+          const data = new FormData();
+        data.append('file', this.uploadInput.files[0]);
+        data.append('bot_name',this.bot_name.value);
+        data.append('gender' ,this.gender.value);
+        data.append('age' ,this.age.value);
+        data.append('creator' , localStorage.getItem('user_id'))
+    
+        fetch('/bot/create', {
+          method: 'POST',
+          // headers : {
+          //   "Access-Control-Allow-Origin": "*",
+          //   //'Content-Type':'application/json'
+          // },
+          //body : JSON.stringify(form),
+          body: data,
+        }).then((response) => {
+          response.json().then((body) => {
+            this.setState({ imageURL: `/${body.file}` });
+            this.setState({ bot_id : data.id})
+            this.setState({ redirect: true }) 
+          });
+        });
+        }
+      }
+      
+      
+    }
 
-    fetch('/bot/create', {
-      method: 'POST',
-      // headers : {
-      //   "Access-Control-Allow-Origin": "*",
-      //   //'Content-Type':'application/json'
-      // },
-      //body : JSON.stringify(form),
-      body: data,
-    }).then((response) => {
-      response.json().then((body) => {
-        this.setState({ imageURL: `/${body.file}` });
-        this.setState({ bot_id : data.id})
-        this.setState({ redirect: true }) 
-      });
-    });
+
   }
   // componentDidMount(){
   //   fetch('/bot/'+user_id)
@@ -249,16 +327,28 @@ _handleImageChange(e) {
                                           </div>
                                           <div className="mt-3 upload-img">                                           
                                               <label for="uploadimage">Upload Proflie</label>
-                                              <input ref={(ref) => { this.uploadInput = ref; }} onChange={(e)=>this._handleImageChange(e)} type="file" />
+                                              <input ref={(ref) => { this.uploadInput = ref; }} onChange={(e)=>this._handleImageChange(e)} type="file" accept="image/x-png,image/gif,image/jpeg"/>
                                             </div>
                                         </div>  
                                         <div className=" group col-lg-6">
                                             <div className="">
-                                              <label  className="form-label">Bot Name</label>
-                                              <input type="text"  name="bot_name" required  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
+                                   
+                                              <label  className="form-label">Bot Name</label>  
+                                              <label  className="form-label" >{this.state.errorMessage['bot_name'] != "start" ? this.state.errorMessage['bot_name'] : ""}</label>
+                                              <input type="text"   name="bot_name" required  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
                                             </div>
+                                            { this.state.showMessage &&  
+                                        <div className="container">
+                                            <FlashMessage duration={4000}>
+                                              <div className="error">
+                                                <strong>* {this.state.message}</strong>
+                                              </div>  
+                                            </FlashMessage>
+                                        </div>
+                                  }
                                             <div class="mt-3">
                                               <label for="inputgender" class="form-label">Gender</label>
+                                              <label for="inputgender" class="form-label" >{this.state.errorMessage['gender'] == "Please Select your option" ? this.state.errorMessage['gender'] : ""}</label>
                                               <select id="inputgender" name="gender" required  ref={(ref) => { this.gender = ref; }} onChange={this.handleChange} class="form-select">
                                                   <option disabled selected>Select your option</option>
                                                   <option>Male </option>
@@ -267,7 +357,8 @@ _handleImageChange(e) {
                                             </div>
                                             <div className="mt-3">
                                                 <label for="inputFirstname" className="form-label">Age</label>
-                                                <input type="integer" name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
+                                                <label  for="inputFirstname" className="form-label" >{this.state.errorMessage['age'] != "start" ? this.state.errorMessage['age'] : ""}</label>
+                                                <input required type="text" pattern="\d*"  min="1" step="1"  name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
                                             </div>
                                         </div>
                                 </div>
@@ -293,7 +384,7 @@ _handleImageChange(e) {
                             {/* <Lineform />                                 */}
 
                               <div className="btn-createbot">
-                                  <button name="btn-create-bot" className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Create ChatBot</button>
+                                  <button name="btn-create-bot" className="btn btn-success text-uppercase" onSubmit={this.handleUploadImage} type="submit">Create ChatBot</button>
                               </div>
 
 
