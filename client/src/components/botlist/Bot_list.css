@@ -4,7 +4,7 @@
 }
 
 .botlist-page .container {
-  background-color : white;
+  /* background-color : white; */
   border-radius: 0.5rem;
   margin-top: 3%;
   /* margin-bottom: 5%;; */
@@ -84,6 +84,8 @@
 
 .info-bot p  {
   font-size: 20px;
+  max-width: 100px;
+  background-color: #009B00;
 }
 
 .divider {
