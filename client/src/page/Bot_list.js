@@ -113,7 +113,7 @@ function Dropdown({botData, deleteBot, openDelete_pop, openForm}){
         </Link>
         <div class="info-bot">
             <Link className="link" to={'/bot/'+botData._id.$oid+'/training'}>
-                <p class="Bot-name">{botData.bot_name}</p>
+                <p className="Bot-name">{botData.bot_name}</p>
             </Link>
             <div class="divider"></div>
         </div>

@@ -1,7 +1,7 @@
   
 import React from 'react';
 import styled from 'styled-components';
-import {withRouter, Redirect} from 'react-router-dom'
+import {Link, withRouter, Redirect} from 'react-router-dom'
 
 const Styles = styled.div`
   .container {
@@ -20,6 +20,7 @@ const Styles = styled.div`
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
     text-align: center;
+    margin-top: 15px;
   }
   
   .card-bot .card-body {
@@ -96,6 +97,17 @@ const Styles = styled.div`
   }
   .btn-line {
     background-color: #34a853 ;
+  }
+
+  .button-close-edit-bot i {
+    float: right;
+    color: red;
+    font-size: 18px;
+  }
+
+  .req-icon{
+    color: red;
+    font-size: 1rem;
   }
 `;
 
@@ -194,8 +206,13 @@ class Edit_bot extends React.Component {
           
               <div className="container">
                     <div className="col-sm-10 col-md-9 col-lg-7 mx-auto">
+                    
                       <div className="card card-bot">
+                        
                         <div className="card-body">
+                        <Link to={"/bot_list/" +localStorage.getItem("user_id") + "#main" }  className="button-close-edit-bot">
+                              <i className="fas fa-times"></i>
+                        </Link>
                           <h5 className="card-title-cretebot ">Edit Bot form</h5>
                           <form className="form-bot" onSubmit={this.handleUploadImage}>
                                 <div className="title_part">
@@ -215,10 +232,12 @@ class Edit_bot extends React.Component {
                                         <div className=" group col-lg-6">
                                             <div className="">
                                               <label  className="form-label">Bot Name</label>
+                                              <span className="req-icon"> *</span>
                                               <input type="text"  name="bot_name" value = {this.state.bot_name}  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
                                             </div>
                                             <div class="mt-3">
                                               <label for="inputgender" class="form-label">Gender</label>
+                                              <span className="req-icon"> *</span>
                                               <select id="inputgender" name="gender" value = {this.state.gender}  ref={(ref) => { this.gender = ref; }} onChange={this.handleChange} class="form-select">
                                                   <option selected>Choose...</option>
                                                   <option>Male </option>
@@ -227,6 +246,7 @@ class Edit_bot extends React.Component {
                                             </div>
                                             <div className="mt-3">
                                                 <label for="inputFirstname" className="form-label">Age</label>
+                                                <span className="req-icon"> *</span>
                                                 <input type="integer" name="age" className="form-control" id="inputfirstname" value = {this.state.age}   ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
                                             </div>
                                         </div>

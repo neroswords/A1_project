@@ -9,10 +9,10 @@ const Styles = styled.div`
     display: flex;
     min-height: 92vh;
 }
-.container {
-    margin-bottom: 2%;
-    margin-top: 2%;
-    overflow:hidden;
+.container-fluid {
+    padding: 40px;
+    width: 100%;
+    overflow: hidden;
 }
 .title-history{
     padding: 4px;
@@ -61,7 +61,7 @@ function History(props) {
         <Styles>
             <div className="history-page">
                 <Navbar_member botID={props.match.params.bot_id} path={"history"} />
-                <div className="container">
+                <div className="container-fluid">
                     <div className="title-history">
                         <h2 className='p-2 flex-grow-1 bd-highlight' id="history-header">History</h2>
                     </div>

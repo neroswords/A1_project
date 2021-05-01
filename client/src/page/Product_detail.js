@@ -13,6 +13,7 @@ const Styles = styled.div`
     border: 0;
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    min-height: 70vh;
 }
   
 .card-pd .card-pd-body {
@@ -126,14 +127,14 @@ const Styles = styled.div`
     position: relative;
 }
 
-.line-pd{
+/* .line-pd{
     margin-top: 8%;
     margin-bottom: 3%;
     width: 100%;
     height: 3px;
     background: #115dd8;
     background: linear-gradient(to right, #115dd8 0%,#115dd8 20%,#ddd 20%,#ddd 100%);
-}
+} */
 
 .card__footer .recommend-pd{
     float:left;
@@ -163,13 +164,15 @@ const Styles = styled.div`
     height: auto;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
     text-align: center;
     /* grid-template-rows: 90px 90px; */
 }
 
 .img-pd img {
-    width: 150px;
-    height: 150px;
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
 }
 
 `
@@ -197,7 +200,7 @@ function Product_datail(botID){
     return(
         <Styles>
                 <div className="container">
-                    <div className="col-sm-10 col-md-9 col-lg-8 mx-auto">
+                    <div className="col-sm-10 col-md-9 col-lg-12 mx-auto">
                         <h3 className="head-pd">Product Details</h3>
                     <div className="card card-pd">
                         <div className="card-pd-body">

@@ -55,14 +55,16 @@ const Styles = styled.div`
     border: 1px solid #dbdbdb;
     /* box-shadow: 0px 4.5px 14px rgba(0, 0, 0, 0.1); */
     display: grid;
-    grid-template-columns: 40% 60%;
+    grid-template-columns: repeat(2, 1fr 2fr);
+    grid-column-gap: 10px;
     margin: 3%;
 }
 
 .inven-list img {
     height: 80px;
     width: 80px;
-    margin: 8%;
+    margin: 9%;
+    object-fit: cover;
     /* box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.06); */
 }
 

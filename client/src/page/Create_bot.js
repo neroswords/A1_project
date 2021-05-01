@@ -113,7 +113,9 @@ const Styles = styled.div`
 
   .req_infobot {
     color: red;
+    font-size: 1rem;
   }
+
 `;
 
 
@@ -137,7 +139,7 @@ class Create_bot extends React.Component {
     this.handlelineChange = this.handlelineChange.bind(this);
     this.handlefacebookChange = this.handlefacebookChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.process = this.process.bind(this);
+    // this.process = this.process.bind(this);
   }
   renderSwitch(param) {
     switch(param) {
@@ -295,19 +297,21 @@ _handleImageChange(e) {
                                               
                                           </div>
                                           <div className="mt-3 upload-img">                                           
-                                              <label for="uploadimage">Upload Proflie</label>
+                                              <label for="uploadimage">Upload Proflie <span className="req_infobot"> *</span></label>
                                               <input ref={(ref) => { this.uploadInput = ref; }} onChange={(e)=>this._handleImageChange(e)} type="file" />
                                             </div>
                                         </div>  
                                         <div className=" group col-lg-6">
                                             <div className="">
                                    
-                                              <label  className="form-label">Bot Name</label>  
+                                              <label  className="form-label">Bot Name</label>
+                                              <span className="req_infobot"> *</span>  
                                               <label  className="form-label" >{this.state.errorMessage['bot_name'] != "start" ? this.state.errorMessage['bot_name'] : ""}</label>
                                               <input type="text"   name="bot_name" required  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
                                             </div>
                                             <div class="mt-3">
                                               <label for="inputgender" class="form-label">Gender</label>
+                                              <span className="req_infobot"> *</span>
                                               <label for="inputgender" class="form-label" >{this.state.errorMessage['gender'] == "Please Select your option" ? this.state.errorMessage['gender'] : ""}</label>
                                               <select id="inputgender" name="gender" required  ref={(ref) => { this.gender = ref; }} onChange={this.handleChange} class="form-select">
                                                   <option disabled selected>Select your option</option>
@@ -318,7 +322,7 @@ _handleImageChange(e) {
                                             <div className="mt-3">
                                                 <label for="inputFirstname" className="form-label">Age</label>
                                                 <span className="req_infobot"> *</span>
-                                                <input type="integer" name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} required onChange={this.handleChange} />
+                                                {/* <input type="integer" name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} required onChange={this.handleChange} /> */}
                                                 <label  for="inputFirstname" className="form-label" >{this.state.errorMessage['age'] != "start" ? this.state.errorMessage['age'] : ""}</label>
                                                 <input min = "1" required type="number" name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
                                             </div>

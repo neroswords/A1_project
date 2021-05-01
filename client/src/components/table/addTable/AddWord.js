@@ -8,7 +8,7 @@ import { Button, Container } from "react-bootstrap";
 const Background = styled.div`
   width: 100%;
   height: 100%;
-  background: blue;
+  /* background: blue; */
   position: absolute;
   display: flex;
   justify-content: center;
@@ -18,10 +18,11 @@ const Background = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 100; 
 `;
 
 const ModalWrapper = styled.div`
-  z-index: 10;
+  z-index: 1000;
   width: 800px;
   height: 500px;
   background-color: white;

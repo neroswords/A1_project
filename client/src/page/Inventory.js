@@ -13,7 +13,7 @@ const Styles = styled.div`
 .inventory-page .container-fluid {
     padding: 40px;
     width: 100%;
-  }
+}
 
 .inven-title{
     padding: 4px;
@@ -40,24 +40,24 @@ const Styles = styled.div`
 
 .inven-showlist{
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
 }
 
-@media (min-width: 500px) {
+@media (min-width: 800px) {
     .inven-showlist { 
         grid-template-columns: repeat(2, 1fr); 
         }
 }
 
-@media (min-width: 920px) {
+@media (min-width: 1200px) {
     .inven-showlist { 
         grid-template-columns: repeat(3, 1fr); 
         }
 }
 
-  @media (min-width: 1200px) {
+  @media (min-width: 1600px) {
     .inven-showlist { 
-        grid-template-columns: repeat(4, 1fr); 
+        grid-template-columns: repeat(5, 1fr); 
     }
   }
 

@@ -17,13 +17,13 @@ const Styles = styled.div`
     width: 100%;
     overflow: hidden;
 }
+
 .mapping-title {
     padding: 4px;
     width: 100% ;
     background-color: white;
     border-radius: 0.25rem;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-    
 }
 
 .mapping-title h2 {
