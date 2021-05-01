@@ -10,7 +10,6 @@ import {
   XAxis,
   YAxis
 } from "recharts";
-// import { getPngData } from "recharts-to-png";
 import styled from 'styled-components';
 
 const Styles = styled.div`
@@ -39,7 +38,7 @@ const Styles = styled.div`
 }
 `;
 
-export const Visualize = ({ botID }) => {
+export const Accession = ({ botID }) => {
   const [containerRef, { width: containerWidth }] = useMeasure();
   const [chart, setChart] = React.useState();
   console.log(botID)
@@ -48,25 +47,24 @@ export const Visualize = ({ botID }) => {
 
   const [loading, setLoading] = React.useState();
   const [head, setHead] = React.useState();
-  
   async function getData( event ) {
     setHead(event.target.value)
     await setLoading(true)
-      fetch('/sales/' + botID + '/' + event.target.value )
+      fetch('/bot/' + botID + '/' + event.target.value  )
       .then(res => res.json().then(data => {
         setDataChart(data)
 
       }))
     await setLoading(false)
   }
-  useEffect(() => {
-    fetch('/sales/' + botID + '/' + '/month' )
-      .then(res => res.json().then(data => {
-        setDataChart(data)
+  // useEffect(() => {
+  //   fetch('/bot/' + botID + '/' + '/month' )
+  //     .then(res => res.json().then(data => {
+  //       setDataChart(data)
 
-      }))
+  //     }))
 
-  }, []);
+  // }, []);
   const data = [
     { name: "Page A", Line: 4000},
     { name: "Page B", Line: 3000},
@@ -77,7 +75,7 @@ export const Visualize = ({ botID }) => {
     { name: "Page G", Line: 3490}
   ];
 
-
+  
   const header = () =>{
     if(head == 'daily'){
       return(<h3>Daily</h3>)
@@ -90,6 +88,9 @@ export const Visualize = ({ botID }) => {
     }
 
   }
+
+
+
   return (
     <Styles>
     <div id="container-graph" ref={containerRef}>
@@ -101,17 +102,15 @@ export const Visualize = ({ botID }) => {
           <option value="day">By Date</option>
           <option value="month">By Month</option>
         </select>
-        
       </div>
 
-       <h3 className="header-text" >{header()}</h3>
+       <h3 className="header-text" >{header()}</h3> 
       <LineChart className="LineChart"
         ref={(ref) => setChart(ref)} // Save the ref of the chart
         data={dataChart}
         height={500}
         width={1000}
         margin={{ top: 5, right: 40, left: 20, bottom: 25 }}
-        
       >
         <XAxis dataKey="name" />
         <YAxis />
@@ -125,7 +124,7 @@ export const Visualize = ({ botID }) => {
           activeDot={{ r: 8 }}
         /> */}
         <Line type="monotone" 
-        dataKey="income" 
+        dataKey="time" 
         stroke="#82ca9d" 
         />
         
@@ -133,7 +132,8 @@ export const Visualize = ({ botID }) => {
 
     </div>
     </Styles>
+
   );
 };
 
-export default Visualize;
+export default Accession;

@@ -192,6 +192,29 @@ const Styles = styled.div`
   color: green;
 }
 
+.group-page {
+    display: flex;
+    min-height: 92vh;
+}
+
+.container-fluid {
+   padding: 40px;
+   width: 100%;
+   overflow: hidden;
+}
+
+.title-group{
+    padding: 4px;
+    width: 100% ;
+    background-color: white;
+    border-radius: 0.25rem;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.title-group h2{ 
+   font-weight: 600;
+}
+
 
 `
 function DragText(props){
@@ -200,7 +223,14 @@ function DragText(props){
     return(
         <div>
             <Styles>
-              <GroupList groupID={props.match.params.group_id} botID={props.match.params.bot_id}/>
+            <div className="group-page">
+              <Navbar_member botID = {props.match.params.bot_id} path={"group"} />
+                <div className="container-fluid">
+                  <GroupList groupID={props.match.params.group_id} botID={props.match.params.bot_id}/>
+                </div>
+
+            </div>
+              
             </Styles>
         </div>
     )
