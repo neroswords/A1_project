@@ -1,0 +1,76 @@
+*{
+	font-family: 'Kanit', sans-serif;
+}
+
+.invoice-wrapper{
+	margin: 40px auto;
+	max-width: 700px;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	/* border-radius: 0.75rem; */
+	/* border: black 1px solid; */
+}
+.invoice-top{
+	background-color: #ffffff;
+	padding: 40px 60px;
+}
+
+.customer-address{
+	/* margin-top: 20px; */
+	max-width: 400px;
+}
+.customer-address-detail h2 , .customer-address-detail h6{
+	line-height: 1.5;
+	/* font-family: 'Kanit', sans-serif; */
+	/* font-family: 'Montserrat', sans-serif; */
+}
+.customer-address-detail h5{
+	margin-top: 30px;
+	font-weight: 700;
+	/* font-family: 'Kanit', sans-serif; */
+	/* font-family: 'Montserrat', sans-serif; */
+}
+
+
+
+.invoice-bottom{
+	background-color: #ffffff;
+	padding: 40px 60px;
+	position: relative;
+}
+
+.title{
+	font-size: 30px;
+	/* font-family: 'Kanit', sans-serif; */
+	font-weight: 600;
+	/* margin-bottom: 30px; */
+}
+
+.invoice-number h5, .invoice-number h4{
+	/* font-family: 'Kanit', sans-serif; */
+}
+
+.invoice-number h4{
+	font-weight: 400;
+}
+
+.terms{
+	/* font-family: 'Kanit', sans-serif; */
+	font-size: 14px;
+	/* margin-top: 40px; */
+}
+
+.button-invoice button{
+	font-size: 20px;
+	padding: 10px 40px;
+	/* margin-left: 20px; */
+	margin-bottom: 30px;
+	border-radius: 0.75rem;
+}
+
+.terms h4{
+	font-weight: 700;
+	font-size: 14px;
+}
+.terms li {
+	font-size: 14px;
+}

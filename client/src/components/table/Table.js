@@ -135,6 +135,10 @@ input::placeholder{
 .select-pagesize {
   padding: 0 1%;
 }
+
+/* .show-number-pagination{
+  z-index: -10;
+} */
 `;
 
 
@@ -250,7 +254,14 @@ const defaultColumn = {
 
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained ,botID }) {
   const Ondelete = (e) => {
-    openDelete_table(e)
+    if(e.length > 0){
+      openDelete_table(e)
+    }
+    else{
+      alert('please select')
+    }
+    console.log(e.length)
+   
     // delete_trained(e)
 
   }
@@ -377,8 +388,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
       <Container>
         <div className="button-trained-word">
           <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
-          {/* <button className="buttondeleteWord" onClick={() => Ondelete(selectedFlatRows)}>Delete</button> */}
-          <button className="buttondeleteWord" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
+          <button className="buttondeleteWord" onClick={() => Ondelete(selectedFlatRows)} >Delete</button>
           <div className='SearchBar'>
           <GlobalFilter
             preGlobalFilteredRows={preGlobalFilteredRows}
@@ -467,6 +477,23 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
                   {<i class="fas fa-chevron-double-right"></i>}
                 </button>{' '}
           </div>
+          {/* <p>Selected Rows: {Object.keys(selectedRowIds).length}</p> */}
+
+
+          {/* <pre>
+        <code>
+          {JSON.stringify(
+            {
+              selectedRowIds: selectedRowIds,
+              'selectedFlatRows[].original': selectedFlatRows.map(
+                d => d.original
+              ),
+            },
+            null,
+            2
+          )}
+        </code>
+      </pre> */}
 
         </div>
       </Container>

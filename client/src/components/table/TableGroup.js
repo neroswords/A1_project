@@ -4,7 +4,7 @@ import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination,
 import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
 import {Link} from "react-router-dom";
-import TextForm from "../Form/GroupForm/TextForm"
+import Delete_table from "../Delete_table";
 
 const Styles = styled.div`
   table {
@@ -238,7 +238,13 @@ const defaultColumn = {
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID }) {
   
   const Ondelete = (e) => {
-    delete_trained(e)
+    if(e.length > 0){
+      openDelete_table(e)
+    }
+    else{
+      alert('please select')
+    }
+    console.log(e.length)
     
   }
 
@@ -265,9 +271,15 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     }),
     []
   )
-  const [showForm, setShowForm] = useState(false);
-  const openForm = () => {
-    setShowForm(prev => !prev);
+  // const [showForm, setShowForm] = useState(false);
+  // const openForm = () => {
+  //   setShowForm(prev => !prev);
+  // }
+
+  const [showDelete_table, setShowDelete_table] = useState(false);
+  const openDelete_table = (data) => {
+    setShowDelete_table(prev => !prev);
+      
   }
   
 
@@ -353,6 +365,8 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
             />
           </div>
           {/* <AddWord showWord={showWord} setShowWord={setShowWord} botID={botID} /> */}
+          <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table} selectedFlatRows={selectedFlatRows} id={botID} delete_trained={delete_trained}/>
+
         </div>
 
         <table {...getTableProps()} className="table">
@@ -384,13 +398,15 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
           <tbody {...getTableBodyProps()}>
             {page.map((row, i) => {
               prepareRow(row)
+              console.log(row)
               return (
                 <tr {...row.getRowProps()}>
                   {row.cells.map(cell => {
                     return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                   })}
-                  <td><button onClick={openForm}><i className="far fa-edit" ></i></button></td>
-                  <TextForm showForm={showForm} setShowForm={setShowForm} botID={botID} />
+                  {/* <td><button onClick={openForm}><i className="far fa-edit" ></i></button></td> */}
+                  <td><Link to ={'/bot/'+botID+'/group/' +row.original.id}><i className="far fa-edit" ></i></Link></td>
+                  {/* <TextForm showForm={showForm} setShowForm={setShowForm} botID={botID} /> */}
                 </tr>
               )
             })}
@@ -459,6 +475,7 @@ function TableGroup({ botID, delete_trained, add_data }) {
         accessor: 'Group', // accessor is the "key" in the data
       },
       
+      
     ],
     []
   )
@@ -507,6 +524,7 @@ function TableGroup({ botID, delete_trained, add_data }) {
 
         setTableGroupState(
           data.map(d => {
+            console.log(d)
             return {
               select: false,
               id: d._id.$oid,

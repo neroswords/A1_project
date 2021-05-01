@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import Navbar_member from '../Components/Navbar/navbar_member';
 import styled from 'styled-components';
 import Visualize from "../Components/Graph/Visualize";
+import {Link} from "react-router-dom";
 
 const Styles = styled.div` 
 .history-page {
@@ -29,8 +30,33 @@ const Styles = styled.div`
     border-radius: 0.25rem;
     /* border: 1px solid #ececec; */
 }
+.CircleRight{
+    color: white;
+    
+}
+.MoreInfo{
+    color: white;
+    margin-left: 30%;
+}
+.icon{
+    color: #E0E0E0 ;
+}
 `
+
+
 function History(props) {
+
+    const [history, setHistoryState] = useState([]);
+
+    useEffect(() => {
+        fetch('/history/' + props.match.params.bot_id)
+          .then(res => res.json().then(data => {
+           setHistoryState(data)
+            
+          }))
+    
+      }, []);
+
     return (
         <Styles>
             <div className="history-page">
@@ -40,29 +66,30 @@ function History(props) {
                         <h2 className='p-2 flex-grow-1 bd-highlight' id="history-header">History</h2>
                     </div>
                     <div className="row p-3">
-                        <div class="small-box bg-info col-4">
-                            <div class="inner">
-                                <h3>150</h3>
+                        <div className="small-box bg-info col-4">
+                            <div className="inner">
+                                <h3>{history.waited}</h3>
 
                                 <p>New Orders</p>
                             </div>
-                            <div class="icon">
-                                <i class="ion ion-bag"></i>
+                            <div className="icon">
+                                <i className="far fa-shopping-basket"></i>
                             </div>
-                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <Link to={'/bot/'+ props.match.params.bot_id +'/history/new'}><a href="#" className="small-box-footer MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
                         </div>
 
                         <div class="col-lg-3 col-6">
-                            <div class="small-box bg-success">
-                                <div class="inner">
-                                    <h3>53</h3>
+                            <div className="small-box bg-success">
+                                <div className="inner">
+                                    <h3>{history.total}</h3>
 
-                                    <p>Bounce Rate</p>
+                                    <p>Total Order</p>
+                                    <br></br>
                                 </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
+                                <div className="icon">
+                                    <i class="far fa-clipboard-list-check"></i>
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                                {/* <Link><a href="#" className="small-box-footer MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link> */}
                             </div>
                         </div>
 
@@ -73,7 +100,7 @@ function History(props) {
 
 
                     <div className="show-history">
-                        <Visualize />
+                        <Visualize botID={props.match.params.bot_id}/>
                     </div>
                 </div>
             </div>

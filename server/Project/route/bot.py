@@ -1,4 +1,3 @@
-
 from flask import Flask, request, abort, render_template, session,url_for,redirect,send_from_directory,send_file,Blueprint,current_app
 from pymessenger import Bot
 from Project.Config import *
@@ -23,7 +22,7 @@ from linebot.models import (MessageEvent, TextMessage, TextSendMessage, FlexSend
 from flask_socketio import send, emit, join_room, leave_room
 from .. import socketio
 import datetime
-from reportlab.pdfgen.canvas import Canvas
+
 
 bot = Blueprint("bot",__name__)
 UPLOAD_FOLDER = './Project/static/images/bot/bot_pic'
@@ -32,17 +31,7 @@ UPLOAD_FOLDER_ITEMS = './Project/static/images/bucket'
 # @socketio.on('message')
 # def webhook_message(message, userID, botID):
 #     socketio.emit("message", "Server message", room='my_room')
-def create_cover_sheet(date,botID,customerID):
-    bot_collection = mongo.db.bots
-    customer_collection = mongo.db.customers
-    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
-    customer_define = customer_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
-    canvas = Canvas("cover_"+botID+"&"+customerID+"_"+date+".pdf")
 
-def create_list_sheet(date,botID,customerID):
-    cart_collection = mongo.db.carts
-    cart_define = cart_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
-    canvas = Canvas("itemsList_"+botID+"&"+customerID+"_"+date+".pdf")
 
 def save_message(message,message_type,sender,sender_id,sender_type,room,botId,userID,pictureUrl):  #sender=Id(bot or user), sender_type=bot or facebookuser or lineuser, message_type = text or image
     message_collection = mongo.db.messages
@@ -163,9 +152,11 @@ def create():
             file.save(destination)
             session['uploadFilePath'] = destination
             response = "success"
-        new_bot = bots_collection.insert_one({'bot_name': bot_name, 'gender': gender, 'owner': ObjectId(
-            creator), 'age': age, 'Img': filename, 'confident': 0.6})
-        #id = JSONEncoder().encode(new_bot.inserted_id).replace('"','')
+        new_bot = bots_collection.insert_one({'bot_name': bot_name, 'gender': gender, 'owner': ObjectId(creator), 'age': age, 'Img': filename, 'confident': 0.6})
+        mappings_collection = mongo.db.mappings
+        bot_id = new_bot.inserted_id
+        mapping = []
+        mappings_collection.insert_one(mapping)
         return {'message': 'add bot successfully'}
     return "add bot unsuccessfully"
 
@@ -275,10 +266,16 @@ def webhook(platform, botID):
                 elif message_type == 'postback':
                     data = {'postback':payload['events'][0]['postback']['data']}
                     res = stateHandler(sender_id=sender_define['userID'], botID=botID, postback= data)
+                elif message_type == 'image':
+                    data = {"image":payload['events'][0]['message']['contentProvider']['originalContentUrl']}
+                    socketio.emit("message_from_webhook", {"message":data["image"],"message_type":message_type, "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"type":"customer"},room=botID+'&'+sender_define['userID'])
+                    save_message(message=data['image'],message_type=message_type,sender=profile.display_name,sender_id=sender_define['userID'],sender_type="lineUser",room=botID+'&'+sender_define['userID'])
+                    res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
                 else:
                     save_message(message="unavailable to show content",message_type="text",sender=profile.display_name,sender_id=sender_define['userID'],sender_type="lineUser",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
                     socketio.emit("message_from_webhook", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"type":"customer"},room=botID+'&'+sender_define['userID'])
                     res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
+                    
                 # if "message" in data.keys():
                 #     res = process_message(data,botID,bot_define['confident'],sender_define['userID'])
 
@@ -311,7 +308,7 @@ def webhook(platform, botID):
                     response = []
                     for reply in res['group']:
                         if "text" == reply['type']:
-                            socketio.emit("message_from_response", {"message":reply["data"], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
+                            socketio.emit("message_from_response", {"message":reply["data"],"message_type":"text", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
                             response.append(TextSendMessage(text = reply["data"]))
                             save_message(message=reply["data"],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
                         elif 'flex' in res.keys():
@@ -373,6 +370,16 @@ def trained(botID):
         listcursor.reverse()
         data = dumps(listcursor, indent=2)
         return data
+
+@bot.route('/<botID>/group', methods=["GET"])
+def group(botID):
+    if request.method == 'GET':
+        groups_collection = mongo.db.groups
+        listcursor = list(groups_collection.find({"botID": ObjectId(botID)}))
+        listcursor.reverse()
+        data = dumps(listcursor, indent=2)
+        return data
+
 
 
 @bot.route('/<botID>/addword', methods=["POST"])
