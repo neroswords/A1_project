@@ -356,7 +356,7 @@ export default class Add_item extends React.Component {
           <div className="container">
             <div className="col-12 col-lg-9 mx-auto">
               <div className="card card-bot">
-                <Link className="button-to-inventory">
+                <Link to= {"/bot/" + this.props.match.params.bot_id+"/inventory" } className="button-to-inventory">
                   <i class="fas fa-long-arrow-left"></i>
                 </Link>
                 <div className="card-body-add-item">
@@ -375,7 +375,6 @@ export default class Add_item extends React.Component {
                                 <input ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
                             </div>
                               {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
-<<<<<<< HEAD
                                 return (
                                   <div className="preview-img">
                                     <button className="btn-delete-img">
@@ -384,13 +383,6 @@ export default class Add_item extends React.Component {
                                       <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
                                 </div>
                               )})}
-=======
-                                
-                                return <form>
-                                      <button><i class="far fa-times-circle"></i></button><img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
-                                      </form>
-                              })}
->>>>>>> 612ad6dae11cce9e4a2b7d554a4e0fa5cb0b566d
                           </div>  
                     </div>  
                     

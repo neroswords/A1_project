@@ -9,7 +9,7 @@ const Styles = styled.div`
     margin-top: 2%;
 }
 .card-pd{
-    padding: 20px;
+    padding: 18px;
     border: 0;
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
@@ -26,7 +26,7 @@ const Styles = styled.div`
 
 .btn-top-pd .back-pd{
     float:left;
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
 }
 
@@ -45,18 +45,20 @@ const Styles = styled.div`
 } */
 
 .pd-delete {
+    font-size :14px;
     float: right;
     color: black;
     border-radius: 1rem;
     margin-left: 1%;
-    padding: 1% 2%;
+    padding: 5px 10px;
 }
 
 .pd-edit{
+    font-size :14px;
     float: right;
     color: black;
     border-radius: 1rem;
-    padding: 1% 2%;
+    padding: 5px 15px;
     /* background-color: #aecaf9; */
 }
 
@@ -79,6 +81,10 @@ const Styles = styled.div`
     /* float:right; */
     margin: 2%;
     font-weight: bolder;
+}
+
+.pd-detail {
+    padding: 0 50px 0 50px ;
 }
 
 .pd-detail .pd-name{

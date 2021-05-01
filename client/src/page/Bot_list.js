@@ -5,6 +5,7 @@ import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
 import Delete_pop from "../Components/Delete_pop";
 import Connect_bot from "../Page/Connect_bot";
 
+
 export default function Bot_list(props) {
     const [botlist,setBotlist] = useState([]);
     const delete_bot =(id)=>{
@@ -46,8 +47,9 @@ export default function Bot_list(props) {
     );
 
     return(
-        
+            
                 <div className="botlist-page">
+                    			{/* <Loader type="Oval" color="#00BFFF" height={50} width={50} secondaryColor="Red" timeout={6000}/> */}
                     <div className="popup-del-connect">
                         <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop} Delete_bot ={delete_bot} bot={showBotId}></Delete_pop>
                         <Connect_bot showForm={showForm} setShowForm={setShowForm} botID={showBotId} ></Connect_bot>

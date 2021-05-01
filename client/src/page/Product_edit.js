@@ -115,6 +115,7 @@ const Styles = styled.div`
     object-fit: cover;
     padding : 10px;
     border: 2px dashed #fca311;
+    margin-bottom : 10px;
   }
   
   @media only screen and (max-width: 1200px){
@@ -184,7 +185,7 @@ const Styles = styled.div`
   font-size: 18px;
   }
 
-.preview-img .btn-delete-img {
+.preview-img .btn-delete-img-edit {
   margin-top: -30px;
   background-color: transparent;
   position: relative;
@@ -192,13 +193,13 @@ const Styles = styled.div`
   border-style: none;
 }
 
-.btn-delete-img {
+.btn-delete-img-edit {
   position : relative;
   top: 20px;
   right: -10px;
 }
 
-.btn-delete-img i{
+.btn-delete-img-edit i{
     font-size: 18px;
     color: red;
     /* float: right; */ 
@@ -388,7 +389,7 @@ export default class Product_edit extends React.Component {
                               {this.state.url_preview.map((url_preview) => {
                                 return [ (
                                 <div className="preview-img"> 
-                                  <button className="btn-delete-img">
+                                  <button className="btn-delete-img-edit">
                                         <i className="fas fa-times-circle"></i>
                                   </button>
                                     <img key={url_preview} alt='previewImg' src={"/images/bucket/"+url_preview} />
@@ -398,7 +399,7 @@ export default class Product_edit extends React.Component {
                                 {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
                                 return (
                                 <div className="preview-img">
-                                    <button className="btn-delete-img">
+                                    <button className="btn-delete-img-edit">
                                           <i className="fas fa-times-circle"></i>
                                       </button>
                                       <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
