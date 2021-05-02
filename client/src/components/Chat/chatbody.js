@@ -101,6 +101,12 @@ function Chatbody({botID,customerID}){
                             <div className="current-chatting-user">
                               <p>{username}</p>
                             </div>
+                            
+                            <div class="toggle">
+                              <input type="checkbox" class="check"/>
+                              <b class="b switch"></b>
+                              <b class="b track"></b>
+                            </div>
                         </div>
                       </div>
                     <div className="content__body">

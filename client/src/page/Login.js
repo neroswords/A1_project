@@ -75,7 +75,13 @@ const Styles = styled.div`
   .alert-message{
     margin-top: 10%;
   }
-  .btn-login button {
+  .btn-login {
+    align-items: center;
+    margin: 2px auto;
+  }
+
+  .btn-login button{
+    margin: auto;
     text-align: center;
     align-items: center;
     position: relative;
@@ -89,7 +95,7 @@ const Styles = styled.div`
       @include transition(all, 0.5s, cubic-bezier(0.65,-0.25,0.25,1.95));
       font-weight: 900;
       color: $black;
-      padding: 1.25rem 2rem;
+      padding: 1rem;
       background: $white;
       text-transform: uppercase;
       &:hover, &:focus, &:active {
@@ -191,8 +197,8 @@ class Login extends React.Component {
                                       </FlashMessage>
                                   </div>
                                 }
-                                <div className="btn-login col-lg-9 col-md-12 col-sm-12 col-xs-12 ms-5">
-                                    <button class="btn btn-primary text-uppercase btn-inlogin " type="submit" name="btn-login" onClick={this.handleSignIn}>Log in</button>
+                                <div className="btn-login col-lg-9 col-md-12 col-sm-12 col-xs-12 ">
+                                    <button class="btn btn-primary text-uppercase btn-inlogin" type="submit" name="btn-login" onClick={this.handleSignIn}>Log in</button>
                                 </div>
                                 <hr className="my-4"/>
                                 

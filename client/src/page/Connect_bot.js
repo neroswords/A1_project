@@ -27,22 +27,22 @@ const Styles = styled.div`
 const Background = styled.div`
   width: 100%;
   height: 100%;
-  background: blue;
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
   background : rgba(0, 0, 0, 0.2);
-  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 2000000;
 `;
 
 const ModalWrapper = styled.div`
   background-color: white;
   padding: 3rem 3rem;
   border-radius: 0.5rem;
+
   /* width: 400px; */
   /* height: 550px; */
   /* z-index: 1000; */
@@ -133,7 +133,7 @@ export function Connect_bot({ setShowForm, showForm, botID }) {
 
   return (
     <Styles>
-      <div className="model-popup">
+      <div className="model-popup-botlist">
         {showForm ? (
           <Background onClick={closeModal} ref={modalRef}>
             <animated.div style={animation}>
