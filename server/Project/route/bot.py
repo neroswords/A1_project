@@ -39,7 +39,7 @@ def save_message(message,message_type,sender,sender_id,sender_type,room,botId,us
     users_collection = mongo.db.users
     customers_collection = mongo.db.customers
     if sender_type == "bot":
-        message_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now(),"botId":botId})
+        message_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now(),"time":str(datetime.datetime.now().hour)+":"+str(datetime.datetime.now().minute)+":"+str(datetime.datetime.now().second),"day":datetime.datetime.now().day,"month":datetime.datetime.now().month,"year":datetime.datetime.now().year,"botId":botId})
     if sender_type != "bot":
         noti_define = notification_collection.find_one({'$and':[{"botID": ObjectId(botId)},{'sender_id':sender_id}]})
         customers_collection.update_one({'$and':[{"botID": ObjectId(botId)},{'userID':sender_id}]},{"$set":{'date':datetime.datetime.now()}})
@@ -51,14 +51,13 @@ def save_message(message,message_type,sender,sender_id,sender_type,room,botId,us
             # noti = profile_define['notification']
             # info_update = { "$set": {"notification" : noti+1}}
             # done = users_collection.update_one({'_id': ObjectId(userId)}, info_update)
-        message_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now(),"botId":botId})
+        message_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"sender_id":sender_id, "sender_type": sender_type, "room":room,"day":datetime.datetime.now().day,"month":datetime.datetime.now().month,"year":datetime.datetime.now().year,"botId":botId})
         notification_define = notification_collection.find({"userID":userID})
         list_cur = list(notification_define) 
         count = 0
         for i in list_cur:
             if(i["readed"] == "unread"):
                 count = count+1
-        print(count)
         info_update = { "$set": {"notification" : count}}
         done = users_collection.update_one({'_id': ObjectId(userID)}, info_update)
 # def save_notification(message,message_type,sender,sender_id,sender_type,room,bot_name):  #sender=Id(bot or user), sender_type=bot or facebookuser or lineuser, message_type = text or image
@@ -155,7 +154,7 @@ def create():
         new_bot = bots_collection.insert_one({'bot_name': bot_name, 'gender': gender, 'owner': ObjectId(creator), 'age': age, 'Img': filename, 'confident': 0.6})
         mappings_collection = mongo.db.mappings
         bot_id = new_bot.inserted_id
-        mapping = []
+        mapping = {"name":"ซื้อขาย","node":[{"id":"1","type":"input","data":{"label":"ซื้ออะไรคับ"},"position":{"x":600,"y":50}},{"id":"node_1614597962960","data":{"label":"ขอที่อยู่ด้วยครับ"},"position":{"x":450,"y":150}},{"source":"1","target":"node_1614597962960","id":"reactflow__edge-1undefined-node_1614597962960undefined"},{"id":"node_1617897630799","data":{"label":"กรอกเบอร์โทรด้วยครับ"},"position":{"x":300,"y":250}},{"source":"node_1614597962960","target":"node_1617897630799","id":"reactflow__edge-node_1614597962960undefined-node_1617897630799undefined"}],"botID":bot_id,"details":[{"id":"1","answer":"ซื้ออะไรคับ","keyword":"name","parameter":"%s"},{"id":"node_1614597962960","answer":"ขอที่อยู่ด้วยครับ","keyword":"address","parameter":"%s"},{"id":"node_1617897630799","answer":"กรอกเบอร์โทรด้วยครับ","keyword":"tel","parameter":"%s"},{"id":"node_1617897641268","answer":"ส่ง tracking number","keyword":"keyword","parameter":"parameter"}]}
         mappings_collection.insert_one(mapping)
         return {'message': 'add bot successfully'}
     return "add bot unsuccessfully"
@@ -254,7 +253,7 @@ def webhook(platform, botID):
             if sender_define != None and sender_define['userID']==profile.display_name and sender_define['pictureUrl']==profile.picture_url:
                 customer_collection.update_one({'$and':[{'userID':sender['userId']},{'botID': ObjectId(botID)}]},{"$set":{'pictureUrl':profile.picture_url,'display_name':profile.display_name}})
             if sender_define == None :
-                sender_define = {'userID':sender['userId'],'type':"lineUser",'date':datetime.datetime.now(),'state':'none','botID':bot_define['_id'],'status':'open','pictureUrl':profile.picture_url,'display_name':profile.display_name}
+                sender_define = {'userID':sender['userId'],'type':"lineUser",'date':datetime.datetime.now(),'state':'none','botID':bot_define['_id'],'auto_chat':True,'pictureUrl':profile.picture_url,'display_name':profile.display_name}
                 customer_collection.insert_one(sender_define)
             if sender_define['status'] == 'open' :
                 if message_type == 'text':
@@ -276,8 +275,6 @@ def webhook(platform, botID):
                     socketio.emit("message_from_webhook", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"type":"customer"},room=botID+'&'+sender_define['userID'])
                     res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
                     
-                # if "message" in data.keys():
-                #     res = process_message(data,botID,bot_define['confident'],sender_define['userID'])
 
                 if "message" in res.keys():
                     response = [TextSendMessage(text = res['message'])]
@@ -461,27 +458,64 @@ def customer_list(botID):
     customer_collection = mongo.db.customers
     customer_cur = customer_collection.find({"botID": ObjectId(botID)})
     customer_list = list(customer_cur)
-    print(customer_list)
     customer_list.sort(key = lambda x:x['date'],reverse=True)
-    print("sort")
-    print(customer_list)
     data = dumps(customer_list, indent=2)
     return data
 
 @bot.route('/<botID>/customer/<customerID>', methods=["GET","POST"])
 def get_message(botID,customerID):
-    print("COMEEEEE")
-    print("botid = ",botID)
-    print("CUS = ",customerID)
     messages_collection = mongo.db.messages
     customer_collection = mongo.db.customers
     messages_cur = messages_collection.find({"room": botID+'&'+customerID})
     customer = customer_collection.find_one({"$and": [{"botID":ObjectId(botID)},{"userID":customerID}]})
     messages_list = list(messages_cur)
-
     data = dumps({"message":messages_list,"profile":customer}, indent=2)
-
     return data
+
+@bot.route('/<botID>/dashboard/<type>', methods=['GET'])
+def dashboard(botID,type):
+    messages_collection = mongo.db.messages
+    date = datetime.datetime.now()
+    data = []
+    if type == "day":
+        message_list = list(messages_collection.find({"$and":[{"botID":ObjectId(botID)},{"month":int(date.month)},{"year":int(date.year)}]}))
+        for i in range(31):
+            count = 0
+            if date.day < i+1:
+                break
+            for x in message_list:
+                if x['day'] == i+1 :
+                    count += 1
+                else: continue
+            message_list = list(filter(lambda a: a['day'] != i+1, message_list))
+            data.append({"name":i+1,"count":count})
+    elif type == "month":
+        month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+        message_list = list(messages_collection.find({"$and":[{"botID":ObjectId(botID)},{"year":int(date.year)}]}))
+        for i in range(12):
+            count = 0
+            if date.month < i+1:
+                break
+            for x in message_list:
+                if x['month'] == i+1 :
+                    count += 1
+                else: continue
+            message_list = list(filter(lambda a: a['month'] != i+1, message_list))
+            data.append({"name":month[i],"count":count})
+    elif type == "daily":
+        message_list = list(messages_collection.find({"$and":[{"botID":ObjectId(botID)},{"month":int(date.month)},{"day":int(date.day)},{"year":int(date.year)}]}))
+        for i in range(24):
+            count = 0
+            if date.hour < i:
+                break
+            for x in message_list:
+                hour = int(x['time'].split(':')[0])
+                if x['time'] == i :
+                    count += 1
+                else: continue
+            message_list = list(filter(lambda a: int(a['time'].split(':')[0]) != i+1, message_list))
+            data.append({"name":(("0"+str(i)+".00")*(i<10)+((str(i)+".00")*(i >= 10))),"count":count})
+    return dumps(data)
 
 
 

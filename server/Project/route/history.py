@@ -18,7 +18,18 @@ log = Blueprint("history",__name__)
 @log.route('/<botID>', methods=['GET', 'POST'])
 def historyy(botID):
     purchased_collection = mongo.db.purchased
-    purchased_cursor = purchased_collection.find({'botID': ObjectId(botID)})
-    if request.method == 'GET':
+    waited_cursor = list(purchased_collection.find({"$and":[{'botID': ObjectId(botID)},{"type":"waited"}]}))
+    total_cursor = list(purchased_collection.find({'botID': ObjectId(botID)}))
+    return {"waited":len(waited_cursor),"total":len(total_cursor)}
+    
+@log.route('/<botID>/<data_type>', methods=['GET', 'POST'])
+def getData(botID,data_type):
+    if data_type == "waited":
+        purchased_collection = mongo.db.purchased
+        purchased_cursor = purchased_collection.find({"$and":[{'botID': ObjectId(botID)},{"type":"waited"}]})
         data = list(purchased_cursor)
-        return data
+    elif data_type == "all":
+        purchased_collection = mongo.db.purchased
+        purchased_cursor = purchased_collection.find({'botID': ObjectId(botID)})
+        data = list(purchased_cursor)
+    return data
