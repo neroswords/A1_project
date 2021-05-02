@@ -289,7 +289,7 @@ flash = (e) =>{
                             </div>
                                 <div className="my-3">
                                   <label for="exampleInputEmail1" className="form-label">Email address</label>
-                                  <span className="req-icon"> *</span>
+                                    <span className="req-icon"> *</span>
                                   <input type="email" className="form-control " id="inputemail" name='email' required value={this.state.email} onChange={this.handleChange} />
                                 </div>
                                 <div className="my-3">

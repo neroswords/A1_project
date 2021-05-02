@@ -234,10 +234,10 @@ useEffect(() => {
                   <img className="msg-noti-all" src={msg['pictureUrl']}></img>
 
                     <div className="noti-show-info-user">
-                    {msg['readed'] == "unread"? <div className="noti-new-word"><p>NEW</p></div>: " "}
-
+                    {msg['readed'] == "unread"? <div className="noti-show-new"><p>NEW</p></div>: " "}
                     <p className="noti-show-name">{msg['sender']}</p>  
                     <p className="noti-show-msg">{msg['message']}</p>
+                    <p className="noti-show-time">11.20 น.</p>
                     {/* {msg['message']} {msg['botID']['$oid']} */}
 
                     </div> 

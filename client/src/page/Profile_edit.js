@@ -27,6 +27,7 @@ const Styles = styled.div`
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
     text-align: center;
+    margin-top: 20px;
   }
   
   .card-regis .card-body {
@@ -120,6 +121,13 @@ const Styles = styled.div`
   
   .reg_proflie{
     color: red;
+  }
+
+  .button-close-edit-proflie i {
+    float: right;
+    color: red;
+    font-size: 18px;
+    margin-bottom: 5px;
   }
 `;
 
@@ -264,6 +272,7 @@ componentDidMount ()  {
               <div className="container">
                     <div className="col-sm-10 col-md-9 col-lg-8 mx-auto">
                       <div className="card card-regis">
+                        
                         <div className="card-body">
                           <h5 className="card-title text-center">Edit Profile</h5>
                           <form className="form-regis"  onSubmit={this.handleSubmit}>

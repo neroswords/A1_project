@@ -433,7 +433,7 @@
   background-color: #fff;
   border-radius: var(--border-radius);
   box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  z-index: -1;
   cursor: pointer;
   position: absolute;
   /* margin-top: 80px; */
@@ -464,6 +464,11 @@
 }
 
 .msg-noti-i .noti-show-msg{
+  color: #000;
+  font-weight: 600;
+}
+
+.msg-noti-i .noti-show-time{
   color: #000;
   font-weight: 600;
 }
@@ -537,12 +542,12 @@ p.noti-each-msg {
   margin: 0 !important;
 }
 
-.noti-new-word{
+.noti-show-new{
   position: absolute;
   right: 30px;
 }
 
-.noti-new-word p{
+.noti-show-new p{
   text-align: center;
   font-weight: 600;
   font-size: 12px;
@@ -570,3 +575,15 @@ p.show-number{
   font-weight: 700;
   margin: 0px !important;
 }
+
+.noti-show-info-user .noti-show-time {
+  position: absolute;
+  right: 30px;
+  /* top: 10px; */
+  margin-top: -20px;
+}
+
+p.noti-show-time {
+  font-size: 14px;
+}
+

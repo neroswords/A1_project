@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withRouter, Redirect } from 'react-router-dom'
+import {Link, withRouter, Redirect } from 'react-router-dom'
 // import { Multiselect } from 'multiselect-react-dropdown';
 import 'react-widgets/dist/css/react-widgets.css';
 import { Multiselect } from 'react-widgets' 
 import FlashMessage from 'react-flash-message'
+import { PanelGroup } from 'react-bootstrap';
 
 const Styles = styled.div`
   .container {
@@ -50,7 +51,7 @@ const Styles = styled.div`
   
   .form-additem .btn {
     border-radius: 1rem;
-    letter-spacing: .1rem;
+    letter-spacing: 0.1rem;
     font-weight: bold;
     padding: 0.75rem;
     transition: all 0.2s;
@@ -82,11 +83,11 @@ const Styles = styled.div`
     color: white;
     width: 40%;
     margin-top: 30%; */
-    margin-top: 10%;
+    margin-top: 80px;
     margin-left: -1.3%;
     justify-content:center;
     position: absolute;
-    padding: 10px 20px;
+    padding: 10px 15px;
     background-color: #fca311;
     border: none;
     border-radius: 0.75rem;
@@ -104,17 +105,21 @@ const Styles = styled.div`
     text-align: center;
     display: grid;
     /* grid-template-columns: repeat(3, 1fr); */
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     grid-column-gap: 10px;
     margin-bottom: 1%;
+    /* margin-top: 50px; */
   }
 
   .showimg-newinv img{
     border: 1px solid #ddd;
     border-radius: 0.75rem;
-    height: 150px;
-    width: 150px;
+    height: 140px;
+    width: 140px;
+    margin-bottom: 8%;
     object-fit: cover;
+    padding : 10px;
+    border: 2px dashed #fca311;
   }
   
   /* .showimg-newinv img:hover{
@@ -129,8 +134,23 @@ const Styles = styled.div`
     transition: all 200ms ease-in;
     transform: scale(1.2);
   } */
+  @media only screen and (max-width: 1200px){
+    .showimg-newinv{
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 4%;
+    }
+  } 
 
   @media only screen and (max-width: 760px){
+    .showimg-newinv{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 1%;
+    }
+  } 
+
+  @media only screen and (max-width: 690px){
     .showimg-newinv{
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -145,13 +165,58 @@ const Styles = styled.div`
     border: 2px dashed #fca311;
     border-radius : 0.75rem;
     text-align:center;
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 140px;
     
   }
 
+  .req-icon{
+    color: red;
+    font-size: 1rem;
+  }
+
+  .button-to-inventory i {
+  /* display: flex; */
+  /* float:right; */
+  /* color: red; */
+  font-size: 18px;
+  }
+
+.btn-delete-img {
+  position: relative;
+  right: 0;
+  background-color: #fff;
+  border-style: none;
+}
+
+.btn-delete-img i{
+    color: red;
+    float: right;
+}
+
+.preview-img .btn-delete-img {
+  margin-top: -30px;
+  background-color: transparent;
+  position: relative;
+  float: right;
+  border-style: none;
+}
+
+.btn-delete-img {
+  position : relative;
+  top: 20px;
+  right: -10px;
+}
+
+.btn-delete-img i{
+    font-size: 18px;
+    color: red;
+    /* float: right; */ 
+} 
+
 `;
 let fileimg = []
+
 export default class Add_item extends React.Component {
   constructor(props) {
     super(props);
@@ -164,6 +229,7 @@ export default class Add_item extends React.Component {
       imageURL: '',
       Image: '',
       des: '',
+      file: [],
       imagesPreviewUrl: [],
       options: ["d1","2"],
       value: [],
@@ -175,9 +241,31 @@ export default class Add_item extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     // this.Onend = this.Onend.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
+    this.deleteImg = this.deleteImg.bind(this)
    
   }
-  
+  deleteImg (img,index) {
+    
+    
+      const preview_image = this.state.imagesPreviewUrl
+      const preview_img = preview_image.filter(e => e != img);
+      
+      const data_image = fileimg
+      
+      const data_img = data_image.filter(e => e != data_image[index]);
+     fileimg = data_img
+    
+ 
+     // OldImg.pop(index)
+     
+     this.setState({
+       imagesPreviewUrl: preview_img
+       
+     })
+     // console.log(this.state.url_preview)
+     
+   }
+
   handleCreate(name) {
     let { options, value } = this.state;
 
@@ -192,7 +280,7 @@ export default class Add_item extends React.Component {
 
   handleChange(evt) {
     this.setState({ [evt.target.name]: evt.target.value });
-    console.log(this.state)
+   
   }
 
 
@@ -214,6 +302,7 @@ export default class Add_item extends React.Component {
       }
       else{
         let reader = new FileReader();
+        console.log(this.uploadInput.files[i])
         fileimg.push(this.uploadInput.files[i])
         if (!fileimg) {
           return
@@ -221,7 +310,7 @@ export default class Add_item extends React.Component {
         // console.log(this.state.imagesPreviewUrl)
         reader.onloadend = () => {
           this.setState({
-            file: this.uploadInput.files[i],
+            file: [...this.state.file,this.uploadInput.files[i]],
             imagesPreviewUrl: [...this.state.imagesPreviewUrl, reader.result]
           });
         }
@@ -231,11 +320,14 @@ export default class Add_item extends React.Component {
       
 
     }
-
-    console.log(fileimg)
+    
+    // console.log(fileimg)
 
 
   }
+  
+
+
   handleUploadImage(ev) {
     ev.preventDefault();
 
@@ -290,6 +382,8 @@ export default class Add_item extends React.Component {
     }
     
   }
+
+ 
     // componentDidMount ()  {
     //  var a = []
     //  var unique = []
@@ -323,26 +417,41 @@ export default class Add_item extends React.Component {
       return (
         <Styles>
           <div className="container">
-            <div className="col-12 col-lg-8 mx-auto">
+            <div className="col-12 col-lg-9 mx-auto">
               <div className="card card-bot">
+                <Link to= {"/bot/" + this.props.match.params.bot_id+"/inventory" } className="button-to-inventory">
+                  <i class="fas fa-long-arrow-left"></i>
+                </Link>
                 <div className="card-body-add-item">
                   <h5 className="card-title-add-item mt-3 mb-4">Create New Item</h5>
                   <form className="form-additem" onSubmit={this.handleUploadImage}>
                    <div className="title_additem">
-                          <p className="">Upload image</p>
+                          <p className="">Upload image <span className="req-icon"> *</span></p>
+                          
                           <div className="line-inv"></div>
-                    </div> 
-                    <div className="showimg-newinv row d-flex justify-content-between">
+                    </div>
+                    
+                    <div className="showimg-newinv form-row d-flex justify-content-between">
                           <div className="showimg-newinv">
                             <div className="upload-newinv">
                                 <input accept="image/x-png,image/gif,image/jpeg" ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
                             </div>
-                              {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
-                                
-                                return <form>
-                                      <button><i class="far fa-times-circle"></i></button><img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
-                                      </form>
-                              })}
+                            {/* {this.state.file.map((file) => {
+                                console.log(file) 
+                               })} */}
+                            {this.state.file}
+                              {this.state.imagesPreviewUrl.map((imagesPreviewUrl,index) => {
+                               
+                                return (
+                                  
+                                  <div className="preview-img">
+                                    <div className="btn-delete-img" >
+                                          <i className="fas fa-times-circle" onClick={() => this.deleteImg(imagesPreviewUrl,index) }></i>
+                                      </div>
+                                      
+                                      <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
+                                </div>
+                              )})}
                           </div>  
                     </div>  
                     
@@ -353,7 +462,8 @@ export default class Add_item extends React.Component {
                           </div>
                           <div className="row">
                               <div className="col">
-                                <label className="form-label">Item name *</label>
+                                <label className="form-label">Item name</label>
+                                <span className="req-icon"> *</span>
                                 <input type="text" name="item_name" value={this.state.item_name} ref={(ref) => { this.item_name = ref; }} onChange={this.handleChange} className="form-control"required />
                               </div> 
                               { this.state.showMessage &&  
@@ -366,14 +476,16 @@ export default class Add_item extends React.Component {
                                         </div>
                                   }                       
                               <div className="col">
-                                <label className="form-label">Price *</label>
+                                <label className="form-label">Price</label>
+                                <span className="req-icon"> *</span>
                                 <input type="number" min="0" step="any" name="price" value={this.state.price} ref={(ref) => { this.price = ref; }} onChange={this.handleChange} className="form-control"required />
                               </div>
                           </div>
                           {/* <div class="mt-3"  onKeyDown ={((e) => this.Onend(e))}> */}
                           <div className="row">
-                            <div class="col mt-2"  >
+                            <div class="col mt-2">
                               <label for="inputtype" class="form-label" required>Type</label>
+                              <span className="req-icon"> *</span>
                               <Multiselect
                                 data={this.state.options}
                                 value={this.state.value}
@@ -385,7 +497,8 @@ export default class Add_item extends React.Component {
                               
                             </div>
                             <div className="col mt-2">
-                              <label for="inputAmout" className="form-label" required>Amount *</label>
+                              <label for="inputAmout" className="form-label" required>Amount</label>
+                              <span className="req-icon"> *</span>
                               <input type="text" pattern="\d*"  name="amount" className="form-control" id="inputfirstname" value={this.state.amount} ref={(ref) => { this.amount = ref; }} onChange={this.handleChange} />
                             </div>
                          </div> 

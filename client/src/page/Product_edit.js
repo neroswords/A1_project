@@ -1,7 +1,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { withRouter, Redirect } from 'react-router-dom'
+import { Link, withRouter, Redirect } from 'react-router-dom';
 // import { Multiselect } from 'multiselect-react-dropdown';
 import 'react-widgets/dist/css/react-widgets.css';
 import { Multiselect } from 'react-widgets' 
@@ -16,16 +16,17 @@ const Styles = styled.div`
     border: 0;
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    padding: 4%;
   }
   
-  .card-bot .card-title {
+  .card-bot .card-title-edit-product {
     margin-bottom: 2rem;
     font-size: 2rem;
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
   }
   
-  .card-bot .card-body {
+  .card-bot .card-body-edit-item {
     margin: 1rem;
   }
   
@@ -48,7 +49,7 @@ const Styles = styled.div`
   
   .form-additem .btn {
     border-radius: 1rem;
-    letter-spacing: .1rem;
+    letter-spacing: 0.1rem;
     font-weight: bold;
     padding: 0.75rem;
     transition: all 0.2s;
@@ -80,11 +81,11 @@ const Styles = styled.div`
     color: white;
     width: 40%;
     margin-top: 30%; */
-    margin-top: 10%;
-    margin-left: -1%;
+    margin-top: 80px;
+    margin-left: -1.3%;
     justify-content:center;
     position: absolute;
-    padding: 10px 20px;
+    padding: 10px 15px;
     background-color: #fca311;
     border: none;
     border-radius: 0.75rem;
@@ -102,7 +103,7 @@ const Styles = styled.div`
     text-align: center;
     display: grid;
     /* grid-template-columns: repeat(3, 1fr); */
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     grid-column-gap: 10px;
     margin-bottom: 1%;
   }
@@ -110,11 +111,38 @@ const Styles = styled.div`
   .showimg-newinv img{
     border: 1px solid #ddd;
     border-radius: 0.75rem;
-    height: 150px;
-    width: 150px;
+    height: 140px;
+    width: 140px;
     object-fit: cover;
+    padding : 10px;
+    border: 2px dashed #fca311;
+    margin-bottom : 10px;
   }
   
+  @media only screen and (max-width: 1200px){
+    .showimg-newinv{
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 4%;
+    }
+  } 
+
+  @media only screen and (max-width: 760px){
+    .showimg-newinv{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 1%;
+    }
+  } 
+
+  @media only screen and (max-width: 690px){
+    .showimg-newinv{
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 5%;
+    }
+  } 
+
   /* .showimg-newinv img:hover{
     z-index: 2;
     width:100%
@@ -127,6 +155,25 @@ const Styles = styled.div`
     transition: all 200ms ease-in;
     transform: scale(1.2);
   } */
+
+  .upload-newinv{
+    /* display:flex; */
+    
+    background-color: #feecd1;
+    border: 2px dashed #fca311;
+    border-radius : 0.75rem;
+    text-align:center;
+    height: 140px;
+    width: 140px;
+    
+  }
+  @media only screen and (max-width: 760px){
+    .showimg-newinv{
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 5%;
+    }
+  }
 
   .upload-newinv{
     /* display:flex; */
@@ -159,8 +206,48 @@ const Styles = styled.div`
     
   }
 
+  .req-icon{
+    color: red;
+    font-size: 1rem;
+  }
+
+  .button-to-inventory i {
+  /* display: flex; */
+  /* float:right; */
+  /* color: red; */
+  font-size: 18px;
+  }
+  .button-to-inventory i {
+  /* display: flex; */
+  /* float:right; */
+  /* color: red; */
+  font-size: 18px;
+  }
+
+.preview-img .btn-delete-img-edit {
+  margin-top: -30px;
+  background-color: transparent;
+  position: relative;
+  float: right;
+  border-style: none;
+}
+
+.btn-delete-img-edit {
+  position : relative;
+  top: 20px;
+  right: -10px;
+}
+
+.btn-delete-img-edit i{
+    font-size: 18px;
+    color: red;
+    /* float: right; */ 
+}
+
+
 `;
 let fileimg = []
+
 export default class Product_edit extends React.Component {
   constructor(props) {
     super(props);
@@ -188,6 +275,50 @@ export default class Product_edit extends React.Component {
     this.OnDeletepic = this.OnDeletepic.bind(this);
     
   }
+
+  deleteOldImg (index) {
+   console.log(index)
+
+   
+   
+     const OldImg = this.state.url_preview
+     const result = OldImg.filter(img => img != index);
+     console.log(result)
+ 
+   
+    
+
+    // OldImg.pop(index)
+    
+    this.setState({
+      url_preview: result,
+      Image : result
+    })
+    // console.log(this.state.url_preview)
+    
+  }
+
+  deleteImg (img,index) {
+    
+    
+    const preview_image = this.state.imagesPreviewUrl
+    const preview_img = preview_image.filter(e => e != img);
+    
+    const data_image = fileimg
+    
+    const data_img = data_image.filter(e => e != data_image[index]);
+   fileimg = data_img
+  
+
+   // OldImg.pop(index)
+   
+   this.setState({
+     imagesPreviewUrl: preview_img
+     
+   })
+   // console.log(this.state.url_preview)
+   
+ }
 
   handleCreate(name) {
     let { options, value } = this.state;
@@ -260,13 +391,13 @@ export default class Product_edit extends React.Component {
           data.append('file' + [i], fileimg[i]);
       }
 
-
+      
     // data.append('file', file);
       data.append('item_name', this.item_name.value);
       data.append('type', JSON.stringify(this.state.value));
       data.append('amount', this.amount.value);
       data.append('creator', localStorage.getItem('user_id'))
-      console.log(this.state.Image)
+     
       data.append('Image', this.state.Image)
       data.append('des', this.des.value);
       data.append('price', this.price.value);
@@ -313,7 +444,7 @@ export default class Product_edit extends React.Component {
           this.setState({ Image: data.img });
           this.setState({ des: data.des });
           this.setState({ price: data.price });
-          console.log(this.state.Image)
+          // console.log(this.state.Image)
         });
         
       });
@@ -341,39 +472,61 @@ export default class Product_edit extends React.Component {
       return (
         <Styles>
           <div className="container">
-            <div className="col-sm-10 col-md-9 col-lg-8 mx-auto">
+            <div className="col-12 col-lg-9 mx-auto">
               <div className="card card-bot">
-                <div className="card-body">
-                  <h5 className="card-title text-center mt-3 mb-4">Edit Item</h5>
+              <Link to={"/bot/"+ this.props.match.params.bot_id +"/inventory/product_detail/"+this.props.match.params.product_id} className="button-to-inventory">
+                  <i class="fas fa-long-arrow-left"></i>
+                </Link>
+                <div className="card-body-edit-item">
+                  <h5 className="card-title-edit-product text-center mt-3 mb-4">Edit Item Details</h5>
                   <form className="form-additem" onSubmit={this.handleUploadImage}>
                    <div className="title_addinv">
-                          <p className="col">Upload image</p>
+                          <p className="">Upload image <span className="req-icon"> *</span></p>
                           <div className="line-inv"></div>
                     </div> 
                     <div className="showimg-newinv form-row d-flex justify-content-between">
-                          <div className="col showimg-newinv">
-                            <div className="col upload-newinv">
+                          <div className="showimg-newinv">
+                            <div className="upload-newinv">
                                 <input accept="image/x-png,image/gif,image/jpeg" ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
                             </div>
-                              {this.state.url_preview.map((url_preview) => {
-                    
-                                return [<img key={url_preview} alt='previewImg' src={"/images/bucket/"+url_preview} /> ]
+                              {this.state.url_preview.map((url_preview,index) => {
+                                if(url_preview == ""){
+
+                                }
+                                else{
+
+                                
+                                return [ (
+                                <div className="preview-img"> 
+                                
+                                  <div className="btn-delete-img-edit">
+                                        <i className="fas fa-times-circle" onClick={() => this.deleteOldImg(url_preview) }></i>
+                                  </div>
+                                    <img key={url_preview} alt='previewImg' src={"/images/bucket/"+url_preview} />
+                                  </div> 
+                                  )]}
                               })}
-                                {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
-                                   
-                                    return <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
-                                })}
+                                {this.state.imagesPreviewUrl.map((imagesPreviewUrl,index) => {
+                                return (
+                                <div className="preview-img">
+                                    <div className="btn-delete-img-edit">
+                                          <i className="fas fa-times-circle"  onClick={() => this.deleteImg(imagesPreviewUrl,index) } ></i>
+                                      </div>
+                                      <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
+                                </div> 
+                                )})}
                           </div>  
                     </div>  
                     
                           
                           <div className="title_addinv">
-                            <p className="col">Item descriptions</p>
+                            <p className="">Item descriptions</p>
                             <div className="line-inv"></div>
                           </div>
                           <div className="row">
                               <div className="col">
-                                <label className="form-label">Item name *</label>
+                                <label className="form-label">Item name</label>
+                                <span className="req-icon"> *</span>
                                 <input type="text" name="item_name" value={this.state.item_name} ref={(ref) => { this.item_name = ref; }} onChange={this.handleChange} className="form-control"required />
                               </div>          
                               { this.state.showMessage &&  
@@ -386,7 +539,8 @@ export default class Product_edit extends React.Component {
                                         </div>
                                   }                
                               <div className="col">
-                                <label className="form-label">Price *</label>
+                                <label className="form-label">Price</label>
+                                <span className="req-icon"> *</span>
                                 <input type="number" min="0" step="any" name="price" value={this.state.price} ref={(ref) => { this.price = ref; }} onChange={this.handleChange} className="form-control"required />
                               </div>
                           </div>
@@ -394,6 +548,7 @@ export default class Product_edit extends React.Component {
                           <div className="row">
                             <div class="col mt-2"  >
                               <label for="inputtype" class="form-label" required>Type</label>
+                              <span className="req-icon"> *</span>
                               <Multiselect
                                 data={this.state.options}
                                 value={this.state.value}
@@ -406,7 +561,8 @@ export default class Product_edit extends React.Component {
                               
                             </div>
                             <div className="col mt-2">
-                              <label for="inputAmout" className="form-label" required>Amount *</label>
+                              <label for="inputAmout" className="form-label" required>Amount</label>
+                              <span className="req-icon"> *</span>
                               <input type="text" pattern="\d*"  name="amount" className="form-control" id="inputfirstname" value={this.state.amount} ref={(ref) => { this.amount = ref; }} onChange={this.handleChange} />
                             </div>
                          </div> 
@@ -417,7 +573,7 @@ export default class Product_edit extends React.Component {
                     
                     <hr className="mt-5"></hr>
                     <div className="btn-submitinv">
-                      <button className="btn btn-success text-uppercase" onSubmit={this.handleUploadImage} type="submit">Submit</button>
+                      <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Edit</button>
                     </div>
                   </form>
 

@@ -114,7 +114,9 @@ const Styles = styled.div`
 
   .req_infobot {
     color: red;
+    font-size: 1rem;
   }
+
 `;
 
 

@@ -9,7 +9,7 @@ const Styles = styled.div`
     min-height: 92vh;
 }
 .learned-page .container-fluid {
-    padding: 40px;
+    padding: 20px 40px;
     width: 100%;
     overflow:hidden;
 }
@@ -37,6 +37,29 @@ const Styles = styled.div`
     /* border: 1px solid #ececec; */
     overflow-x: auto;
 }
+
+.bot-name-on-page {
+    
+    margin-bottom: 10px;
+    /* width: 150px; */
+    /* max-width: 800px; */
+    width: max-content;
+    border-radius: 1rem;
+  }
+
+  .bot-name-on-page h4{
+    position: relative;
+    right: 0;
+    font-size: 14px;
+    font-weight: 600;
+    /* width: 500px; */
+    /* max-width: 500px; */
+    color: #fff;
+    /* border: 2px solid #fca311; */
+    background-color : #fca311;
+    border-radius: 1rem;
+    padding: 5px 20px; 
+  }
 `
 // const mapStateToProps = (state) =>{
 //     return {
@@ -88,6 +111,9 @@ function Learned(props){
         <div className="learned-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"trained"}  />
             <div className="container-fluid">
+                <div className="bot-name-on-page">
+                    <h4> Bot name :</h4>
+                </div>
                 <div className="learned-title-page d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight' id="trained-header">Trained</h2>
                 </div>

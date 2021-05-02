@@ -9,7 +9,7 @@ import Delete_table from "../Delete_table";
 
 const Styles = styled.div`
 
-  .table-show-all > div.container {
+  .table-show-all > div.container { 
     /* max-width: max-content; */
     margin: 0;
     padding: 20px;
@@ -62,7 +62,7 @@ const Styles = styled.div`
 
   .trained-Word{
     background-color: transparent;
-    border-radius: 25px;
+    border-radius: 25px; 
     padding-left:15px;
     width: 300px;
   }
@@ -71,8 +71,6 @@ const Styles = styled.div`
 .table tbody tr:nth-of-type(even){
         background-color: #fafafc;
     }
-
-
 
 
 .button-trained-word .buttondeleteWord{
@@ -93,13 +91,13 @@ const Styles = styled.div`
   }
 
   .buttonaddWord{
-  padding: 7px 15px;
-  font-size: 12px;
-  border-radius: 25px;
-  border: 1px solid #0078ff;
-  transition: 0.5s;
-  background-color: #0078ff;
-  color: #fff;
+    padding: 7px 15px;
+    font-size: 12px;
+    border-radius: 25px;
+    border: 1px solid #0078ff;
+    transition: 0.5s;
+    background-color: #0078ff;
+    color: #fff;
 }
 
 .buttonaddWord:hover{
@@ -107,6 +105,7 @@ const Styles = styled.div`
 }
 
 .pagination{
+  z-index : -1;
   justify-content:space-between;
   width:100%;
   margin-bottom: 0;

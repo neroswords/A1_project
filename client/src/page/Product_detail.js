@@ -9,10 +9,11 @@ const Styles = styled.div`
     margin-top: 2%;
 }
 .card-pd{
-    padding: 20px;
+    padding: 18px;
     border: 0;
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    min-height: 70vh;
 }
   
 .card-pd .card-pd-body {
@@ -25,7 +26,7 @@ const Styles = styled.div`
 
 .btn-top-pd .back-pd{
     float:left;
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
 }
 
@@ -44,18 +45,20 @@ const Styles = styled.div`
 } */
 
 .pd-delete {
+    font-size :14px;
     float: right;
     color: black;
     border-radius: 1rem;
     margin-left: 1%;
-    padding: 1% 2%;
+    padding: 5px 10px;
 }
 
 .pd-edit{
+    font-size :14px;
     float: right;
     color: black;
     border-radius: 1rem;
-    padding: 1% 2%;
+    padding: 5px 15px;
     /* background-color: #aecaf9; */
 }
 
@@ -78,6 +81,10 @@ const Styles = styled.div`
     /* float:right; */
     margin: 2%;
     font-weight: bolder;
+}
+
+.pd-detail {
+    padding: 0 50px 0 50px ;
 }
 
 .pd-detail .pd-name{
@@ -126,14 +133,14 @@ const Styles = styled.div`
     position: relative;
 }
 
-.line-pd{
+/* .line-pd{
     margin-top: 8%;
     margin-bottom: 3%;
     width: 100%;
     height: 3px;
     background: #115dd8;
     background: linear-gradient(to right, #115dd8 0%,#115dd8 20%,#ddd 20%,#ddd 100%);
-}
+} */
 
 .card__footer .recommend-pd{
     float:left;
@@ -163,13 +170,15 @@ const Styles = styled.div`
     height: auto;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
     text-align: center;
     /* grid-template-rows: 90px 90px; */
 }
 
 .img-pd img {
-    width: 150px;
-    height: 150px;
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
 }
 
 `
@@ -197,7 +206,7 @@ function Product_datail(botID){
     return(
         <Styles>
                 <div className="container">
-                    <div className="col-sm-10 col-md-9 col-lg-8 mx-auto">
+                    <div className="col-sm-10 col-md-9 col-lg-12 mx-auto">
                         <h3 className="head-pd">Product Details</h3>
                     <div className="card card-pd">
                         <div className="card-pd-body">

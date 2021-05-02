@@ -232,6 +232,7 @@ function DragText(props){
             <Styles>
             <div className="group-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"group"} />
+            <h4> Group name :</h4>
             <div className="container-fluid">
                 <div className="group-title container-top d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group</h2>
