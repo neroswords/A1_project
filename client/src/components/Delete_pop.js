@@ -9,7 +9,7 @@ import ImageWarnning from "./Images/warnning2.png";
 const Background = styled.div`
   width: 100%;
   height: 100%;
-  background: blue;
+  /* background: blue; */
   position: absolute;
   display: flex;
   justify-content: center;
@@ -19,6 +19,7 @@ const Background = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 1000;
 `;
 
 const ModalWrapper = styled.div`
@@ -26,6 +27,7 @@ const ModalWrapper = styled.div`
   background-color: white;
   padding: 3rem;
   border-radius: 0.5rem;
+  z-index: 10000;
 `;
 
 const CloseModalButton = styled(MdClose)`

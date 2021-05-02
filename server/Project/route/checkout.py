@@ -242,6 +242,8 @@ def FbCheck_out(botID,userID):
 
     )
 
+
+
 @checkout.route("/<botID>", methods=['GET'])
 def check_out(botID):
     cart_collection = mongo.db.carts

@@ -69,7 +69,7 @@ function Loged_in_nav(props) {
       <div
         className={"show-user " + (main == "#main" ? "click-show-user" : "")}
       >
-        <a
+        <a name="validate-user" 
           className="click"
           href={"/bot_list/" + localStorage.getItem("user_id") + "#main"}
         >
@@ -81,6 +81,7 @@ function Loged_in_nav(props) {
       <NavItem flag = {false}icon={<CaretIcon />}>
         <DropdownMenu></DropdownMenu>
       </NavItem>
+      
     </Navbar_real>
   );
 }
@@ -162,8 +163,11 @@ useEffect(() => {
 
   useEffect(() => {
     fetch('/profile/' + localStorage.getItem("user_id") + '/notification')
-    .then(res => res.json().then(data => {
-            setNoti(data)
+    .then(res => res.json().then(data => { if (data != 0) {
+            setNoti(data)}
+        else {
+          setNoti("")
+        }
         }))
   },[callnumber]);
 
@@ -171,7 +175,7 @@ useEffect(() => {
 
   const getNoti = () => {
 
-    let audio = new Audio("/test.mp3")
+    // let audio = new Audio("/test.mp3")
     socket.on("connect", function (room) {
       socket.emit("join_room_noti", {
         userID: localStorage.getItem("user_id"),
@@ -222,17 +226,26 @@ useEffect(() => {
     setShownoti(info.map(msg => (
       
         <li> 
-               
-             
+              
                {/* <Link to={"/chat/"+msg['botID']['$oid']+"/live_chat/"+msg['sender_id']}  > */}
-               <div className={msg['readed'] == "read"? 'img-noti-iread': "img-noti-i"} onClick={()=>toggleClass(msg)} > 
+               <div className={msg['readed'] == "read"? 'msg-noti-iread': "msg-noti-i"} onClick={()=>toggleClass(msg)} > 
                 {/* <div className={isActiveClass ? 'img-noti-i': 'img-noti-inew'} onClick={toggleClass(this)} > */}
-                  <img  src={msg['pictureUrl']}></img> 
-                    {msg['message']} {msg['botID']['$oid']}
-                    </div>
+                
+                  <img className="msg-noti-all" src={msg['pictureUrl']}></img>
+
+                    <div className="noti-show-info-user">
+                    {msg['readed'] == "unread"? <div className="noti-show-new"><p>NEW</p></div>: " "}
+                    <p className="noti-show-name">{msg['sender']}</p>  
+                    <p className="noti-show-msg">{msg['message']}</p>
+                    <p className="noti-show-time">11.20 น.</p>
+                    {/* {msg['message']} {msg['botID']['$oid']} */}
+
+                    </div> 
+                </div>
                    {/* </Link> */}
-         
+                
             </li>
+          
             )
    )
    
@@ -243,9 +256,10 @@ useEffect(() => {
   }
 
   const toggleClass = (msg) => {
-    setIsActive(prev => !prev)
-    
+    // setIsActive(prev => !prev)
+    // console.log("nampun")
     // for (var i in msg) {
+      console.log("/profile/" + localStorage.getItem("user_id") + "/notification/get")
       msg['readed'] = "read"
        fetch("/profile/" + localStorage.getItem("user_id") + "/notification/get", {
           method: "POST",
@@ -275,41 +289,42 @@ useEffect(() => {
       //    break; //Stop this loop, we found it!
       // }
     //}
-    window.location.href = "/chat/"+msg['botID']['$oid']+"/live_chat/"+msg['sender_id']
+    // window.location.href = "/chat/"+msg['botID']['$oid']+"/live_chat/"+msg['sender_id']
     
   };
   return (
+    
     <li className="nav-item-real">
-      <div className="menu-continer">
-            <div onClick={onClick} className="menu-trigger">
-            <i class="far fa-bells">{noti}
-      </i>
+            
+            <div onClick={onClick} className="menu-trigger-noti">
+              <i class="fas fa-comments-alt"></i>
             </div>
+              <div className="number-noti"><p className="show-number">{noti}</p></div>
             <div
                 ref={dropdownRef}
                 className={`menu ${isActive ? "active" : "inactive"}`}
                 >
+                  <div className="dropdown-noti">
                 <ul>
+                <p>Chat Notification</p>
                 {shownoti.length > 0 && 
                           shownoti.map(msg => (
-                             <div className="chat__item ">
-                                  <p className="msg-all">{msg}</p>
-                            </div>  
+                            <p className="noti-each-msg">{msg}</p>
+                            
                         ))}
             
                     
                     <li>
-                        <a onClick={OnopenForm}><i class="fas fa-link"></i> Connect </a>
+                        {/* <a onClick={OnopenForm}><i class="fas fa-link"></i> Connect </a> */}
                     {/* <a href={'/bot/'+botData._id.$oid+'/connect'} ><i class="fas fa-link"></i> Connect</a> */}
                     {/* <Facebookform showForm={showForm} setShowForm={setShowForm} showIdbot={showIdbot}></Facebookform> */}
                     </li>
-                    <li>
-                       
-                    </li>
+                    
                 </ul>
-               
-            </div>
-        </div> 
+                </div> 
+          </div>  
+          
+        
       {/* <a href="#" className="icon-button-real" name="user-dropdown" onClick={() => setOpennoti(!open)}>
         <i class="far fa-bells">{noti}
       </i>

@@ -24,7 +24,28 @@ const Styles = styled.div`
   margin-bottom: 20px;
 }
 
+.bot-name-on-page {
+    
+    margin-bottom: 10px;
+    /* width: 150px; */
+    /* max-width: 800px; */
+    width: max-content;
+    border-radius: 1rem;
+  }
 
+  .bot-name-on-page h4{
+    position: relative;
+    right: 0;
+    font-size: 14px;
+    font-weight: 600;
+    /* width: 500px; */
+    /* max-width: 500px; */
+    color: #fff;
+    /* border: 2px solid #fca311; */
+    background-color : #fca311;
+    border-radius: 1rem;
+    padding: 5px 20px; 
+  }
 
 `
 
@@ -87,7 +108,6 @@ const Styles = styled.div`
 function Chat(props){
     const [customerList, setCustomerList] =  useState([])
     const [customer, setCustomer] =  useState(props.match.params.customer_id)
-    const [toggleState, setToggleState] = useState()
 
     const [toggleState, setToggleState] = useState("All");
     const toggleTab = (index) => {
@@ -109,8 +129,11 @@ function Chat(props){
             <div className="chat-page">
                     <Navbar_member botID = {props.match.params.bot_id} path={"chat"} />
                 <div className="container-fluid">
+                <div className="bot-name-on-page">
+                        <h4> Bot name :</h4>
+                    </div>
                     <div className="main-chatlist row">
-                
+                    
                         <div className="main-chatlist col-3">
                             <div className="chatlist__heading">
                                 <h2>Chats</h2>

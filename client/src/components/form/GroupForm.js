@@ -22,12 +22,31 @@ function GroupForm(props) {
     const handleSubmit = e => {
         e.preventDefault();
 
-        props.onSubmit({
+        if(input == ''){
+            alert("please input yout text")
+        }
+        else{
+            props.onSubmit({
             id: Math.floor(Math.random() * 10000),
             text: input,
         });
-        setInput('');
+            setInput('');
+        }
+        
+
+        
     };
+
+    const _handleImageChange = (e) =>{
+        console.log(e)
+        if (e.target.files[0].type != "image/jpeg" && e.target.files[0].type != "image/png" ){
+            alert("Only PNG or JPG is accepted")
+        }
+        else{
+            setFile(e.target.files[0])
+        }
+        
+    }
 
 
     const insertImage = (e) => {
@@ -36,7 +55,7 @@ function GroupForm(props) {
 
         console.log(file);
         if(file == null){
-            alert('please select file')
+            alert('Please select PNG or JPEG file')
         }
         else{
             props.onSubmit({
@@ -88,7 +107,7 @@ function GroupForm(props) {
                                     />
                                     <button onClick={handleSubmit} className='todo-button'>
                                         Add
-                        </button>
+                                    </button>
                                 </>
                             )}
 
@@ -97,7 +116,7 @@ function GroupForm(props) {
                         :
                         //form upload image 
                         <form onSubmit={insertImage}>
-                            <input className='todo-input-img' type="file" onChange={e => setFile(e.target.files[0])}></input>
+                            <input accept="image/x-png,image/gif,image/jpeg" className='todo-input-img' type="file" onChange={e => _handleImageChange(e)}></input>
                             <button className='todo-button-img' onClick={insertImage}>
                                 Add
                             </button>

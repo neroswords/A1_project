@@ -19,7 +19,7 @@ const Styles = styled.div`
   }
   table {
     font-family: 'Roboto',sans-serif;
-    margin: 10px 0;
+    margin: 7px 0;
     font-size: 1em;
     text-align: center;
     border: 1px solid #efeff5;
@@ -32,7 +32,7 @@ const Styles = styled.div`
     }
 
     th{
-      margin: 0;
+      margin-top: 0;
       /* padding: 12px 15px; */
       border: 1px solid #efeff5;
       background-color: #393939;
@@ -136,7 +136,8 @@ const Styles = styled.div`
   height: 30px;
   border-radius: 25px;
   border: .5px solid #A9A9A9;
-  margin-bottom: 5%;
+  margin-bottom: 2%;
+  margin-top: 25px;
 }
 
 input::placeholder{
@@ -350,26 +351,26 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     hooks => {
       hooks.visibleColumns.push(columns => [
 
-        {
-          id: 'selection',
-          Header: ({ getToggleAllPageRowsSelectedProps }) => (
-            <div>
-              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+        // {
+        //   id: 'selection',
+        //   Header: ({ getToggleAllPageRowsSelectedProps }) => (
+        //     <div>
+        //       <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
 
-            </div>
-          ),
+        //     </div>
+        //   ),
 
-          Cell: ({ row }) => (
+        //   Cell: ({ row }) => (
 
-            <div >
+        //     <div >
 
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+        //       <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
 
 
-            </div>
-          ),
+        //     </div>
+        //   ),
 
-        },
+        // },
         ...columns,
 
       ])
