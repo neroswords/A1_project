@@ -10,7 +10,6 @@ import ast
 import json
 import time
 import string
-
 import requests
 from Project.message import item_list_flexmessage
 from Project.extensions import mongo, JSONEncoder,server_url

@@ -89,7 +89,3 @@ def delete_inventory(botID,productID):
             return {"message": "delete successfully"}
         else:
             return {"message": "delete unsuccessfully"}
-
-        
-
-

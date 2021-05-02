@@ -250,6 +250,7 @@ const Styles = styled.div`
 
 `;
 let fileimg = []
+
 export default class Product_edit extends React.Component {
   constructor(props) {
     super(props);
@@ -277,6 +278,50 @@ export default class Product_edit extends React.Component {
     this.OnDeletepic = this.OnDeletepic.bind(this);
     
   }
+
+  deleteOldImg (index) {
+   console.log(index)
+
+   
+   
+     const OldImg = this.state.url_preview
+     const result = OldImg.filter(img => img != index);
+     console.log(result)
+ 
+   
+    
+
+    // OldImg.pop(index)
+    
+    this.setState({
+      url_preview: result,
+      Image : result
+    })
+    // console.log(this.state.url_preview)
+    
+  }
+
+  deleteImg (img,index) {
+    
+    
+    const preview_image = this.state.imagesPreviewUrl
+    const preview_img = preview_image.filter(e => e != img);
+    
+    const data_image = fileimg
+    
+    const data_img = data_image.filter(e => e != data_image[index]);
+   fileimg = data_img
+  
+
+   // OldImg.pop(index)
+   
+   this.setState({
+     imagesPreviewUrl: preview_img
+     
+   })
+   // console.log(this.state.url_preview)
+   
+ }
 
   handleCreate(name) {
     let { options, value } = this.state;
@@ -349,13 +394,13 @@ export default class Product_edit extends React.Component {
           data.append('file' + [i], fileimg[i]);
       }
 
-
+      
     // data.append('file', file);
       data.append('item_name', this.item_name.value);
       data.append('type', JSON.stringify(this.state.value));
       data.append('amount', this.amount.value);
       data.append('creator', localStorage.getItem('user_id'))
-      console.log(this.state.Image)
+     
       data.append('Image', this.state.Image)
       data.append('des', this.des.value);
       data.append('price', this.price.value);
@@ -402,7 +447,7 @@ export default class Product_edit extends React.Component {
           this.setState({ Image: data.img });
           this.setState({ des: data.des });
           this.setState({ price: data.price });
-          console.log(this.state.Image)
+          // console.log(this.state.Image)
         });
         
       });
@@ -447,22 +492,29 @@ export default class Product_edit extends React.Component {
                             <div className="upload-newinv">
                                 <input accept="image/x-png,image/gif,image/jpeg" ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
                             </div>
-                              {this.state.url_preview.map((url_preview) => {
+                              {this.state.url_preview.map((url_preview,index) => {
+                                if(url_preview == ""){
+
+                                }
+                                else{
+
+                                
                                 return [ (
                                 <div className="preview-img"> 
-                                  <button className="btn-delete-img-edit">
-                                        <i className="fas fa-times-circle"></i>
-                                  </button>
+                                
+                                  <div className="btn-delete-img-edit">
+                                        <i className="fas fa-times-circle" onClick={() => this.deleteOldImg(url_preview) }></i>
+                                  </div>
                                     <img key={url_preview} alt='previewImg' src={"/images/bucket/"+url_preview} />
                                   </div> 
-                                  )]
+                                  )]}
                               })}
-                                {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
+                                {this.state.imagesPreviewUrl.map((imagesPreviewUrl,index) => {
                                 return (
                                 <div className="preview-img">
-                                    <button className="btn-delete-img-edit">
-                                          <i className="fas fa-times-circle"></i>
-                                      </button>
+                                    <div className="btn-delete-img-edit">
+                                          <i className="fas fa-times-circle"  onClick={() => this.deleteImg(imagesPreviewUrl,index) } ></i>
+                                      </div>
                                       <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
                                 </div> 
                                 )})}
