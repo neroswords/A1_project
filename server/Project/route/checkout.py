@@ -169,6 +169,13 @@ def charge():
     omise.api_version = current_app.config.get("OMISE_API_VERSION")
     omise.api_main = current_app.config.get("OMISE_API_BASE")
     define_cart = cart_collection.find_one({'$and':[{'userID':userID},{'botID':ObjectId(botID)}]})
+    inventory_collection = mongo.db.inventory
+    for item in define_cart['cart']:
+        item_define = inventory_collection.find_one({"_id":item['item_id']})
+        if (item_define['amount'] - item['amount']) >= 0:
+            inventory_collection.update_one({"_id":item['item_id']},{"$inc": {"amount":item['amount']*(-1)}})
+        else:
+            return render_template('no_item.html',liffId=bot_define['liff_id'],item=item['item_name'])
     order_id = str(define_cart['_id'])
     try:
         if email and token:

@@ -431,7 +431,6 @@ def detail(botID, itemId, userID):
         data = list(inventory_cursor)
         return render_template('Item_Detail.html', data=data, botID=botID, itemId=itemId, userID=userID)
     if request.method == 'POST':
-        print("POSTTTTTTTTTTTTTT")
         item_Id = itemId
         cart_collection = mongo.db.carts
         bot_collection = mongo.db.bots
@@ -451,8 +450,6 @@ def detail(botID, itemId, userID):
         if(cart_define != None):
             amount = cart_define['cart']
             old_price = cart_define['total']
-            print("oldprice = ",old_price)
-            print("total ob =",total_ob)
             price = 0
             for idx, val in enumerate(cart_define['cart']):
                 if(str(item_Id) == str(val['itemid'])):
@@ -472,7 +469,6 @@ def detail(botID, itemId, userID):
                 newvalues = {"$set": {"total":price}}
                 cart_collection.update_one(myquery, newvalues)
         if(not flag):
-            print("not flag")
             cart_collection_define = cart_collection.find(
                 {'botID': ObjectId(botID)})
             flag = False
@@ -577,14 +573,3 @@ def save_message(message,message_type,sender,sender_id,sender_type,room,botId,us
         info_update = { "$set": {"notification" : count}}
         done = users_collection.update_one({'_id': ObjectId(userID)}, info_update)
 
-
-# @socketio.on('join_room')
-# def handle_join_room_event(data):
-#     room_id = data['bot']+"&"+data['customer']
-#     join_room(room_id)
-#     # socketio.emit('join_room_announcement', data, room=data['room'])
-
-# @socketio.on('join_room_noti')
-# def handle_join_room_noti(data):
-#     join_room(data['userID'])
-#     # socketio.emit('join_room_announcement', data, room=data['room'])

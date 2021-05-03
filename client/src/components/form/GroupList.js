@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import GroupForm from './GroupForm';
 import Todo from './Todo';
 
-function GroupList({groupID, botID}) {
+function GroupList({groupID, botID, groupname}) {
   const [todos, setTodos] = useState([]);
   // const [file, setFile] = useState([]);
 
@@ -78,6 +78,7 @@ function GroupList({groupID, botID}) {
           completeTodo={completeTodo}
           removeTodo={removeTodo}
           updateTodo={updateTodo}
+          name={groupname}
         />
       </div>
     </>

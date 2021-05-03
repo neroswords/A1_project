@@ -30,20 +30,7 @@ bot = Blueprint("bot",__name__)
 UPLOAD_FOLDER = './Project/static/images/bot/bot_pic'
 UPLOAD_FOLDER_ITEMS = './Project/static/images/bucket'
 UPLOAD_FOLDER_Group = './Project/static/images/bot/group'
-# @socketio.on('message')
-# def webhook_message(message, userID, botID):
-#     socketio.emit("message", "Server message", room='my_room')
-def create_cover_sheet(date,botID,customerID):
-    bot_collection = mongo.db.bots
-    customer_collection = mongo.db.customers
-    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
-    customer_define = customer_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
-    canvas = Canvas("cover_"+botID+"&"+customerID+"_"+date+".pdf")
 
-def create_list_sheet(date,botID,customerID):
-    cart_collection = mongo.db.carts
-    cart_define = cart_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
-    canvas = Canvas("itemsList_"+botID+"&"+customerID+"_"+date+".pdf")
 
 def save_message(message,message_type,sender,sender_id,sender_type,room,botId,userID,pictureUrl,bot_name):  #sender=Id(bot or user), sender_type=bot or facebookuser or line, message_type = text or image
     message_collection = mongo.db.messages
@@ -72,9 +59,6 @@ def save_message(message,message_type,sender,sender_id,sender_type,room,botId,us
                 count = count+1
         info_update = { "$set": {"notification" : count}}
         done = users_collection.update_one({'_id': ObjectId(userID)}, info_update)
-# def save_notification(message,message_type,sender,sender_id,sender_type,room,bot_name):  #sender=Id(bot or user), sender_type=bot or facebookuser or line, message_type = text or image
-#     notification_collection = mongo.db.notification
-#     notification_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now(),"bot_name":bot_name})
 
 
 def push_message(data):
@@ -85,18 +69,6 @@ def push_message(data):
     line_bot_api = LineBotApi(bot_define['access_token'])
     line_bot_api.push_message(data['customerID'], TextSendMessage(text=data['message']))
     save_message(message=data["message"],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(data['botID']),sender_type="bot",room=data['botID']+'&'+data['customerID'],botId=data['_id'],userID=bot_define['owner'])
-
-
-@socketio.on('join_room')
-def handle_join_room_event(data):
-    room_id = data['bot']+"&"+data['customer']
-    join_room(room_id)
-    # socketio.emit('join_room_announcement', data, room=data['room'])
-
-@socketio.on('join_room_noti')
-def handle_join_room_noti(data):
-    join_room(data['userID'])
-    # socketio.emit('join_room_announcement', data, room=data['room'])
 
 
 
@@ -280,7 +252,6 @@ def webhook(platform, botID):
                     data = {"message":payload['events'][0]['message']['text']}
                     timestamp = datetime.datetime.timestamp(datetime.datetime.now())
                     socket_noti({"bot_name": bot_define['bot_name'],"readed":"unread", "message":data["message"], "sender_id":sender_define['userID'], "botID":{"$oid":str(bot_define['_id'])},"pictureUrl":profile.picture_url,"sender":profile.display_name,"type":"customer","readed":"unread",'date':int(timestamp),"sender_type": platform},userID=str(bot_define['owner']))
-                    # socketio.emit("message_from_webhook", {"message":data["message"], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"type":"customer"},room=botID+'&'+sender_define['userID'])
                     socket_api({"message":data["message"], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"sender_type":"customer"},str(bot_define['_id']),sender_define['userID'])
                     res = stateHandler(sender_id=sender_define['userID'], botID=botID, message= data, confident=bot_define['confident'])
                     save_message(message=data['message'],bot_name=bot_define['bot_name'],message_type="text",sender=profile.display_name,sender_id=sender_define['userID'],sender_type="line",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
@@ -289,20 +260,17 @@ def webhook(platform, botID):
                     res = stateHandler(sender_id=sender_define['userID'], botID=botID, postback= data)
                 elif message_type == 'image':
                     data = {"image":payload['events'][0]['message']['contentProvider']['originalContentUrl']}
-                    # socketio.emit("message_from_webhook", {"message":data["image"],"message_type":message_type, "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"type":"customer"},room=botID+'&'+sender_define['userID'])
                     socket_api({"message":data["image"],"message_type":message_type, "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"sender_type":"customer"},str(bot_define['_id']),sender_define['userID'])
                     save_message(message=data['image'],message_type=message_type,bot_name=bot_define['bot_name'],sender=profile.display_name,sender_id=sender_define['userID'],sender_type="line",room=botID+'&'+sender_define['userID'])
                     res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
                 else:
                     save_message(message="unavailable to show content",message_type="text",bot_name=bot_define['bot_name'],sender=profile.display_name,sender_id=sender_define['userID'],sender_type="line",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
                     socket_api({"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"sender_type":"customer"},str(bot_define['_id']),sender_define['userID'])
-                    # socketio.emit("message_from_webhook", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"type":"customer"},room=botID+'&'+sender_define['userID'])
                     res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
                     
 
                 if "message" in res.keys():
                     response = [TextSendMessage(text = res['message'])]
-                    # socketio.emit("message_from_response", {"message":res['message'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
                     socket_api({"message":res['message'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"sender_type":"bot"},str(bot_define['_id']),sender_define['userID'])
                     save_message(message=res['message'],message_type="text",bot_name=bot_define['bot_name'],sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
                 elif 'flex' in res.keys():
@@ -311,7 +279,6 @@ def webhook(platform, botID):
                     contents= res['flex']
                     )
                     socket_api({"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"sender_type":"bot"},str(bot_define['_id']),sender_define['userID'])
-                    # socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
                     save_message(message="unavailable to show content",bot_name=bot_define['bot_name'],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
                 elif 'image' in res.keys():
                     response = ImageSendMessage(
@@ -319,7 +286,6 @@ def webhook(platform, botID):
                         preview_image_url=res['image']
                     )
                     socket_api({"ImageURL":res['image'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"sender_type":"bot"},str(bot_define['_id']),sender_define['userID'])
-                    # socketio.emit("message_from_response", {"ImageURL":res['image'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
                     save_message(message="unavailable to show content",bot_name=bot_define['bot_name'],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
                 elif 'sticker' in res.keys():
                     response = StickerSendMessage(
@@ -327,13 +293,11 @@ def webhook(platform, botID):
                         sticker_id=res['sticker']
                     )
                     socket_api({"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"sender_type":"bot"},str(bot_define['_id']),sender_define['userID'])
-                    # socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
                     save_message(message="unavailable to show content",bot_name=bot_define['bot_name'],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
                 elif 'group' in res.keys():
                     response = []
                     for reply in res['group']:
                         if "text" == reply['type']:
-                            # socketio.emit("message_from_response", {"message":reply["data"],"message_type":"text", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
                             response.append(TextSendMessage(text = reply["data"]))
                             socket_api({"message":reply["data"],"message_type":"text", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"sender_type":"bot"},str(bot_define['_id']),sender_define['userID'])
                             save_message(message=reply["data"],bot_name=bot_define['bot_name'],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
@@ -343,7 +307,6 @@ def webhook(platform, botID):
                             contents= res['flex']
                             ))
                             socket_api({"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"sender_type":"bot"},str(bot_define['_id']),sender_define['userID'])
-                            # socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
                             save_message(message="unavailable to show content",bot_name=bot_define['bot_name'],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
                         elif 'image' == reply['type']:
                             response.append(ImageSendMessage(
@@ -351,7 +314,6 @@ def webhook(platform, botID):
                                 preview_image_url=server_url+"/images/bot/image_message/"+reply["data"]
                             ))
                             socket_api({"ImageURL":res['image'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"sender_type":"bot"},str(bot_define['_id']),sender_define['userID'])
-                            # socketio.emit("message_from_response", {"ImageURL":res['image'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
                             save_message(message=res['image'],bot_name=bot_define['bot_name'],message_type="image",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
                         elif 'sticker' == reply['type']:
                             response.append(StickerSendMessage(
@@ -359,7 +321,6 @@ def webhook(platform, botID):
                                 sticker_id=reply['stickerId']
                             ))
                             socket_api({"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"sender_type":"bot"},str(bot_define['_id']),sender_define['userID'])
-                            # socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
                             save_message(message="unavailable to show content",message_type="text",bot_name=bot_define['bot_name'],sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="line",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
                 line_bot_api.reply_message(Reply_token, response)
                 return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
@@ -528,13 +489,6 @@ def addword(botID):
             return {"message": "add done"}
     return {"message": "ok"}
 
-@bot.route('/item',methods=["GET"])
-def item():
-    return render_template('item_desc.html')
-
-
-
-
 
 @bot.route('/<botID>/additem', methods=["POST"])
 def additem(botID):
@@ -592,41 +546,26 @@ def customer_list(botID):
 
 @bot.route('/<botID>/customer/<customerID>', methods=["GET","POST"])
 def get_message(botID,customerID):
-    messages_collection = mongo.db.messages
-    customer_collection = mongo.db.customers
-    notification_collection = mongo.db.notification
-    users_collection = mongo.db.users
-    bot_collection = mongo.db.bots
-    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
-    messages_cur = messages_collection.find({"room": botID+'&'+customerID})
-    customer = customer_collection.find_one({"$and": [{"botID":ObjectId(botID)},{"userID":customerID}]})
-    messages_list = list(messages_cur)
-    notification_collection.update_one({'$and':[{"botID": ObjectId(botID)},{'sender_id':customerID}]},{"$set":{"readed":"read"}})
-    data = dumps({"message":messages_list,"profile":customer}, indent=2)
-    notification_define = notification_collection.find({"$and": [{"botID":ObjectId(botID)},{"userID":customerID}]})
-    list_cur = list(notification_define) 
-    count = 0
-    for i in list_cur:
-        if(i["readed"] == "unread"):
-            count = count+1
-    info_update = { "$set": {"notification" : count}}
-    done = users_collection.update_one({'_id':ObjectId(bot_define['owner'])}, info_update)
-    socketio.emit("message_from_noti", {"check":"rerun"},room=str(bot_define['owner']))
+    if request.method == "GET":
+        messages_collection = mongo.db.messages
+        customer_collection = mongo.db.customers
+        notification_collection = mongo.db.notification
+        users_collection = mongo.db.users
+        bot_collection = mongo.db.bots
+        bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
+        messages_cur = messages_collection.find({"room": botID+'&'+customerID})
+        customer = customer_collection.find_one({"$and": [{"botID":ObjectId(botID)},{"userID":customerID}]})
+        messages_list = list(messages_cur)
+        notification_collection.update_one({'$and':[{"botID": ObjectId(botID)},{'sender_id':customerID}]},{"$set":{"readed":"read"}})
+        data = dumps({"message":messages_list,"profile":customer}, indent=2)
+        return data
+    elif request.method == "POST":
+        data = request.get_json()
+        customer_collection = mongo.db.customers
+        customer = customer_collection.update_one({"$and": [{"botID":ObjectId(botID)},{"userID":customerID}]},{"$set":{"auto_chat":data['auto_chat']}})
+        return {"message": "switch successfully"}
+        
     
-    return data
-
-
-
-# @bot.route('/<botID>/getname', methods=["GET","POST"])
-# def getBotname(botID):
-#     bot_collection = mongo.db.bots
-#     bot_define = bot_collection.find_one({"botID": ObjectId(botID)})
-    
-#     # customer_list = list(customer_cur)
-
-#     data = dumps(bot_define['bot_name'], indent=2)
-#     return data
-
 
 
 @bot.route('/<botID>/dashboard/<type>', methods=['GET'])

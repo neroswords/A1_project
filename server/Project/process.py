@@ -200,7 +200,7 @@ def commandsHandler(**kwargs):
             customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"name"}})
             if 'fullname' in customer_define.keys():
                 return {"flex":json.loads(confirm_flexmessage(customer_define['fullname'])),"alt":"ยืนยันชื่อ-นามสกุล"}
-            return {"message":mapping_define['details'][0]['answer']}
+            return objectReader(mapping_define['details'][0]['answer'],kwargs['botID'])
         elif commd[1] == "false":
             cart_collection.delete_one({'$and':[{'userID':kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]})
             customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"none"}})
@@ -214,7 +214,7 @@ def commandsHandler(**kwargs):
                 customer_collection.update_one(myquery,newvalues)
                 if 'address' in customer_define.keys():
                     return {"flex":json.loads(address_flex(customer_define['address'])),"alt":"ยืนยันที่อยู่"}
-                return {'message':mapping_define['details'][1]['answer']}
+                return objectReader(mapping_define['details'][1]['answer'],kwargs['botID'])
             elif commd[1] == "false":
                 customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
                 return {'message':'เชิญเลือกซื้อของต่อได้เลยครับ'}
@@ -228,7 +228,7 @@ def commandsHandler(**kwargs):
                 customer_collection.update_one(myquery, newvalues)
                 if 'tel' in customer_define.keys():
                     return {'flex': json.loads(tel_flexmessage(customer_define['tel'])),"alt":"ยืนยันเบอร์โทร"}
-                return {'message':mapping_define['details'][2]['answer']}
+                return objectReader(mapping_define['details'][2]['answer'],kwargs['botID'])
             elif commd[1] == "false":
                 customer_collection.update_one({'$and': [{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
                 return {'message':'เชิญเลือกซื้อของต่อได้เลยครับ'}

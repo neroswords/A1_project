@@ -155,6 +155,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
 
       }
       else{
+        
         window.location.reload("bot/"+id+'/trained');
       }
     }))

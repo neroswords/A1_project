@@ -90,7 +90,7 @@ function Navbar_real(props) {
   return (
     <nav className="navbar-real">
       <a href="/">
-        <img href="/" src="/images/logo2.PNG" className="nav_brand" />
+        <img href="/" src="/images/logo6.PNG" className="nav_brand" />
       </a>
       <ul className="navbar-nav-real">{props.children}</ul>
     </nav>
@@ -428,7 +428,7 @@ function DropdownMenu() {
             </DropdownItem>
           </a>
 
-          <a
+          {/* <a
             onClick={() => {
               window.location.replace("/manual");
             }}
@@ -436,7 +436,7 @@ function DropdownMenu() {
             <DropdownItem leftIcon={<i class="fas fa-book-open"></i>}>
               Manual
             </DropdownItem>
-          </a>
+          </a> */}
           <a
             name="signout"
             onClick={() => {
