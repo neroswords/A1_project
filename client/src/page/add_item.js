@@ -6,6 +6,7 @@ import 'react-widgets/dist/css/react-widgets.css';
 import { Multiselect } from 'react-widgets' 
 import FlashMessage from 'react-flash-message'
 import { PanelGroup } from 'react-bootstrap';
+import { MDBNotification, MDBContainer } from "mdbreact";
 
 const Styles = styled.div`
   .container {
@@ -240,6 +241,7 @@ export default class Add_item extends React.Component {
       price: '',
       message : '',
       showMessage: false,
+      errorState: false
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -291,7 +293,7 @@ export default class Add_item extends React.Component {
 
   _handleImageChange(e) {
     e.preventDefault();
-   
+    this.setState({errorState: false})
     // console.log(this.state.value)
     // console.log(this.state)
     let i
@@ -302,7 +304,7 @@ export default class Add_item extends React.Component {
     for (i = 0; i < e.target.files.length; i++) {
       
       if(e.target.files[i].type != "image/jpeg" && e.target.files[i].type != "image/png"){
-        alert("Only PNG or JPG is accepted")
+        this.setState({errorState: true})
       }
       else{
         let reader = new FileReader();
@@ -334,7 +336,7 @@ export default class Add_item extends React.Component {
 
   handleUploadImage(ev) {
     ev.preventDefault();
-
+    this.setState({errorState: false})
     // const files = ev.target[0].files[0]
     const itemnameLength = this.state.item_name.replace(/^\s+|\s+$/gm,'').length
     var i
@@ -346,42 +348,48 @@ export default class Add_item extends React.Component {
     }
 
     else{
-      const data = new FormData();
-    
-      for (i = 0; i < fileimg.length; i++) {
-        
-        // file.push(this.uploadInput.files[i])
-        
-        data.append('file' + [i], fileimg[i]);
+      if(fileimg.length == 0){
+        this.setState({errorState: true})
       }
-  
-  
-  
-      // console.log(fileimg)
-      // data.append('file', file);
-      data.append('item_name', this.item_name.value);
-      data.append('type', JSON.stringify(this.state.value));
-      data.append('amount', this.amount.value);
-      data.append('creator', localStorage.getItem('user_id'))
-      data.append('Image', this.state.Image)
-      data.append('des', this.des.value);
-      data.append('price', this.price.value);
-      fetch('/bot/' + this.props.match.params.bot_id + '/additem', {
-        method: 'POST',
-        // headers : {
-        //   "Access-Control-Allow-Origin": "*",
-        //   'Content-Type':'application/json'
-        // },
-        // body : JSON.stringify(json5),
-        body : data
-      }).then((response) => {
-        response.json().then((body) => {
-          this.setState({ imageURL: `/${body.file}` });
-          this.setState({ bot_id: data.id })
-          fileimg = []
-          this.setState({ redirect: true })
+      else{
+        const data = new FormData();
+      
+        for (i = 0; i < fileimg.length; i++) {
+          
+          // file.push(this.uploadInput.files[i])
+          
+          data.append('file' + [i], fileimg[i]);
+        }
+    
+    
+    
+        // console.log(fileimg)
+        // data.append('file', file);
+        data.append('item_name', this.item_name.value);
+        data.append('type', JSON.stringify(this.state.value));
+        data.append('amount', this.amount.value);
+        data.append('creator', localStorage.getItem('user_id'))
+        data.append('Image', this.state.Image)
+        data.append('des', this.des.value);
+        data.append('price', this.price.value);
+        fetch('/bot/' + this.props.match.params.bot_id + '/additem', {
+          method: 'POST',
+          // headers : {
+          //   "Access-Control-Allow-Origin": "*",
+          //   'Content-Type':'application/json'
+          // },
+          // body : JSON.stringify(json5),
+          body : data
+        }).then((response) => {
+          response.json().then((body) => {
+            this.setState({ imageURL: `/${body.file}` });
+            this.setState({ bot_id: data.id })
+            fileimg = []
+            this.setState({ redirect: true })
+          });
         });
-      });
+      }
+      
   
     }
     
@@ -414,12 +422,40 @@ export default class Add_item extends React.Component {
       let { imagePreviewUrl } = this.state;
       
       let $imagePreview = null;
-      if (imagePreviewUrl) {
-
-        $imagePreview = (<img src={imagePreviewUrl} />);
-      }
+      // if (imagePreviewUrl) {
+      //   console.log(imagePreviewUrl)
+      //   $imagePreview = (<img src={imagePreviewUrl} />);
+      // }
       return (
         <Styles>
+           { this.state.errorState &&  
+            <div className="errorstate">
+
+                              
+                                  <MDBNotification
+                                  style={{
+                                    // width: "auto",
+                                    position: "absolute",
+                                    // top: "10px",
+                                    // left: "500px",
+                                    zIndex: 9999
+                                  }}
+                                  bodyClassName="p-2 font-weight-bold white-text "
+                                  className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
+                                  closeClassName="blue-grey-text"
+                                  fade
+                                  icon="bell"
+                                  iconClassName="text-danger"
+                                  message="Only PNG or JPG is accepted."
+                                  show
+                                  
+                                  title="Error"
+                                  titleClassName="elegant-color-dark white-text"
+                    
+                                  />
+                                </div>
+
+                                }
           <div className="container">
             <div className="col-12 col-lg-9 mx-auto">
               <div className="card card-bot">

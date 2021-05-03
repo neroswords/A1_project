@@ -1,11 +1,10 @@
 from flask import Flask, request, abort, render_template, session,url_for,send_from_directory,send_file
 from flask_socketio import SocketIO,send, emit, join_room, leave_room
-from Project.Config import *
 from flask_pymongo import PyMongo
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS, cross_origin
-from .extensions import mongo, Config
-from flask_talisman import Talisman
+from .extensions import mongo
+# from flask_talisman import Talisman
 from engineio.payload import Payload
 from bson import ObjectId
 
@@ -26,7 +25,6 @@ jwt=JWTManager(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = './static'
 
-app.config.from_object(Config)
 
 @socketio.on('join_room')
 def handle_join_room_event(data):
@@ -43,10 +41,11 @@ def handle_join_room_noti(data):
 def message_api():
     try:
         data = request.get_json()
-        if data['data']['type'] == "bot":
-            socketio.emit("message_from_response", data,room=data['botID']+'&'+data['userID'])
-        elif data['data']['type'] in ["lineUser","facebookuser"]:
-            socketio.emit("message_from_webhook", data,room=data['botID']+'&'+data['userID'])
+        
+        if data['data']['sender_type'] != "bot":
+            socketio.emit("message_from_webhook", data['data'],room=data['botID']+'&'+data['userID'])
+        else:
+            socketio.emit("message_from_response", data['data'],room=data['botID']+'&'+data['userID'])
         return {"message":"message has been sent successfully"}, 200
     except :
         return {"error":"some error was occurred while processing, please check you data and try again"}, 500
@@ -55,7 +54,7 @@ def message_api():
 def notification_api():
     try:
         data = request.get_json()
-        socketio.emit("message_from_noti", data,room=data['botID']+'&'+data['userID'])
+        socketio.emit("message_from_noti", data['data'],room=data['userID'])
         return {"message":"message has been sent successfully"}, 200
     except :
         return {"error":"some error was occurred while processing, please check you data and try again"}, 500

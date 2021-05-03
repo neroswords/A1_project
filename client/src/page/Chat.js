@@ -167,13 +167,13 @@ function Chat(props){
                                   <span>All Massage</span>
                                 </div>
                                 <div
-                                  className={toggleState === "lineUser" ? "tabs active-tabs active-tabs-line" : "tabs"}
-                                  onClick={() => toggleTab("lineUser")}>
+                                  className={toggleState === "line" ? "tabs active-tabs active-tabs-line" : "tabs"}
+                                  onClick={() => toggleTab("line")}>
                                   <i class="fab fa-line"></i><span> Line</span>
                                 </div>
                                 <div
-                                  className={toggleState === "facebookUser" ? "tabs active-tabs active-tabs-facebook" : "tabs"}
-                                  onClick={() => toggleTab("facebookUser")}>
+                                  className={toggleState === "facebook" ? "tabs active-tabs active-tabs-facebook" : "tabs"}
+                                  onClick={() => toggleTab("facebook")}>
                                   <i class="fab fa-facebook-square"></i><span> Facebook</span>
                                 </div>
                               </div>
@@ -182,10 +182,10 @@ function Chat(props){
                                   className={toggleState === "All" ? "content  active-content" : "content"}>
                                 </div>
                                 <div
-                                  className={toggleState === "lineUser" ? "content  active-content" : "content"}>
+                                  className={toggleState === "line" ? "content  active-content" : "content"}>
                                 </div>
                                 <div
-                                  className={toggleState === "facebookUser" ? "content  active-content" : "content"}>
+                                  className={toggleState === "facebook" ? "content  active-content" : "content"}>
                                 </div>
                               </div>
                             <div className="chatlist-user">                               
@@ -195,7 +195,7 @@ function Chat(props){
                                      <li className={"msg-user row " + (props.match.params.customer_id == customer.userID ? "select-user-list":"")}>
                                          <div className="user-list-pic col-lg-3 col-sm-1">
                                              <img src={customer.pictureUrl}></img>
-                                             {   customer.type == "lineUser" ?
+                                             {   customer.type == "line" ?
                                                  (            
                                                  <div className="connec">
                                                      <i className="fab fa-line"></i>

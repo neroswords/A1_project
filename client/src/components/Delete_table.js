@@ -134,6 +134,7 @@ function Delete_table({showDelete_table, setShowDelete_table, delete_trained, id
   // }
 
   const ConfirmDelete = (data) => {
+    console.log(data)
       delete_trained(data)
       setShowDelete_table(prev => !prev)
   }

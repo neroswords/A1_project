@@ -6,7 +6,6 @@ import os
 
 mongo = PyMongo()
 
-server_url = 'https://68bc51c4e3ef.ngrok.io'
 
 
 class JSONEncoder(json.JSONEncoder):

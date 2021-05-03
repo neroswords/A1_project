@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import {Redirect} from 'react-router-dom';
 import FlashMessage from 'react-flash-message'
+
+import { MDBNotification, MDBContainer } from "mdbreact";
 import { faMailBulk, faTerminal } from '@fortawesome/free-solid-svg-icons';
 
 const Styles = styled.div`
@@ -165,7 +167,8 @@ class Register extends React.Component {
       showMessagePassword: false,
       showMessageShopname: false,
       showMessageFirstname: false,
-      showMessageLastname: false
+      showMessageLastname: false,
+      successState: false,
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -257,6 +260,7 @@ class Register extends React.Component {
       body: JSON.stringify(profile)
     }).then((res)=>res.json()).then(data=>{
       if(data.message){
+        this.setState({successState:true})
         this.setState({redirect:true})
       }
       else if(data.error){
@@ -286,6 +290,34 @@ flash = (e) =>{
       else {
         return(
           <Styles>
+             { this.state.successState &&  
+            <div className="errorstate">
+
+                              
+                                  <MDBNotification
+                                  style={{
+                                    // width: "auto",
+                                    position: "absolute",
+                                    // top: "10px",
+                                    // left: "500px",
+                                    zIndex: 9999
+                                  }}
+                                  bodyClassName="p-2 font-weight-bold white-text "
+                                  className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
+                                  closeClassName="blue-grey-text"
+                                  fade
+                                  icon="bell"
+                                  iconClassName="text-danger"
+                                  message="Only PNG or JPG is accepted."
+                                  show
+                                  
+                                  title="Error"
+                                  titleClassName="elegant-color-dark white-text"
+                    
+                                  />
+                                </div>
+
+                                }
                 <div className="container">
                       <div className="col-sm-11 col-md-10 col-lg-9 mx-auto">
                         <div className="card card-regis">

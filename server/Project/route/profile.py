@@ -10,8 +10,7 @@ import datetime
 from random import randint
 from Project.models.user import User
 from Project.extensions import mongo, JSONEncoder
-from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required,
-                                get_jwt_identity, get_raw_jwt)
+
 import json
 from bson.json_util import dumps, loads 
 from bson import ObjectId
@@ -129,10 +128,8 @@ def run_timer():
 @profile.route('/<user_id>/notification',methods=['GET','POST'])
 def noti(user_id):
     if request.method == 'GET':
-        print("GET5555")
         users_collection = mongo.db.users
         profile_cursor =  users_collection.find_one({'_id': ObjectId(user_id)})
-        print(profile_cursor['notification'])
         # list_cur = list(profile_cursor['notification']) 
         json_data = dumps(profile_cursor['notification'], indent = 2) 
         # print(json_data['notification'])
@@ -141,7 +138,6 @@ def noti(user_id):
         users_collection = mongo.db.users
         notification_collection = mongo.db.notification
         noti_info = request.get_json()
-        print("dddd = ",noti_info)
         info_update = { "$set": {"notification" : noti_info}}
         done = users_collection.update_one({'_id': ObjectId(user_id)}, info_update)
         # if not (noti_info > 0 ):
@@ -151,36 +147,30 @@ def noti(user_id):
 @profile.route('/<user_id>/notification/get',methods=['GET','POST'])
 def getNoti(user_id):
     if request.method == 'GET':
-        print("GET")
         a = request.get_json()
         notification_collection = mongo.db.notification
         notification_cursor =  notification_collection.find({'userID': ObjectId(user_id)}).limit(15)
         #noti = {"message":notification_cursor['message'],"sender":notification_cursor['sender'],"bot_name":notification_cursor['bot_name']}
         list_cur = list(notification_cursor) 
         list_cur.sort(key = lambda x:x['date'],reverse=True)
-        print(list_cur)
         json_data = dumps(list_cur, indent = 2) 
         return json_data
     if request.method == "POST":
-        print("POST")
+        print("POSTtttttttttttttttttttttttttttttttttttttttttttttttttttt")
         notification_collection = mongo.db.notification
         users_collection = mongo.db.users
         # notification_collection.delete_many({'userId':ObjectId(user_id)})
         noti_info = request.get_json()
-        print(noti_info)
         botID = str(noti_info['botID']['$oid'])
         read_update = { "$set": {"readed" : "read"}}
         done = notification_collection.update_one({'$and':[{"botID":ObjectId(botID)},{"sender_id": noti_info['sender_id']}]},read_update)
-        print(done)
-        notification_define = notification_collection.find({"userID":ObjectId(user_id)})
+        notification_define = notification_collection.find({"$and": [{"botID":ObjectId(botID)},{"userID":customerID}]})
         list_cur = list(notification_define) 
         count = 0
         for i in list_cur:
             if(i["readed"] == "unread"):
                 count = count+1
-        print(count)
         info_update = { "$set": {"notification" : count}}
         done = users_collection.update_one({'_id':ObjectId(user_id)}, info_update)
-        print("DONEEEEEEEEEEEEEEEEEEEEEEEEEE")
         return noti_info
         

@@ -14,25 +14,12 @@ mongo = PyMongo()
 server_url = 'https://68bc51c4e3ef.ngrok.io'
 
 
-
-# def create_list_sheet(date,botID,customerID):
-#     cart_collection = mongo.db.carts
-#     cart_define = cart_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
-#     canvas = Canvas("itemsList_"+botID+"&"+customerID+"_"+date+".pdf")
-
-
-
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, ObjectId):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
-# def JSONEncoder(x):
-#     if isinstance(x, bson.objectid.ObjectId):
-#         return str(x)
-#     else:
-#         return JSONEncoder(x)
 
 class User:
     def __init__(self, username, password,is_active):
@@ -42,9 +29,16 @@ class User:
 
 
 def socket_api(data,botID,userID):
-    url = ''
+    url = 'http://127.0.0.1:300/api/message'
     myobj = {'data': data, 'botID':botID, 'userID':userID}
     x = requests.post(url, json = myobj, headers = {'Content-type': 'application/json'})
+    return x
+
+def socket_noti(data,userID):
+    url = 'http://127.0.0.1:300/api/notification'
+    myobj = {'data': data,  'userID':userID}
+    x = requests.post(url, json = myobj, headers = {'Content-type': 'application/json'})
+    return x
 
 class Config:
     """Basic Flask configuration.

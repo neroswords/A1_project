@@ -6,6 +6,8 @@ import ReactFileReader from 'react-file-reader';
 import Facebookform  from '../Components/Form/facebookform';
 import Lineform  from '../Components/Form/lineform';
 import FlashMessage from 'react-flash-message'
+import { MDBNotification, MDBContainer } from "mdbreact";
+
 
 const Styles = styled.div`
   .container {
@@ -146,6 +148,7 @@ class Create_bot extends React.Component {
       errorMessage :{ "bot_name":"start","gender":"start","age":"start"},
       message : '',
       showMessage: false,
+      errorState: false
     };
     
     this.handleUploadImage = this.handleUploadImage.bind(this);
@@ -215,8 +218,10 @@ _handleImageChange(e) {
     return
   }
   else{
+    this.setState({errorState: false}) 
     if( type != "image/jpeg" && type != "image/png"){
-          alert("Only PNG or JPG is accepted")
+      this.setState({errorState: true})
+          // alert("Only PNG or JPG is accepted")
     return
     }
     else{
@@ -238,8 +243,9 @@ _handleImageChange(e) {
 }
   handleUploadImage(ev) {
     ev.preventDefault();
+   
     // let type = ev.target.files[0].type;
-    
+    this.setState({errorState: false})
     const files = ev.target[0].files[0]
     const BotnameLength = this.state.bot_name.replace(/^\s+|\s+$/gm,'').length
     
@@ -280,7 +286,7 @@ _handleImageChange(e) {
         const type = ev.target[0].files[0].type;
         console.log(type)
         if( type != "image/jpeg" && type != "image/png"){
-              alert("Only PNG or JPG is accepted")
+          this.setState({errorState: true})
         }
         else{
           const data = new FormData();
@@ -332,6 +338,36 @@ _handleImageChange(e) {
         } 
         return(
         <Styles>
+          
+          { this.state.errorState &&  
+            <div className="errorstate">
+
+                              
+                                  <MDBNotification
+                                  style={{
+                                    // width: "auto",
+                                    position: "absolute",
+                                    // top: "10px",
+                                    // left: "500px",
+                                    zIndex: 9999
+                                  }}
+                                  bodyClassName="p-2 font-weight-bold white-text "
+                                  className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
+                                  closeClassName="blue-grey-text"
+                                  fade
+                                  icon="bell"
+                                  iconClassName="text-danger"
+                                  message="Only PNG or JPG is accepted."
+                                  show
+                                  
+                                  title="Error"
+                                  titleClassName="elegant-color-dark white-text"
+                    
+                                  />
+                                </div>
+
+                                }
+
           
               <div className="container">
                     <div className="col-sm-10 col-md-9 col-lg-7 mx-auto">

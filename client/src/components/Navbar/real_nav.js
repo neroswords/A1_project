@@ -12,7 +12,7 @@ import CommunicationInvertColorsOff from "material-ui/svg-icons/communication/in
 import { Info } from "material-ui-icons";
 // import Notifier from "react-desktop-notification"
 
-let endPoint = "http://127.0.0.1:200";
+let endPoint = "http://127.0.0.1:300";
 let socket = io.connect(`${endPoint}`);
 let flag = false
 let flag2 = false
@@ -254,7 +254,7 @@ useEffect(() => {
                         {msg['readed'] == "unread"? <div className="noti-show-new"><p>NEW</p></div>: " "}
                         <p className="noti-show-name">{msg['sender']}</p>  
                         <p className="noti-show-msg">{msg['message']}</p>
-                        <p className="noti-show-bot">bot name</p>
+                        <p className="noti-show-bot">{msg['bot_name']}</p>
                         {/* {msg['message']} {msg['botID']['$oid']} */}
 
                       </div> 
