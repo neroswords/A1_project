@@ -149,8 +149,14 @@ class Register extends React.Component {
       shop_address : null,
       redirect : false,
       message : '',
+      messageShopname : '',
+      messageFirstname : '',
+      messageLastname : '',
       showMessageUsername: false,
-      showMessagePassword: false
+      showMessagePassword: false,
+      showMessageShopname: false,
+      showMessageFirstname: false,
+      showMessageLastname: false
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -163,21 +169,66 @@ class Register extends React.Component {
   }
 
   handleChange (evt) {
+
     this.setState({ [evt.target.name]: evt.target.value });
+    
+    const field = evt.target.name
+    if(field == "firstname"){
+      this.setState({showMessageFirstname: false})
+    }
+    else if(field == "lastname"){
+      this.setState({showMessageLastname: false})
+    }
+    else if(field == "shop_name"){
+      this.setState({showMessageShopname: false})
+    }
+    else{
+      return
+    }
   }
  
   handleSubmit = (e) => {
     e.preventDefault()
     
     if(this.state.password !== this.state.confirm_password){
-      this.setState({showMessagePassword: false})
-      this.setState({message:'your password and confirm was not match'})
+      this.setState({message:'your password and confirm password was not match'})
       this.setState({showMessagePassword: true})
       this.scrollToTop()
-      console.log(this.state.showMessagePassword)
+      // console.log(this.state.showMessagePassword)
   }
   else{
-    const profile = {
+    const snLength = this.state.shop_name.replace(/^\s+|\s+$/gm,'').length
+    const fnLength = this.state.firstname.replace(/^\s+|\s+$/gm,'').length
+    const lnLength = this.state.lastname.replace(/^\s+|\s+$/gm,'').length
+    if (fnLength == 0 ){
+      this.setState({messageFirstname:'Please enter First name'})
+      this.setState({showMessageFirstname: true})
+      if(lnLength == 0){
+        this.setState({messageLastname:'Please enter Last name'})
+        this.setState({showMessageLastname: true})
+        if(snLength == 0){
+          this.setState({messageShopname:'Please enter Shop name'})
+          this.setState({showMessageShopname: true})
+        }
+      }  
+    }
+    
+    else if (lnLength == 0){
+      this.setState({messageLastname:'Please enter Last name'})
+      this.setState({showMessageLastname: true})
+      if(snLength == 0){
+        this.setState({messageShopname:'Please enter Shop name'})
+        this.setState({showMessageShopname: true})
+      }
+      
+    }
+    else if (snLength == 0){
+      this.setState({messageShopname:'Please enter Shop name'})
+      this.setState({showMessageShopname: true})
+      
+    }
+    else{
+      const profile = {
         email: this.state.email,
         username: this.state.username,
         password : this.state.password,
@@ -205,6 +256,8 @@ class Register extends React.Component {
         this.scrollToTop()
       }
     }).then(this.setState({showMessageUsername: false})).then(this.setState({showMessagePassword: false}))
+    }
+    
   }
 }
 flash = (e) =>{
@@ -236,7 +289,7 @@ flash = (e) =>{
                             </div>
                                 <div className="my-3">
                                   <label for="exampleInputEmail1" className="form-label">Email address</label>
-                                  <span className="req-icon"> *</span>
+                                    <span className="req-icon"> *</span>
                                   <input type="email" className="form-control " id="inputemail" name='email' required value={this.state.email} onChange={this.handleChange} />
                                 </div>
                                 <div className="my-3">
@@ -247,7 +300,7 @@ flash = (e) =>{
                                         <div className="container">
                                             <FlashMessage duration={4000}>
                                               <div className="error">
-                                                <strong>Error : {this.state.message}</strong>
+                                                <strong>* {this.state.message}</strong>
                                               </div>  
                                             </FlashMessage>
                                         </div>
@@ -258,6 +311,7 @@ flash = (e) =>{
                                     <label for="exampleInputPassword1" className="form-label">Password</label>
                                     <span className="req-icon"> *</span>
                                     <input type="password" className="form-control" pattern="[A-Za-z0-9]+" id="inputpassword" name='password' required  minLength={6} value={this.state.password} onChange={this.handleChange} /> 
+                                    <span for="examplePassword" className="ex-password">*  A combination of upper,lowercase letters,numbers or special characters (more than 5 character)</span>
                                   </div>
                                   <div className="col">
                                     <label for="exampleInputPassword1" className="form-label">Comfirm Password</label>
@@ -268,7 +322,7 @@ flash = (e) =>{
                                       <div className="container">
                                           <FlashMessage duration={4000}>
                                             <div className="error">
-                                              <strong>Error : {this.state.message}</strong>
+                                              <strong>* {this.state.message}</strong>
                                             </div>  
                                           </FlashMessage>
                                       </div>
@@ -282,13 +336,33 @@ flash = (e) =>{
                                       <div className="col">
                                           <label for="inputFirstname" className="form-label">Firstname</label>
                                           <span className="req-icon"> *</span>
-                                          <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputfirstname" required  name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
+                                          <input type="text" className="form-control"  id="inputfirstname" required  name='firstname' value={this.state.firstname} onChange={this.handleChange}/>
+                                          { this.state.showMessageFirstname &&  
+                                      <div className="container">
+                                          <FlashMessage duration={40000}>
+                                            <div className="error">
+                                              <strong>* {this.state.messageFirstname}</strong>
+                                            </div>  
+                                          </FlashMessage>
                                       </div>
+                                  }
+                                      </div>
+                                      
                                       <div className="col">
                                       <label for="inputLastname" className="form-label">Last name</label>
                                       <span className="req-icon"> *</span>
-                                          <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputlastname" required name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
+                                          <input type="text" className="form-control"  id="inputlastname" required name='lastname' value={this.state.lastname} onChange={this.handleChange}/>
+                                          { this.state.showMessageLastname &&  
+                                      <div className="container">
+                                          <FlashMessage duration={40000}>
+                                            <div className="error">
+                                              <strong>* {this.state.messageLastname}</strong>
+                                            </div>  
+                                          </FlashMessage>
                                       </div>
+                                }
+                                      </div>
+                                      
                                       <div className="col">
                                         <label for="exampleInputEmail1" className="form-label">Birthday</label>
                                         <input type="date" className="form-control" id="inputdate" name='birthday' value={this.state.birthday} onChange={this.handleChange} />
@@ -298,14 +372,24 @@ flash = (e) =>{
                                     <div className="col my-3">
                                       <label for="exampleInputEmail1" className="form-label">Shop name</label>
                                       <span className="req-icon"> *</span>
-                                      <input type="text" className="form-control" id="inputshopname" required value={this.state.shop_name} name='shop_name' onChange={this.handleChange} />
+                                      <input type="text" className="form-control"  id="inputshopname" required value={this.state.shop_name} name='shop_name' onChange={this.handleChange} />
+                                      { this.state.showMessageShopname &&  
+                                      <div className="container">
+                                          <FlashMessage duration={40000}>
+                                            <div className="error">
+                                              <strong>* {this.state.messageShopname}</strong>
+                                            </div>  
+                                          </FlashMessage>
+                                      </div>
+                                }
                                     </div>
                                     <div className="col my-3">
                                       <label for="exampleInputEmail1" className="form-label">Type of sale</label>
                                       <span className="req-icon"> *</span>
-                                      <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' required onChange={this.handleChange} />
+                                      <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputtypeofsale" value={this.state.shop_type} name='shop_type' onChange={this.handleChange} />
                                     </div>
                                   </div>
+                                  
                                   <div className="my-3">
                                     <label for="exampleFormControlTextarea1" className="form-label">Shop Address</label>
                                     <textarea className="form-control" id="inputshopaddress" rows="3" placeholder="หากไม่มีให้เว้นว่างเอาไว้" name='shop_address' value={this.state.shop_address} onChange={this.handleChange}></textarea>

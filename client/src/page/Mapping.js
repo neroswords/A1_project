@@ -13,17 +13,17 @@ const Styles = styled.div`
     min-height: 92vh;
 }
 .mapping-page .container-fluid {
-    padding: 40px;
+    padding: 20px 40px;
     width: 100%;
     overflow: hidden;
 }
+
 .mapping-title {
     padding: 4px;
     width: 100% ;
     background-color: white;
     border-radius: 0.25rem;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-    
 }
 
 .mapping-title h2 {
@@ -38,9 +38,37 @@ const Styles = styled.div`
     border-radius: 0.25rem;
     overflow-x: auto;
 }
+.bot-name-on-page {
+    
+    margin-bottom: 10px;
+    /* width: 150px; */
+    /* max-width: 800px; */
+    width: max-content;
+    border-radius: 1rem;
+  }
+
+  .bot-name-on-page h4{
+    position: relative;
+    right: 0;
+    font-size: 14px;
+    font-weight: 600;
+    /* width: 500px; */
+    /* max-width: 500px; */
+    color: #fff;
+    /* border: 2px solid #fca311; */
+    background-color : #fca311;
+    border-radius: 1rem;
+    padding: 5px 20px; 
+  }
 ` 
 
 function Mapping(props){
+    const [name, setName] = useState();
+    useEffect(() => {
+      fetch('/bot/'+props.match.params.bot_id) .then(response => response.json().then(inf => {
+        setName(inf)
+    }))
+    }, []);
   
     return(
         <Styles>
@@ -48,6 +76,9 @@ function Mapping(props){
         <div className="mapping-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"mapping"} />
             <div className="container-fluid">
+                <div className="bot-name-on-page">
+                    <h4> Bot name : {name}</h4>
+                </div>
                 <div className="mapping-title">
                     <h2 className='p-2 flex-grow-1 bd-highlight' id="mapping-header">Mapping</h2>
                 </div>

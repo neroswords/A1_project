@@ -7,9 +7,17 @@ import {Link} from "react-router-dom";
 import Delete_table from "../Delete_table";
 
 const Styles = styled.div`
+  .table-show-all > div.container { 
+      /* max-width: max-content; */
+      margin: 0;
+      padding: 20px;
+      min-width: 100% ;
+    }
+
   table {
     /* font-family: 'Roboto',sans-serif; */
-    margin: 3% 0;
+    width: 100%;
+    margin: 1% 0;
     font-size: 1em;
     text-align: center;
     border: 1px solid #efeff5;
@@ -46,15 +54,17 @@ const Styles = styled.div`
         /* text-align: center; */
       }
     }
-  .customer_input{
-    background-color: transparent;
-    border-radius: 25px;
-    padding-left:15px;
-  }
+    .customer_input{
+      background-color: transparent;
+      border-radius: 25px;
+      padding-left: 15px;
+      width:300px;
+    }
 }
 .table tbody tr:nth-of-type(even){
         background-color: #fafafc;
-    }
+}
+
 .button-trained-word .buttondeleteWord{
     padding: 7px 20px !important;
     font-size: 12px !important;
@@ -63,7 +73,9 @@ const Styles = styled.div`
     transition: 0.5s;
     background-color: #CD5C5C;
     color: #fff ;
-    margin-left: 1%;
+    /* margin-left: 1%; */
+    margin-top: 5px;
+
   }
   .button-trained-word .buttondeleteWord:hover{
     color: #000;
@@ -112,6 +124,7 @@ const Styles = styled.div`
   height: 30px;
   border-radius: 1rem;
   border: 0.5px solid #A9A9A9;
+  margin: 5px 0;
 }
 input::placeholder{
   padding-left:15px;
@@ -398,13 +411,14 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
           <tbody {...getTableBodyProps()}>
             {page.map((row, i) => {
               prepareRow(row)
+              console.log(row)
               return (
                 <tr {...row.getRowProps()}>
                   {row.cells.map(cell => {
                     return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                   })}
                   {/* <td><button onClick={openForm}><i className="far fa-edit" ></i></button></td> */}
-                  <td><Link to ={'/bot/'+botID+'/group/text'}><i className="far fa-edit" ></i></Link></td>
+                  <td><Link to ={'/bot/'+botID+'/group/' +row.original.id}><i className="far fa-edit" ></i></Link></td>
                   {/* <TextForm showForm={showForm} setShowForm={setShowForm} botID={botID} /> */}
                 </tr>
               )
@@ -474,6 +488,7 @@ function TableGroup({ botID, delete_trained, add_data }) {
         accessor: 'Group', // accessor is the "key" in the data
       },
       
+      
     ],
     []
   )
@@ -522,6 +537,7 @@ function TableGroup({ botID, delete_trained, add_data }) {
 
         setTableGroupState(
           data.map(d => {
+            console.log(d)
             return {
               select: false,
               id: d._id.$oid,
@@ -541,15 +557,16 @@ function TableGroup({ botID, delete_trained, add_data }) {
   
   return (
     <Styles>
-      <TableShow
-        columns={columns}
-        data={TableGroupState}
-        updateMyData={updateMyData}
-        skipPageReset={skipPageReset}
-        delete_trained={delete_trained}
-        botID={botID}
-      />
-
+      <div className="table-show-all">
+        <TableShow
+          columns={columns}
+          data={TableGroupState}
+          updateMyData={updateMyData}
+          skipPageReset={skipPageReset}
+          delete_trained={delete_trained}
+          botID={botID}
+        />
+      </div>
     </Styles>
   );
 }

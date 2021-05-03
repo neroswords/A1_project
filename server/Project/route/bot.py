@@ -22,16 +22,27 @@ from linebot.models import (MessageEvent, TextMessage, TextSendMessage, FlexSend
 from flask_socketio import send, emit, join_room, leave_room
 from .. import socketio
 import datetime
+from reportlab.pdfgen.canvas import Canvas
 
 
 bot = Blueprint("bot",__name__)
 UPLOAD_FOLDER = './Project/static/images/bot/bot_pic'
 UPLOAD_FOLDER_ITEMS = './Project/static/images/bucket'
-
+UPLOAD_FOLDER_Group = './Project/static/images/bot/group'
 # @socketio.on('message')
 # def webhook_message(message, userID, botID):
 #     socketio.emit("message", "Server message", room='my_room')
+def create_cover_sheet(date,botID,customerID):
+    bot_collection = mongo.db.bots
+    customer_collection = mongo.db.customers
+    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
+    customer_define = customer_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
+    canvas = Canvas("cover_"+botID+"&"+customerID+"_"+date+".pdf")
 
+def create_list_sheet(date,botID,customerID):
+    cart_collection = mongo.db.carts
+    cart_define = cart_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
+    canvas = Canvas("itemsList_"+botID+"&"+customerID+"_"+date+".pdf")
 
 def save_message(message,message_type,sender,sender_id,sender_type,room,botId,userID,pictureUrl):  #sender=Id(bot or user), sender_type=bot or facebookuser or line, message_type = text or image
     message_collection = mongo.db.messages
@@ -39,19 +50,19 @@ def save_message(message,message_type,sender,sender_id,sender_type,room,botId,us
     users_collection = mongo.db.users
     customers_collection = mongo.db.customers
     if sender_type == "bot":
-        message_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now(),"botId":botId})
+        message_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now(),"botId":botId,"time":str(datetime.datetime.now().hour)+":"+str(datetime.datetime.now().minute)+":"+str(datetime.datetime.now().second),"day":datetime.datetime.now().day,"month":datetime.datetime.now().month,"year":datetime.datetime.now().year,})
     if sender_type != "bot":
         noti_define = notification_collection.find_one({'$and':[{"botID": ObjectId(botId)},{'sender_id':sender_id}]})
         customers_collection.update_one({'$and':[{"botID": ObjectId(botId)},{'userID':sender_id}]},{"$set":{'date':datetime.datetime.now()}})
         if(noti_define != None):
             notification_collection.update_one({'$and':[{"botID": ObjectId(botId)},{'sender_id':sender_id}]},{"$set":{'message':message,'date':datetime.datetime.now(),"readed":"unread"}})
         else:
-            notification_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now(),"botID":botId,"userID":userID,"pictureUrl":pictureUrl,"readed":"unread"})
+            notification_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now(),"botID":botId,"userID":userID,"pictureUrl":pictureUrl,"readed":"unread","time":str(datetime.datetime.now().hour)+":"+str(datetime.datetime.now().minute)+":"+str(datetime.datetime.now().second),"day":datetime.datetime.now().day,"month":datetime.datetime.now().month,"year":datetime.datetime.now().year,})
             # profile_define = users_collection.find_one({"_id":userId})
             # noti = profile_define['notification']
             # info_update = { "$set": {"notification" : noti+1}}
             # done = users_collection.update_one({'_id': ObjectId(userId)}, info_update)
-        message_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now(),"botId":botId,"readed":"unread"})
+        message_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now(),"botId":botId,"readed":"unread","time":str(datetime.datetime.now().hour)+":"+str(datetime.datetime.now().minute)+":"+str(datetime.datetime.now().second),"day":datetime.datetime.now().day,"month":datetime.datetime.now().month,"year":datetime.datetime.now().year,})
         notification_define = notification_collection.find({"userID":userID})
         list_cur = list(notification_define) 
         count = 0
@@ -151,10 +162,12 @@ def create():
             file.save(destination)
             session['uploadFilePath'] = destination
             response = "success"
+        
+        
         new_bot = bots_collection.insert_one({'bot_name': bot_name, 'gender': gender, 'owner': ObjectId(creator), 'age': age, 'Img': filename, 'confident': 0.6})
         mappings_collection = mongo.db.mappings
         bot_id = new_bot.inserted_id
-        mapping = []
+        mapping = {}
         mappings_collection.insert_one(mapping)
         return {'message': 'add bot successfully'}
     return "add bot unsuccessfully"
@@ -174,6 +187,8 @@ def edit(id):
         bot_name = request.form['bot_name']
         gender = request.form['gender']
         age = request.form['age']
+        file = request.files
+        # print(file)
 
         if "file" not in request.files:
             filename = "Avatar.jpg"
@@ -182,14 +197,18 @@ def edit(id):
                                     'owner':  ObjectId(creator), 'gender': gender, 'age': age}}
         else:
             file = request.files['file']
+            # print(file)
             filename = secure_filename(file.filename)
+            
             filename = creator+"&"+bot_name+os.path.splitext(filename)[1]
+            print(filename)
             destination = "/".join([UPLOAD_FOLDER, filename])
             file.save(destination)
             session['uploadFilePath']=destination
             response="success"
-            info_update = { "$set": {'bot_name': bot_name, 'owner':  ObjectId(creator), 'gender': gender, 'age': age, 'Img' : filename}}
 
+            info_update = { "$set": {'bot_name': bot_name, 'owner':  ObjectId(creator), 'gender': gender, 'age': age, 'Img' : filename}}
+        # print(info_update)
         done = bots_collection.update_one({'_id': ObjectId(id)}, info_update)
         return {'message': 'add bot successfully'}
     return {'message': 'add bot unsuccessfully'}
@@ -380,6 +399,73 @@ def group(botID):
         data = dumps(listcursor, indent=2)
         return data
 
+@bot.route('/<botID>/group/delete/<groupID>', methods=["GET"])
+def delete_group(botID,groupID):
+    if request.method == 'POST':
+        print("Printt")
+        groups_collection = mongo.db.groups
+        group_delete = request.get_json() #ID
+        groups_collection.delete_one({'$and':[{"botID":ObjectId(botID),"_id":ObjectId(groupID)}]})
+        # listcursor = list(groups_collection.find({"botID": ObjectId(botID)}))
+        # listcursor.reverse()
+        # data = dumps(listcursor, indent=2)
+        return "delete done"
+
+@bot.route('/<botID>/group/addgroup', methods=["POST"])
+def add_group(botID):
+    if request.method == 'POST':
+        groups_collection = mongo.db.groups 
+        group_name = request.get_json()#name #pathbotID
+
+        groups_collection.insert_one({"name":group_name['group'],"botID": ObjectId(botID)})
+        # group_define = groups_collection.find_one({'$and':[{"botID": ObjectId(botID)},{'group_name':group_name}]})
+        # listcursor = list(groups_collection.find({"botID": ObjectId(botID)}))
+        # listcursor.reverse()
+    
+        return "add done"
+
+@bot.route('/<botID>/group/<groupID>/edit', methods=["GET","POST"])
+def edit_group(botID,groupID):
+    if request.method == 'GET':
+        print("GETDONEEE")
+        groups_collection = mongo.db.groups
+        get_group = request.get_json() #findbyID
+        listcursor = groups_collection.find_one({'$and':[{"botID": ObjectId(botID)},{'_id':ObjectId(groupID)}]})
+        data = dumps(listcursor, indent=2)
+        return data
+    if request.method == 'POST':
+        print("READY EDITTTTTTTTTTTTTTTT")
+        groups_collection = mongo.db.groups
+        # group_info = request.get_json() 
+        # print(group_info)
+        # if "text" in group_info.keys():
+        #     print("READY TEXTTTTTTTTTTTTTTTTTTTTT")
+        #     groups_collection.update_one({'$and':[{"botID": ObjectId(botID)},{'_id':ObjectId(groupID)}]},{"$set":{"group":[group_info['text']]}})
+
+        # if "file" in group_info.keys():
+        print("READY fffffffffffffffffffff")
+        a = request.form
+        print(a)
+        print("DASD")
+        text = request.form['text']
+        img = request.form['file']
+        print(text)
+        print(img)
+        for i in request.files:
+            file = request.files[i]
+            print(file)
+            filename = secure_filename(file.name)
+            filename = item_name+"&" + \
+            str(count)+"&"+creator+"&"+str(file.name)
+            destination = "/".join([UPLOAD_FOLDER_Group, filename])
+            file.save(destination)
+            session['uploadFilePath'] = destination
+            groups_collection.update_one({'$and':[{"botID": ObjectId(botID)},{'_id':ObjectId(groupID)}]},{"$set":{"group":[{'text': group_info['text'],'img':filename}]}})
+        # listcursor = list(groups_collection.find({"botID": ObjectId(botID)}))
+        # listcursor.reverse()
+        # data = dumps(listcursor, indent=2)
+        return "edit done"
+
 
 
 @bot.route('/<botID>/addword', methods=["POST"])
@@ -427,7 +513,7 @@ def additem(botID):
         price = request.form['price']
         count = 0
         info_update = {'item_name': item_name, 'owner':  ObjectId(creator),
-                       'type': item_type, 'amount': int(amount), 'des': des, 'botID': ObjectId(botID) ,'price':int(price)}
+                       'type': item_type, 'amount': int(amount), 'des': des, 'botID': ObjectId(botID) ,'price':float(price)}
         info_pic = []
         for i in request.files:
             file = request.files[i]
@@ -492,8 +578,61 @@ def get_message(botID,customerID):
     return data
 
 
+# @bot.route('/<botID>/getname', methods=["GET","POST"])
+# def getBotname(botID):
+#     bot_collection = mongo.db.bots
+#     bot_define = bot_collection.find_one({"botID": ObjectId(botID)})
+    
+#     # customer_list = list(customer_cur)
+
+#     data = dumps(bot_define['bot_name'], indent=2)
+#     return data
 
 
 
+@bot.route('/<botID>/dashboard/<type>', methods=['GET'])
+def dashboard(botID,type):
+    messages_collection = mongo.db.messages
+    date = datetime.datetime.now()
+    data = []
+    if type == "day":
+        message_list = list(messages_collection.find({"$and":[{"botID":ObjectId(botID)},{"month":int(date.month)},{"year":int(date.year)},{"$or":[{"sender_type":"line" },{"sender_type":"facebook"}]}]}))
+        for i in range(31):
+            count = 0
+            if date.day < i+1:
+                break
+            for x in message_list:
+                if x['day'] == i+1 :
+                    count += 1
+                else: continue
+            message_list = list(filter(lambda a: a['day'] != i+1, message_list))
+            data.append({"name":i+1,"count":count})
+    elif type == "month":
+        month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+        message_list = list(messages_collection.find({"$and":[{"botID":ObjectId(botID)},{"year":int(date.year)},{"$or":[{"sender_type":"line" },{"sender_type":"facebook"}]}]}))
+        for i in range(12):
+            count = 0
+            if date.month < i+1:
+                break
+            for x in message_list:
+                if x['month'] == i+1 :
+                    count += 1
+                else: continue
+            message_list = list(filter(lambda a: a['month'] != i+1, message_list))
+            data.append({"name":month[i],"count":count})
+    elif type == "daily":
+        message_list = list(messages_collection.find({"$and":[{"botID":ObjectId(botID)},{"month":int(date.month)},{"day":int(date.day)},{"year":int(date.year)},{"$or":[{"sender_type":"line" },{"sender_type":"facebook"}]}]}))
+        for i in range(24):
+            count = 0
+            if date.hour < i:
+                break
+            for x in message_list:
+                hour = int(x['time'].split(':')[0])
+                if x['time'] == i :
+                    count += 1
+                else: continue
+            message_list = list(filter(lambda a: int(a['time'].split(':')[0]) != i+1, message_list))
+            data.append({"name":(("0"+str(i)+".00")*(i<10)+((str(i)+".00")*(i >= 10))),"count":count})
+    return dumps(data)
 
 

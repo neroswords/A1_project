@@ -18,7 +18,7 @@ function Chatbody({botID,customerID}){
 
     const scrollToBottom = () => {
       messagesEndRef.current?.scrollIntoView({ behavior: "auto" })
-    }
+    } 
 
     useEffect(() =>{
         if (customerID !=="main"){

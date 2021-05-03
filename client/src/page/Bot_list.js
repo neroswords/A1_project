@@ -5,6 +5,7 @@ import { useDetectOutsideClick } from "../Components/Botlist/button_nav";
 import Delete_pop from "../Components/Delete_pop";
 import Connect_bot from "../Page/Connect_bot";
 
+
 export default function Bot_list(props) {
     const [botlist,setBotlist] = useState([]);
     const delete_bot =(id)=>{
@@ -46,8 +47,9 @@ export default function Bot_list(props) {
     );
 
     return(
-        
+            
                 <div className="botlist-page">
+                    			{/* <Loader type="Oval" color="#00BFFF" height={50} width={50} secondaryColor="Red" timeout={6000}/> */}
                     <div className="popup-del-connect">
                         <Delete_pop showDelete_pop={showDelete_pop} setShowDelete_pop = {setShowDelete_pop} Delete_bot ={delete_bot} bot={showBotId}></Delete_pop>
                         <Connect_bot showForm={showForm} setShowForm={setShowForm} botID={showBotId} ></Connect_bot>
@@ -56,8 +58,8 @@ export default function Bot_list(props) {
                     {/* <Navbar_member /> */}
                           <div class="container col-9">
                                     <div className="botlist-body" name="bot_list">
-                                        <Link className='link' to={'/bot/'+localStorage.getItem('user_id')+'/create_bot'}>
-                                        <div className="card-plus group">
+                                        <Link className='link' to={'/bot/'+localStorage.getItem('user_id')+'/create_bot'} >
+                                        <div className="card-plus group" name="create-bot">
                                             <div>
                                                 <p>Add new Bot</p>
                                             </div>    
@@ -109,11 +111,12 @@ function Dropdown({botData, deleteBot, openDelete_pop, openForm}){
     <div>
     <div class="card-box">
         <Link to={'/bot/'+botData._id.$oid+'/training' } >
+            {/* <p>{botData.Img}</p> */}
             <img src={'/images/bot/bot_pic/'+botData.Img} class="bot-img"/>
         </Link>
         <div class="info-bot">
             <Link className="link" to={'/bot/'+botData._id.$oid+'/training'}>
-                <p class="Bot-name">{botData.bot_name}</p>
+                <p className="Bot-name">{botData.bot_name}</p>
             </Link>
             <div class="divider"></div>
         </div>

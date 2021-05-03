@@ -22,6 +22,8 @@ def historyy(botID):
     total_cursor = list(purchased_collection.find({'botID': ObjectId(botID)}))
     return {"waited":len(waited_cursor),"total":len(total_cursor)}
 
+
+
 # @history.route('/<botID>/waited', methods=['GET', 'POST'])
 # def getData(botID):
 #     print("SSSSSSSSSSSSSSSSSSSSSSSSSSS")

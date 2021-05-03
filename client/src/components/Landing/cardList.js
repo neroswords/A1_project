@@ -184,22 +184,22 @@ export const CardList = () => (
     <div className="container"> 
 
         <div className="title-cardlist">
-            <h1>About Features</h1>
+            <h1>เกี่ยวกับคุณสมบัติ</h1>
         </div>
         <div className="col-12 section-about-feature">
                 <div className="card">
                     <div className="img-card">
                         <img src="./images/chat.svg" />
                     </div>
-                    <h5 className="card-title">Bot Features
+                    <h5 className="card-title">ฟีเจอร์ของบอท
                         <hr />
                     </h5>
                     <ul> 					
-                        <li><i class="fas fa-check select"></i><p>Can get ordering from customer</p></li>
+                        <li><i class="fas fa-check select"></i><p>สามารถรับคำสั่งซื้อจากลูกค้า</p></li>
                         <div className="mt-3"></div>					
-                        <li><i class="fas fa-check select"></i><p>Can understand and answer customer as what we teach</p></li>
+                        <li><i class="fas fa-check select"></i><p>สามารถเข้าใจและตอบลูกค้าได้จากสิ่งที่สอน</p></li>
                         <div className="mt-3"></div> 					
-                        <li> <i class="fas fa-check select"></i><p>Can do dealing by itself</p></li>
+                        <li> <i class="fas fa-check select"></i><p>สามารถจัดการได้ด้วยตัวเอง</p></li>
                         			
                     </ul>
                 </div>
@@ -208,15 +208,15 @@ export const CardList = () => (
                     <div className="img-card">
                         <img src="./images/delivery-truck.svg" />
                     </div>
-                    <h5 className="card-title">Parcel Features
+                    <h5 className="card-title">ฟีเจอร์ระบบขนส่ง
                         <hr />
                     </h5>
                     <ul> 					
-                        <li><i class="fas fa-check"></i><p>Can issue a cover sheet for the parcel</p></li>
+                        <li><i class="fas fa-check"></i><p>สามารถออกใบปะหน้าพัสดุได้</p></li>
                         <div className="mt-4"></div> 
-                        <li><i class="fas fa-check"></i><p>Can issue tracking number</p></li>
+                        <li><i class="fas fa-check"></i><p>สามารถออกหมายเลขติดตามพัสดุได้</p></li>
                         <div className="mt-4"></div>  					
-                        <li><i class="fas fa-check"></i><p>Can keep the address</p></li> 					
+                        <li><i class="fas fa-check"></i><p>สามารถเก็บที่อยู่ของลูกค้าได้</p></li> 					
                          				
                     </ul>
                 </div>
@@ -225,13 +225,13 @@ export const CardList = () => (
                     <div className="img-card">
                         <img src="./images/statistics.svg"/>
                     </div>
-                    <h5 className="card-title">Visualization Feature
+                    <h5 className="card-title">ฟีเจอร์แสดงยอดขาย
                     <hr />
                     </h5>
                     <ul> 					
-                        <li><i class="fas fa-check"></i><p>Able to check sales on time</p></li>
+                        <li><i class="fas fa-check"></i><p>สามารถตรวจสอบยอดขายได้ตรงเวลา</p></li>
                         <div className="mt-4"></div>  					
-                        <li><i class="fas fa-check"></i><p>Able to check product balances</p></li>
+                        <li><i class="fas fa-check"></i><p>สามารถตรวจสอบยอดสินค้า</p></li>
 									
                     </ul>
                 </div>

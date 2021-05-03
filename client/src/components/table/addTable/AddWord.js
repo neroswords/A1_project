@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { MdClose } from 'react-icons/md';
 import { Button, Container } from "react-bootstrap";
+import FlashMessage from 'react-flash-message'
 
 
 const Background = styled.div`
   width: 100%;
   height: 100%;
-  background: blue;
+  /* background: blue; */
   position: absolute;
   display: flex;
   justify-content: center;
@@ -18,10 +19,11 @@ const Background = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 100; 
 `;
 
 const ModalWrapper = styled.div`
-  z-index: 10;
+  z-index: 1000;
   width: 800px;
   height: 500px;
   background-color: white;
@@ -105,11 +107,38 @@ const CloseModalButton = styled(MdClose)`
 
 
 export const AddWord = ({ showWord, setShowWord,botID}) => {
+  const [message,setMessage] = useState('')
+  const [showMessage,setShowMessage] = useState(false)
   const modalRef = useRef();
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
-  const [flash,setFlash] = useState('')
+
+  console.log(showMessage)
+  const closePop = () =>{
+    // setFlash('')
+    setShowWord(prev => !prev)
+  }
+
+  function handleClick(e) {
+    e.preventDefault();
+    console.log('The link was clicked.');
+    const qLength = question.replace(/^\s+|\s+$/gm,'').length
+    const aLength = answer.replace(/^\s+|\s+$/gm,'').length
+    console.log(qLength)
+    
+    if (qLength == 0 || aLength == 0 ){
+      console.log("null")
+      setMessage("Please fill question or answer")
+      setShowMessage(true)
+    }
+    else{
+      addword(botID)
+    }
+  }
+
   const addword =(id)=>{
+    
+    
     const data = {'question' : question,'answer' : answer ,'botID' : id}
     fetch('/bot/'+id+'/addword', {
     method : 'POST',
@@ -117,10 +146,16 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
         "Access-Control-Allow-Origin": "*",
         'Content-Type':'application/json'
         },
-    body: JSON.stringify(data)}).then(res=>res.json().then(data => {
-      if ("error" in data)
-      {
-        setFlash(data['error'])
+    body: JSON.stringify(data)}).then(res => res.json().then(data => {
+      // console.log(data)
+      if ("error" in data ){
+        
+        setMessage(data["error"])
+        setShowMessage(true)
+
+      }
+      else{
+        window.location.reload("bot/"+id+'/trained');
       }
     }))
     // window.location.reload("bot/"+id+'/trained');
@@ -159,6 +194,17 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
     },
     [keyPress]
   );
+
+  useEffect(
+    () => {
+      // console.log(showWord)
+      if (showWord == false) {
+        
+        setShowMessage(false)
+      }
+    },
+    [showWord]
+  );
   
   return(
     <div>
@@ -170,24 +216,33 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
               <ModalContent>
                 <article className="part Addword">
                   <h1 name="addword-popup">
-                    Add your Question and Answer   {flash}
+                    Add your Question and Answer   
                   </h1>
                   <form>
                     <div className="group-Question">
                       <label for="AddQuestion">Question</label>
-                      <input type="text" className="input-question" name="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question"></input>
+                      <input type="text" pattern="[A-Za-z0-9]+" className="input-question" id="question" name="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question"></input>
                     </div>
+                    { showMessage &&  
+                                  
+                                      <FlashMessage duration={4000}>
+                                        <div className="detect">
+                                          <strong>{message}</strong>
+                                        </div>  
+                                      </FlashMessage>
+                                  
+                      }
                     <div className="group-Answer">
                       <label for="AddAnswer">Answer</label>
-                      <input type="text" className="input-answer" name="input-answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer"></input>
+                      <input type="text" pattern="[A-Za-z0-9]+" className="input-answer" name="input-answer" id="answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer"></input>
                     </div>
                   </form>
                 </article>
-              <Button className="qa-comfirm" variant="success" name="btn-addword-confirm" onClick = {() => addword(botID) }>Comfirm</Button>
+              <button type="submit" className="qa-comfirm" variant="success" name="btn-addword-confirm" onClick={handleClick} >Comfirm</button>
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"
-                onClick={() => setShowWord(prev => !prev)}
+                onClick={() => closePop()}
               />
             </ModalWrapper>
             </Container>

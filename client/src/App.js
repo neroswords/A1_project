@@ -31,6 +31,7 @@ import Product_edit from './Page/Product_edit';
 import Chat from './Page/Chat';
 import NewOrder from './Page/NewOrder';
 import DragText from './Page/DragText';
+import Dashboard from './Page/Dashboard';
 function App() {
   return (
     <Router>
@@ -48,7 +49,7 @@ function App() {
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/training" component={ Train }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/trained" component={ Learned }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/group" component={ Group }/>
-            <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/group/text" component={ DragText }/>
+            <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/group/:group_id" component={ DragText }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/mapping" component={ Mapping }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/add_item" component={ Add_item }/>
             <PrivateRoute isloggedin={isLoggedIn()} exact path="/bot/:bot_id/mapping/create" component={ Mapping_create }/>
@@ -62,7 +63,7 @@ function App() {
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/inventory/product_detail/:product_id" component={ Product_detail } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/inventory/product_edit/:product_id" component={ Product_edit } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/chat/:bot_id/live_chat/:customer_id" component={ Chat } />
-            
+            <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/dashboard" component={ Dashboard } />
 
           </Switch>
     </Router>
