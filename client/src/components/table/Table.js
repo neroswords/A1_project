@@ -254,6 +254,7 @@ const defaultColumn = {
 
 
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained ,botID,loading }) {
+  const [errorState, setErrorState] = React.useState(false)
   const Ondelete = (e) => {
     setErrorState(false)
     if(e.length > 0){
