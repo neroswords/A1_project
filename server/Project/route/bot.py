@@ -622,6 +622,17 @@ def getTracking(botID):
     data = dumps(info_cur, indent=2)
     return data
 
+@bot.route('/<botID>/tracking',methods=["GET"])
+def load_tracking(botID):
+    
+    if request.method == 'GET' :
+        purchased_collection = mongo.db.purchased
+        purchased_cursor = purchased_collection.find({"botID" : ObjectId(botID)})
+        listcursor = list(purchased_cursor)
+        data = dumps(listcursor,indent = 2)
+        return data
+
+
 
 @bot.route('/<trackingNo>/addtracking', methods=['POST'])
 def addTracking(trackingNo):

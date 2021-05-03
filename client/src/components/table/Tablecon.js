@@ -3,9 +3,8 @@ import styled from 'styled-components';
 import  { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination, useRowSelect,useResizeColumns } from 'react-table'
 import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
-import { AddWord } from "./AddTable/AddWord";
-import { Button } from 'react-bootstrap';
 import Delete_table from "../Delete_table";
+import Traintable from "../Traintable";
 import { MDBNotification, MDBContainer } from "mdbreact";
 
 const Styles = styled.div`
@@ -91,17 +90,17 @@ const Styles = styled.div`
     color: #000;
   }
 
-  .buttonaddWord{
+  .buttonaddtrain{
     padding: 7px 15px;
     font-size: 12px;
     border-radius: 25px;
-    border: 1px solid #0078ff;
+    border: 1px solid #34a853;
     transition: 0.5s;
-    background-color: #0078ff;
+    background-color: #34a853;
     color: #fff;
 }
 
-.buttonaddWord:hover{
+.buttonaddtrain:hover{
   color: #000;
 }
 
@@ -337,6 +336,17 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     console.log(e.length)
   }
 
+  const OnTrain = (e) => {
+    console.log(e)
+    if(e.length > 0){
+      openTraintable(e)
+    }
+    else{
+      alert('please select')
+    }
+    console.log(e.length)
+  }
+
   const filterTypes = React.useMemo(
     () => ({
       fuzzyText: fuzzyTextFilterFn,
@@ -360,15 +370,20 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     }),
     []
   )
-  const [showWord, setShowWord] = useState(false);
-  const openWord = () => {
-    setShowWord(prev => !prev);
-  }
+  const [showTraintable, setShowTraintable] = useState(false);
+  
   
 
   const [showDelete_table, setShowDelete_table] = useState(false);
   const openDelete_table = (data) => {
     setShowDelete_table(prev => !prev);
+      
+  }
+
+  const openTraintable = (data) => {
+    console.log(data)
+    setShowTraintable(prev => !prev);
+    console.log(showTraintable)
       
   }
 
@@ -473,7 +488,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
                                 }
         <div className="button-trained-word">
-          <Button className='buttonaddWord' name="btn-addword" onClick={openWord}>Add Word</Button>
+          <button className="buttonaddtrain" name="btn-delword" onClick={() => OnTrain(selectedFlatRows)}>Train</button>
           <button className="buttondeleteWord" name="btn-delword" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
           <div className='SearchBar'>
             <GlobalFilter
@@ -482,7 +497,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               setGlobalFilter={setGlobalFilter}
             />
           </div>
-          <AddWord showWord={showWord} setShowWord={setShowWord} botID = {botID}/>
+          <Traintable showTraintable={showTraintable} setShowTraintable={setShowTraintable} selectedFlatRows={selectedFlatRows} id={botID} />
           <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table} selectedFlatRows={selectedFlatRows} id={botID} delete_trained={delete_trained}/>
         </div>
 
@@ -640,10 +655,10 @@ function Tablecon({ botID, delete_trained, add_data }) {
     )
   }
 
-  const openWord = () => {
-    setShowWord(prev => !prev);
+  // const openWord = () => {
+  //   setShowWord(prev => !prev);
 
-  }
+  // }
 
   useEffect(() => {
     fetch('/train_bot/' + botID + '/training')

@@ -116,25 +116,25 @@ function Group(props){
     }))
     }, []);
     const delete_trained =(data)=>{
-        // var newdata = []
-        // var i = 0
+        var newdata = []
+        var i = 0
     
-        // // var a = []
-        // for (i = 0; i < data.length; i++){
-        //     newdata.push(data[i].original)
-        // }
-        // if (data[0]){
-        //     fetch('/train_bot/delete/training/'+data[0].original.id, {
-        //         method : 'POST',
-        //         headers : {
-        //             "Access-Control-Allow-Origin": "*",
-        //             'Content-Type':'application/json'
-        //             },
-        //             body : JSON.stringify(newdata),
-        //         });
-        //         console.log(data)
-        //         window.location.reload("bot/"+id+'/trained');
-        // }    
+        // var a = []
+        for (i = 0; i < data.length; i++){
+            newdata.push(data[i].original)
+        }
+        if (data[0]){
+            console.log(newdata)
+            fetch('/bot/'+props.match.params.bot_id+'/group/delete/'+data[0].original.id, {
+                method : 'POST',
+                headers : {
+                    "Access-Control-Allow-Origin": "*",
+                    'Content-Type':'application/json'
+                    },
+                    body : JSON.stringify(newdata),
+                })
+                                
+        }    
     }
     return(
         <Styles>

@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 const Styles = styled.div` 
 .history-page {
     display: flex;
-    height: 92vh;
+    min-height: 92vh;
 }
 .container-fluid {
    padding: 20px 40px;
