@@ -1,7 +1,5 @@
-from flask import Flask, request, abort, render_template, session,url_for,redirect,g,send_from_directory,send_file
+from flask import Flask, request, abort, render_template, session,url_for,send_from_directory,send_file
 from flask_socketio import SocketIO
-import requests
-import json
 from Project.Config import *
 from flask_pymongo import PyMongo
 import bcrypt
@@ -65,14 +63,6 @@ app.register_blueprint(sales, url_prefix='/sales')
 # Talisman(app, content_security_policy={"default-src": "'unsafe-inline' 'self' *.omise.co"},)
 
 
-# @app.route('/upload', methods=['POST'])
-# def fileUpload():
-#     file = request.files['file'] 
-#     filename = secure_filename(file.filename)
-#     filename = images.save(form.image.data)
-#     return response
-
-
 @app.route('/images/<path:image_name>')
 def serve_image(image_name):
     return send_from_directory(app.config['DOWNLOAD_FOLDER']+"/images/",image_name)
@@ -81,12 +71,6 @@ def serve_image(image_name):
 def serve_video(video_name):
     return send_from_directory(app.config['DOWNLOAD_FOLDER']+"/video/",video_name)
 
-@app.route('/')
-def serve_api():
-    # bot_collection = mongo.db.bots
-    # bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
-    # if request.args.get('liff.state') != None:
-    return render_template('loading.html',liffId="1655652942-zNpjoxYV")
 
 CORS(app, expose_headers='Authorization')
 

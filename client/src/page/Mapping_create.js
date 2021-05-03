@@ -21,11 +21,16 @@ const Styles = styled.div`
     display: flex;
     min-height: 92vh;
 }
-.container {
+.container-fluid {
     margin-bottom: 2%;
     margin-top: 2%;
     overflow:hidden;
 }
+
+.mapping-create-title h2{
+  font-weight: 700;
+}
+
 .save__controls {
   z-index: 10;
   position: relative;
@@ -34,7 +39,6 @@ const Styles = styled.div`
   text-align: right;
 }
 .save__controls button{
-  
   margin-left: 0.2%;
   padding: 7px 15px;
   font-size: 12px;
@@ -273,8 +277,8 @@ function Mapping_create(props){
         <Styles>
         <div className="mapping-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"mapping"} />
-            <div className="container">
-                <div className="container-top d-flex bd-highlight">
+            <div className="container-fluid">
+                <div className="mapping-create-title d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight'>Mapping</h2>
                     
                 </div>

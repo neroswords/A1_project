@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import '../Chat/Chat.css';
 
-let endPoint = "http://127.0.0.1:200";
+let endPoint = "http://127.0.0.1:300";
 
 let socket = io.connect(`${endPoint}`);
  
@@ -29,12 +29,12 @@ function Chatbody({botID,customerID}){
                 data.message.forEach(ele=>{ 
                   if (ele.sender_type == "bot"){
                     setMessages(messages=> [...messages,<div><p className="head-name from-owner msg">{ele.sender}</p><p className="msg owner-send">{ele.message}</p></div>])
-                  } else if (ele.sender_type == "lineUser"){
+                  } else if (ele.sender_type == "line"){
                     setMessages(messages=> [...messages,<div><p className="head-name from-cust msg">{ele.sender}</p><p className="msg customer-send">{ele.message}</p></div>])
-                  }   
-                    else if (ele.sender_type == "facebookUser"){
+                  }
+                    else if (ele.sender_type == "facebook"){
                     setMessages(messages=> [...messages,<div><p className="head-name from-cust msg">{ele.sender}</p><p className="msg customer-send">{ele.message}</p></div>])
-                  }   
+                  }
             })
           })).then(scrollToBottom())
         }
@@ -61,7 +61,7 @@ function Chatbody({botID,customerID}){
     const getMessages = () =>{
       socket.on("message_from_webhook", msg =>{
           setMessages([...messages,
-              <div className="customer-msg col">
+              <div >
                   <p className="head-name from-cust msg">{msg.sender}</p><p className="msg customer-send">{msg.message}</p>
               </div>]);
               scrollToBottom()
@@ -69,8 +69,9 @@ function Chatbody({botID,customerID}){
       })
    
       socket.on("message_from_response", msg =>{
+          console.log(msg)
           setMessages([...messages,
-              <div className="owner-msg col">
+              <div >
                   <p className="head-name from-owner msg">{msg.sender}</p><p className="msg owner-send">{msg.message}</p>
               </div>]);
               
@@ -100,6 +101,12 @@ function Chatbody({botID,customerID}){
                         <div className="blocks">
                             <div className="current-chatting-user">
                               <p>{username}</p>
+                            </div>
+                            
+                            <div class="toggle">
+                              <input type="checkbox" class="check"/>
+                              <b class="b switch"></b>
+                              <b class="b track"></b>
                             </div>
                         </div>
                       </div>

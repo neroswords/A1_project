@@ -60,19 +60,70 @@ const Styles = styled.div`
     border-radius: 1rem;
     padding: 5px 20px; 
   }
+  .loader {
+  animation:spin 1s infinite linear;
+  border:solid 2vmin transparent;
+  border-radius:50%;
+  border-right-color:#fca311;
+  border-top-color:#fca311;
+  box-sizing:border-box;
+  height:20vmin;
+  left:calc(50% - 10vmin);
+  position:fixed;
+  top:calc(50% - 10vmin);
+  width:20vmin;
+  z-index:1;
+  &:before {
+    animation:spin 2s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcc111;
+    border-top-color:#fcc111;
+    box-sizing:border-box;
+    content:"";
+    height:16vmin;
+    left:0;
+    position:absolute;
+    top:0;
+    width:16vmin;
+  }
+  &:after {
+    animation:spin 3s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcd111;
+    border-top-color:#fcd111;
+    box-sizing:border-box;
+    content:"";
+    height:12vmin;
+    left:2vmin;
+    position:absolute;
+    top:2vmin;
+    width:12vmin;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
 ` 
 
 function Mapping(props){
     const [name, setName] = useState();
+    const [loading,setLoading] = useState(false);
     useEffect(() => {
       fetch('/bot/'+props.match.params.bot_id) .then(response => response.json().then(inf => {
         setName(inf)
+        setLoading(true)
     }))
     }, []);
   
     return(
         <Styles>
-        
+  
+        {loading ?            
         <div className="mapping-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"mapping"} />
             <div className="container-fluid">
@@ -89,7 +140,9 @@ function Mapping(props){
                 </div>
             </div>
 
-        </div>
+        </div>   
+                  
+                  : <div class="loader"></div>}
         </Styles>        
         
     );

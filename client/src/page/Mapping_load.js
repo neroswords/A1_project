@@ -21,12 +21,21 @@ const Styles = styled.div`
     display: flex;
     min-height: 92vh;
 }
-.container {
-    margin-top:2%;
+.container-fluid {
+    padding: 20px;
 }
 .react-flow{
-  max-height: 50vh;
+  max-height: 80vh;
+  background-color: white;
+  border-radius :0.75rem;
+  padding: 20px;
 }
+
+.mapping-create-title h2{
+  font-weight: 700;
+  margin: 2px auto;
+}
+
 .save__controls {
   z-index: 10;
   position: relative;
@@ -35,7 +44,6 @@ const Styles = styled.div`
   text-align: right;
 }
 .save__controls button{
-  
   margin-left: 0.2%;
   padding: 7px 15px;
   font-size: 12px;
@@ -84,6 +92,8 @@ input::placeholder{
   padding-left:30px;
 
 }
+
+
 ` 
 // make delete button and drop down change node type
 
@@ -305,9 +315,9 @@ const changeAnswer =  (evt) =>{
         
         <div className="mapping-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"mapping"} />
-            <div className="container">
-                <div className="container-top d-flex bd-highlight">
-                    <h2 className='p-2 flex-grow-1 bd-highlight' id="mapping-load-header">Mapping</h2>
+            <div className="container-fluid">
+                <div className="mapping-create-title d-flex bd-highlight">
+                    <h2 className='p-2 flex-grow-1 bd-highlight' id="mapping-load-header">Create Mapping Word</h2>
                     
                 </div>
              

@@ -10,10 +10,9 @@ import ast
 import json
 import time
 import string
-
 import requests
 from Project.message import item_list_flexmessage
-from Project.extensions import mongo, JSONEncoder,server_url
+from Project.extensions import mongo, JSONEncoder,server_url,socket_api,socket_noti
 from Project.nlp import sentence_get_confident
 from Project.process_facebook import stateHandler
 from Project.process import process_message
@@ -21,6 +20,7 @@ from bson import ObjectId,json_util
 from json import dumps,loads
 import os.path
 import bson.json_util
+
 # from bson.json_util import dumps, loads,json_util
 from .. import socketio
 facebook = Blueprint("facebook", __name__)
@@ -58,15 +58,15 @@ def call_facebook(botID):
         sender_define = customer_collection.find_one(
             {'$and': [{'userID': sender_id}, {'botID': ObjectId(botID)}]})
         if sender_define == None:
-            sender_define = {'userID': sender_id, 'type': "facebook","date":datetime.datetime.now(),
+            sender_define = {'userID': sender_id,'auto_chat':True, 'type': "facebook","date":datetime.datetime.now(),
                              'state': 'none', 'botID': bot_define['_id'], 'status': 'open',"pictureUrl":profile['picture']['data']['url'],"display_name":profile['name']}
             customer_collection.insert_one(sender_define)
         if sender_define['status'] == 'open':
             if message_type == 'text':
                 data = {"message": payload['entry'][0]
                         ['messaging'][0]['message']['text'],"pictureUrl":profile['picture']['data']['url'],"display_name":profile['name']}
-                socketio.emit("message_from_noti", {"bot_name": bot_define['bot_name'],"readed":"unread", "message":data["message"], "sender_id":sender_define['userID'], "botID":{"$oid":str(bot_define['_id'])},"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"type":"customer"},room=str(bot_define['owner']))
-                socketio.emit("message_from_webhook", {"message":data["message"], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},room=botID+'&'+sender_define['userID'])
+                socket_noti({"bot_name": bot_define['bot_name'],"readed":"unread", "message":data["message"], "sender_id":sender_define['userID'], "botID":{"$oid":str(bot_define['_id'])},"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"type":"customer"},userID=str(bot_define['owner']))
+                socket_api({"message":data["message"], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},botID,sender_define['userID'])
                 res = stateHandler(
                     sender_id=sender_define['userID'], botID=botID, message=data, confident=bot_define['confident'],platform='facebook')
                 # save_message(message=data['message'],message_type="text",sender=profile['name'],sender_id=sender_define['userID'],sender_type="facebook",room=botID+'&'+sender_define['userID'],bot_name=bot_define['bot_name'])
@@ -77,7 +77,8 @@ def call_facebook(botID):
                 res = stateHandler(
                     sender_id=sender_define['userID'], botID=botID, postback=data)
                 show = payload['entry'][0]['messaging'][0]['postback']['title']
-                socketio.emit("message_from_webhook", {"message":show, "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},room=botID+'&'+sender_define['userID'])
+                socket_api({"message":show, "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},botID,sender_define['userID'])
+                #socketio.emit("message_from_webhook", {"message":show, "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},room=botID+'&'+sender_define['userID'])
                 save_message(message=show,message_type="text",sender=profile['name'],sender_id=sender_define['userID'],sender_type="facebook",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile['picture']['data']['url'])
             elif message_type == 'q_postback':
                 print(payload)
@@ -86,12 +87,14 @@ def call_facebook(botID):
                 show = payload['entry'][0]['messaging'][0]['message']['text']
                 res = stateHandler(
                     sender_id=sender_define['userID'], botID=botID, postback=data)
-                socketio.emit("message_from_webhook", {"message":show, "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},room=botID+'&'+sender_define['userID'])
+                socket_api({"message":show, "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},botID,sender_define['userID'])
+                #socketio.emit("message_from_webhook", {"message":show, "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},room=botID+'&'+sender_define['userID'])
                 save_message(message=show,message_type="text",sender=profile['name'],sender_id=sender_define['userID'],sender_type="facebook",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile['picture']['data']['url'])
             else:
                 res = {"message": "ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
             if "message" in res.keys():
-                socketio.emit("message_from_response", {"message":res['message'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":bot_define['bot_name'],"sender_type":"bot"},room=botID+'&'+sender_define['userID'])
+                socket_api({"message":res['message'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},botID,sender_define['userID'])
+                #socketio.emit("message_from_response", {"message":res['message'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":bot_define['bot_name'],"sender_type":"bot"},room=botID+'&'+sender_define['userID'])
                 # save_message(message=res['message'],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'],bot_name=bot_define['bot_name'])
                 save_message(message=res['message'],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile['picture']['data']['url'])
                 response = print(bot.send_text_message(sender_id,res['message']))
@@ -115,7 +118,8 @@ def call_facebook(botID):
     #     }
     # }
                 call_basket(botID, sender_id, bot,res['btn_template'])
-                socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":bot_define['bot_name'],"sender_type":"bot"},room=botID+'&'+sender_define['userID'])
+                socket_api({"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},botID,sender_define['userID'])
+                #socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":bot_define['bot_name'],"sender_type":"bot"},room=botID+'&'+sender_define['userID'])
                 save_message(message="unavailable to show content",message_type="text",sender=bot_define['bot_name'],sender_id=sender_define['userID'],sender_type="facebook",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile['picture']['data']['url'])
             elif 'flex' in res.keys():
                 if res['type'] == "name":
@@ -144,17 +148,20 @@ def call_facebook(botID):
                     save_message(message="กรุณาตรวจทานเบอร์มือถือของท่านหากผิดพลาดสามารถพิมพ์อีกครั้งได้เลย",message_type="text",sender=bot_define['bot_name'],sender_id=sender_define['userID'],sender_type="bot",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile['picture']['data']['url'])
                 response = res['flex']
                 print(bot.send_message(sender_id, response))
-                socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":bot_define['bot_name'],"sender_type":"bot"},room=botID+'&'+sender_define['userID'])
+                socket_api({"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},botID,sender_define['userID'])
+                #socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":bot_define['bot_name'],"sender_type":"bot"},room=botID+'&'+sender_define['userID'])
                 save_message(message="unavailable to show content",message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(botID),sender_type="bot",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile['picture']['data']['url'])
             elif 'btn_payment' in res.keys():
                 response = call_payment(botID, sender_id, bot)
                 print(bot.send_message(sender_id, response))
-                socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":bot_define['bot_name'],"sender_type":"bot"},room=botID+'&'+sender_define['userID'])
+                socket_api({"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},botID,sender_define['userID']) 
+                #socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":bot_define['bot_name'],"sender_type":"bot"},room=botID+'&'+sender_define['userID'])
                 save_message(message="unavailable to show content",message_type="text",sender=bot_define['bot_name'],sender_id=sender_define['userID'],sender_type="facebook",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile['picture']['data']['url'])
             elif 'receipt' in res.keys():
                 response = receipt()
                 print(bot.send_message(sender_id, response))
-                socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":bot_define['bot_name'],"sender_type":"bot"},room=botID+'&'+sender_define['userID'])
+                socket_api({"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},botID,sender_define['userID'])
+                #socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":bot_define['bot_name'],"sender_type":"bot"},room=botID+'&'+sender_define['userID'])
                 save_message(message="unavailable to show content",message_type="text",sender=bot_define['bot_name'],sender_id=sender_define['userID'],sender_type="facebook",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile['picture']['data']['url'])
            
             # elif 'image' in res.keys():
@@ -571,13 +578,13 @@ def save_message(message,message_type,sender,sender_id,sender_type,room,botId,us
         done = users_collection.update_one({'_id': ObjectId(userID)}, info_update)
 
 
-@socketio.on('join_room')
-def handle_join_room_event(data):
-    room_id = data['bot']+"&"+data['customer']
-    join_room(room_id)
-    # socketio.emit('join_room_announcement', data, room=data['room'])
+# @socketio.on('join_room')
+# def handle_join_room_event(data):
+#     room_id = data['bot']+"&"+data['customer']
+#     join_room(room_id)
+#     # socketio.emit('join_room_announcement', data, room=data['room'])
 
-@socketio.on('join_room_noti')
-def handle_join_room_noti(data):
-    join_room(data['userID'])
-    # socketio.emit('join_room_announcement', data, room=data['room'])
+# @socketio.on('join_room_noti')
+# def handle_join_room_noti(data):
+#     join_room(data['userID'])
+#     # socketio.emit('join_room_announcement', data, room=data['room'])

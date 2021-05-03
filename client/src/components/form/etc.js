@@ -8,7 +8,7 @@ const Styles = styled.div`
     margin-top: 2%;
 }
 
-.facebook-card {
+.optional-card {
     height: 30rem;
     width: 25rem;
     /* padding: 4rem 3rem; */
@@ -17,13 +17,13 @@ const Styles = styled.div`
     background-color: #fff;
     color: white;
     // box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-    border: 3px solid #0078ff;
+    border: 3px solid #fca311;
 }
-.facebook {
+.optional-form {
     padding : 5%;
 }
 
-.facebook p{
+.optional-form p{
     font-weight: bold;
     font-size: 23px;
     color: black;
@@ -41,7 +41,7 @@ const Styles = styled.div`
 
 .copy-link p::-webkit-scrollbar {
   /* width: 5px; */
-  height: 6px;
+  height: 10px;
 }
 
 .copy-link p::-webkit-scrollbar-track {
@@ -58,11 +58,11 @@ const Styles = styled.div`
 } */
 
 .copy-link i{
-    color: #0078ff;
+    color: #fca311;
 }
 
 .copy-clipboard {
-    color: #34a853;
+    color: #fca311;
     /* top: 195px;
     right: 70px; */
 }
@@ -73,19 +73,19 @@ const Styles = styled.div`
     float : right;
     background: white;
     border-radius: 1rem;
-    border: 2px solid #0078ff;
+    border: 2px solid #fca311;
     /* margin-left: -3%;
     margin-right: -8px; */
     margin: 0 -5% 0 0;
     /* text-align:center; */
 } 
 
-.facebook .input-Box label{
+.optional-form .input-Box label{
     font-size: 15px;
     color: black;
 }
 
-.facebook .input-Box input{
+.optional-form .input-Box input{
     box-shadow: none;
     outline: none;
     border: none;
@@ -103,14 +103,14 @@ const Styles = styled.div`
 }
 
 #container-button .submit{
-    padding: 5px 20px;
+    padding: 5px 30px;
     margin-top: 15px;
     font-size: 19px;
     border-radius: 25px;
-    border: 3px solid #0078ff;
+    border: 3px solid #fca311;
     transition: 0.5s;
     margin: 10px;
-    background-color: #0078ff;
+    background-color: #fca311;
     color: #fff;
 }
 
@@ -183,8 +183,8 @@ export default function Etcform({botID}) {
         <Styles>
             <div className="container">
                  <div className="row my-3">
-                    <div className="group facebook-card col-lg-12">
-                        <form className="facebook" onSubmit={ handleSubmit }>
+                    <div className="group optional-card col-lg-12">
+                        <form className="optional-form" onSubmit={ handleSubmit }>
                             <div className="row">
                                 <p className="col mb-4">Optional connection</p>
                                 {/* <i className="col fab fa-facebook"></i> */}
@@ -194,8 +194,8 @@ export default function Etcform({botID}) {
                                 <button type="button" className="copy-clipboard" onClick={() => {navigator.clipboard.writeText(webhook)}}><i className="fas fa-copy fa-xs copy-clipboard"></i></button>
                             </div>
                             <div className="input-Box">
-                            <div className="col-lg-12">
-                                <label  className="form-label">Page Facebook access token</label>
+                            <div className="ms-2">
+                                <label  className="form-label">Access token</label>
                                 <input type="text" value={ omiseAccesstoken } onChange={e => setOmiseAccesstoken(e.target.value)} className="form-control" id="inputpagefacebook" />
                             </div>
                             <div className="col-lg-12 mt-3">
@@ -204,7 +204,7 @@ export default function Etcform({botID}) {
                             </div>
                             </div>
                             <div id="container-button">
-                                <button className="cancle" type='button' onClick={() => {history.goBack()}} >Back</button>
+                                {/* <button className="cancle" type='button' onClick={() => {history.goBack()}} >Back</button> */}
                                 <button className="submit" type='submit'>Submit</button>
                             </div>
                         </form>

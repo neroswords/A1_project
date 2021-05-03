@@ -1,6 +1,5 @@
 .botlist-page {
   display: flex;
-  
 }
 
 .botlist-page .container {
@@ -33,7 +32,8 @@
 }
 
 @media (min-width: 1600px) {
-  .botlist-body { grid-template-columns: repeat(4, 1fr); }
+  .botlist-body { grid-template-columns: repeat(4, 1fr); 
+  }
 }
  .card-box {
   background-color: white;
@@ -50,18 +50,21 @@
   transition: all 0.2s ease-out;
   text-decoration: none;
   color: black;
+  
 }
 
 .card-box:hover {
   box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.12);
   /* transform: translatey(-6px); */
   color:black;
+  z-index: -10;
 }
 
 .link{
   text-decoration: none;
   color: black;
 }
+
 .link:hover{
   color: black;
 }
@@ -123,6 +126,7 @@ p.Bot-name{
   margin-top: 10px;
   margin-left: -15px;
   vertical-align: middle;
+
   /* transition: box-shadow 0.4s ease; */
 }
 

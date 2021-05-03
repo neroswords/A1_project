@@ -68,13 +68,61 @@ const Styles = styled.div`
     border-radius: 1rem;
     padding: 5px 20px; 
   }
+  .loader {
+  animation:spin 1s infinite linear;
+  border:solid 2vmin transparent;
+  border-radius:50%;
+  border-right-color:#fca311;
+  border-top-color:#fca311;
+  box-sizing:border-box;
+  height:20vmin;
+  left:calc(50% - 10vmin);
+  position:fixed;
+  top:calc(50% - 10vmin);
+  width:20vmin;
+  z-index:1;
+  &:before {
+    animation:spin 2s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcc111;
+    border-top-color:#fcc111;
+    box-sizing:border-box;
+    content:"";
+    height:16vmin;
+    left:0;
+    position:absolute;
+    top:0;
+    width:16vmin;
+  }
+  &:after {
+    animation:spin 3s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcd111;
+    border-top-color:#fcd111;
+    box-sizing:border-box;
+    content:"";
+    height:12vmin;
+    left:2vmin;
+    position:absolute;
+    top:2vmin;
+    width:12vmin;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
 `
 
 
 function History(props) {
 
     const [history, setHistoryState] = useState([]);
-
+    const [loading,setLoading] = useState(false);
     useEffect(() => {
         fetch('/history/' + props.match.params.bot_id)
           .then(res => res.json().then(data => {
@@ -87,58 +135,63 @@ function History(props) {
       useEffect(() => {
         fetch('/bot/'+props.match.params.bot_id) .then(response => response.json().then(inf => {
           setName(inf)
+          setLoading(true)
       }))
       }, []);
 
     return (
         <Styles>
-            <div className="history-page">
-                <Navbar_member botID={props.match.params.bot_id} path={"history"} />
-                <div className="container-fluid">
-                    <div className="bot-name-on-page">
-                        <h4> Bot name : {name}</h4>
-                    </div>
-                    <div className="title-history">
-                        <h2 className='p-2 flex-grow-1 bd-highlight' id="history-header">History</h2>
-                    </div>
+     
+            {loading ?         
+                         <div className="history-page">
+                         <Navbar_member botID={props.match.params.bot_id} path={"history"} />
+                         <div className="container-fluid">
+                             <div className="bot-name-on-page">
+                                 <h4> Bot name : {name}</h4>
+                             </div>
+                             <div className="title-history">
+                                 <h2 className='p-2 flex-grow-1 bd-highlight' id="history-header">History</h2>
+                             </div>
+         
+                             <div className="row p-3">
+                                 <div className="small-box bg-info col-4">
+                                     <div className="inner">
+                                         <h3>{history.waited}</h3>
+                                         <p>New Orders</p>
+                                     </div>
+                                     <div className="icon">
+                                         <i className="far fa-shopping-basket"></i>
+                                     </div>
+                                     <Link to={'/bot/'+ props.match.params.bot_id +'/history/new'}><a href="#" className="small-box-footer MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
+                                 </div>
+         
+                                 <div class="col-lg-3 col-6">
+                                     <div className="small-box bg-success">
+                                         <div className="inner">
+                                             <h3>{history.total}</h3>
+                                             <p>Total Order</p>
+                                             <br></br>
+                                         </div>
+                                         <div className="icon">
+                                             <i class="far fa-clipboard-list-check"></i>
+                                         </div>
+                                         {/* <Link><a href="#" className="small-box-footer MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link> */}
+                                     </div>
+                                 </div>
+         
+         
+         
+                             </div>
+         
+         
+         
+                             <div className="show-history">
+                                 <Visualize botID={props.match.params.bot_id}/>
+                             </div>
+                         </div>
+                     </div>
+                  : <div class="loader"></div>}
 
-                    <div className="row p-3">
-                        <div className="small-box bg-info col-4">
-                            <div className="inner">
-                                <h3>{history.waited}</h3>
-                                <p>New Orders</p>
-                            </div>
-                            <div className="icon">
-                                <i className="far fa-shopping-basket"></i>
-                            </div>
-                            <Link to={'/bot/'+ props.match.params.bot_id +'/history/new'}><a href="#" className="small-box-footer MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
-                        </div>
-
-                        <div class="col-lg-3 col-6">
-                            <div className="small-box bg-success">
-                                <div className="inner">
-                                    <h3>{history.total}</h3>
-                                    <p>Total Order</p>
-                                    <br></br>
-                                </div>
-                                <div className="icon">
-                                    <i class="far fa-clipboard-list-check"></i>
-                                </div>
-                                {/* <Link><a href="#" className="small-box-footer MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link> */}
-                            </div>
-                        </div>
-
-
-
-                    </div>
-
-
-
-                    <div className="show-history">
-                        <Visualize botID={props.match.params.bot_id}/>
-                    </div>
-                </div>
-            </div>
         </Styles>
     );
 }

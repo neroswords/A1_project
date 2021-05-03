@@ -1,7 +1,7 @@
   
 import React from 'react';
 import styled from 'styled-components';
-import {withRouter, Redirect} from 'react-router-dom'
+import {Link,withRouter, Redirect} from 'react-router-dom'
 import ReactFileReader from 'react-file-reader';
 import Facebookform  from '../Components/Form/facebookform';
 import Lineform  from '../Components/Form/lineform';
@@ -25,6 +25,7 @@ const Styles = styled.div`
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
     text-align: center;
+    margin-top: 15px;
   }
   
   .card-bot .card-body {
@@ -117,6 +118,15 @@ const Styles = styled.div`
     font-size: 1rem;
   }
 
+  .error {
+    color: red;
+  }
+
+  .button-close-create-bot i{
+    float: right;
+    color: red;
+    font-size: 18px;
+  }
 `;
 
 
@@ -324,9 +334,12 @@ _handleImageChange(e) {
         <Styles>
           
               <div className="container">
-                    <div className="col-sm-10 col-md-9 col-lg-6 mx-auto">
+                    <div className="col-sm-10 col-md-9 col-lg-7 mx-auto">
                       <div className="card card-bot" id="create_bot">
                         <div className="card-body">
+                        <Link to={"/bot_list/" +localStorage.getItem("user_id") + "#main" }  className="button-close-create-bot">
+                              <i className="fas fa-times"></i>
+                        </Link>
                           <h5 className="card-title-addbot">Create Bot form</h5>
                           <form className="form-bot" onSubmit={this.handleUploadImage}>
                                 <div className="title_part">

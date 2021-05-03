@@ -110,6 +110,9 @@ const Styles = styled.div`
     color: red;
     font-size: 1rem;
   }
+  .error{
+      color: red;
+    }
 `;
 
 class Edit_bot extends React.Component {

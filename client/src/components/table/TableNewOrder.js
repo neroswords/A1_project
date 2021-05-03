@@ -11,9 +11,16 @@ import Delete_table from "../Delete_table";
 
 const Styles = styled.div`
 
+.table-show-all > div.container { 
+    /* max-width: max-content; */
+    margin: 0 !important;
+    /* padding: 20px; */
+    min-width: 100% ;
+  }
+
   table {
     font-family: 'Roboto',sans-serif;
-    margin: 10px 0;
+    margin: 1% 0;
     font-size: 1em;
     text-align: center;
     border: 1px solid #efeff5;
@@ -48,6 +55,7 @@ const Styles = styled.div`
         padding: 0;
         margin: 0;
         border: 0;
+        text-align: center;
       }
     }
 
@@ -55,6 +63,7 @@ const Styles = styled.div`
     background-color: transparent;
     border-radius: 25px;
     padding-left:15px;
+    width: 300px;
   }
 
 }
@@ -72,6 +81,7 @@ const Styles = styled.div`
     background-color: #CD5C5C;
     color: #fff ;
     margin-left: 1%;
+    margin-top: 5px;
   }
 
 
@@ -94,6 +104,7 @@ const Styles = styled.div`
 }
 
 .pagination{
+  z-index : -1;
   justify-content:space-between;
   width:100%;
   margin-bottom: 0;
@@ -129,7 +140,7 @@ const Styles = styled.div`
   height: 30px;
   border-radius: 25px;
   border: .5px solid #A9A9A9;
-
+  margin: 15px 0;
 }
 
 input::placeholder{
@@ -564,6 +575,7 @@ function TableNewOrder({ botID, delete_trained, add_data }) {
  
   return (
     <Styles>
+      <div className="table-show-all">
       <TableShow
         columns={columns}
         data={TableNewOrderState}
@@ -573,7 +585,7 @@ function TableNewOrder({ botID, delete_trained, add_data }) {
         botID={botID}
         // mapID ={TablemapState[0].id}
       />
-
+      </div>
     </Styles>
   );
 }

@@ -5,6 +5,7 @@ import {Link, withRouter, Redirect } from 'react-router-dom'
 import 'react-widgets/dist/css/react-widgets.css';
 import { Multiselect } from 'react-widgets' 
 import FlashMessage from 'react-flash-message'
+import { PanelGroup } from 'react-bootstrap';
 
 const Styles = styled.div`
   .container {
@@ -213,8 +214,13 @@ const Styles = styled.div`
     /* float: right; */ 
 } 
 
+.error {
+  color: red;
+}
+
 `;
 let fileimg = []
+
 export default class Add_item extends React.Component {
   constructor(props) {
     super(props);
@@ -227,6 +233,7 @@ export default class Add_item extends React.Component {
       imageURL: '',
       Image: '',
       des: '',
+      file: [],
       imagesPreviewUrl: [],
       options: ["d1","2"],
       value: [],
@@ -238,9 +245,31 @@ export default class Add_item extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     // this.Onend = this.Onend.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
+    this.deleteImg = this.deleteImg.bind(this)
    
   }
-  
+  deleteImg (img,index) {
+    
+    
+      const preview_image = this.state.imagesPreviewUrl
+      const preview_img = preview_image.filter(e => e != img);
+      
+      const data_image = fileimg
+      
+      const data_img = data_image.filter(e => e != data_image[index]);
+     fileimg = data_img
+    
+ 
+     // OldImg.pop(index)
+     
+     this.setState({
+       imagesPreviewUrl: preview_img
+       
+     })
+     // console.log(this.state.url_preview)
+     
+   }
+
   handleCreate(name) {
     let { options, value } = this.state;
 
@@ -255,7 +284,7 @@ export default class Add_item extends React.Component {
 
   handleChange(evt) {
     this.setState({ [evt.target.name]: evt.target.value });
-    console.log(this.state)
+   
   }
 
 
@@ -277,6 +306,7 @@ export default class Add_item extends React.Component {
       }
       else{
         let reader = new FileReader();
+        console.log(this.uploadInput.files[i])
         fileimg.push(this.uploadInput.files[i])
         if (!fileimg) {
           return
@@ -284,7 +314,7 @@ export default class Add_item extends React.Component {
         // console.log(this.state.imagesPreviewUrl)
         reader.onloadend = () => {
           this.setState({
-            file: this.uploadInput.files[i],
+            file: [...this.state.file,this.uploadInput.files[i]],
             imagesPreviewUrl: [...this.state.imagesPreviewUrl, reader.result]
           });
         }
@@ -294,11 +324,14 @@ export default class Add_item extends React.Component {
       
 
     }
-
-    console.log(fileimg)
+    
+    // console.log(fileimg)
 
 
   }
+  
+
+
   handleUploadImage(ev) {
     ev.preventDefault();
 
@@ -353,6 +386,8 @@ export default class Add_item extends React.Component {
     }
     
   }
+
+ 
     // componentDidMount ()  {
     //  var a = []
     //  var unique = []
@@ -405,17 +440,19 @@ export default class Add_item extends React.Component {
                             <div className="upload-newinv">
                                 <input accept="image/x-png,image/gif,image/jpeg" ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
                             </div>
-                            
+                            {/* {this.state.file.map((file) => {
+                                console.log(file) 
+                               })} */}
+                            {this.state.file}
                               {this.state.imagesPreviewUrl.map((imagesPreviewUrl,index) => {
-                                
-                                return (
                                
+                                return (
+                                  
                                   <div className="preview-img">
-                                {console.log(index)}
-                                       <img src={imagesPreviewUrl} />
-                                    <button className="btn-delete-img">
-                                          <i className="fas fa-times-circle"></i>
-                                      </button>
+                                    <div className="btn-delete-img" >
+                                          <i className="fas fa-times-circle" onClick={() => this.deleteImg(imagesPreviewUrl,index) }></i>
+                                      </div>
+                                      
                                       <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
                                 </div>
                               )})}
@@ -432,8 +469,7 @@ export default class Add_item extends React.Component {
                                 <label className="form-label">Item name</label>
                                 <span className="req-icon"> *</span>
                                 <input type="text" name="item_name" value={this.state.item_name} ref={(ref) => { this.item_name = ref; }} onChange={this.handleChange} className="form-control"required />
-                              </div> 
-                              { this.state.showMessage &&  
+                                { this.state.showMessage &&  
                                         <div className="container">
                                             <FlashMessage duration={4000}>
                                               <div className="error">
@@ -441,7 +477,9 @@ export default class Add_item extends React.Component {
                                               </div>  
                                             </FlashMessage>
                                         </div>
-                                  }                       
+                                  } 
+                              </div> 
+                                                    
                               <div className="col">
                                 <label className="form-label">Price</label>
                                 <span className="req-icon"> *</span>
