@@ -171,7 +171,7 @@ useEffect(() => {
         }))
   },[callnumber]);
 
-
+  // console.log(data)
 
   const getNoti = () => {
 
@@ -230,18 +230,36 @@ useEffect(() => {
                {/* <Link to={"/chat/"+msg['botID']['$oid']+"/live_chat/"+msg['sender_id']}  > */}
                <div className={msg['readed'] == "read"? 'msg-noti-iread': "msg-noti-i"} onClick={()=>toggleClass(msg)} > 
                 {/* <div className={isActiveClass ? 'img-noti-i': 'img-noti-inew'} onClick={toggleClass(this)} > */}
-                
-                  <img className="msg-noti-all" src={msg['pictureUrl']}></img>
+                <div className="msg-noti-all">
+                    <div className="noti-show-img-and-type">
+                      <img className="noti-show-img" src={msg['pictureUrl']}></img>
+                      <div className="noti-show-user-type">
+                        {   msg.sender_type == "line" ||  msg.sender_type == "lineUser" ?
+                              (            
+                                <div className="noti-show-line">
+                                    <i className="fab fa-line"></i>
+                                      
+                                </div>
+                              ) : (
+                                <div className="noti-show-facebook">
+                                    <i className="fab fa-facebook-square"></i>
+                                    
+                                </div>    
+                              )
+                        }
+                        </div>
+                      </div> 
+                      {console.log(msg)} 
+                      <div className="noti-show-info-user">
+                        {msg['readed'] == "unread"? <div className="noti-show-new"><p>NEW</p></div>: " "}
+                        <p className="noti-show-name">{msg['sender']}</p>  
+                        <p className="noti-show-msg">{msg['message']}</p>
+                        <p className="noti-show-bot">bot name</p>
+                        {/* {msg['message']} {msg['botID']['$oid']} */}
 
-                    <div className="noti-show-info-user">
-                    {msg['readed'] == "unread"? <div className="noti-show-new"><p>NEW</p></div>: " "}
-                    <p className="noti-show-name">{msg['sender']}</p>  
-                    <p className="noti-show-msg">{msg['message']}</p>
-                    <p className="noti-show-time">11.20 น.</p>
-                    {/* {msg['message']} {msg['botID']['$oid']} */}
-
-                    </div> 
-                </div>
+                      </div> 
+                    </div>
+                  </div>
                    {/* </Link> */}
                 
             </li>
@@ -268,12 +286,13 @@ useEffect(() => {
             "Content-Type": "application/json",
           },
           body : JSON.stringify(msg)
+          
         }).then((response) => {
           response.json().then((body) => {
             setCallnumber(prev => !prev)
           });
         }).then(getUpdate());
-        
+       
 
 
       // if (shownoti[i].sender_id == msg.sender_id) {

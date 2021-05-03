@@ -18,31 +18,85 @@ const Styles = styled.div`
   }
 
   .connect_platform button{
-    padding: 7px 5px;
+    padding: 5px 5px;
     border-radius: 40px;
   }
-  
+
+  i.icon-connect {
+    font-size: 30px;
+  }
+
+  i.fa-filter{
+    font-size: 27px;
+  }
+
+  .unselect-platform{
+    background-color: #dedede;
+    color: white;
+    /* border: none; */
+    border-radius: 0.25rem;
+    border: 1px solid transparent;
+    padding: 5px 7px;
+  }
+
+  .connect-platform {
+    width: 300px;
+    display: flex;
+    justify-content:space-evenly; 
+    /* background-color: red; */
+  }
+
+  .connect-platform .btn-select-facebook{
+    background-color: #0078ff;
+    color: white;
+    border: 1px solid #0078ff;
+   border-radius: 0.25rem;
+   padding : 5px 10px;
+  }
+
+  .connect-platform .btn-select-line{
+    background-color: #34a853;
+    color: white;
+    border: 1px solid #34a853;
+   border-radius: 0.25rem;
+   padding : 5px 10px;
+  }
+
+  .connect-platform .btn-select-etc{
+    background-color: #fca311;
+    color: white;
+    border: 1px solid #fca311;
+   border-radius: 0.25rem;
+   padding : 6px 10px;
+  }
+
+  .title-popup-connect{
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 25px;
+  }
+
 `;
 
 const Background = styled.div`
   width: 100%;
   height: 100%;
-  background: blue;
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
-  background : rgba(0, 0, 0, 0.2);
-  position: fixed;
+  background : rgba(0, 0, 0, 0.5);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 2000000;
 `;
 
 const ModalWrapper = styled.div`
   background-color: white;
   padding: 3rem 3rem;
   border-radius: 0.5rem;
+
   /* width: 400px; */
   /* height: 550px; */
   /* z-index: 1000; */
@@ -133,19 +187,21 @@ export function Connect_bot({ setShowForm, showForm, botID }) {
 
   return (
     <Styles>
-      <div className="model-popup">
+      <div className="model-popup-botlist">
         {showForm ? (
           <Background onClick={closeModal} ref={modalRef}>
             <animated.div style={animation}>
               {/* <Container> */}
                 <ModalWrapper showForm={showForm}>
                   <ModalContent>
-                    <div>
-                      <button className="con-facebook btn btn-primary text-uppercase" onClick={() => setplatform("facebook")} type=""><i class="icon-facebook fab fa-facebook fa-2x"></i></button>
-                      <button className="con-line btn btn-success btn-line text-uppercase" onClick={() => setplatform("line")} type=""><i class="icon-line fab fa-line fa-2x"></i></button>
-                      <button className="con-line btn btn-success btn-line text-uppercase" onClick={() => setplatform("etc")} type=""><i class="fas fa-filter"></i></button>
+                  <h4 className="title-popup-connect"> Select platform to connect bot</h4>
+                    <div className="connect-platform">
+                      <button className={"unselect-platform" + (platform == 'facebook' ? ("btn btn-select-facebook") : (""))}  onClick={() => setplatform("facebook")} type=""><i className="icon-connect fab fa-facebook "></i></button>
+                      <button className={"unselect-platform" + (platform == 'line' ? ("btn btn-select-line") : (""))} onClick={() => setplatform("line")} type=""><i className="icon-connect fab fa-line "></i></button>
+                      <button className={"unselect-platform" + (platform == 'etc' ? ("btn btn-select-etc") : (""))} onClick={() => setplatform("etc")} type=""><i className="icon-connect fas fa-filter "></i></button>
                     </div>
                     {renderSwitch(platform, botID)}
+                    
                   </ModalContent>
                   <CloseModalButton
                     aria-label="Close modal"
