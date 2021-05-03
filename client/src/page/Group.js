@@ -107,6 +107,7 @@ const Styles = styled.div`
 ` 
 
 function Group(props){
+    console.log(props)
     const [name, setName] = useState();
     const [loading,setLoading] = useState(false);
     useEffect(() => {

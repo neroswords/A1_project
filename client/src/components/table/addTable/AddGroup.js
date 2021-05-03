@@ -109,10 +109,10 @@ export const AddGroup = ({ showAddGroup, setShowAddGroup,botID}) => {
     console.log(question)
     e.preventDefault();
     console.log('The link was clicked.');
-    // const qLength = question.replace(/^\s+|\s+$/gm,'').length
+    const qLength = question.replace(/^\s+|\s+$/gm,'').length
     // console.log(qLength)
     
-    if (question == ''){
+    if (qLength == ''){
       console.log("null")
       setMessage("Please fill Group name")
       setShowMessage(true)
