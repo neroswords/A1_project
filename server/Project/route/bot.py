@@ -409,7 +409,7 @@ def group(botID):
         data = dumps(listcursor, indent=2)
         return data
 
-@bot.route('/<botID>/group/delete/<groupID>', methods=["GET"])
+@bot.route('/<botID>/group/delete/<groupID>', methods=["POST"])
 def delete_group(botID,groupID):
     if request.method == 'POST':
         print("Printt")
@@ -457,7 +457,8 @@ def edit_group(botID,groupID):
         groups_collection = mongo.db.groups
         get_group = request.get_json() #findbyID
         info = groups_collection.find_one({'$and':[{"botID": ObjectId(botID)},{'_id':ObjectId(groupID)}]})
-        data = dumps(info, indent=2)
+        data = dumps(info, indent=2)    
+        print(data)
         return data
     if request.method == 'POST':
         print("READY EDITTTTTTTTTTTTTTTT")
@@ -471,9 +472,10 @@ def edit_group(botID,groupID):
                     file = request.files[i]
                     print(file)
                     filename = secure_filename(file.name)
+                    name, extension = os.path.splitext(filename)
                     value = randint(0, 9999)
                     filename = info['name']+"&" + \
-                    str(value)+"&"+str(info["_id"])+"&.png"
+                    str(value)+"&"+str(info["_id"])+"&"+extension
                     destination = "/".join([UPLOAD_FOLDER_Group, filename])
                     file.save(destination)
                     session['uploadFilePath'] = destination
@@ -489,9 +491,10 @@ def edit_group(botID,groupID):
                     file = request.files[i]
                     print(file)
                     filename = secure_filename(file.name)
+                    name, extension = os.path.splitext(filename)
                     value = randint(0, 9999)
                     filename = info['name']+"&" + \
-                    str(value)+"&"+str(info["_id"])+"&.jpg"
+                    str(value)+"&"+str(info["_id"])+"&"+extension
                     destination = "/".join([UPLOAD_FOLDER_Group, filename])
                     file.save(destination)
                     session['uploadFilePath'] = destination
@@ -672,3 +675,28 @@ def dashboard(botID,type):
     return dumps(data)
 
 
+@bot.route('/<botID>/tracking', methods=['GET'])
+def getTracking(botID):
+    purchased_collection = mongo.db.purchased
+    info_cur = list(purchased_collection.find({"$and":[{"botID":ObjectId(botID)},{"type":"waited"}]}))
+    info_cur.reverse()
+    data = dumps(info_cur, indent=2)
+    return data
+
+
+@bot.route('/<trackingNo>/addtracking', methods=['POST'])
+def addTracking(trackingNo):
+    if request.method == 'POST':
+        purchased_collection = mongo.db.purchased
+        info = request.get_json()
+        info_update = { "$set": {"TrackingNo" : info['tracking'],"type":"success"}}
+        done = purchased_collection.update_one({'_id': ObjectId(trackingNo)}, info_update)
+        return {"response":"done"}
+
+@bot.route('/<botID>/totalorder', methods=['GET'])
+def successTracking(botID):
+    purchased_collection = mongo.db.purchased
+    info_cur = list(purchased_collection.find({"$and":[{"botID":ObjectId(botID)},{"type":"success"}]}))
+    info_cur.reverse()
+    data = dumps(info_cur, indent=2)
+    return data
