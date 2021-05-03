@@ -14,25 +14,12 @@ mongo = PyMongo()
 server_url = 'https://68bc51c4e3ef.ngrok.io'
 
 
-
-# def create_list_sheet(date,botID,customerID):
-#     cart_collection = mongo.db.carts
-#     cart_define = cart_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
-#     canvas = Canvas("itemsList_"+botID+"&"+customerID+"_"+date+".pdf")
-
-
-
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, ObjectId):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
-# def JSONEncoder(x):
-#     if isinstance(x, bson.objectid.ObjectId):
-#         return str(x)
-#     else:
-#         return JSONEncoder(x)
 
 class User:
     def __init__(self, username, password,is_active):

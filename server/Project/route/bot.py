@@ -272,7 +272,7 @@ def webhook(platform, botID):
             if sender_define != None and sender_define['userID']==profile.display_name and sender_define['pictureUrl']==profile.picture_url:
                 customer_collection.update_one({'$and':[{'userID':sender['userId']},{'botID': ObjectId(botID)}]},{"$set":{'pictureUrl':profile.picture_url,'display_name':profile.display_name}})
             if sender_define == None :
-                sender_define = {'userID':sender['userId'],'type':"lineUser",'date':datetime.datetime.now(),'state':'none','botID':bot_define['_id'],'auto_chat':True,'pictureUrl':profile.picture_url,'display_name':profile.display_name}
+                sender_define = {'userID':sender['userId'],'type':"lineUser",'date':datetime.datetime.now(),'state':'none','botID':bot_define['_id'],'auto_chat':True,'pictureUrl':profile.picture_url,'display_name':profile.display_name,"auto_chat":True}
                 customer_collection.insert_one(sender_define)
             if sender_define['auto_chat'] == True :
                 if message_type == 'text':
@@ -430,13 +430,6 @@ def addword(botID):
             return {"message": "add done"}
     return {"message": "ok"}
 
-@bot.route('/item',methods=["GET"])
-def item():
-    return render_template('item_desc.html')
-
-
-
-
 
 @bot.route('/<botID>/additem', methods=["POST"])
 def additem(botID):
@@ -494,13 +487,20 @@ def customer_list(botID):
 
 @bot.route('/<botID>/customer/<customerID>', methods=["GET","POST"])
 def get_message(botID,customerID):
-    messages_collection = mongo.db.messages
-    customer_collection = mongo.db.customers
-    messages_cur = messages_collection.find({"room": botID+'&'+customerID})
-    customer = customer_collection.find_one({"$and": [{"botID":ObjectId(botID)},{"userID":customerID}]})
-    messages_list = list(messages_cur)
-    data = dumps({"message":messages_list,"profile":customer}, indent=2)
-    return data
+    if request.method == "GET":
+        messages_collection = mongo.db.messages
+        customer_collection = mongo.db.customers
+        messages_cur = messages_collection.find({"room": botID+'&'+customerID})
+        customer = customer_collection.find_one({"$and": [{"botID":ObjectId(botID)},{"userID":customerID}]})
+        messages_list = list(messages_cur)
+        data = dumps({"message":messages_list,"profile":customer}, indent=2)
+        return data
+    elif request.method == "POST":
+        data = request.get_json()
+        customer_collection = mongo.db.customers
+        customer = customer_collection.update_one({"$and": [{"botID":ObjectId(botID)},{"userID":customerID}]},{"$set":{"auto_chat":data['auto_chat']}})
+        return {"message": "switch successfully"}
+        
 
 @bot.route('/<botID>/dashboard/<type>', methods=['GET'])
 def dashboard(botID,type):

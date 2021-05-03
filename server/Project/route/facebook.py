@@ -152,7 +152,6 @@ def call_facebook(botID):
                 save_message(message="unavailable to show content",message_type="text",sender=bot_define['bot_name'],sender_id=sender_define['userID'],sender_type="facebookUser",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile['picture']['data']['url'])
             elif 'receipt' in res.keys():
                 response = receipt()
-                print(bot.send_message(sender_id, response))
                 socketio.emit("message_from_response", {"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":bot_define['bot_name'],"type":"bot"},room=botID+'&'+sender_define['userID'])
                 save_message(message="unavailable to show content",message_type="text",sender=bot_define['bot_name'],sender_id=sender_define['userID'],sender_type="facebookUser",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile['picture']['data']['url'])
            
