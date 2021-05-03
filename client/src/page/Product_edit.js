@@ -249,6 +249,55 @@ const Styles = styled.div`
   color: red;
 }
 
+.loader {
+  animation:spin 1s infinite linear;
+  border:solid 2vmin transparent;
+  border-radius:50%;
+  border-right-color:#fca311;
+  border-top-color:#fca311;
+  box-sizing:border-box;
+  height:20vmin;
+  left:calc(50% - 10vmin);
+  position:fixed;
+  top:calc(50% - 10vmin);
+  width:20vmin;
+  z-index:1;
+  &:before {
+    animation:spin 2s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcc111;
+    border-top-color:#fcc111;
+    box-sizing:border-box;
+    content:"";
+    height:16vmin;
+    left:0;
+    position:absolute;
+    top:0;
+    width:16vmin;
+  }
+  &:after {
+    animation:spin 3s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcd111;
+    border-top-color:#fcd111;
+    box-sizing:border-box;
+    content:"";
+    height:12vmin;
+    left:2vmin;
+    position:absolute;
+    top:2vmin;
+    width:12vmin;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
+
 `;
 let fileimg = []
 
@@ -271,7 +320,8 @@ export default class Product_edit extends React.Component {
       url_preview: [],
       message : '',
       showMessage: false,
-      errorState: false
+      errorState: false,
+      successState: false
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -394,6 +444,7 @@ export default class Product_edit extends React.Component {
           this.setState({errorState: true})
         }
         else{
+          this.setState({ successState: true})
           const data = new FormData();
       
           for (i = 0; i < fileimg.length; i++) {
@@ -423,6 +474,7 @@ export default class Product_edit extends React.Component {
             // body : JSON.stringify(json5),
             body : data
           }).then((response) => {
+            this.setState({ successState: false})
             response.json().then((body) => {
               this.setState({ imageURL: `/${body.file}` });
               this.setState({ bot_id: data.id })
@@ -433,6 +485,7 @@ export default class Product_edit extends React.Component {
         }
       }
       else{
+        this.setState({ successState: true})
         const data = new FormData();
       
         for (i = 0; i < fileimg.length; i++) {
@@ -462,6 +515,7 @@ export default class Product_edit extends React.Component {
           // body : JSON.stringify(json5),
           body : data
         }).then((response) => {
+          this.setState({ successState: false})
           response.json().then((body) => {
             this.setState({ imageURL: `/${body.file}` });
             this.setState({ bot_id: data.id })
@@ -525,7 +579,11 @@ export default class Product_edit extends React.Component {
       }
       return (
         <Styles>
-            { this.state.errorState &&  
+            { this.state.successState ? <div>
+                    {/* <img src={ImageWarnning} alt="warnning" className="warnning_img" /> */}
+                    <div class="loader">Loading...</div>
+                  </div>
+            :  this.state.errorState &&  
             <div className="errorstate">
 
                               

@@ -103,6 +103,55 @@ const Styles = styled.div`
       }
     }
   }
+
+  .loader {
+  animation:spin 1s infinite linear;
+  border:solid 2vmin transparent;
+  border-radius:50%;
+  border-right-color:#fca311;
+  border-top-color:#fca311;
+  box-sizing:border-box;
+  height:20vmin;
+  left:calc(50% - 10vmin);
+  position:fixed;
+  top:calc(50% - 10vmin);
+  width:20vmin;
+  z-index:1;
+  &:before {
+    animation:spin 2s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcc111;
+    border-top-color:#fcc111;
+    box-sizing:border-box;
+    content:"";
+    height:16vmin;
+    left:0;
+    position:absolute;
+    top:0;
+    width:16vmin;
+  }
+  &:after {
+    animation:spin 3s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcd111;
+    border-top-color:#fcd111;
+    box-sizing:border-box;
+    content:"";
+    height:12vmin;
+    left:2vmin;
+    position:absolute;
+    top:2vmin;
+    width:12vmin;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
   
   // @supports (display: grid) {
   //   body {
@@ -132,7 +181,8 @@ class Login extends React.Component {
       username: '',
       password : '',
       showMessage: false,
-      message : ''
+      message : '',
+      successState: false,
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -147,6 +197,7 @@ class Login extends React.Component {
       username: this.state.username,
       password : this.state.password
     }
+    this.setState({ successState: true})
 
     fetch('/profile/login', {
       method: 'POST',
@@ -157,10 +208,12 @@ class Login extends React.Component {
       body: JSON.stringify(formLogin)
       }).then( res => res.json())
       .then(data=>{
+        
           localStorage.setItem('access_token', data.access_token);
           localStorage.setItem('username', data.username);
           localStorage.setItem('user_id', data.user_id);
           if (localStorage.getItem("access_token") !== null && localStorage.getItem("access_token")!=="undefined") {
+            this.setState({ successState: false})
             window.location.replace("/")
           }else{
             this.setState({ showMessage: true })
@@ -172,7 +225,11 @@ class Login extends React.Component {
   render(){
       return(
           <Styles>
-            <div className="login-page">
+            {this.state.successState ? <div>
+                    {/* <img src={ImageWarnning} alt="warnning" className="warnning_img" /> */}
+                    <div class="loader">Loading...</div>
+                  </div>
+            : <div className="login-page">
                 <div className="container">
                       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                         <div class="card card-signin my-5">
@@ -213,7 +270,8 @@ class Login extends React.Component {
                   </div>
                   
                   
-                  </div>
+                  </div>}
+            
                   
           </Styles>
     );
