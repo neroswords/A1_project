@@ -26,7 +26,7 @@ const Styles = styled.div`
   }
 
   .main-text-endpage h1 {
-    font-size: 40px;
+    font-size: 30px;
     font-weight: 700;
     margin-bottom: 5%;
     margin-top: 16%;
@@ -105,7 +105,7 @@ export const Endpage = () => (
     <div className="all-endpage">
         <div className="row">
               <div className="img-on-endpage col-lg-7 col-sm-12 col-md-12 col-lg-12 col-xl-7 .d-print-none">
-                  <img src="./images/phone_group.png"/>
+                  <img src="./images/showgraph2.svg"/>
             </div>
             <div className="main-text-endpage col-5 col-sm-12 col-xs-12 col-xl-5">
                   <h1>ปรับปรุงในทุกขั้นตอน <br/> ของการเติบโตทางธุรกิจของคุณ</h1>

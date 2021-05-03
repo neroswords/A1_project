@@ -184,7 +184,7 @@ export const CardList = () => (
     <div className="container"> 
 
         <div className="title-cardlist">
-            <h1>เกี่ยวกับคุณสมบัติ</h1>
+            <h1>ฟีเจอร์ของ A1 Chatbot</h1>
         </div>
         <div className="col-12 section-about-feature">
                 <div className="card">
