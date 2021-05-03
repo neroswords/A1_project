@@ -42,9 +42,10 @@ class User:
 
 
 def socket_api(data,botID,userID):
-    url = ''
+    url = 'http://127.0.0.1:300/api/message'
     myobj = {'data': data, 'botID':botID, 'userID':userID}
     x = requests.post(url, json = myobj, headers = {'Content-type': 'application/json'})
+    return x
 
 class Config:
     """Basic Flask configuration.

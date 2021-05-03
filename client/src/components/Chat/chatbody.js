@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import '../Chat/Chat.css';
 
-let endPoint = "http://127.0.0.1:200";
+let endPoint = "http://127.0.0.1:300";
 
 let socket = io.connect(`${endPoint}`);
  
@@ -31,10 +31,10 @@ function Chatbody({botID,customerID}){
                     setMessages(messages=> [...messages,<div><p className="head-name from-owner msg">{ele.sender}</p><p className="msg owner-send">{ele.message}</p></div>])
                   } else if (ele.sender_type == "lineUser"){
                     setMessages(messages=> [...messages,<div><p className="head-name from-cust msg">{ele.sender}</p><p className="msg customer-send">{ele.message}</p></div>])
-                  }   
+                  }
                     else if (ele.sender_type == "facebookUser"){
                     setMessages(messages=> [...messages,<div><p className="head-name from-cust msg">{ele.sender}</p><p className="msg customer-send">{ele.message}</p></div>])
-                  }   
+                  }
             })
           })).then(scrollToBottom())
         }
@@ -69,6 +69,7 @@ function Chatbody({botID,customerID}){
       })
    
       socket.on("message_from_response", msg =>{
+          console.log(msg)
           setMessages([...messages,
               <div className="owner-msg col">
                   <p className="head-name from-owner msg">{msg.sender}</p><p className="msg owner-send">{msg.message}</p>
