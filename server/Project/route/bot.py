@@ -399,6 +399,17 @@ def group(botID):
         data = dumps(listcursor, indent=2)
         return data
 
+@bot.route('<botID>/groupdetail/<groupID>', methods=['GET'])
+def load__groupetail(botID,groupID):
+    if request.method == 'GET' :
+        
+        groups_collection = mongo.db.groups
+        groups_cursor = groups_collection.find({"_id" : ObjectId(groupID)})
+        listcursor = list(groups_cursor)
+        data = dumps(listcursor,indent = 2)
+        print(data)
+        return data
+
 
 
 @bot.route('/<botID>/addword', methods=["POST"])
