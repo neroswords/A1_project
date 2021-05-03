@@ -3,7 +3,11 @@ from flask_socketio import SocketIO
 from Project.Config import *
 from flask_pymongo import PyMongo
 import bcrypt
-from flask_jwt_extended import JWTManager
+# from flask_jwt_extended import JWTManager
+from base64 import encodebytes
+from hashlib import sha1
+import hmac
+from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
 from .extensions import mongo, Config
 from flask_talisman import Talisman
@@ -21,8 +25,8 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app.config['MONGO_URI'] = 'mongodb+srv://a1bot:m99MwNSyrNxM13uS@cluster0.jffbs.mongodb.net/a1?retryWrites=true&w=majority'
 mongo.init_app(app)
 
-app.config['JWT_SECRET_KEY'] = 'boost-is-the-secret-of-our-app'
-jwt=JWTManager(app)
+# app.config['JWT_SECRET_KEY'] = 'boost-is-the-secret-of-our-app'
+# jwt=JWTManager(app)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = './static'
@@ -40,10 +44,12 @@ from Project.route.inventory import inventory
 from Project.route.checkout import checkout
 from Project.route.sales import sales
 from Project.route.liff import liff
+from Project.route.history import history
 
 app.register_blueprint(profile, url_prefix='/profile')
 app.register_blueprint(bot, url_prefix='/bot')
 app.register_blueprint(train_bot, url_prefix='/train_bot')
+app.register_blueprint(history, url_prefix='/history')
 app.register_blueprint(merchant, url_prefix='/merchant')
 app.register_blueprint(mapping, url_prefix='/mapping')
 app.register_blueprint(merchant, url_prefix='/merchant')

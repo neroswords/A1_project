@@ -34,6 +34,12 @@ def socket_api(data,botID,userID):
     x = requests.post(url, json = myobj, headers = {'Content-type': 'application/json'})
     return x
 
+def socket_noti(data,userID):
+    url = 'http://127.0.0.1:300/api/notification'
+    myobj = {'data': data,  'userID':userID}
+    x = requests.post(url, json = myobj, headers = {'Content-type': 'application/json'})
+    return x
+
 class Config:
     """Basic Flask configuration.
     In theory, we could get store currency and locale from Omise

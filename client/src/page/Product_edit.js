@@ -360,6 +360,7 @@ export default class Product_edit extends React.Component {
         if (!fileimg) {
           return
         }
+
         reader.onloadend = () => {
           this.setState({
             file: this.uploadInput.files[i],

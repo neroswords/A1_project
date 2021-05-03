@@ -41,10 +41,11 @@ def handle_join_room_noti(data):
 def message_api():
     try:
         data = request.get_json()
-        if data['data']['type'] == "bot":
-            socketio.emit("message_from_response", data['data'],room=data['botID']+'&'+data['userID'])
-        elif data['data']['type'] == "customer":
+        
+        if data['data']['sender_type'] != "bot":
             socketio.emit("message_from_webhook", data['data'],room=data['botID']+'&'+data['userID'])
+        else:
+            socketio.emit("message_from_response", data['data'],room=data['botID']+'&'+data['userID'])
         return {"message":"message has been sent successfully"}, 200
     except :
         return {"error":"some error was occurred while processing, please check you data and try again"}, 500
@@ -53,7 +54,7 @@ def message_api():
 def notification_api():
     try:
         data = request.get_json()
-        socketio.emit("message_from_noti", data,room=data['botID']+'&'+data['userID'])
+        socketio.emit("message_from_noti", data['data'],room=data['userID'])
         return {"message":"message has been sent successfully"}, 200
     except :
         return {"error":"some error was occurred while processing, please check you data and try again"}, 500

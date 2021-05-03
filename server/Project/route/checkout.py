@@ -78,7 +78,7 @@ def process(chrg, botID, userID, already_redirected=False):
         customer_collection = mongo.db.customers
         purchased_collection = mongo.db.purchased
         customer_define = customer_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
-        if customer_define['type'] == "lineUser":
+        if customer_define['type'] == "line":
             customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
             cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
             new_data = purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":datetime.datetime.now(),"type":"waited"})
@@ -87,7 +87,7 @@ def process(chrg, botID, userID, already_redirected=False):
             data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
             push_message(data)
             return redirect("https://liff.line.me/1655652942-zNpjoxYV/checkout/complete")
-        elif customer_define['type'] == "facebookUser":
+        elif customer_define['type'] == "facebook":
             cart_collection = mongo.db.carts
             customer_collection = mongo.db.customers
             purchased_collection = mongo.db.purchased

@@ -252,7 +252,7 @@ const defaultColumn = {
 }
 
 
-function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained ,botID }) {
+function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained ,botID,loading }) {
   const Ondelete = (e) => {
     if(e.length > 0){
       openDelete_table(e)
@@ -426,18 +426,22 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
               </th>
             </tr> */}
           </thead>
-          <tbody {...getTableBodyProps()} >
-            {page.map((row, i) => {
-              prepareRow(row)
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map(cell => {
-                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                  })}
-                </tr>
-              )
-            })}
-          </tbody>
+          {loading ?                    
+                    
+                    <tbody {...getTableBodyProps()}>
+                    {page.map((row, i) => {
+                      prepareRow(row)
+                      return (
+                        <tr {...row.getRowProps()} name="training-row">
+                          {row.cells.map(cell => {
+                            return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                          })}
+                        </tr>
+                      )
+                    })}
+                  </tbody> 
+                    : <div class="loader"></div>}
+
         </table>
         <div className="pagination">
         <div className="parginate-tex col">
@@ -506,7 +510,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
 
 function Table({ botID, delete_trained, add_data }) {
   const [TableState, setTableState] = useState([]);
-
+  const [loading,setLoading] = useState(false);
 
 
   const [showWord, setShowWord] = useState(false);
@@ -578,7 +582,7 @@ function Table({ botID, delete_trained, add_data }) {
               ReplyWord: d.answer
             };
           })
-        );
+        );setLoading(true)
       }))
 
   }
@@ -592,6 +596,7 @@ function Table({ botID, delete_trained, add_data }) {
     
       <Styles>
         <div className="table-show-all">
+        {loading ?   
         <TableShow
           columns={columns}
           data={TableState}
@@ -599,7 +604,8 @@ function Table({ botID, delete_trained, add_data }) {
           skipPageReset={skipPageReset}
           delete_trained={delete_trained}
           botID={botID}
-        />
+          loading={loading}
+          />   : <div class="loader"></div>}
       </div>
     </Styles>
   );

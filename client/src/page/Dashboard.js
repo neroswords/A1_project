@@ -82,6 +82,12 @@ function Dashboard(props) {
           }))
     
       }, []);
+      const [name, setName] = useState();
+      useEffect(() => {
+        fetch('/bot/'+props.match.params.bot_id) .then(response => response.json().then(inf => {
+          setName(inf)
+      }))
+      }, []);
 
     return (
         <Styles>
@@ -89,7 +95,7 @@ function Dashboard(props) {
                 <Navbar_member botID={props.match.params.bot_id} path={"dashboard"} />
                 <div className="container-fluid">
                     <div className="bot-name-on-page">
-                        <h4> Bot name :</h4>
+                        <h4> Bot name : {name}</h4>
                     </div>
                     <div className="title-dashboard">
                         <h2 className='p-2 flex-grow-1 bd-highlight' id="history-header">Dashboard bot</h2>
