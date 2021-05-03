@@ -82,6 +82,7 @@
     text-decoration: none;
     /* color: #000; */
     color: #000;
+    z-index: 999;
   }
 
   .nav_brand {
@@ -102,7 +103,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: white;
+    background-color: transparent;
     z-index: 20;
   }
   
@@ -190,12 +191,12 @@
 
 .click-show-user .click{
   background-color: #fca311;
-  color: white;
+  color: #000;
 }
 
 .show-user:hover a{
   background-color: #fca311;
-  color: white;
+  color: #000;
 }
 
 .show-user i {
