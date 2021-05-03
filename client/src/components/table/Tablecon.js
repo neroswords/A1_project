@@ -4,7 +4,11 @@ import  { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination
 import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
 import Delete_table from "../Delete_table";
+<<<<<<< HEAD
 import Traintable from "../Traintable";
+=======
+import { MDBNotification, MDBContainer } from "mdbreact";
+>>>>>>> 02b71eaacbbd2046b9d297e03b2e137391b72277
 
 const Styles = styled.div`
 
@@ -157,6 +161,54 @@ input::placeholder{
 .select-pagesize {
   padding: 0 1%;
 }
+.loader {
+  animation:spin 1s infinite linear;
+  border:solid 2vmin transparent;
+  border-radius:50%;
+  border-right-color:#fca311;
+  border-top-color:#fca311;
+  box-sizing:border-box;
+  height:20vmin;
+  left:calc(50% - 10vmin);
+  position:fixed;
+  top:calc(50% - 10vmin);
+  width:20vmin;
+  z-index:1;
+  &:before {
+    animation:spin 2s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcc111;
+    border-top-color:#fcc111;
+    box-sizing:border-box;
+    content:"";
+    height:16vmin;
+    left:0;
+    position:absolute;
+    top:0;
+    width:16vmin;
+  }
+  &:after {
+    animation:spin 3s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcd111;
+    border-top-color:#fcd111;
+    box-sizing:border-box;
+    content:"";
+    height:12vmin;
+    left:2vmin;
+    position:absolute;
+    top:2vmin;
+    width:12vmin;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
 
 
 `;
@@ -271,14 +323,18 @@ const defaultColumn = {
 }
 
 
-function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID }) {
+function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID ,loading}) {
+
+  const [errorState, setErrorState] = React.useState(false)
 
   const Ondelete = (e) => {
+    setErrorState(false)
     if(e.length > 0){
+      
       openDelete_table(e)
     }
     else{
-      alert('please select')
+      setErrorState(true)
     }
     console.log(e.length)
   }
@@ -403,8 +459,37 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
   )
   return (
-    
+      
       <Container>
+         { errorState &&  
+            <div className="errorstate">
+
+                              
+                                  <MDBNotification
+                                  style={{
+                                    // width: "auto",
+                                    position: "absolute",
+                                    // top: "10px",
+                                    // left: "500px",
+                                    zIndex: 9999
+                                  }}
+                                  // autohide={3000}
+                                  bodyClassName="p-4 font-weight-bold white-text "
+                                  className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
+                                  closeClassName="blue-grey-text"
+                                  fade
+                                  icon="bell"
+                                  iconClassName="text-danger"
+                                  message="Please select word to delete"
+                                  show
+                                  
+                                  title="Error"
+                                  titleClassName="elegant-color-dark white-text"
+                    
+                                  />
+                                </div>
+
+                                }
         <div className="button-trained-word">
           <button className="buttonaddtrain" name="btn-delword" onClick={() => OnTrain(selectedFlatRows)}>Train</button>
           <button className="buttondeleteWord" name="btn-delword" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
@@ -444,18 +529,22 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               </th>
             </tr> */}
           </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map((row, i) => {
-              prepareRow(row)
-              return (
-                <tr {...row.getRowProps()} name="training-row">
-                  {row.cells.map(cell => {
-                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                  })}
-                </tr>
-              )
-            })}
-          </tbody>
+        
+          {loading ?                    
+                    
+                    <tbody {...getTableBodyProps()}>
+                    {page.map((row, i) => {
+                      prepareRow(row)
+                      return (
+                        <tr {...row.getRowProps()} name="training-row">
+                          {row.cells.map(cell => {
+                            return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                          })}
+                        </tr>
+                      )
+                    })}
+                  </tbody> 
+                    : <div class="loader"></div>}
         </table>
 
         <div className="pagination row">
@@ -508,7 +597,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
 function Tablecon({ botID, delete_trained, add_data }) {
   const [TableconState, setTableconState] = useState([]);
-
+  const [loading,setLoading] = useState(false);
                                                           
 
   const [showWord, setShowWord] = useState(false);
@@ -590,7 +679,7 @@ function Tablecon({ botID, delete_trained, add_data }) {
           
 
         );
-
+        setLoading(true)
       }))
 
   }, []);
@@ -600,15 +689,20 @@ function Tablecon({ botID, delete_trained, add_data }) {
   return (
     <Styles>
       <div className="table-show-all">
-        <TableShow 
+ 
+         {loading ?                    
+                    
+                  
+                    <TableShow 
           
-          columns={columns}
-          data={TableconState}
-          updateMyData={updateMyData}
-          skipPageReset={skipPageReset}
-          delete_trained={delete_trained}
-          botID={botID}
-        />
+                    columns={columns}
+                    data={TableconState}
+                    updateMyData={updateMyData}
+                    skipPageReset={skipPageReset}
+                    delete_trained={delete_trained}
+                    botID={botID}
+                    loading={loading}
+                  />   : <div class="loader"></div>}
       </div>
     </Styles>
   );

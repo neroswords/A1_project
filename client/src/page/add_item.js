@@ -5,6 +5,8 @@ import {Link, withRouter, Redirect } from 'react-router-dom'
 import 'react-widgets/dist/css/react-widgets.css';
 import { Multiselect } from 'react-widgets' 
 import FlashMessage from 'react-flash-message'
+import { PanelGroup } from 'react-bootstrap';
+import { MDBNotification, MDBContainer } from "mdbreact";
 
 const Styles = styled.div`
   .container {
@@ -213,8 +215,13 @@ const Styles = styled.div`
     /* float: right; */ 
 } 
 
+.error {
+  color: red;
+}
+
 `;
 let fileimg = []
+
 export default class Add_item extends React.Component {
   constructor(props) {
     super(props);
@@ -227,20 +234,44 @@ export default class Add_item extends React.Component {
       imageURL: '',
       Image: '',
       des: '',
+      file: [],
       imagesPreviewUrl: [],
       options: ["d1","2"],
       value: [],
       price: '',
       message : '',
       showMessage: false,
+      errorState: false
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
     // this.Onend = this.Onend.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
+    this.deleteImg = this.deleteImg.bind(this)
    
   }
-  
+  deleteImg (img,index) {
+    
+    
+      const preview_image = this.state.imagesPreviewUrl
+      const preview_img = preview_image.filter(e => e != img);
+      
+      const data_image = fileimg
+      
+      const data_img = data_image.filter(e => e != data_image[index]);
+     fileimg = data_img
+    
+ 
+     // OldImg.pop(index)
+     
+     this.setState({
+       imagesPreviewUrl: preview_img
+       
+     })
+     // console.log(this.state.url_preview)
+     
+   }
+
   handleCreate(name) {
     let { options, value } = this.state;
 
@@ -255,14 +286,14 @@ export default class Add_item extends React.Component {
 
   handleChange(evt) {
     this.setState({ [evt.target.name]: evt.target.value });
-    console.log(this.state)
+   
   }
 
 
 
   _handleImageChange(e) {
     e.preventDefault();
-   
+    this.setState({errorState: false})
     // console.log(this.state.value)
     // console.log(this.state)
     let i
@@ -273,10 +304,11 @@ export default class Add_item extends React.Component {
     for (i = 0; i < e.target.files.length; i++) {
       
       if(e.target.files[i].type != "image/jpeg" && e.target.files[i].type != "image/png"){
-        alert("Only PNG or JPG is accepted")
+        this.setState({errorState: true})
       }
       else{
         let reader = new FileReader();
+        console.log(this.uploadInput.files[i])
         fileimg.push(this.uploadInput.files[i])
         if (!fileimg) {
           return
@@ -284,7 +316,7 @@ export default class Add_item extends React.Component {
         // console.log(this.state.imagesPreviewUrl)
         reader.onloadend = () => {
           this.setState({
-            file: this.uploadInput.files[i],
+            file: [...this.state.file,this.uploadInput.files[i]],
             imagesPreviewUrl: [...this.state.imagesPreviewUrl, reader.result]
           });
         }
@@ -294,14 +326,17 @@ export default class Add_item extends React.Component {
       
 
     }
-
-    console.log(fileimg)
+    
+    // console.log(fileimg)
 
 
   }
+  
+
+
   handleUploadImage(ev) {
     ev.preventDefault();
-
+    this.setState({errorState: false})
     // const files = ev.target[0].files[0]
     const itemnameLength = this.state.item_name.replace(/^\s+|\s+$/gm,'').length
     var i
@@ -313,46 +348,54 @@ export default class Add_item extends React.Component {
     }
 
     else{
-      const data = new FormData();
-    
-      for (i = 0; i < fileimg.length; i++) {
-        
-        // file.push(this.uploadInput.files[i])
-        
-        data.append('file' + [i], fileimg[i]);
+      if(fileimg.length == 0){
+        this.setState({errorState: true})
       }
-  
-  
-  
-      // console.log(fileimg)
-      // data.append('file', file);
-      data.append('item_name', this.item_name.value);
-      data.append('type', JSON.stringify(this.state.value));
-      data.append('amount', this.amount.value);
-      data.append('creator', localStorage.getItem('user_id'))
-      data.append('Image', this.state.Image)
-      data.append('des', this.des.value);
-      data.append('price', this.price.value);
-      fetch('/bot/' + this.props.match.params.bot_id + '/additem', {
-        method: 'POST',
-        // headers : {
-        //   "Access-Control-Allow-Origin": "*",
-        //   'Content-Type':'application/json'
-        // },
-        // body : JSON.stringify(json5),
-        body : data
-      }).then((response) => {
-        response.json().then((body) => {
-          this.setState({ imageURL: `/${body.file}` });
-          this.setState({ bot_id: data.id })
-          fileimg = []
-          this.setState({ redirect: true })
+      else{
+        const data = new FormData();
+      
+        for (i = 0; i < fileimg.length; i++) {
+          
+          // file.push(this.uploadInput.files[i])
+          
+          data.append('file' + [i], fileimg[i]);
+        }
+    
+    
+    
+        // console.log(fileimg)
+        // data.append('file', file);
+        data.append('item_name', this.item_name.value);
+        data.append('type', JSON.stringify(this.state.value));
+        data.append('amount', this.amount.value);
+        data.append('creator', localStorage.getItem('user_id'))
+        data.append('Image', this.state.Image)
+        data.append('des', this.des.value);
+        data.append('price', this.price.value);
+        fetch('/bot/' + this.props.match.params.bot_id + '/additem', {
+          method: 'POST',
+          // headers : {
+          //   "Access-Control-Allow-Origin": "*",
+          //   'Content-Type':'application/json'
+          // },
+          // body : JSON.stringify(json5),
+          body : data
+        }).then((response) => {
+          response.json().then((body) => {
+            this.setState({ imageURL: `/${body.file}` });
+            this.setState({ bot_id: data.id })
+            fileimg = []
+            this.setState({ redirect: true })
+          });
         });
-      });
+      }
+      
   
     }
     
   }
+
+ 
     // componentDidMount ()  {
     //  var a = []
     //  var unique = []
@@ -379,12 +422,40 @@ export default class Add_item extends React.Component {
       let { imagePreviewUrl } = this.state;
       
       let $imagePreview = null;
-      if (imagePreviewUrl) {
-
-        $imagePreview = (<img src={imagePreviewUrl} />);
-      }
+      // if (imagePreviewUrl) {
+      //   console.log(imagePreviewUrl)
+      //   $imagePreview = (<img src={imagePreviewUrl} />);
+      // }
       return (
         <Styles>
+           { this.state.errorState &&  
+            <div className="errorstate">
+
+                              
+                                  <MDBNotification
+                                  style={{
+                                    // width: "auto",
+                                    position: "absolute",
+                                    // top: "10px",
+                                    // left: "500px",
+                                    zIndex: 9999
+                                  }}
+                                  bodyClassName="p-2 font-weight-bold white-text "
+                                  className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
+                                  closeClassName="blue-grey-text"
+                                  fade
+                                  icon="bell"
+                                  iconClassName="text-danger"
+                                  message="Only PNG or JPG is accepted."
+                                  show
+                                  
+                                  title="Error"
+                                  titleClassName="elegant-color-dark white-text"
+                    
+                                  />
+                                </div>
+
+                                }
           <div className="container">
             <div className="col-12 col-lg-9 mx-auto">
               <div className="card card-bot">
@@ -405,12 +476,19 @@ export default class Add_item extends React.Component {
                             <div className="upload-newinv">
                                 <input accept="image/x-png,image/gif,image/jpeg" ref={(ref) => { this.uploadInput = ref; }} onChange={(e) => this._handleImageChange(e)} type="file" multiple />
                             </div>
-                              {this.state.imagesPreviewUrl.map((imagesPreviewUrl) => {
+                            {/* {this.state.file.map((file) => {
+                                console.log(file) 
+                               })} */}
+                            {this.state.file}
+                              {this.state.imagesPreviewUrl.map((imagesPreviewUrl,index) => {
+                               
                                 return (
+                                  
                                   <div className="preview-img">
-                                    <button className="btn-delete-img">
-                                          <i className="fas fa-times-circle"></i>
-                                      </button>
+                                    <div className="btn-delete-img" >
+                                          <i className="fas fa-times-circle" onClick={() => this.deleteImg(imagesPreviewUrl,index) }></i>
+                                      </div>
+                                      
                                       <img key={imagesPreviewUrl} alt='previewImg' src={imagesPreviewUrl} />
                                 </div>
                               )})}
@@ -427,8 +505,7 @@ export default class Add_item extends React.Component {
                                 <label className="form-label">Item name</label>
                                 <span className="req-icon"> *</span>
                                 <input type="text" name="item_name" value={this.state.item_name} ref={(ref) => { this.item_name = ref; }} onChange={this.handleChange} className="form-control"required />
-                              </div> 
-                              { this.state.showMessage &&  
+                                { this.state.showMessage &&  
                                         <div className="container">
                                             <FlashMessage duration={4000}>
                                               <div className="error">
@@ -436,7 +513,9 @@ export default class Add_item extends React.Component {
                                               </div>  
                                             </FlashMessage>
                                         </div>
-                                  }                       
+                                  } 
+                              </div> 
+                                                    
                               <div className="col">
                                 <label className="form-label">Price</label>
                                 <span className="req-icon"> *</span>

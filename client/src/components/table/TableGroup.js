@@ -5,8 +5,12 @@ import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
 import {Link} from "react-router-dom";
 import Delete_table from "../Delete_table";
+<<<<<<< HEAD
 import { Button } from 'react-bootstrap';
 import AddGroup from "./AddTable/AddGroup";
+=======
+import { MDBNotification, MDBContainer } from "mdbreact";
+>>>>>>> 02b71eaacbbd2046b9d297e03b2e137391b72277
 
 const Styles = styled.div`
   .table-show-all > div.container { 
@@ -251,13 +255,15 @@ const defaultColumn = {
 
 
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID }) {
+  const [errorState, setErrorState] = React.useState(false)
   
   const Ondelete = (e) => {
+    setErrorState(false)
     if(e.length > 0){
       openDelete_table(e)
     }
     else{
-      alert('please select')
+      setErrorState(true)
     }
     console.log(e.length)
     
@@ -369,6 +375,35 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
   return (
     <>
       <Container>
+      { errorState &&  
+            <div className="errorstate">
+
+                              
+                                  <MDBNotification
+                                  style={{
+                                    // width: "auto",
+                                    position: "absolute",
+                                    // top: "10px",
+                                    // left: "500px",
+                                    zIndex: 9999
+                                  }}
+                                  // autohide={3000}
+                                  bodyClassName="p-4 font-weight-bold white-text "
+                                  className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
+                                  closeClassName="blue-grey-text"
+                                  fade
+                                  icon="bell"
+                                  iconClassName="text-danger"
+                                  message="Please select word to delete"
+                                  show
+                                  
+                                  title="Error"
+                                  titleClassName="elegant-color-dark white-text"
+                    
+                                  />
+                                </div>
+
+                                }
         <div className="button-trained-word">
           <Button className='buttonadd-Group' onClick={openAddGroup} >Add Group</Button>
           <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
@@ -533,11 +568,11 @@ function TableGroup({ botID, delete_trained, add_data }) {
   useEffect(() => {
     fetch('/bot/' + botID + '/group')
       .then(res => res.json().then(data => {
-        console.log(data)
+        // console.log(data)
 
         setTableGroupState(
           data.map(d => {
-            console.log(d)
+            // console.log(d)
             return {
               select: false,
               id: d._id.$oid,

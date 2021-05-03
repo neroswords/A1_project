@@ -78,3 +78,31 @@ def addword(botID):
         trained_collection.insert_one({'question': question, 'botID':  ObjectId(creator), 'answer': ans})
         return {"message":"add done"}
     return {"message":"ok"}
+
+
+@train_bot.route('/<botID>/group/create', methods=['POST'])
+def cre_group():
+    # bots_collection = mongo.db.bots
+    # filename = ''
+    # if request.method == 'POST':
+    #     creator = request.form['creator'] 
+    #     bot_name = request.form['bot_name']
+    #     gender = request.form['gender'] 
+    #     age = request.form['age']
+    #     if  "file" not in request.files :
+    #         filename = "Avatar.jpg"
+    #     else :
+    #         file = request.files['file']
+    #         filename = secure_filename(file.filename)
+    #         filename = creator+"&"+bot_name+os.path.splitext(filename)[1]
+    #         destination = "/".join([UPLOAD_FOLDER, filename])
+    #         file.save(destination)
+    #         session['uploadFilePath'] = destination
+    #         response = "success"
+    #     new_bot = bots_collection.insert_one({'bot_name': bot_name, 'gender': gender, 'owner': ObjectId(creator), 'age': age, 'Img': filename, 'confident': 0.6})
+    #     mappings_collection = mongo.db.mappings
+    #     bot_id = new_bot.inserted_id
+    #     mapping = []
+    #     mappings_collection.insert_one(mapping)
+    #     return {'message': 'add bot successfully'}
+    return "add bot unsuccessfully"

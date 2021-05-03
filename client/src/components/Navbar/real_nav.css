@@ -82,6 +82,7 @@
     text-decoration: none;
     /* color: #000; */
     color: #000;
+    z-index: 999;
   }
 
   .nav_brand {
@@ -102,7 +103,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: white;
+    background-color: transparent;
     z-index: 20;
   }
   
@@ -190,12 +191,12 @@
 
 .click-show-user .click{
   background-color: #fca311;
-  color: white;
+  color: #000;
 }
 
 .show-user:hover a{
   background-color: #fca311;
-  color: white;
+  color: #000;
 }
 
 .show-user i {
@@ -408,6 +409,15 @@
   box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
 }
 
+@media  only screen and (min-width:1600px){
+  .btn-login{
+    margin-top: 8%;
+  }
+
+  .btn-signup {
+    margin-top: 7%;
+  }
+}
 
 /******************** noti********************************** */
 .menu-trigger-noti {
@@ -440,10 +450,30 @@
   top: 15px;
   right: 5px;
   width: 400px;
-  max-height: 500px;
+  max-height: 700px;
   padding: 20px;
+  overflow-y: scroll;
 }
 
+.dropdown-noti ul::-webkit-scrollbar-track{
+  background-color: #dfdfdfdf;
+  border-radius: 10px;
+  margin: 20px;
+}
+
+.dropdown-noti ul::-webkit-scrollbar{
+  width: 8px;
+  height: 8px;
+  margin: 20px;
+
+}
+
+.dropdown-noti ul::-webkit-scrollbar-thumb{
+  background-color: rgba(0, 0, 0, 0.4);;
+  border-radius: 10px;
+  margin: 20px;
+
+}
 
 .msg-noti-i {
   /* border: 1px solid rgb(113, 113, 122); */
@@ -496,29 +526,11 @@
 } 
 
 .msg-noti-all {
-  /* background-color: #f40000; */
-  max-height: 500px;
-  overflow: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 20% 80%);
+  grid-column-gap: 10px;
 }
 
-.msg-noti-all::-webkit-scrollbar {
-  width: 8px;
-}
-
-.msg-noti-all::-webkit-scrollbar-track {
-  background: #ddd;
-  margin: 30px;
-
-}
-
-.msg-noti-all::-webkit-scrollbar-thumb {
-  background: #bdbdbd;
-}
-
-.msg-noti-all {
-  margin-top: -20px;
-  margin-right: 5px;
-}
 
 .noti-show-info-user {
   display: inline-block;
@@ -576,14 +588,47 @@ p.show-number{
   margin: 0px !important;
 }
 
-.noti-show-info-user .noti-show-time {
+.noti-show-info-user .noti-show-bot {
   position: absolute;
   right: 30px;
   /* top: 10px; */
   margin-top: -20px;
 }
 
-p.noti-show-time {
+p.noti-show-bot{
   font-size: 14px;
+  max-width:  100px;
+  max-height: 20px;
+  /* margin-bottom: 2px; */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+.noti-show-img-and-type{
+  width: 50px;
+}
+
+.noti-show-user-type {
+  display: flex;
+  border-bottom: 10px solid transparent;
+  /* width: 10px;
+  height: 1px;
+  background: white;
+  width: 16px; */
+}
+
+.noti-show-user-type .noti-show-line{
+  /* font-size: 20px; */
+  color: #009B00;
+  border-bottom: 1px solid transparent;
+  position: absolute;
+  /* margin-top: 5px; */
+  left: 68px;
+  margin-top: -25px;
+
+}
+
+.noti-show-user-type .noti-show-facebook{
+  color: #0078ff;
+  border-bottom: 1px solid transparent;
+}

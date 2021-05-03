@@ -102,14 +102,15 @@ const Styles = styled.div`
 } 
 ` 
 export default function Invenlist(props) {
-    console.log(props.props._id.$oid)
+    console.log(props.props.img)
     return(    
         <Styles>
                 <div class="inven-list">
                     
                     <div className="inven-list-body">
                         <Link to = {"inventory/product_detail/"+props.props._id.$oid} className="inven-card">
-                            <img className="img-inven" src={'/images/bucket/'+props.props.img[0]}/>
+                            {props.props.img[0] == "" ? <img className="img-inven" src={'/images/bucket/'+props.props.img[1]}/> : <img className="img-inven" src={'/images/bucket/'+props.props.img[0]}/>}
+                            {/* <img className="img-inven" src={'/images/bucket/'+props.props.img[0]}/> */}
                             <div className="inven-info">
                                 <div className="product-name">{props.props.item_name}</div>
                                 <div className="product-price">Price(฿) : {props.props.price}</div>

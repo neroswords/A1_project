@@ -3,7 +3,7 @@ import GroupForm from './GroupForm'
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { TiEdit } from 'react-icons/ti';
 
-function Todo({todos, completeTodo, removeTodo, updateTodo}) {
+function Todo({todos, completeTodo, removeTodo, updateTodo, groupname}) {
     const [edit, setEdit] = useState({
         id: null,
         value: ''

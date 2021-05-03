@@ -27,9 +27,12 @@ const Styles = styled.div`
     text-transform : uppercase;
     font-family: 'Roboto', sans-serif;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 15px;
   }
   
+  .card-title-edit-profile h4 {
+    font-weight: 700;
+  }
   .card-regis .card-body {
     margin: 1rem;
   }
@@ -128,6 +131,10 @@ const Styles = styled.div`
     color: red;
     font-size: 18px;
     margin-bottom: 5px;
+  }
+
+  .error{
+    color:red;
   }
 `;
 
@@ -272,9 +279,9 @@ componentDidMount ()  {
               <div className="container">
                     <div className="col-sm-10 col-md-9 col-lg-8 mx-auto">
                       <div className="card card-regis">
-                        
+                          
                         <div className="card-body">
-                          <h5 className="card-title text-center">Edit Profile</h5>
+                          <h4 className="card-title-edit-profile text-center">Edit Profile</h4>
                           <form className="form-regis"  onSubmit={this.handleSubmit}>
                           <div className="title_part">
                                 <p className="col">Account infomation</p>
@@ -296,7 +303,7 @@ componentDidMount ()  {
                                 <p className="col">Personal infomation</p>
                                 <div className="line"></div>
                               </div>
-                                <div className="row my-3">
+                                <div className="row">
                                     <div className="col">
                                         <label for="inputFirstname" className="form-label">Firstname</label>
                                         <span className="reg_proflie"> *</span>
@@ -305,7 +312,7 @@ componentDidMount ()  {
                                       <div className="container">
                                           <FlashMessage duration={40000}>
                                             <div className="error">
-                                              <strong>* {this.state.messageFirstname}</strong>
+                                              <strong>{this.state.messageFirstname}</strong>
                                             </div>  
                                           </FlashMessage>
                                       </div>

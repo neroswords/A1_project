@@ -197,7 +197,7 @@ export default function Facebookform({botID}) {
                             </div>
                             <div className="input-Box">
                             <div className="ms-2">
-                                <label  className="form-label">Page Facebook access token</label>
+                                <label  className="form-label">Access token</label>
                                 <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputpagefacebook" />
                             </div>
                             <div className="col-lg-12 mt-3">

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 
 function GroupForm(props) {
+    console.log(props)
     const [input, setInput] = useState('');
     const [file, setFile] = useState();
     // const [upload, setUpload] = useState();
@@ -77,6 +78,7 @@ function GroupForm(props) {
         <div>
             <div className='container-GroupForm'>
                 <div className="IconTextImage">
+                
                     <button className="ButTextIcon" type="button" onClick={textPanel}><i className="fas fa-text TextIcon fa-2x"></i></button>
                     <button className="ButImageIcon" type="button" onClick={filePanel}><i className="fas fa-image ImageIcon fa-2x"></i></button>
                 </div>

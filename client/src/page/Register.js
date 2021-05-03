@@ -2,7 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import {Redirect} from 'react-router-dom';
 import FlashMessage from 'react-flash-message'
-import { faTerminal } from '@fortawesome/free-solid-svg-icons';
+
+import { MDBNotification, MDBContainer } from "mdbreact";
+import { faMailBulk, faTerminal } from '@fortawesome/free-solid-svg-icons';
 
 const Styles = styled.div`
   .container {
@@ -15,6 +17,7 @@ const Styles = styled.div`
   }
 
   .card-regis {
+    padding: 20px;
     margin-top: 8%;
     margin-bottom: 10%;
     border: 0;
@@ -128,6 +131,14 @@ const Styles = styled.div`
   .error {
     background-color: white;
     color: red;
+    font-weight: 600;
+    
+  }
+
+  span.ex-password {
+    margin-top: 5px;
+    font-size: 14px;
+    color: red;
   }
 `;
 
@@ -156,7 +167,8 @@ class Register extends React.Component {
       showMessagePassword: false,
       showMessageShopname: false,
       showMessageFirstname: false,
-      showMessageLastname: false
+      showMessageLastname: false,
+      successState: false,
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -248,6 +260,7 @@ class Register extends React.Component {
       body: JSON.stringify(profile)
     }).then((res)=>res.json()).then(data=>{
       if(data.message){
+        this.setState({successState:true})
         this.setState({redirect:true})
       }
       else if(data.error){
@@ -277,8 +290,36 @@ flash = (e) =>{
       else {
         return(
           <Styles>
+             { this.state.successState &&  
+            <div className="errorstate">
+
+                              
+                                  <MDBNotification
+                                  style={{
+                                    // width: "auto",
+                                    position: "absolute",
+                                    // top: "10px",
+                                    // left: "500px",
+                                    zIndex: 9999
+                                  }}
+                                  bodyClassName="p-2 font-weight-bold white-text "
+                                  className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
+                                  closeClassName="blue-grey-text"
+                                  fade
+                                  icon="bell"
+                                  iconClassName="text-danger"
+                                  message="Only PNG or JPG is accepted."
+                                  show
+                                  
+                                  title="Error"
+                                  titleClassName="elegant-color-dark white-text"
+                    
+                                  />
+                                </div>
+
+                                }
                 <div className="container">
-                      <div className="col-sm-11 col-md-10 col-lg-8 mx-auto">
+                      <div className="col-sm-11 col-md-10 col-lg-9 mx-auto">
                         <div className="card card-regis">
                           <div className="card-body-regis">
                             <h5 className="card-title-regis">Register</h5>
@@ -290,7 +331,7 @@ flash = (e) =>{
                                 <div className="my-3">
                                   <label for="exampleInputEmail1" className="form-label">Email address</label>
                                     <span className="req-icon"> *</span>
-                                  <input type="email" className="form-control " id="inputemail" name='email' required value={this.state.email} onChange={this.handleChange} />
+                                  <input type="email" className="form-control " id="inputemail" name='email' required value={this.state.email} onChange={this.handleChange} placeholder="example@mail.com"/>
                                 </div>
                                 <div className="my-3">
                                   <label for="exampleInputEmail1" className="form-label">Username</label>
@@ -299,7 +340,7 @@ flash = (e) =>{
                                   { this.state.showMessageUsername &&  
                                         <div className="container">
                                             <FlashMessage duration={4000}>
-                                              <div className="error">
+                                              <div className="msg-error">
                                                 <strong>* {this.state.message}</strong>
                                               </div>  
                                             </FlashMessage>
@@ -311,7 +352,7 @@ flash = (e) =>{
                                     <label for="exampleInputPassword1" className="form-label">Password</label>
                                     <span className="req-icon"> *</span>
                                     <input type="password" className="form-control" pattern="[A-Za-z0-9]+" id="inputpassword" name='password' required  minLength={6} value={this.state.password} onChange={this.handleChange} /> 
-                                    <span for="examplePassword" className="ex-password">*  A combination of upper,lowercase letters,numbers or special characters (more than 5 character)</span>
+                                    
                                   </div>
                                   <div className="col">
                                     <label for="exampleInputPassword1" className="form-label">Comfirm Password</label>
@@ -327,6 +368,7 @@ flash = (e) =>{
                                           </FlashMessage>
                                       </div>
                                 }
+                                <span for="examplePassword" className="ex-password">*  A combination of upper, lowercase letters, numbers or special characters <br/>(more than 5 character)</span>
                                 </div>
                                 <div className="title_part-regis">
                                   <p className="col">Personal infomation</p>

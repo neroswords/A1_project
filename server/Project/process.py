@@ -6,6 +6,20 @@ from Project.extensions import mongo
 from Project.message import invoice_flexmessage,item_list_flexmessage,confirm_flexmessage,address_flex, payment_flex, tel_flexmessage
 import json
 from linebot.models import CarouselContainer
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.lib.pagesizes import letter, landscape
+import os
+
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.enums import TA_CENTER
+from PyPDF2 import PdfFileMerger
+from pathlib import Path
+
+pdfmetrics.registerFont(TTFont('Th sarabun New', 'THSarabunNew.ttf'))
+
 
 def checkVariable(ss2):
     flag = []
@@ -102,7 +116,7 @@ def basicEventHandler(msg,botID,sender_id,platform):
         if event_define != None:
             msg.remove(key)
             break
-    for x in ['ครับ', 'ค่ะ', 'ค่า', 'คะ', 'คับ', 'คร้าบ', 'ฮ่ะ', 'อ่ะ', 'อ่า', 'ป้ะ', 'ป่ะ', 'บ่', 'แมะ', 'มะ', 'ก๊า', 'ไหม', 'มั้ย', 'ค้า', 'หน่อย']:
+    for x in ['ครับ', 'ค่ะ', 'ค่า', 'คะ', 'คับ', 'คร้าบ', 'ฮ่ะ', 'อ่ะ', 'อ่า', 'ป้ะ', 'ป่ะ', 'บ่', 'แมะ', 'มะ', 'ก๊า', 'ไหม', 'มั้ย', 'หน่อย']:
         try:
             msg.remove(x)
         except :
@@ -126,9 +140,11 @@ def basicEventHandler(msg,botID,sender_id,platform):
             return True,item
         return True,{"flex":item, "alt": "ยืนยันรายการ","type":"none"}
     elif event_define != None and event_define['type'] == 'call_merchant':
+        customer_collection = mongo.db.customers
+        customer_collection.update_one({"userID": sender_id},{"$set":{"call_merchant":True}})
         return True,{"group":[{"data":"ติดต่อแม่ค้าไปแล้วครับ กรุณารอสักครู่","type":"text"},{"data":"ระหว่างนี้เลือกซื้อของรอไปก่อนได้เลยครับบ","type":"text"}]}
-    elif event_define != None and event_define['type'] == 'liff':
-        return True,{"message":"https://liff.line.me/1655652942-YyMAypje"}
+    # elif event_define != None and event_define['type'] == 'liff':
+    #     return True,{"message":"https://liff.line.me/1655652942-YyMAypje"}
     return False,'not found word'
 
 
@@ -138,6 +154,7 @@ def commandsHandler(**kwargs):
     inventory_collection = mongo.db.inventory
     mappings_collection = mongo.db.mappings
     customer_define = customer_collection.find_one({'$and':[{'userID':kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]})
+    mapping_define = mappings_collection.find_one({'$and':[{'botID':ObjectId(kwargs['botID'])}]})
     commands = kwargs['commands']['postback'].split("&")
     define_cart = cart_collection.find_one({'$and':[{'userID':kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]})
     if commands[0] == "action=buy":
@@ -168,7 +185,7 @@ def commandsHandler(**kwargs):
                         newvalues = {"$set": {"cart": newlist,"total": total}}
                         cart_collection.update_one(myquery,newvalues)
                         customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
-                        return {"message":"ใส่ "+define_item['item_name']+" ลงตระกร้าเรียบร้อยแล้วครับบ"}
+                        return {"message":"ใส่ "+define_item['item_name']+" ลงตระกร้าเรียบร้อยแล้ว"}
                 myquery = {"userID": kwargs['sender_id']}
                 newvalues = {"$push":{'cart':{'itemid': ObjectId(itemid),'price_per_ob':define_item['price'],'item_name':define_item['item_name'], 'amount': 1,'total_ob':define_item['price']}}}
                 cart_collection.update_one(myquery,newvalues)
@@ -176,14 +193,14 @@ def commandsHandler(**kwargs):
                 
                 customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
                
-                return {"message":"ใส่ "+define_item['item_name']+" ลงตระกร้าเรียบร้อยแล้วครับบ"}
+                return {"message":"ใส่ "+define_item['item_name']+" ลงตระกร้าเรียบร้อยแล้ว"}
     elif commands[0] == "action=confirm":
         commd = commands[1].split('=')
         if commd[1] == "true":
             customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"name"}})
             if 'fullname' in customer_define.keys():
                 return {"flex":json.loads(confirm_flexmessage(customer_define['fullname'])),"alt":"ยืนยันชื่อ-นามสกุล"}
-            return {"message":"ขอชื่อนามสกุลในการจัดส่งด้วยครับ"}
+            return objectReader(mapping_define['details'][0]['answer'],kwargs['botID'])
         elif commd[1] == "false":
             cart_collection.delete_one({'$and':[{'userID':kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]})
             customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"none"}})
@@ -197,7 +214,7 @@ def commandsHandler(**kwargs):
                 customer_collection.update_one(myquery,newvalues)
                 if 'address' in customer_define.keys():
                     return {"flex":json.loads(address_flex(customer_define['address'])),"alt":"ยืนยันที่อยู่"}
-                return {'message':'ระบุที่อยู่ที่ต้องการจัดส่ง'}
+                return objectReader(mapping_define['details'][1]['answer'],kwargs['botID'])
             elif commd[1] == "false":
                 customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
                 return {'message':'เชิญเลือกซื้อของต่อได้เลยครับ'}
@@ -211,7 +228,7 @@ def commandsHandler(**kwargs):
                 customer_collection.update_one(myquery, newvalues)
                 if 'tel' in customer_define.keys():
                     return {'flex': json.loads(tel_flexmessage(customer_define['tel'])),"alt":"ยืนยันเบอร์โทร"}
-                return {'message':'โปรดกรอกเบอร์โทรของคุณ'}
+                return objectReader(mapping_define['details'][2]['answer'],kwargs['botID'])
             elif commd[1] == "false":
                 customer_collection.update_one({'$and': [{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]},{"$set": {"state":"inCart"}})
                 return {'message':'เชิญเลือกซื้อของต่อได้เลยครับ'}
@@ -233,7 +250,7 @@ def commandsHandler(**kwargs):
             commd = commands[1].split('=')
             if commd[1] == "true":
                 customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]}, {"$set": {"state": "payment"}})
-                return {'message':'tracking number'}
+                return {'message':'ทำการสั่งซื้อเรียบร้อย โปรดรอแม่ค้าส่ง tracking number ให้ครับ'}
             elif commd[1] == "false":
                 customer_collection.update_one({'$and':[{"userID": kwargs['sender_id']},{'botID':ObjectId(kwargs['botID'])}]}, {"$set": {"state": "inCart"}})
                 return {'message':'ยกเลิกการจ่ายเงินแล้ว เชิญเลือกซื้อของต่อได้เลยครับ'}
@@ -256,3 +273,71 @@ def stateHandler(**kwargs):
     elif 'postback' in kwargs.keys():
         res = commandsHandler(commands = kwargs['postback'], sender_id = kwargs['sender_id'], botID=kwargs['botID'])
     return res
+
+def create_cover_sheet(purchased_id,botID,customerID):
+    bot_collection = mongo.db.bots
+    customer_collection = mongo.db.customers
+    user_collection = mongo.db.users
+    purchased_collection = mongo.db.purchased
+    cart_define = purchased_collection.find_one({'$and':[{"userID":customerID},{"_id": ObjectId(purchased_id)}]})
+    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
+    customer_define = customer_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
+    user_define = user_collection.find_one({"_id": bot_define['owner']})
+    canvas = Canvas("Project\static\pdf\cover\cover_"+str(botID)+"&"+customerID+"_"+cart_define['purchased_date']+".pdf")
+    canvas.setPageSize(landscape(letter))
+    textobject = canvas.beginText(50, 550)
+    textobject.setFont('Th sarabun New', 26, leading=None)
+    textobject.textLine("ผู้ส่ง")
+    canvas.setFont('Th sarabun New', 18, leading=None)
+    textobject.textLine(user_define['shop_name'])
+    # canvas.drawString(80,750,user_define['shop_name'])
+    address_line = user_define['address'].split(" ")
+    for i in range(0,len(address_line),3):
+        textobject.textLine(" ".join(address_line[i:i+3:]))
+    canvas.drawText(textobject)
+    # textobject.drawString(80,750,user_define['tel'])
+    canvas.setFont('Th sarabun New', 32, leading=None)
+    textobject = canvas.beginText(350, 350)
+    textobject.textLine("ผู้รับ")
+    canvas.setFont('Th sarabun New', 26, leading=None)
+    textobject.textLine(customer_define['fullname'])
+    address_line = customer_define['address'].split(" ")
+    for i in range(0,len(address_line),3):
+        textobject.textLine(" ".join(address_line[i:i+3:]))
+    textobject.textLine("โทร."+customer_define['tel'])
+    canvas.drawText(textobject)
+    canvas.showPage()
+    # canvas.setFont('Th sarabun New', 24, leading=None)
+    # textobject = canvas.beginText(50, 550)
+    # textobject.textLine("คำสั่งซื้อหมายเลข"+str(cart_define['_id']))
+    # canvas.setFont('Th sarabun New', 16, leading=None)
+    # for item in cart_define['cart']:
+    #     textobject.textLine(item['item_name']+"       "+str(item['amount'])+"       "+str(item['total_ob']))
+    # canvas.drawText(textobject)
+    # canvas.showPage()
+    canvas.save()
+    doc = SimpleDocTemplate("Project\static\pdf\item_list\list_"+str(botID)+"&"+customerID+"_"+cart_define['purchased_date']+".pdf", pagesize=letter)
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='Center', alignment=TA_CENTER, fontName="Th sarabun New"))
+    elements = []
+    text = '<font size=14>รายการสินค้า : คำสั่งซื้อ '+str(cart_define['_id'])+'</font>'
+    elements.append(Paragraph(text, styles['Center']))
+    data = [["name", "amount", "price(Baht)"]]
+    for item in cart_define['cart']:
+        data.append([item['item_name'],item['amount'],item['total_ob']])
+    t=Table(data)
+    elements.append(t)
+    doc.build(elements)
+    # report_dir = (
+    #     Path.home()
+    #     / "creating-and-modifying-pdfs"
+    #     / "practice_files"
+    #     / "quarterly_report"
+    # )
+    pdf_merger = PdfFileMerger()
+    pdf_merger.append(str("Project\static\pdf\cover\cover_"+str(botID)+"&"+customerID+"_"+cart_define['purchased_date']+".pdf"))
+    pdf_merger.merge(1, str("Project\static\pdf\item_list\list_"+str(botID)+"&"+customerID+"_"+cart_define['purchased_date']+".pdf"))
+    with Path("Project/static/pdf/full_report.pdf").open(mode="wb") as output_file:
+        pdf_merger.write(output_file)
+
+# create_cover_sheet("22_22",ObjectId('60096576712624a4c1d2db1c'),'U355a58d5a4c7fe37ae1e84a231aff4d5')
