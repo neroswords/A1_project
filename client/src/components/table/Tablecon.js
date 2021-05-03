@@ -4,11 +4,8 @@ import  { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination
 import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
 import Delete_table from "../Delete_table";
-<<<<<<< HEAD
 import Traintable from "../Traintable";
-=======
 import { MDBNotification, MDBContainer } from "mdbreact";
->>>>>>> 02b71eaacbbd2046b9d297e03b2e137391b72277
 
 const Styles = styled.div`
 

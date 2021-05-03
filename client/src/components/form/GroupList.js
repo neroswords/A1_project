@@ -3,13 +3,7 @@ import GroupForm from './GroupForm';
 import Todo from './Todo';
 import {Link} from "react-router-dom";
 
-<<<<<<< HEAD
-function GroupList({groupID, botID}) {
-
-
-=======
 function GroupList({groupID, botID, groupname}) {
->>>>>>> 02b71eaacbbd2046b9d297e03b2e137391b72277
   const [todos, setTodos] = useState([]);
   // const [file, setFile] = useState([]);
   

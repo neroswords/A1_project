@@ -68,17 +68,6 @@ const Styles = styled.div`
     border-radius: 1rem;
     padding: 5px 20px; 
   }
-<<<<<<< HEAD
-  .widget{
-      height: 200px;
-  }
-
-  .inner-widget{
-      margin: 0px;
-      padding: 20px;
-      height: 170px;  
-  }
-=======
   .loader {
   animation:spin 1s infinite linear;
   border:solid 2vmin transparent;
@@ -127,7 +116,6 @@ const Styles = styled.div`
     transform:rotate(360deg);
   }
 }
->>>>>>> 02b71eaacbbd2046b9d297e03b2e137391b72277
 `
 
 
@@ -153,65 +141,6 @@ function History(props) {
 
     return (
         <Styles>
-<<<<<<< HEAD
-            <div className="history-page">
-                <Navbar_member botID={props.match.params.bot_id} path={"history"} />
-                <div className="container-fluid">
-                    <div className="bot-name-on-page">
-                        <h4> Bot name :</h4>
-                    </div>
-                    <div className="title-history">
-                        <h2 className='p-2 flex-grow-1 bd-highlight' id="history-header">Order</h2>
-                    </div>
-
-                    <div className="row p-3">
-                    <div class="col">
-                        <div className="widget small-box bg-info">
-                            <div className="inner-widget">
-                                <h3>{history.waited}</h3>
-                                <p>New Orders</p>
-                            </div>
-                            <div className="icon">
-                                <i className="icon-widget far fa-shopping-basket"></i>
-                            </div>
-                            <Link to={'/bot/'+ props.match.params.bot_id +'/history/new'}><a href="#" className=" MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
-                        </div>
-                        </div>
-                    
-
-                        <div class="col">
-                            <div className="widget small-box bg-success">
-                                <div className="inner-widget">
-                                    <h3>{history.total}</h3>
-                                    <p>Total Order</p>
-                                    <br></br>
-                                </div>
-                                <div className="icon">
-                                    <i class="icon-widget far fa-clipboard-list-check"></i>
-                                </div>
-                                <Link to={'/bot/'+ props.match.params.bot_id +'/history/totalorder'}><a href="#" className=" MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                        <div className="widget small-box bg-warning">
-                            <div className="inner-widget">
-                                <h3>{history.tracking}</h3>
-                                <p>Tracking number</p>
-                            </div>
-                            <div className="icon">
-                                <i class="far fa-truck-moving"></i>
-                            </div>
-                            <Link to={'/bot/'+ props.match.params.bot_id +'/history/tracking'}><a href="#" className=" MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
-                        </div>
-                        </div>
-
-
-
-                    </div>
-
-
-=======
      
             {loading ?         
                          <div className="history-page">
@@ -262,7 +191,6 @@ function History(props) {
                          </div>
                      </div>
                   : <div class="loader"></div>}
->>>>>>> 02b71eaacbbd2046b9d297e03b2e137391b72277
 
         </Styles>
     );

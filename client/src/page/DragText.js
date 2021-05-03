@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useState } from "react";
-=======
-import React, { useEffect, useState} from "react";
->>>>>>> 02b71eaacbbd2046b9d297e03b2e137391b72277
 import styled from 'styled-components';
 import Navbar_member from '../Components/Navbar/navbar_member';
 import GroupList from "../Components/Form/GroupList";
@@ -44,18 +40,14 @@ const Styles = styled.div`
    color: #000;
 }
 
-.group-title-name{
+.title-group{
   margin: 10px 10px;
   margin-left: 5%;
     padding: 4px;
-    width: 510px;
+    width: 90% ;
     background-color: white;
     border-radius: 0.25rem;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-    justify-content: start;
-    display: flex;
-    margin: 25px auto;
-    text-align: center;
 }
 
 .todo-app {
@@ -205,7 +197,7 @@ const Styles = styled.div`
     min-height: 92vh;
 }
 .container-fluid {
-   padding: 10px;
+   padding: 40px;
    width: 100%;
    overflow: hidden;
 }
@@ -271,50 +263,11 @@ const Styles = styled.div`
   #container-button .submit:hover{
       color: #000;
   }
- 
+
 
 `
-<<<<<<< HEAD
 function DragText(props) {
 
-=======
-function DragText(props){
-  console.log(props)
-  console.log(props.match.params.group_id)
-  console.log(props.match.params.bot_id)
-  const [groupName, setGroupName] = useState("");
-
-
-  useEffect(() => {
-    fetch('/bot/' + props.match.params.bot_id  + '/groupdetail/' +props.match.params.group_id).then(res => res.json().then(data => {
-      console.log(data[0].name)
-      setGroupName(data[0].name)
-    //   setElements(data[0].node)
-    // setDetails(data[0].details)
-    // setName(data[0].name)
-  }
-    ))
-
-    
-  }, []);
-
-    
-    return(
-        <div>
-            <Styles>
-            
-            <div className="group-page">
-            <Navbar_member botID = {props.match.params.bot_id} path={"group"} />
-            
-            <div className="container-fluid">
-            <div className="group-title-name ">
-                    <h3 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group name : {groupName}</h3>
-                </div>
-                
-                {/* <h4> Group name : {groupName}</h4> */}
-                  <GroupList groupID={props.match.params.group_id} botID={props.match.params.bot_id} name={groupName}/>
-                </div>
->>>>>>> 02b71eaacbbd2046b9d297e03b2e137391b72277
 
   return (
     <div>

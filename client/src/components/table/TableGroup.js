@@ -5,12 +5,9 @@ import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
 import {Link} from "react-router-dom";
 import Delete_table from "../Delete_table";
-<<<<<<< HEAD
 import { Button } from 'react-bootstrap';
 import AddGroup from "./AddTable/AddGroup";
-=======
 import { MDBNotification, MDBContainer } from "mdbreact";
->>>>>>> 02b71eaacbbd2046b9d297e03b2e137391b72277
 
 const Styles = styled.div`
   .table-show-all > div.container { 
