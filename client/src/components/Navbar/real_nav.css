@@ -449,7 +449,7 @@
   top: 15px;
   right: 5px;
   width: 400px;
-  height: 700px;
+  max-height: 700px;
   padding: 20px;
   overflow-y: scroll;
 }
