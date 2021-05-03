@@ -4,53 +4,14 @@ import bson.objectid
 from bson import ObjectId
 import os
 from dotenv import dotenv_values
+import requests
 
-from reportlab.pdfgen.canvas import Canvas
-from reportlab.lib.pagesizes import letter, landscape
 
 config = dotenv_values("./.env")
 
 mongo = PyMongo()
 
 server_url = 'https://68bc51c4e3ef.ngrok.io'
-
-def create_cover_sheet(date,botID,customerID):
-    bot_collection = mongo.db.bots
-    customer_collection = mongo.db.customers
-    user_collection = mongo.db.users
-    cart_collection = mongo.db.carts
-    cart_define = cart_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
-    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
-    customer_define = customer_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
-    user_define = user_collection.find_one({"_id": bot_define['owner']})
-    canvas = Canvas("cover_"+botID+"&"+customerID+"_"+date+".pdf")
-    canvas.setPageSize(landscape(letter))
-    canvas.setFont('TH Sarabun New', 36, leading=None)
-    canvas.drawString(80,750,"ผู้ส่ง")
-    canvas.setFont('TH Sarabun New', 26, leading=None)
-    canvas.drawString(80,750,user_define['shop_name'])
-    address_line = user_define['address'].split(" ")
-    for i in range(0,len(address_line),3):
-        canvas.drawString(80,750," ".address_line[i:i+3:])
-    # canvas.drawString(80,750,user_define['tel'])
-    canvas.setFont('TH Sarabun New', 36, leading=None)
-    canvas.drawCentredString(415,500,"ผู้รับ")
-    canvas.setFont('TH Sarabun New', 26, leading=None)
-    canvas.drawCentredString(415,500,customer_define['fullname'])
-    address_line = customer_define['address'].split(" ")
-    for i in range(0,len(address_line),3):
-        canvas.drawCentredString(400,500," ".address_line[i:i+3:])
-    canvas.drawCentredString(400,500,"โทร."+customer_define['tel'])
-    canvas.showPage()
-    for item in cart_define['cart']:
-        canvas.drawString(80,750,item['item_name']+"\t"+item['amount']+"\t"+item['total_ob'])
-    canvas.showPage()
-    canvas.save()
-
-def create_list_sheet(date,botID,customerID):
-    cart_collection = mongo.db.carts
-    cart_define = cart_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
-    canvas = Canvas("itemsList_"+botID+"&"+customerID+"_"+date+".pdf")
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -59,11 +20,6 @@ class JSONEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
-# def JSONEncoder(x):
-#     if isinstance(x, bson.objectid.ObjectId):
-#         return str(x)
-#     else:
-#         return JSONEncoder(x)
 
 class User:
     def __init__(self, username, password,is_active):
@@ -72,8 +28,17 @@ class User:
         self.is_active = is_active
 
 
+def socket_api(data,botID,userID):
+    url = 'http://127.0.0.1:300/api/message'
+    myobj = {'data': data, 'botID':botID, 'userID':userID}
+    x = requests.post(url, json = myobj, headers = {'Content-type': 'application/json'})
+    return x
 
-
+def socket_noti(data,userID):
+    url = 'http://127.0.0.1:300/api/notification'
+    myobj = {'data': data,  'userID':userID}
+    x = requests.post(url, json = myobj, headers = {'Content-type': 'application/json'})
+    return x
 
 class Config:
     """Basic Flask configuration.

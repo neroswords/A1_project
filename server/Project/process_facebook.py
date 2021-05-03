@@ -138,7 +138,6 @@ def commandsHandler(**kwargs):
             commd = commands[1].split('=')
             if commd[1] == "true":
                 if commands[2].isnumeric():
-                        
                     myquery = { '$and': [{"userID": kwargs['sender_id']}, {"botID": ObjectId(kwargs['botID'])}]}
                     newvalues = { "$set": {"phone": commands[2],"state":"payment"}}
                     customer_collection.update_one(myquery, newvalues)

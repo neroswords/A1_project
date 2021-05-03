@@ -215,6 +215,10 @@ const Styles = styled.div`
     /* float: right; */ 
 } 
 
+.error {
+  color: red;
+}
+
 `;
 let fileimg = []
 
@@ -418,10 +422,10 @@ export default class Add_item extends React.Component {
       let { imagePreviewUrl } = this.state;
       
       let $imagePreview = null;
-      if (imagePreviewUrl) {
-
-        $imagePreview = (<img src={imagePreviewUrl} />);
-      }
+      // if (imagePreviewUrl) {
+      //   console.log(imagePreviewUrl)
+      //   $imagePreview = (<img src={imagePreviewUrl} />);
+      // }
       return (
         <Styles>
            { this.state.errorState &&  
@@ -501,8 +505,7 @@ export default class Add_item extends React.Component {
                                 <label className="form-label">Item name</label>
                                 <span className="req-icon"> *</span>
                                 <input type="text" name="item_name" value={this.state.item_name} ref={(ref) => { this.item_name = ref; }} onChange={this.handleChange} className="form-control"required />
-                              </div> 
-                              { this.state.showMessage &&  
+                                { this.state.showMessage &&  
                                         <div className="container">
                                             <FlashMessage duration={4000}>
                                               <div className="error">
@@ -510,7 +513,9 @@ export default class Add_item extends React.Component {
                                               </div>  
                                             </FlashMessage>
                                         </div>
-                                  }                       
+                                  } 
+                              </div> 
+                                                    
                               <div className="col">
                                 <label className="form-label">Price</label>
                                 <span className="req-icon"> *</span>

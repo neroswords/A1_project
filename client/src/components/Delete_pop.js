@@ -10,7 +10,7 @@ const Background = styled.div`
   width: 100%;
   height: 100%;
   /* background: blue; */
-  position: absolute;
+  /* position: absolute; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,15 +19,16 @@ const Background = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1000;
+  z-index: 20; 
 `;
 
 const ModalWrapper = styled.div`
+z-index: 1000;
   width: 500px;
   background-color: white;
   padding: 3rem;
   border-radius: 0.5rem;
-  z-index: 10000;
+  z-index: 30;
 `;
 
 const CloseModalButton = styled(MdClose)`

@@ -159,6 +159,54 @@ input::placeholder{
 .select-pagesize {
   padding: 0 1%;
 }
+.loader {
+  animation:spin 1s infinite linear;
+  border:solid 2vmin transparent;
+  border-radius:50%;
+  border-right-color:#fca311;
+  border-top-color:#fca311;
+  box-sizing:border-box;
+  height:20vmin;
+  left:calc(50% - 10vmin);
+  position:fixed;
+  top:calc(50% - 10vmin);
+  width:20vmin;
+  z-index:1;
+  &:before {
+    animation:spin 2s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcc111;
+    border-top-color:#fcc111;
+    box-sizing:border-box;
+    content:"";
+    height:16vmin;
+    left:0;
+    position:absolute;
+    top:0;
+    width:16vmin;
+  }
+  &:after {
+    animation:spin 3s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcd111;
+    border-top-color:#fcd111;
+    box-sizing:border-box;
+    content:"";
+    height:12vmin;
+    left:2vmin;
+    position:absolute;
+    top:2vmin;
+    width:12vmin;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
 
 
 `;
@@ -273,7 +321,7 @@ const defaultColumn = {
 }
 
 
-function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID }) {
+function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID ,loading}) {
 
   const [errorState, setErrorState] = React.useState(false)
 
@@ -463,18 +511,22 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               </th>
             </tr> */}
           </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map((row, i) => {
-              prepareRow(row)
-              return (
-                <tr {...row.getRowProps()} name="training-row">
-                  {row.cells.map(cell => {
-                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                  })}
-                </tr>
-              )
-            })}
-          </tbody>
+        
+          {loading ?                    
+                    
+                    <tbody {...getTableBodyProps()}>
+                    {page.map((row, i) => {
+                      prepareRow(row)
+                      return (
+                        <tr {...row.getRowProps()} name="training-row">
+                          {row.cells.map(cell => {
+                            return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                          })}
+                        </tr>
+                      )
+                    })}
+                  </tbody> 
+                    : <div class="loader"></div>}
         </table>
 
         <div className="pagination row">
@@ -527,7 +579,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
 function Tablecon({ botID, delete_trained, add_data }) {
   const [TableconState, setTableconState] = useState([]);
-
+  const [loading,setLoading] = useState(false);
                                                           
 
   const [showWord, setShowWord] = useState(false);
@@ -609,7 +661,7 @@ function Tablecon({ botID, delete_trained, add_data }) {
           
 
         );
-
+        setLoading(true)
       }))
 
   }, []);
@@ -619,15 +671,20 @@ function Tablecon({ botID, delete_trained, add_data }) {
   return (
     <Styles>
       <div className="table-show-all">
-        <TableShow 
+ 
+         {loading ?                    
+                    
+                  
+                    <TableShow 
           
-          columns={columns}
-          data={TableconState}
-          updateMyData={updateMyData}
-          skipPageReset={skipPageReset}
-          delete_trained={delete_trained}
-          botID={botID}
-        />
+                    columns={columns}
+                    data={TableconState}
+                    updateMyData={updateMyData}
+                    skipPageReset={skipPageReset}
+                    delete_trained={delete_trained}
+                    botID={botID}
+                    loading={loading}
+                  />   : <div class="loader"></div>}
       </div>
     </Styles>
   );
