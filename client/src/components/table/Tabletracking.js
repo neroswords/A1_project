@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import Delete_table from "../Delete_table";
 import { Button } from 'react-bootstrap';
 import AddGroup from "./AddTable/AddGroup";
+import AddTracking from "./AddTable/AddTracking";
 
 const Styles = styled.div`
   .table-show-all > div.container { 
@@ -82,7 +83,7 @@ const Styles = styled.div`
   .button-trained-word .buttondeleteWord:hover{
     color: #000;
   }
-  .buttonadd-Group{
+  .buttonadd-tracking{
   padding: 7px 15px;
   font-size: 12px;
   border-radius: 25px;
@@ -91,7 +92,7 @@ const Styles = styled.div`
   background-color: #0078ff;
   color: #fff;
 }
-.buttonadd-Group:hover{
+.buttonadd-tracking:hover{
   color: #000;
 }
 .pagination{
@@ -250,19 +251,8 @@ const defaultColumn = {
 }
 
 
-function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID }) {
+function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID, info }) {
   
-  const Ondelete = (e) => {
-    if(e.length > 0){
-      openDelete_table(e)
-    }
-    else{
-      alert('please select')
-    }
-    console.log(e.length)
-    
-  }
-
   const filterTypes = React.useMemo(
     () => ({
       fuzzyText: fuzzyTextFilterFn,
@@ -296,6 +286,16 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     setShowDelete_table(prev => !prev);
       
   }
+
+  const [sentTracking, setSenttracking] = useState();
+  const [showAddTracking, setShowAddTracking] = useState(false);
+  const openAddTracking = (e) => {
+    console.log(e)
+    setSenttracking(e)
+    setShowAddTracking(prev => !prev);
+  }
+
+  
   
 
   const {
@@ -370,8 +370,6 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     <>
       <Container>
         <div className="button-trained-word">
-          <Button className='buttonadd-Group' onClick={openAddGroup} >Add Group</Button>
-          <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
           <div className='SearchBar'>
             <GlobalFilter
               preGlobalFilteredRows={preGlobalFilteredRows}
@@ -379,8 +377,6 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               setGlobalFilter={setGlobalFilter}
             />
           </div>
-          <AddGroup showAddGroup={showAddGroup} setShowAddGroup={setShowAddGroup} botID={botID} />
-          <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table} selectedFlatRows={selectedFlatRows} id={botID} delete_trained={delete_trained}/>
 
         </div>
 
@@ -394,7 +390,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
                   </th>
                 ))}
-                <th>Edit Group</th>
+                <th>Add tracking</th>
               </tr>
 
             ))}
@@ -419,10 +415,11 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
                   {row.cells.map(cell => {
                     return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                   })}
-                  {/* <td><button onClick={openForm}><i className="far fa-edit" ></i></button></td> */}
-                  <td><Link to ={'/bot/'+botID+'/group/' +row.original.id}><i className="far fa-edit" ></i></Link></td>
-                  {/* <TextForm showForm={showForm} setShowForm={setShowForm} botID={botID} /> */}
+                  <td><button className='buttonadd-tracking' onClick={() => openAddTracking(row) } >Add tracking</button></td>
+                  <AddTracking showAddTracking={showAddTracking} setShowAddTracking={setShowAddTracking} tabletrackingState={data} info={sentTracking}  botID={botID} />
+
                 </tr>
+                
               )
             })}
           </tbody>
@@ -476,72 +473,55 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
 
 
-function TableGroup({ botID, delete_trained, add_data }) {
-  const [TableGroupState, setTableGroupState] = useState([]);
+function Tabletracking({ botID, delete_trained, add_data }) {
+  const [tabletrackingState, setTabletrackingState] = useState([]);
                                                         
   const [showAddGroup, setShowAddGroup] = useState(false);
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Group',
-        accessor: 'Group', // accessor is the "key" in the data
+        Header: 'ID',
+        accessor: 'id', // accessor is the "key" in the data
       },
+      {
+        Header: 'Name',
+        accessor: 'Name', // accessor is the "key" in the data
+      },
+      {
+        Header: 'Time',
+        accessor: 'Time', // accessor is the "key" in the data
+      }
       
       
     ],
     []
   )
 
-  const [originalData] = React.useState(TableGroupState)
+  const [originalData] = React.useState(tabletrackingState)
   const [skipPageReset, setSkipPageReset] = React.useState(false)
 
-  // const updateMyData = (rowIndex, columnId, value) => {
-  //   setTableGroupState(old =>
-  //     old.map((row, index) => {
-  //       if (index === rowIndex) {
-  //         const editData = {
-  //           "value": value,
-  //           "type": columnId,
-  //           "data": row
-  //         }
-  //         if (row.Word != value && row.ReplyWord != value) {
-  //           fetch('/train_bot/edit/trained/', {
-  //             method: 'POST',
-  //             headers: {
-  //               "Access-Control-Allow-Origin": "*",
-  //               'Content-Type': 'application/json'
-  //             },
-  //             body: JSON.stringify(editData)
-  //           })
-  //         }
-  //         return {
-  //           ...old[rowIndex],
-  //           [columnId]: value,
-  //         }
-  //       }
-  //       return row
-  //     })
-  //   )
-  // }
+ 
 
   const openAddGroup = () => {
     setShowAddGroup(prev => !prev);
 
   }
-
+  const [info, setInfo] =React.useState();
 
   useEffect(() => {
-    fetch('/bot/' + botID + '/group')
+    fetch('/bot/' + botID + '/tracking')
       .then(res => res.json().then(data => {
-        console.log(data)
-
-        setTableGroupState(
+        // console.log(data)
+        setInfo(data)
+        setTabletrackingState(
           data.map(d => {
             console.log(d)
             return {
               select: false,
               id: d._id.$oid,
-              Group: d.name,
+              Name: d.userID,
+              Time: d.purchase_day+'/'+ d.purchase_month +'/'+ d.purchase_year
+              
             };
           })
           
@@ -553,22 +533,22 @@ function TableGroup({ botID, delete_trained, add_data }) {
   }, []);
 
 
-  const resetData = () => setTableGroupState(originalData)
+  const resetData = () => setTabletrackingState(originalData)
   
   return (
     <Styles>
       <div className="table-show-all">
         <TableShow
           columns={columns}
-          data={TableGroupState}
-          // updateMyData={updateMyData}
+          data={tabletrackingState}
           skipPageReset={skipPageReset}
           delete_trained={delete_trained}
           botID={botID}
+          info={info}
         />
       </div>
     </Styles>
   );
 }
 
-export default TableGroup;
+export default Tabletracking;

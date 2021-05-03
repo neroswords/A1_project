@@ -399,6 +399,33 @@ def group(botID):
         data = dumps(listcursor, indent=2)
         return data
 
+@bot.route('/<botID>/addgroup', methods=["POST"])
+def addgroup(botID):
+    if request.method == 'POST':
+        groupList = []
+        groups_collection = mongo.db.groups
+        groups_update = request.get_json()
+        print(groups_update)
+        groups = groups_update['group']
+        creator = groups_update['botID']
+        group = groups_collection.find({"botID": ObjectId(botID)})
+        groups_info = list(group)
+        print(groups_info)
+        flag = True
+        for data in groups_info:
+            print(data)
+            # if  data['name'] == groups:
+            #     flag = False
+            #     return {'error':'This question already exists'}
+        if flag == True:
+            groups_collection.insert_one(
+                    {'name': groups, 'botID':  ObjectId(creator),
+                    'message': groupList
+                    })
+            print('sun')
+            return {"message": "add done"}
+    return {"message": "ok"}
+
 
 
 @bot.route('/<botID>/addword', methods=["POST"])
@@ -501,6 +528,17 @@ def get_message(botID,customerID):
     data = dumps({"message":messages_list,"profile":customer}, indent=2)
 
     return data
+
+@bot.route('/<botID>/tracking',methods=["GET"])
+def load_tracking(botID):
+    
+    if request.method == 'GET' :
+        purchased_collection = mongo.db.purchased
+        purchased_cursor = purchased_collection.find({"botID" : ObjectId(botID)})
+        listcursor = list(purchased_cursor)
+        data = dumps(listcursor,indent = 2)
+        return data
+
 
 
 

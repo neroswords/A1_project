@@ -1,19 +1,20 @@
-import React from 'react';
-import TableGroup from '../Components/Table/TableGroup';
+import React, { useEffect, useState,Fragment, useCallback } from 'react';
+import TableTotalor from '../Components/Table/TableTotalorder';
 import Navbar_member from '../Components/Navbar/navbar_member';
 import styled from 'styled-components';
+import { Redirect } from 'react-router-dom';
 
 const Styles = styled.div` 
-.group-page {
+.totalorder-page {
     display: flex;
     min-height: 92vh;
 }
-.group-page .container-fluid {
+.totalorder-page .container-fluid {
     padding: 20px 40px;
     width: 100%;
     overflow:hidden;
 }
-.group-title{
+.totalorder-title{
     padding: 4px;
     width: 100% ;
     background-color: white;
@@ -21,11 +22,10 @@ const Styles = styled.div`
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.group-title h2{
+.totalorder-title h2{
     font-weight:600;
 }
-
-.showtable-group{
+.showtabletotalorder{
     min-height: 70vh;
     margin-top: 1%;
     background-color: white;
@@ -57,52 +57,34 @@ const Styles = styled.div`
     padding: 5px 20px; 
   }
 
-  
 ` 
 
-function Group(props){
-    const delete_trained =(data)=>{
-        var newdata = []
-        var i = 0
-    
-        // var a = []
-        for (i = 0; i < data.length; i++){
-            newdata.push(data[i].original)
-        }
-        if (data[0]){
-            console.log(newdata)
-            fetch('/bot/'+props.match.params.bot_id+'/group/delete/'+data[0].original.id, {
-                method : 'POST',
-                headers : {
-                    "Access-Control-Allow-Origin": "*",
-                    'Content-Type':'application/json'
-                    },
-                    body : JSON.stringify(newdata),
-                })
-                                
-        }    
-    }
+function TotalOrder(props){
+  
     return(
         <Styles>
-        <div className="group-page">
-            <Navbar_member botID = {props.match.params.bot_id} path={"group"} />
+        
+        <div className="totalorder-page">
+            <Navbar_member botID = {props.match.params.bot_id} path={"history"} />
             <div className="container-fluid">
-                <div className="bot-name-on-page">
+            <div className="bot-name-on-page">
                     <h4> Bot name : {}</h4>
                 </div>
-                <div className="group-title d-flex bd-highlight">
-                    <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group</h2>
+                <div className="totalorder-title d-flex bd-highlight">
+                    <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Total Order</h2>
                     {/* <div className="p-2 bd-highlight"><button className="btn btn-danger" type="button">Delete</button></div> */}
                 </div>
-                <div className="showtable-group">
-                    <TableGroup botID = {props.match.params.bot_id} delete_trained={delete_trained}/>
+                <div className="showtabletotalorder">
+                    <TableTotalor 
+                        botID={props.match.params.bot_id}
+                    />  
                 </div>
             </div>
 
         </div>
-       </Styles>         
+        </Styles>        
         
     );
 }
 
-export default Group;
+export default TotalOrder;

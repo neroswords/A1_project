@@ -3,10 +3,6 @@ import styled from 'styled-components';
 import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination, useRowSelect } from 'react-table'
 import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
-import {Link} from "react-router-dom";
-import Delete_table from "../Delete_table";
-import { Button } from 'react-bootstrap';
-import AddGroup from "./AddTable/AddGroup";
 
 const Styles = styled.div`
   .table-show-all > div.container { 
@@ -370,8 +366,6 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     <>
       <Container>
         <div className="button-trained-word">
-          <Button className='buttonadd-Group' onClick={openAddGroup} >Add Group</Button>
-          <button className="buttondeleteWord" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
           <div className='SearchBar'>
             <GlobalFilter
               preGlobalFilteredRows={preGlobalFilteredRows}
@@ -379,8 +373,6 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               setGlobalFilter={setGlobalFilter}
             />
           </div>
-          <AddGroup showAddGroup={showAddGroup} setShowAddGroup={setShowAddGroup} botID={botID} />
-          <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table} selectedFlatRows={selectedFlatRows} id={botID} delete_trained={delete_trained}/>
 
         </div>
 
@@ -394,7 +386,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
                   </th>
                 ))}
-                <th>Edit Group</th>
+                
               </tr>
 
             ))}
@@ -419,9 +411,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
                   {row.cells.map(cell => {
                     return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                   })}
-                  {/* <td><button onClick={openForm}><i className="far fa-edit" ></i></button></td> */}
-                  <td><Link to ={'/bot/'+botID+'/group/' +row.original.id}><i className="far fa-edit" ></i></Link></td>
-                  {/* <TextForm showForm={showForm} setShowForm={setShowForm} botID={botID} /> */}
+                 
                 </tr>
               )
             })}
@@ -483,8 +473,20 @@ function TableGroup({ botID, delete_trained, add_data }) {
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Group',
-        accessor: 'Group', // accessor is the "key" in the data
+        Header: 'Date',
+        accessor: 'Date', // accessor is the "key" in the data
+      },
+      {
+        Header: 'Name',
+        accessor: 'Name', // accessor is the "key" in the data
+      },
+      {
+        Header: 'Income',
+        accessor: 'Income', // accessor is the "key" in the data
+      },
+      {
+        Header: 'Tracking Number',
+        accessor: 'TrackingNumber', // accessor is the "key" in the data
       },
       
       
@@ -495,43 +497,15 @@ function TableGroup({ botID, delete_trained, add_data }) {
   const [originalData] = React.useState(TableGroupState)
   const [skipPageReset, setSkipPageReset] = React.useState(false)
 
-  // const updateMyData = (rowIndex, columnId, value) => {
-  //   setTableGroupState(old =>
-  //     old.map((row, index) => {
-  //       if (index === rowIndex) {
-  //         const editData = {
-  //           "value": value,
-  //           "type": columnId,
-  //           "data": row
-  //         }
-  //         if (row.Word != value && row.ReplyWord != value) {
-  //           fetch('/train_bot/edit/trained/', {
-  //             method: 'POST',
-  //             headers: {
-  //               "Access-Control-Allow-Origin": "*",
-  //               'Content-Type': 'application/json'
-  //             },
-  //             body: JSON.stringify(editData)
-  //           })
-  //         }
-  //         return {
-  //           ...old[rowIndex],
-  //           [columnId]: value,
-  //         }
-  //       }
-  //       return row
-  //     })
-  //   )
-  // }
+  
+//   const openAddGroup = () => {
+//     setShowAddGroup(prev => !prev);
 
-  const openAddGroup = () => {
-    setShowAddGroup(prev => !prev);
-
-  }
+//   }
 
 
   useEffect(() => {
-    fetch('/bot/' + botID + '/group')
+    fetch('/bot/' + botID + '/totalorder')
       .then(res => res.json().then(data => {
         console.log(data)
 
@@ -540,8 +514,11 @@ function TableGroup({ botID, delete_trained, add_data }) {
             console.log(d)
             return {
               select: false,
-              id: d._id.$oid,
-              Group: d.name,
+              Date: d.purchased_date.$date,
+              Name: d.userID,
+              Income: d.total,
+              TrackingNumber: d.TrackingNo
+
             };
           })
           
