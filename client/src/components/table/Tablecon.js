@@ -320,7 +320,7 @@ const defaultColumn = {
 }
 
 
-function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID ,loading}) {
+function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID ,loading, setReload}) {
 
   const [errorState, setErrorState] = React.useState(false)
 
@@ -497,7 +497,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               setGlobalFilter={setGlobalFilter}
             />
           </div>
-          <Traintable showTraintable={showTraintable} setShowTraintable={setShowTraintable} selectedFlatRows={selectedFlatRows} id={botID} />
+          <Traintable showTraintable={showTraintable} setShowTraintable={setShowTraintable} selectedFlatRows={selectedFlatRows} id={botID} setReload={setReload} />
           <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table} selectedFlatRows={selectedFlatRows} id={botID} delete_trained={delete_trained}/>
         </div>
 
@@ -659,8 +659,10 @@ function Tablecon({ botID, delete_trained, add_data }) {
   //   setShowWord(prev => !prev);
 
   // }
+  const [reload,setReload] = useState(false)
 
   useEffect(() => {
+    
     fetch('/train_bot/' + botID + '/training')
       .then(res => res.json().then(data => {
         setTableconState(
@@ -679,7 +681,7 @@ function Tablecon({ botID, delete_trained, add_data }) {
         setLoading(true)
       }))
 
-  }, []);
+  }, [reload]);
 
 
   const resetData = () => setTableconState(originalData)
@@ -699,6 +701,7 @@ function Tablecon({ botID, delete_trained, add_data }) {
                     delete_trained={delete_trained}
                     botID={botID}
                     loading={loading}
+                    setReload={setReload}
                   />   : <div class="loader"></div>}
       </div>
     </Styles>
