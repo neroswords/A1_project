@@ -666,7 +666,7 @@ function Navbar_member({ botID, customer_id, path  }) {
                       <i className="fas fa-user-chart"></i>
                   </div>
                 </div>
-                <span className="link-text">Dashcoard</span>
+                <span className="link-text">Dashboard</span>
               </Link> ) : (
               <Link to={"/bot/" + botID + "/dashboard"} onClick={onSubmit} class="nav-link2" name="menu-customer">
                   <div className="fa-group">

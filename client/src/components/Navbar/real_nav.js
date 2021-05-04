@@ -250,16 +250,19 @@ useEffect(() => {
                         </div>
                       </div> 
                       {console.log(msg)} 
-                      <div className="noti-show-info-user">
+                       <Link className="noti-show-info-user" to={"/chat/"+msg['botID']['$oid']+"/live_chat/"+msg['sender_id']}  >
+                      
                         {msg['readed'] == "unread"? <div className="noti-show-new"><p>NEW</p></div>: " "}
                         <p className="noti-show-name">{msg['sender']}</p>  
                         <p className="noti-show-msg">{msg['message']}</p>
                         <p className="noti-show-bot">{msg['bot_name']}</p>
                         {/* {msg['message']} {msg['botID']['$oid']} */}
 
-                      </div> 
+                      
+                      </Link>
                     </div>
                   </div>
+                  
                    {/* </Link> */}
                 
             </li>

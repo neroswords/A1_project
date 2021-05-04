@@ -470,14 +470,14 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
                                     // left: "500px",
                                     zIndex: 9999
                                   }}
-                                  autohide={4000}
+                                  autohide={3000}
                                   bodyClassName="p-4 font-weight-bold white-text "
                                   className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
                                   closeClassName="blue-grey-text"
                                   fade
                                   icon="bell"
                                   iconClassName="text-danger"
-                                  message="Please select word to delete"
+                                  message="Please select word"
                                   show
                                   
                                   title="Error"

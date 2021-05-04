@@ -445,7 +445,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
           <tbody {...getTableBodyProps()}>
             {page.map((row, i) => {
               prepareRow(row)
-              console.log(row)
+              // console.log(row)
               return (
                 <tr {...row.getRowProps()}>
                   {row.cells.map(cell => {
@@ -508,7 +508,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
 
 
-function TableGroup({ botID, delete_trained, add_data }) {
+function TableGroup({ botID, delete_trained}) {
   const [TableGroupState, setTableGroupState] = useState([]);
                                                         
   const [showAddGroup, setShowAddGroup] = useState(false);

@@ -537,6 +537,12 @@
   padding: 5px 0;
 }
 
+a.noti-show-info-user {
+  padding: 0 !important;
+  
+  
+}
+
 .noti-show-info-user .noti-show-name{
   /* color: #959595; */
   font-size: 16px;
