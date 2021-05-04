@@ -47,12 +47,12 @@ const Styles = styled.div`
 }
 
 .widget{
-    height: 200px;
+    height: 175px;
     
 }
 
 .inner-widget{
-    height: 170px;
+    height: 145px;
     padding: 10px;
 }
 

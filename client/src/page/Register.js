@@ -401,7 +401,7 @@ flash = (e) =>{
                                           </FlashMessage>
                                       </div>
                                 }
-                                <span for="examplePassword" className="ex-password">*  A combination of upper, lowercase letters, numbers or special characters <br/>(more than 5 character)</span>
+                                <span for="examplePassword" className="ex-password">*  A combination of upper, lowercase letters or numbers <br/>(more than 5 character)</span>
                                 </div>
                                 <div className="title_part-regis">
                                   <p className="col">Personal infomation</p>
