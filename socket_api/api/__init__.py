@@ -1,5 +1,4 @@
 from flask import Flask, request, abort, render_template, session,url_for,send_from_directory,send_file
-from flask_socketio import SocketIO,send, emit, join_room, leave_room
 from flask_pymongo import PyMongo
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS, cross_origin
@@ -36,6 +35,11 @@ def handle_join_room_event(data):
 def handle_join_room_noti(data):
     join_room(data['userID'])
     # socketio.emit('join_room_announcement', data, room=data['room'])
+
+
+@app.route('/', methods=['GET'])
+def home():
+    return "Welcome to a1 socket"
 
 @app.route('/api/message', methods=['POST'])
 def message_api():

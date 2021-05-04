@@ -267,7 +267,7 @@ const Styles = styled.div`
 
 `
 function DragText(props) {
-
+  console.log(props)
 
   return (
     <div>

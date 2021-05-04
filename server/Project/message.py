@@ -96,7 +96,7 @@ def item_list_flexmessage(**kwargs):
             "type": "bubble",
             "hero": {
               "type": "image",
-              "url": "https://da37df61a729.ngrok.io/images/bot/bot_pic/Avatar.jpg",
+              "url": "%s/images/bot/items/%s",
               "size": "full",
               "aspectRatio": "20:13",
               "aspectMode": "cover"
@@ -150,12 +150,12 @@ def item_list_flexmessage(**kwargs):
                   "action": {
                     "type": "uri",
                     "label": "Description",
-                    "uri": "https://liff.line.me/1655652942-1EJmM0LZ"
+                    "uri": "https://liff.line.me/%s/product_info/%s"
                   }
                 }
               ]
             }
-          }''' % (index['item_name'], index['price'], index['_id'])
+          }''' % (server_url,index['img'][0],index['item_name'], index['price'], index['_id'],bot_define['liff_id'], index['_id'])
                 else:
                   contents = '''{
             "type": "bubble",
