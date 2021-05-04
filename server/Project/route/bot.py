@@ -452,11 +452,12 @@ def edit_group(botID,groupID):
 
 @bot.route('/<botID>/train', methods=["POST"])
 def train(botID):
-    data = request.get_json()
+    datas = request.get_json()
     training_collection = mongo.db.training
     trained_collection = mongo.db.trained
-    for id in data['id']:
-        train_define = training_collection.find_one({"_id": ObjectId(id)})
+    for data in datas:
+        train_define = training_collection.find_one({"_id": ObjectId(data['id'])})
+        training_collection.delete_one({"_id": ObjectId(data['id'])})
         el = train_define.pop('confident', None)
         trained_collection.insert_one(train_define)
     return {'message': 'train successfully'}

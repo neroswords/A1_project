@@ -134,8 +134,9 @@ function Group(props){
                     },
                     body : JSON.stringify(newdata),
                 })
-                                
-        }    
+            window.location.reload("bot/"+props.match.params.bot_id+'/group');                    
+        }
+            
     }
     return(
         <Styles>

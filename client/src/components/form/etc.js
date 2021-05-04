@@ -184,11 +184,11 @@ export default function Etcform({botID}) {
                             <div className="input-Box">
                             <div className="ms-2">
                                 <label  className="form-label">OMISE SECRET KEY</label>
-                                <input type="text" value={ omiseAccesstoken } onChange={e => setOMISE_SECRET_KEY(e.target.value)} className="form-control" id="inputpagefacebook" />
+                                <input type="text" value={ OMISE_SECRET_KEY } onChange={e => setOMISE_SECRET_KEY(e.target.value)} className="form-control" id="inputpagefacebook" />
                             </div>
                             <div className="ms-2">
                                 <label  className="form-label">OMISE PUBLIC KEY</label>
-                                <input type="text" value={ omiseAccesstoken } onChange={e => setOMISE_PUBLIC_KEY(e.target.value)} className="form-control" id="inputpagefacebook" />
+                                <input type="text" value={ OMISE_PUBLIC_KEY } onChange={e => setOMISE_PUBLIC_KEY(e.target.value)} className="form-control" id="inputpagefacebook" />
                             </div>
                             <div className="copy-link">
                                 <p>{packageJson.proxy}/liff/{botID}</p>
