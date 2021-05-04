@@ -11,7 +11,7 @@ config = dotenv_values("./.env")
 
 mongo = PyMongo()
 
-server_url = 'https://68bc51c4e3ef.ngrok.io'
+server_url = 'https://002165596f9c.ngrok.io'
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -29,13 +29,13 @@ class User:
 
 
 def socket_api(data,botID,userID):
-    url = 'http://127.0.0.1:300/api/message'
+    url = 'https://a1server-socket.herokuapp.com/api/message'
     myobj = {'data': data, 'botID':botID, 'userID':userID}
     x = requests.post(url, json = myobj, headers = {'Content-type': 'application/json'})
     return x
 
 def socket_noti(data,userID):
-    url = 'http://127.0.0.1:300/api/notification'
+    url = 'https://a1server-socket.herokuapp.com/api/notification'
     myobj = {'data': data,  'userID':userID}
     x = requests.post(url, json = myobj, headers = {'Content-type': 'application/json'})
     return x
@@ -47,8 +47,6 @@ class Config:
     locale is th_TH and store currency is THB.
     """
 
-    OMISE_SECRET_KEY = config["OMISE_SECRET_KEY"]
-    OMISE_PUBLIC_KEY = config["OMISE_PUBLIC_KEY"]
     SECRET_KEY = config["FLASK_SECRET_KEY"]
     OMISE_API_VERSION = os.environ.get("OMISE_API_VERSION", "2019-05-29")
     OMISE_API_BASE = os.environ.get("OMISE_API_BASE", "https://api.omise.co")

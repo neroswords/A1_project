@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import '../Chat/Chat.css';
 
-let endPoint = "http://127.0.0.1:300";
+let endPoint = "https://a1server-socket.herokuapp.com";
 
 let socket = io.connect(`${endPoint}`);
  

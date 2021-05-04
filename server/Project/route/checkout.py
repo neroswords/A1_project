@@ -73,25 +73,21 @@ def process(chrg, botID, userID, already_redirected=False):
     )
 
     if chrg.status == "successful":
-        flash(f"Order {order_id} successfully completed.")
         cart_collection = mongo.db.carts
         customer_collection = mongo.db.customers
         purchased_collection = mongo.db.purchased
         customer_define = customer_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+        timestamp = datetime.datetime.now()
         if customer_define['type'] == "line":
             customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
             cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
-            new_data = purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":datetime.datetime.now(),"type":"waited"})
+            new_data = purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":timestamp,"purchased_time":str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second),"purchase_day": timestamp.day,"purchase_month": timestamp.month,"purchase_year": timestamp.year})              
             cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
             create_cover_sheet(new_data.inserted_id,botID,userID)
             data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
             push_message(data)
             return redirect("https://liff.line.me/1655652942-zNpjoxYV/checkout/complete")
         elif customer_define['type'] == "facebook":
-            cart_collection = mongo.db.carts
-            customer_collection = mongo.db.customers
-            purchased_collection = mongo.db.purchased
-            timestamp = datetime.datetime.now()
             customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
             cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
             new_data = purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":timestamp,"purchased_time":str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second),"purchase_day": timestamp.day,"purchase_month": timestamp.month,"purchase_year": timestamp.year})
@@ -159,25 +155,25 @@ def charge():
     email = request.form.get("email")
 
     bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
-
     token = request.form.get("omiseToken")
     source = request.form.get("omiseSource")
     customer = request.form.get("omiseCustomer")
-    omise.api_secret = current_app.config.get("OMISE_SECRET_KEY")
-    # omise.api_secret = bot_define["OMISE_SECRET_KEY"]
+    # omise.api_secret = current_app.config.get("OMISE_SECRET_KEY")
+    omise.api_secret = bot_define["OMISE_SECRET_KEY"]
     # omise.api_public = bot_define["OMISE_PUBLIC_KEY"]
     omise.api_version = current_app.config.get("OMISE_API_VERSION")
     omise.api_main = current_app.config.get("OMISE_API_BASE")
     define_cart = cart_collection.find_one({'$and':[{'userID':userID},{'botID':ObjectId(botID)}]})
     inventory_collection = mongo.db.inventory
     for item in define_cart['cart']:
-        item_define = inventory_collection.find_one({"_id":item['item_id']})
+        item_define = inventory_collection.find_one({"_id": item['itemid']})
         if (item_define['amount'] - item['amount']) >= 0:
-            inventory_collection.update_one({"_id":item['item_id']},{"$inc": {"amount":item['amount']*(-1)}})
+            inventory_collection.update_one({"_id":item['itemid']},{"$inc": {"amount":item['amount']*(-1)}})
         else:
             return render_template('no_item.html',liffId=bot_define['liff_id'],item=item['item_name'])
     order_id = str(define_cart['_id'])
-    try:
+    # try:
+    if True:
         if email and token:
             cust = omise.Customer.create(
                 description="Created on Omise Flask",
@@ -216,14 +212,14 @@ def charge():
         )
         return process(chrg, botID, userID)
 
-    except omise.errors.BaseError as error:
-        flash(f"An error occurred.  Please contact support.  Order ID: {order_id}")
-        current_app.logger.error(f"OmiseError: {repr(error)}.")
-        return redirect("/checkout/"+botID+'/check')
-    except Exception as e:
-        flash("""An error occurred.  Please contact support.""")
-        current_app.logger.error(repr(e))
-        return redirect("/checkout/"+botID+'/check')
+    # except omise.errors.BaseError as error:
+    #     flash(f"An error occurred.  Please contact support.  Order ID: {order_id}")
+    #     current_app.logger.error(f"OmiseError: {repr(error)}.")
+    #     return redirect("/checkout/"+botID+'/check')
+    # except Exception as e:
+    #     flash("""An error occurred.  Please contact support.""")
+    #     current_app.logger.error(repr(e))
+    #     return redirect("/checkout/"+botID+'/check')
 
 @checkout.route("/<botID>/complete",methods=['GET'])
 def complete(botID):
@@ -251,31 +247,31 @@ def FbCheck_out(botID,userID):
 
 
 
-@checkout.route("/<botID>", methods=['GET'])
-def check_out(botID):
-    cart_collection = mongo.db.carts
-    cart_define = cart_collection.find_one({'$and':[{'userID':request.args.get('customer')},{'botID':ObjectId(botID)}]})
-    if cart_define == None:
-        return render_template(
-        'checkout.html',
-        key=current_app.config.get("OMISE_PUBLIC_KEY"),
-        # cart=3000,
-        # Price=cart_define['total']*100,
-        botID = botID,
-        currency=current_app.config.get("STORE_CURRENCY"),
-        customer=session.get("customer"),
-        liffId = "1655652942-zNpjoxYV"
-        )
-    return render_template(
-        'checkout.html',
-        key=current_app.config.get("OMISE_PUBLIC_KEY"),
-        # cart=3000,
-        Price=cart_define['total']*100,
-        botID = botID,
-        currency=current_app.config.get("STORE_CURRENCY"),
-        customer=session.get("customer"),
-        liffId = "1655652942-zNpjoxYV"
-    )
+# @checkout.route("/<botID>", methods=['GET'])
+# def check_out(botID):
+#     cart_collection = mongo.db.carts
+#     cart_define = cart_collection.find_one({'$and':[{'userID':request.args.get('customer')},{'botID':ObjectId(botID)}]})
+#     if cart_define == None:
+#         return render_template(
+#         'checkout.html',
+#         key=current_app.config.get("OMISE_PUBLIC_KEY"),
+#         # cart=3000,
+#         # Price=cart_define['total']*100,
+#         botID = botID,
+#         currency=current_app.config.get("STORE_CURRENCY"),
+#         customer=session.get("customer"),
+#         liffId = "1655652942-zNpjoxYV"
+#         )
+#     return render_template(
+#         'checkout.html',
+#         key=current_app.config.get("OMISE_PUBLIC_KEY"),
+#         # cart=3000,
+#         Price=cart_define['total']*100,
+#         botID = botID,
+#         currency=current_app.config.get("STORE_CURRENCY"),
+#         customer=session.get("customer"),
+#         liffId = "1655652942-zNpjoxYV"
+#     )
 
 
 @checkout.route("/orders/<order_id>/<botID>/<userID>/complete")
@@ -285,8 +281,10 @@ def order(order_id,botID,userID):
     back to this site from the authorization page, we search for the
     charge based on the provided `order_id`.
     """
+    bot_collection = mongo.db.bots
+    bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
 
-    omise.api_secret = current_app.config.get("OMISE_SECRET_KEY")
+    omise.api_secret = bot_define['OMISE_SECRET_KEY']
     omise.api_version = current_app.config.get("OMISE_API_VERSION")
     omise.api_main = current_app.config.get("OMISE_API_BASE")
 
