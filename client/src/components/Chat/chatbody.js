@@ -23,14 +23,22 @@ function Chatbody({botID,customerID}){
 
     const switched =()=>{
       setAuto(prev => !prev)
+      fetch('/bot/'+botID+'/customer/'+customerID,{
+        method: 'POST',
+          headers : {
+          //   "Access-Control-Allow-Origin": "*",
+            'Content-Type':'application/json'
+          },
+          body : JSON.stringify({"auto_chat":auto}),
+      })
     }
-
+    console.log(auto)
     useEffect(() =>{
         if (customerID !=="main"){
             join_room()
             setMessages([])
             fetch('/bot/'+botID+'/customer/'+customerID).then(res=> res.json().then(data=>{
-                setAuto(data.profile.auto_chat)
+                setAuto(!data.profile.auto_chat)
                 setUsername(data.profile.display_name);
                 data.message.forEach(ele=>{ 
                   if (ele.sender_type == "bot"){
@@ -110,7 +118,7 @@ function Chatbody({botID,customerID}){
                             </div>
                             
                             <div class="toggle">
-                              <input type="checkbox" onClick={()=>{switched()}} class="check"/>
+                              <input type="checkbox" onClick={()=>{switched()}} class="check" checked={!auto ?("checked"):("")}/>
                               <b class="b switch"></b>
                               <b class="b track"></b>
                             </div>
