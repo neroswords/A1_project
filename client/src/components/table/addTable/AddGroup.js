@@ -24,8 +24,8 @@ const Background = styled.div`
 
 const ModalWrapper = styled.div`
   z-index: 1000;
-  width: 800px;
-  height: 500px;
+  width: 550px;
+  height: 400px;
   background-color: white;
   padding: 3rem;
   border-radius: 0.5rem;
@@ -57,7 +57,7 @@ const ModalContent = styled.div`
   }
 
 
-  .input-question{
+  .input-group{
     box-shadow: none;
     outline: none;
     border: none;
@@ -69,17 +69,7 @@ const ModalContent = styled.div`
 
   }
 
-  .input-answer{
-    box-shadow: none;
-    outline: none;
-    border: none;
-    border-bottom: 2px solid #000;
-    outline: none;
-    margin-bottom: 20px;
-    font-size: 16px;
-    padding: 5px 0;
-  }
-
+  
   form input{
     width: 100%;
   }
@@ -87,10 +77,7 @@ const ModalContent = styled.div`
   .group-Question{
     margin-top: 5%;
   }
-
-  .group-Answer{
-    margin-top: 2%;
-  }
+  
 
 `;
 
@@ -106,41 +93,41 @@ const CloseModalButton = styled(MdClose)`
 `;
 
 
-export const AddWord = ({ showWord, setShowWord,botID}) => {
+export const AddGroup = ({ showAddGroup, setShowAddGroup,botID}) => {
   const [message,setMessage] = useState('')
   const [showMessage,setShowMessage] = useState(false)
   const modalRef = useRef();
   const [question, setQuestion] = useState('')
-  const [answer, setAnswer] = useState('')
 
   console.log(showMessage)
   const closePop = () =>{
     // setFlash('')
-    setShowWord(prev => !prev)
+    setShowAddGroup(prev => !prev)
   }
 
   function handleClick(e) {
+    console.log(question)
     e.preventDefault();
     console.log('The link was clicked.');
     const qLength = question.replace(/^\s+|\s+$/gm,'').length
-    const aLength = answer.replace(/^\s+|\s+$/gm,'').length
-    console.log(qLength)
+    // console.log(qLength)
     
-    if (qLength == 0 || aLength == 0 ){
+    if (qLength == ''){
       console.log("null")
-      setMessage("Please fill question or answer")
+      setMessage("Please fill Group name")
       setShowMessage(true)
     }
     else{
-      addword(botID)
+      addgroup(botID)
     }
   }
 
-  const addword =(id)=>{
+  const addgroup =(id)=>{
     
     
-    const data = {'question' : question,'answer' : answer ,'botID' : id}
-    fetch('/bot/'+id+'/addword', {
+    const data = {'group' : question, 'botID' : id}
+    console.log(data)
+    fetch('/bot/'+id+'/addgroup', {
     method : 'POST',
     headers : {
         "Access-Control-Allow-Origin": "*",
@@ -155,8 +142,7 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
 
       }
       else{
-        
-        window.location.reload("bot/"+id+'/trained');
+        window.location.reload("bot/"+id+'/group');
       }
     }))
     // window.location.reload("bot/"+id+'/trained');
@@ -166,25 +152,25 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
     config: {
       duration: 250
     },
-    opacity: showWord ? 1 : 0,
-    transform: showWord ? `translateY(0%)` : `translateY(-100%)`
+    opacity: showAddGroup ? 1 : 0,
+    transform: showAddGroup ? `translateY(0%)` : `translateY(-100%)`
   });
 
   const closeModal = e => {
     if (modalRef.current === e.target) {
-      setShowWord(false);
+        setShowAddGroup(false);
       // window.location.replace("/login")
     }
   };
 
   const keyPress = useCallback(
     e => {
-      if (e.key === 'Escape' && showWord) {
-        setShowWord(false);
+      if (e.key === 'Escape' && showAddGroup) {
+        setShowAddGroup(false);
         console.log('I pressed');
       }
     },
-    [setShowWord, showWord]
+    [setShowAddGroup, showAddGroup]
     
   );
 
@@ -199,30 +185,30 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
   useEffect(
     () => {
       // console.log(showWord)
-      if (showWord == false) {
+      if (showAddGroup == false) {
         
         setShowMessage(false)
       }
     },
-    [showWord]
+    [showAddGroup]
   );
   
   return(
     <div>
-    {showWord ? (
+    {showAddGroup ? (
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
             <Container>
-            <ModalWrapper showWord={showWord}>
+            <ModalWrapper showAddGroup={showAddGroup}>
               <ModalContent>
                 <article className="part Addword">
-                  <h1 name="addword-popup">
-                    Add your Question and Answer   
+                  <h1 name="addgroup-popup">
+                    Add your Group name
                   </h1>
                   <form>
                     <div className="group-Question">
-                      <label for="AddQuestion">Question</label>
-                      <input type="text" pattern="[A-Za-z0-9]+" className="input-question" id="question" name="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question"></input>
+                      <label for="AddGroupName">Group name</label>
+                      <input type="text" pattern="[A-Za-z0-9]+" className="input-group" id="group" name="input-group" onChange={(e)=>setQuestion(e.target.value)} placeholder="Group name"></input>
                     </div>
                     { showMessage &&  
                                   
@@ -233,13 +219,13 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
                                       </FlashMessage>
                                   
                       }
-                    <div className="group-Answer">
+                    {/* <div className="group-Answer">
                       <label for="AddAnswer">Answer</label>
                       <input type="text" pattern="[A-Za-z0-9]+" className="input-answer" name="input-answer" id="answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer"></input>
-                    </div>
+                    </div> */}
                   </form>
                 </article>
-              <button type="submit" className="qa-comfirm" variant="success" name="btn-addword-confirm" onClick={handleClick} >Comfirm</button>
+              <button type="submit" className="qa-comfirm" variant="success" name="btn-addgroup-confirm" onClick={handleClick} >Comfirm</button>
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"
@@ -254,4 +240,4 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
     );  
 };
 
-export default AddWord;
+export default AddGroup;

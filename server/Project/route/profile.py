@@ -156,13 +156,15 @@ def getNoti(user_id):
         return json_data
     if request.method == "POST":
         notification_collection = mongo.db.notification
+        customers_collection = mongo.db.customers
         users_collection = mongo.db.users
         # notification_collection.delete_many({'userId':ObjectId(user_id)})
         noti_info = request.get_json()
         botID = str(noti_info['botID']['$oid'])
+        customer_define = customers_collection.find_one({'$and' : [{"botID":ObjectId(botID)},{"userID":noti_info['sender_id']}]})
         read_update = { "$set": {"readed" : "read"}}
         done = notification_collection.update_one({'$and':[{"botID":ObjectId(botID)},{"sender_id": noti_info['sender_id']}]},read_update)
-        notification_define = notification_collection.find({"$and": [{"botID":ObjectId(botID)},{"userID":customerID}]})
+        notification_define = notification_collection.find({"$and": [{"botID":ObjectId(botID)},{"userID":customer_define['_id']}]})
         list_cur = list(notification_define) 
         count = 0
         for i in list_cur:

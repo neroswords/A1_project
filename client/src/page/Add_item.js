@@ -6,6 +6,7 @@ import 'react-widgets/dist/css/react-widgets.css';
 import { Multiselect } from 'react-widgets' 
 import FlashMessage from 'react-flash-message'
 import { PanelGroup } from 'react-bootstrap';
+import { MDBNotification, MDBContainer } from "mdbreact";
 
 const Styles = styled.div`
   .container {
@@ -26,6 +27,54 @@ const Styles = styled.div`
     font-family: 'Roboto', sans-serif;
     text-align: center;
   }
+  .loader {
+  animation:spin 1s infinite linear;
+  border:solid 2vmin transparent;
+  border-radius:50%;
+  border-right-color:#fca311;
+  border-top-color:#fca311;
+  box-sizing:border-box;
+  height:20vmin;
+  left:calc(50% - 10vmin);
+  position:fixed;
+  top:calc(50% - 10vmin);
+  width:20vmin;
+  z-index:1;
+  &:before {
+    animation:spin 2s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcc111;
+    border-top-color:#fcc111;
+    box-sizing:border-box;
+    content:"";
+    height:16vmin;
+    left:0;
+    position:absolute;
+    top:0;
+    width:16vmin;
+  }
+  &:after {
+    animation:spin 3s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcd111;
+    border-top-color:#fcd111;
+    box-sizing:border-box;
+    content:"";
+    height:12vmin;
+    left:2vmin;
+    position:absolute;
+    top:2vmin;
+    width:12vmin;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
   
   .card-bot .card-body-add-item {
     margin: 1rem;
@@ -240,6 +289,8 @@ export default class Add_item extends React.Component {
       price: '',
       message : '',
       showMessage: false,
+      errorState: false,
+      successState: false
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -291,7 +342,7 @@ export default class Add_item extends React.Component {
 
   _handleImageChange(e) {
     e.preventDefault();
-   
+    this.setState({errorState: false})
     // console.log(this.state.value)
     // console.log(this.state)
     let i
@@ -302,7 +353,7 @@ export default class Add_item extends React.Component {
     for (i = 0; i < e.target.files.length; i++) {
       
       if(e.target.files[i].type != "image/jpeg" && e.target.files[i].type != "image/png"){
-        alert("Only PNG or JPG is accepted")
+        this.setState({errorState: true})
       }
       else{
         let reader = new FileReader();
@@ -334,7 +385,7 @@ export default class Add_item extends React.Component {
 
   handleUploadImage(ev) {
     ev.preventDefault();
-
+    this.setState({errorState: false})
     // const files = ev.target[0].files[0]
     const itemnameLength = this.state.item_name.replace(/^\s+|\s+$/gm,'').length
     var i
@@ -346,42 +397,50 @@ export default class Add_item extends React.Component {
     }
 
     else{
-      const data = new FormData();
-    
-      for (i = 0; i < fileimg.length; i++) {
-        
-        // file.push(this.uploadInput.files[i])
-        
-        data.append('file' + [i], fileimg[i]);
+      if(fileimg.length == 0){
+        this.setState({errorState: true})
       }
-  
-  
-  
-      // console.log(fileimg)
-      // data.append('file', file);
-      data.append('item_name', this.item_name.value);
-      data.append('type', JSON.stringify(this.state.value));
-      data.append('amount', this.amount.value);
-      data.append('creator', localStorage.getItem('user_id'))
-      data.append('Image', this.state.Image)
-      data.append('des', this.des.value);
-      data.append('price', this.price.value);
-      fetch('/bot/' + this.props.match.params.bot_id + '/additem', {
-        method: 'POST',
-        // headers : {
-        //   "Access-Control-Allow-Origin": "*",
-        //   'Content-Type':'application/json'
-        // },
-        // body : JSON.stringify(json5),
-        body : data
-      }).then((response) => {
-        response.json().then((body) => {
-          this.setState({ imageURL: `/${body.file}` });
-          this.setState({ bot_id: data.id })
-          fileimg = []
-          this.setState({ redirect: true })
+      else{
+        this.setState({ successState: true})
+        const data = new FormData();
+      
+        for (i = 0; i < fileimg.length; i++) {
+          
+          // file.push(this.uploadInput.files[i])
+          
+          data.append('file' + [i], fileimg[i]);
+        }
+    
+    
+    
+        // console.log(fileimg)
+        // data.append('file', file);
+        data.append('item_name', this.item_name.value);
+        data.append('type', JSON.stringify(this.state.value));
+        data.append('amount', this.amount.value);
+        data.append('creator', localStorage.getItem('user_id'))
+        data.append('Image', this.state.Image)
+        data.append('des', this.des.value);
+        data.append('price', this.price.value);
+        fetch('/bot/' + this.props.match.params.bot_id + '/additem', {
+          method: 'POST',
+          // headers : {
+          //   "Access-Control-Allow-Origin": "*",
+          //   'Content-Type':'application/json'
+          // },
+          // body : JSON.stringify(json5),
+          body : data
+        }).then((response) => {
+          this.setState({ successState: false})
+          response.json().then((body) => {
+            this.setState({ imageURL: `/${body.file}` });
+            this.setState({ bot_id: data.id })
+            fileimg = []
+            this.setState({ redirect: true })
+          });
         });
-      });
+      }
+      
   
     }
     
@@ -420,6 +479,38 @@ export default class Add_item extends React.Component {
       // }
       return (
         <Styles>
+           { this.state.successState ? <div>
+                    {/* <img src={ImageWarnning} alt="warnning" className="warnning_img" /> */}
+                    <div class="loader">Loading...</div>
+                  </div>
+            :  this.state.errorState &&  
+            <div className="errorstate">
+
+                              
+                                  <MDBNotification
+                                  style={{
+                                    // width: "auto",
+                                    position: "absolute",
+                                    // top: "10px",
+                                    // left: "500px",
+                                    zIndex: 9999
+                                  }}
+                                  bodyClassName="p-2 font-weight-bold white-text "
+                                  className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
+                                  closeClassName="blue-grey-text"
+                                  fade
+                                  icon="bell"
+                                  iconClassName="text-danger"
+                                  message="Only PNG or JPG is accepted."
+                                  show
+                                  
+                                  title="Error"
+                                  titleClassName="elegant-color-dark white-text"
+                    
+                                  />
+                                </div>
+
+                                }
           <div className="container">
             <div className="col-12 col-lg-9 mx-auto">
               <div className="card card-bot">

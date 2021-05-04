@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import styled from 'styled-components';
 import Navbar_member from '../Components/Navbar/navbar_member';
 import GroupList from "../Components/Form/GroupList";
@@ -223,28 +223,72 @@ const Styles = styled.div`
     /* border: 1px solid #ececec; */
 }
 
-`
-function DragText(props){
-
+.group-name-on-page {
     
-    return(
-        <div>
-            <Styles>
-            <div className="group-page">
-            <Navbar_member botID = {props.match.params.bot_id} path={"group"} />
-            <h4> Group name :</h4>
-            <div className="container-fluid">
-                <div className="group-title container-top d-flex bd-highlight">
-                    <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group</h2>
-                </div>
-                  <GroupList groupID={props.match.params.group_id} botID={props.match.params.bot_id}/>
-                </div>
+    /* width: 150px; */
+    /* max-width: 800px; */
+    width: max-content;
+    border-radius: 1rem;
+  }
+/* .IconTextImage .group-name-on-page{
+    posi
 
+} */
+
+  .group-name-on-page h4{
+    position: relative;
+    right: 0;
+    font-size: 14px;
+    font-weight: 600;
+    /* width: 500px; */
+    /* max-width: 500px; */
+    color: #fff;
+    /* border: 2px solid #fca311; */
+    background-color : #fca311;
+    border-radius: 1rem;
+    padding: 5px 20px; 
+  }
+
+  #container-button .submit{
+    padding: 5px 30px;
+    font-size: 19px;
+    border-radius: 25px;
+    border: 3px solid #34a853;
+    transition: 0.5s;
+    margin-left: 46%;
+    background-color: #34a853;
+    color: #fff;
+}
+
+  #container-button .submit:hover{
+      color: #000;
+  }
+
+
+`
+function DragText(props) {
+  console.log(props)
+
+  return (
+    <div>
+      <Styles>
+        <div className="group-page">
+          <Navbar_member botID={props.match.params.bot_id} path={"group"} />
+
+          <div className="container-fluid">
+            
+            <div className="group-title container-top d-flex bd-highlight">
+              <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group</h2>
             </div>
-              
-            </Styles>
+            
+            <GroupList groupID={props.match.params.group_id} botID={props.match.params.bot_id} />
+          </div>
+
         </div>
-    )
+
+      </Styles>
+    </div>
+  )
 }
 
 export default DragText;

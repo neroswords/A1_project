@@ -6,6 +6,7 @@ import { Container } from "react-bootstrap";
 import { AddWord } from "./AddTable/AddWord";
 import { Button } from 'react-bootstrap';
 import Delete_table from "../Delete_table";
+import { MDBNotification, MDBContainer } from "mdbreact";
 
 
 const Styles = styled.div`
@@ -253,12 +254,14 @@ const defaultColumn = {
 
 
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained ,botID,loading }) {
+  const [errorState, setErrorState] = React.useState(false)
   const Ondelete = (e) => {
+    setErrorState(false)
     if(e.length > 0){
       openDelete_table(e)
     }
     else{
-      alert('please select')
+      setErrorState(true)
     }
     console.log(e.length)
    
@@ -386,6 +389,35 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
   return (
     <>
       <Container>
+      { errorState &&  
+            <div className="errorstate">
+
+                              
+                                  <MDBNotification
+                                  style={{
+                                    // width: "auto",
+                                    position: "absolute",
+                                    // top: "10px",
+                                    // left: "500px",
+                                    zIndex: 9999
+                                  }}
+                                  autohide={4000}
+                                  bodyClassName="p-4 font-weight-bold white-text "
+                                  className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
+                                  closeClassName="blue-grey-text"
+                                  fade
+                                  icon="bell"
+                                  iconClassName="text-danger"
+                                  message="Please select word to delete"
+                                  show
+                                  
+                                  title="Error"
+                                  titleClassName="elegant-color-dark white-text"
+                    
+                                  />
+                                </div>
+
+                                }
         <div className="button-trained-word">
           <Button className='buttonaddWord' onClick={openWord}>Add Word</Button>
           <button className="buttondeleteWord" onClick={() => Ondelete(selectedFlatRows)} >Delete</button>

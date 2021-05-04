@@ -90,20 +90,21 @@ img{
 }
 `;
 
-function Delete_table({showDelete_table, setShowDelete_table, delete_trained, id, selectedFlatRows}) {
-   console.log('kaaaa') 
+function Regis_submit({showModal}) {
+   console.log('ma') 
+   const [showPopup, setShowPopup] = useState(showModal)
   const modalRef = useRef();
   const animation = useSpring({
     config: {
       duration: 250
     },
-    opacity: showDelete_table ? 1 : 0,
-    transform: showDelete_table ? `translateY(0%)` : `translateY(-100%)`
+    opacity: showPopup ? 1 : 0,
+    transform: showPopup ? `translateY(0%)` : `translateY(-100%)`
   });
 
   const closeModal = e => {
     if (modalRef.current === e.target) {
-      setShowDelete_table(false);
+        setShowPopup(false);
     }
   };
 
@@ -133,19 +134,37 @@ function Delete_table({showDelete_table, setShowDelete_table, delete_trained, id
   
   // }
 
-  const ConfirmDelete = (data) => {
+  const ConfirmSubmit = (data) => {
     console.log(data)
-      delete_trained(data)
-      setShowDelete_table(prev => !prev)
+    //   delete_trained(data)
+      setShowPopup(prev => !prev)
+    //   fetch('/profile/signup', {
+    //     method : 'POST',
+    //     headers : {
+    //           "Access-Control-Allow-Origin": "*",
+    //           'Content-Type':'application/json'
+    //     },
+    //     body: JSON.stringify(profile)
+    //   }).then((res)=>res.json()).then(data=>{
+    //     if(data.message){
+    //       this.setState({successState:true})
+    //       this.setState({redirect:true})
+    //     }
+    //     else if(data.error){
+    //       this.setState({message:data.error})
+    //       this.setState({showMessageUsername: true})
+    //       this.scrollToTop()
+    //     }
+    //   }).then(this.setState({showMessageUsername: false})).then(this.setState({showMessagePassword: false}))
   }
   const keyPress = useCallback(
     e => {
-      if (e.key === 'Escape' && showDelete_table) {
-        setShowDelete_table(false);
+      if (e.key === 'Escape' && showPopup) {
+        setShowPopup(false);
         console.log('I pressed');
       }
     },
-    [setShowDelete_table, showDelete_table]
+    [setShowPopup, showPopup]
   );
 
   useEffect(
@@ -158,25 +177,25 @@ function Delete_table({showDelete_table, setShowDelete_table, delete_trained, id
 
   return (
     <div>
-      {showDelete_table ? (
+      {showPopup ? (
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
             <Container>
-              <ModalWrapper showDelete_table={showDelete_table}>
+              <ModalWrapper showPopup={showPopup}>
                 <ModalContent>
                   <div>
                     <img src={ImageWarnning} alt="warnning" className="warnning_img" />
                   </div>
-                  You want delete this word?
+                  Register Successfully!
                 <Container className="button-delete-bot">
-                    <Button className="cancle-delete-bot" onClick={() => setShowDelete_table(prev => !prev)}>cancle</Button>
-                    <Button className="delete-bot" onClick={() => ConfirmDelete(selectedFlatRows)}>delete</Button>
+                <p  onClick={() => ConfirmSubmit()}>Go to Login page</p>
+                    {/* <Button className="delete-bot" onClick={() => ConfirmDelete(selectedFlatRows)}>Go to Login</Button> */}
                 </Container>
                 </ModalContent>
-                <CloseModalButton
+                {/* <CloseModalButton
                   aria-label="Close modal"
                   onClick={() => setShowDelete_table(prev => !prev)}
-                />
+                /> */}
               </ModalWrapper>
             </Container>
           </animated.div>
@@ -187,4 +206,4 @@ function Delete_table({showDelete_table, setShowDelete_table, delete_trained, id
 
 };
 
-export default Delete_table;
+export default Regis_submit;

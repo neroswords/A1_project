@@ -36,7 +36,7 @@ export default function Bot_list(props) {
   
     useEffect(async () => {
         fetch('/profile/'+localStorage.getItem('user_id')).then(res => res.json().then(data => setBotlist(data)))
-     
+        
     },[])
 
 

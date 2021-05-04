@@ -10,6 +10,7 @@ import { mergeStyles } from "react-select";
 import { useDetectOutsideClick } from "../Botlist/button_nav";
 import CommunicationInvertColorsOff from "material-ui/svg-icons/communication/invert-colors-off";
 import { Info } from "material-ui-icons";
+import { Redirect } from 'react-router';
 // import Notifier from "react-desktop-notification"
 
 let endPoint = "http://127.0.0.1:300";
@@ -90,7 +91,7 @@ function Navbar_real(props) {
   return (
     <nav className="navbar-real">
       <a href="/">
-        <img href="/" src="/images/logo2.PNG" className="nav_brand" />
+        <img href="/" src="/images/logo6.PNG" className="nav_brand" />
       </a>
       <ul className="navbar-nav-real">{props.children}</ul>
     </nav>
@@ -226,8 +227,8 @@ useEffect(() => {
     setShownoti(info.map(msg => (
       
         <li> 
+               {/* <Redirect className="msg-noti-all" to={"/chat/"+msg['botID']['$oid']+"/live_chat/"+msg['sender_id']} > */}
               
-               {/* <Link to={"/chat/"+msg['botID']['$oid']+"/live_chat/"+msg['sender_id']}  > */}
                <div className={msg['readed'] == "read"? 'msg-noti-iread': "msg-noti-i"} onClick={()=>toggleClass(msg)} > 
                 {/* <div className={isActiveClass ? 'img-noti-i': 'img-noti-inew'} onClick={toggleClass(this)} > */}
                 <div className="msg-noti-all">
@@ -249,18 +250,18 @@ useEffect(() => {
                         }
                         </div>
                       </div> 
-                      {console.log(msg)} 
-                      <div className="noti-show-info-user">
+  
+                      <Link className="noti-show-info-user" to={"/chat/"+msg['botID']['$oid']+"/live_chat/"+msg['sender_id']}  >
                         {msg['readed'] == "unread"? <div className="noti-show-new"><p>NEW</p></div>: " "}
                         <p className="noti-show-name">{msg['sender']}</p>  
                         <p className="noti-show-msg">{msg['message']}</p>
                         <p className="noti-show-bot">{msg['bot_name']}</p>
                         {/* {msg['message']} {msg['botID']['$oid']} */}
-
-                      </div> 
+                      </Link>
                     </div>
                   </div>
-                   {/* </Link> */}
+                  {/* </Redirect> */}
+                 
                 
             </li>
           
@@ -428,7 +429,7 @@ function DropdownMenu() {
             </DropdownItem>
           </a>
 
-          <a
+          {/* <a
             onClick={() => {
               window.location.replace("/manual");
             }}
@@ -436,7 +437,7 @@ function DropdownMenu() {
             <DropdownItem leftIcon={<i class="fas fa-book-open"></i>}>
               Manual
             </DropdownItem>
-          </a>
+          </a> */}
           <a
             name="signout"
             onClick={() => {

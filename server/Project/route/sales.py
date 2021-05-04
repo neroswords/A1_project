@@ -53,3 +53,4 @@ def get_sum(botID,type):
             purchased_list = list(filter(lambda a: int(a['purchased_time'].split(':')[0]) != i+1, purchased_list))
             data.append({"name":(("0"+str(i)+".00")*(i<10)+((str(i)+".00")*(i >= 10))),"income":sum})
     return dumps(data)
+

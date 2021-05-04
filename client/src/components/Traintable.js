@@ -6,6 +6,7 @@ import { Container } from "react-bootstrap";
 import Button from '@material-ui/core/Button';
 import ImageWarnning from "./Images/warnning2.png";
 
+
 const Background = styled.div`
   width: 100%;
   height: 100%;
@@ -72,10 +73,10 @@ const ModalContent = styled.div`
     padding: 7px 15px;
     font-size: 12px;
     border-radius: 25px;
-    border: 1px solid #CD5C5C;
+    border: 1px solid #34a853;
     transition: 0.5s;
     margin: 10px;
-    background-color: #CD5C5C;
+    background-color: #34a853;
     color: #fff;
 }
 .button-delete-bot .delete-bot:hover{
@@ -90,62 +91,61 @@ img{
 }
 `;
 
-function Delete_table({showDelete_table, setShowDelete_table, delete_trained, id, selectedFlatRows}) {
+function Traintable({showTraintable, setShowTraintable, delete_trained, id, selectedFlatRows}) {
    console.log('kaaaa') 
   const modalRef = useRef();
   const animation = useSpring({
     config: {
       duration: 250
     },
-    opacity: showDelete_table ? 1 : 0,
-    transform: showDelete_table ? `translateY(0%)` : `translateY(-100%)`
+    opacity: showTraintable ? 1 : 0,
+    transform: showTraintable ? `translateY(0%)` : `translateY(-100%)`
   });
 
   const closeModal = e => {
     if (modalRef.current === e.target) {
-      setShowDelete_table(false);
+      setShowTraintable(false);
     }
   };
 
-  // const ConfirmDelete = (data) => {
-  //   setShowDelete_table(prev => !prev)
-  //   console.log(data)
-  //     var newdata = []
-  //     var i = 0
-  //     for (i = 0; i < data.length; i++){
-  //         newdata.push(data[i].original)
-  //     }
-      
-  //     console.log(newdata)
-      
-  //     if (data[0]){
-  //         fetch('/train_bot/delete/trained/'+data[0].original.id, {
-  //             method : 'POST',
-  //             headers : {
-  //                 "Access-Control-Allow-Origin": "*",
-  //                 'Content-Type':'application/json'
-  //                 },
-  //                 body : JSON.stringify(newdata),
-  //             });
-  //             console.log(data)
-  //             window.location.reload("bot/"+id+'/trained');
-  //     }    
-  
-  // }
-
-  const ConfirmDelete = (data) => {
+  const ConfirmTrain = (data) => {
+    setShowTraintable(prev => !prev)
     console.log(data)
-      delete_trained(data)
-      setShowDelete_table(prev => !prev)
+      var newdata = []
+      var i = 0
+      for (i = 0; i < data.length; i++){
+          newdata.push(data[i].original)
+      }
+      
+      console.log(newdata)
+      
+      if (data[0]){
+          fetch('/bot/'+id+'/train', {
+              method : 'POST',
+              headers : {
+                  "Access-Control-Allow-Origin": "*",
+                  'Content-Type':'application/json'
+                  },
+                  body : JSON.stringify(newdata),
+              });
+              console.log(data)
+              // window.location.reload("bot/"+id+'/trained');
+      }    
+  
   }
+
+  // const ConfirmTrain = (data) => {
+  //     // delete_trained(data)
+  //     setShowTraintable(prev => !prev)
+  // }
   const keyPress = useCallback(
     e => {
-      if (e.key === 'Escape' && showDelete_table) {
-        setShowDelete_table(false);
+      if (e.key === 'Escape' && showTraintable) {
+        setShowTraintable(false);
         console.log('I pressed');
       }
     },
-    [setShowDelete_table, showDelete_table]
+    [setShowTraintable, showTraintable]
   );
 
   useEffect(
@@ -158,24 +158,24 @@ function Delete_table({showDelete_table, setShowDelete_table, delete_trained, id
 
   return (
     <div>
-      {showDelete_table ? (
+      {showTraintable ? (
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
             <Container>
-              <ModalWrapper showDelete_table={showDelete_table}>
+              <ModalWrapper showTraintable={showTraintable}>
                 <ModalContent>
-                  <div>
+                <div>
                     <img src={ImageWarnning} alt="warnning" className="warnning_img" />
                   </div>
-                  You want delete this word?
+                  You want train this word?
                 <Container className="button-delete-bot">
-                    <Button className="cancle-delete-bot" onClick={() => setShowDelete_table(prev => !prev)}>cancle</Button>
-                    <Button className="delete-bot" onClick={() => ConfirmDelete(selectedFlatRows)}>delete</Button>
+                    <Button className="cancle-delete-bot" onClick={() => setShowTraintable(prev => !prev)}>cancel</Button>
+                    <Button className="delete-bot" onClick={() => ConfirmTrain(selectedFlatRows)}>submit</Button>
                 </Container>
                 </ModalContent>
                 <CloseModalButton
                   aria-label="Close modal"
-                  onClick={() => setShowDelete_table(prev => !prev)}
+                  onClick={() => setShowTraintable(prev => !prev)}
                 />
               </ModalWrapper>
             </Container>
@@ -187,4 +187,4 @@ function Delete_table({showDelete_table, setShowDelete_table, delete_trained, id
 
 };
 
-export default Delete_table;
+export default Traintable;

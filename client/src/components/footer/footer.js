@@ -19,15 +19,15 @@ const Styles = styled.div`
     font-size: 30px;
     margin-top: 15px;
     margin-right: 20px;
-    border: 1px solid white;
+    border: 4px solid transparent;
     border-radius: 100%;
     padding: 3px 6px;
     background-color: white;
 }
 
 .list-social i:hover {
-    background-color: #353a44;
-    border: 1px solid #fca311;
+    /* background-color: white; */
+    border: 4px solid #fca311;
     border-radius: 100%;
     padding: 3px 6px;
 }
@@ -39,17 +39,19 @@ const Styles = styled.div`
 
 .list-social .line {
     color: #009B00;
+    background-color: white;
  }
 
- .list-social .twitter {
-    color: #00acee;
+ .list-social .github {
+    color: #211f1f;
  }
 
-.border {
+.border-footer {
     margin: 10px 0px;
-    height: 10px; 	
+    height: 5px; 	
     width: 70px; 	
     background-color: #fca311;
+    /* border-style: ; */
     /* border-style: none; */
     /* border: 0px solid transparent;  */
 }
@@ -90,7 +92,7 @@ function Footer(){
             <div className="container">
                 <div className="row">
                 
-                <div className="col-md-3 col-sm-6 in-footer">
+                <div className="col-md-4 col-sm-4 in-footer">
                     <h4>A1 Chatbot</h4>
                     <ul className="list-unstyled">
                         {/* <li>เกี่ยวกับเรา</li>
@@ -98,31 +100,31 @@ function Footer(){
                     </ul>
                 </div>
                 
-                <div className="col-md-3 col-sm-6 in-footer">
+                {/* <div className="col-md-3 col-sm-6 in-footer">
                     <h4>HELP INFORMATON</h4>
                     <div className="border"></div>
                     <ul className="list-unstyled help">
-                        {/* <li>สร้างร้านค้า</li>
+                        <li>สร้างร้านค้า</li>
                         <li>จัดการคำสั่งซื้อ</li>
-                        <li>เทรนบอทอย่างไร</li> */}
+                        <li>เทรนบอทอย่างไร</li>
                         <li><a href="/file/ข้อตกลงการใช้งานเว็บ.pdf" download>เงื่อนไขและข้อตกลงในการใช้บริการเว็ปไซต์</a></li>
                       <li><a href="/file/คำแนะนำการใช้งาน.pdf" download>คำแนะนำการใช้งาน</a></li>		
                     </ul>
-                </div>
+                </div> */}
                 
-                <div className="col-md-3 col-sm-6 in-footer">
+                <div className="col-md-4 col-sm-4 in-footer">
                     <h4>SOCIAL MEDIA</h4>
-                    <div className="border"></div>
+                    <div className="border-footer"></div>
                     <ul className="list-social list-unstyled">
-                        <i onClick={() => window.location.replace('https://www.facebook.com/DSGas')} className="fab fa-facebook-square facebook"></i>
-                        <i className="fab fa-line line" />
-                        <i className="fab fa-twitter-square twitter"></i>
+                        <i onClick={() => window.location.replace('https://www.facebook.com/a1chatbot/')} className="fab fa-facebook-square facebook"></i>
+                        <i onClick={() => window.location.replace('https://lin.ee/Tsx7SfC')} className="fab fa-line line"/>
+                        <i onClick={() => window.location.replace('https://github.com/neroswords/A1_project')} class="fab fa-github github"></i>
                     </ul>
                 </div>
                 
-                <div className="col-md-3 col-sm-6 in-footer">
+                <div className="col-md-4 col-sm-4 in-footer">
                     <h4>POWERED BY</h4>
-                    <div className="border"></div>
+                    <div className="border-footer"></div>
                     <ul className="list-unstyled powered">
                         <li>Teletubbies Team</li>
                         <li><i className="fas fa-map-marker-alt" aria-hidden="true"></i>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี</li> 					

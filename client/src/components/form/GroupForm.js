@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 
 
 function GroupForm(props) {
+    console.log(props)
     const [input, setInput] = useState('');
     const [file, setFile] = useState();
+    // const [upload, setUpload] = useState();
     const [panel, setpanel] = useState(true);
 
     const textPanel = () => { setpanel(true) }
@@ -62,7 +64,9 @@ function GroupForm(props) {
             
             id: Math.floor(Math.random() * 10000),
             text: file.name,
-            file: file
+            file: file,
+            // upload: upload
+            
         });
         setFile();
         }
@@ -74,6 +78,7 @@ function GroupForm(props) {
         <div>
             <div className='container-GroupForm'>
                 <div className="IconTextImage">
+                
                     <button className="ButTextIcon" type="button" onClick={textPanel}><i className="fas fa-text TextIcon fa-2x"></i></button>
                     <button className="ButImageIcon" type="button" onClick={filePanel}><i className="fas fa-image ImageIcon fa-2x"></i></button>
                 </div>
@@ -116,7 +121,7 @@ function GroupForm(props) {
                         :
                         //form upload image 
                         <form onSubmit={insertImage}>
-                            <input accept="image/x-png,image/gif,image/jpeg" className='todo-input-img' type="file" onChange={e => _handleImageChange(e)}></input>
+                            <input accept="image/x-png,image/gif,image/jpeg" className='todo-input-img'  type="file" onChange={e => _handleImageChange(e)}></input>
                             <button className='todo-button-img' onClick={insertImage}>
                                 Add
                             </button>

@@ -237,7 +237,12 @@ function Product_datail(botID){
                                     <div className="img-pd">
 
                                 { img.map((i, index) =>{
-                                     return [<img className="img-inven" src={'/images/bucket/'+i}/> ]
+                                    if(i != "")
+                                    {
+                                        return [<img className="img-inven" src={'/images/bucket/'+i}/> ]
+                                    }
+                                    
+                                     
                                 })  
                             }               
  

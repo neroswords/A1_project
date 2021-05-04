@@ -1,4 +1,4 @@
-// import FileSaver from "file-saver";
+import FileSaver from "file-saver";
 import React, { useEffect } from "react";
 import { useMeasure } from "react-use";
 import {
@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis
 } from "recharts";
-// import { getPngData } from "recharts-to-png";
+
 import styled from 'styled-components';
 
 const Styles = styled.div`
@@ -22,20 +22,56 @@ const Styles = styled.div`
 .header-text{
   text-align:center;
 }
-.showgraph-type{
-  position: absolute;
-  right: 10%;
-  margin-top: -6%;
-  width: 160px;
-  height: 70px;
-  border: 3px solid #fca311 ;
-  border-radius: 1rem;
-}
 
-.showgraph-text{
-  margin-left: 15px;
-  margin-top: 8px;
-}
+.showgraph-type-y {
+    margin-left: 20%;
+    margin-bottom: 10px;
+    /* width: 150px; */
+    /* max-width: 800px; */
+    width: max-content;
+    border-radius: 1rem;
+  }
+
+  .showgraph-type-x {
+    position:absolute;
+    right:15%;
+    margin-top: -5%;
+    margin-bottom: 10px;
+    /* width: 150px; */
+    /* max-width: 800px; */
+    width: max-content;
+    border-radius: 1rem;
+  }
+
+
+  .showgraph-type-y h4{
+    position: relative;
+    right: 0;
+    font-size: 14px;
+    font-weight: 600;
+    /* width: 500px; */
+    /* max-width: 500px; */
+    color: #000;
+    /* border: 2px solid #fca311; */
+    background-color : #fca311;
+    border-radius: 1rem;
+    padding: 5px 20px; 
+  }
+
+  
+
+  .showgraph-type-x h4{
+    position: relative;
+    font-size: 14px;
+    font-weight: 600;
+    /* width: 500px; */
+    /* max-width: 500px; */
+    color: #000;
+    /* border: 2px solid #fca311; */
+    background-color : #fca311;
+    border-radius: 1rem;
+    padding: 5px 20px; 
+  }
 
 
 @media only screen and (max-width: 1600px) {
@@ -43,12 +79,53 @@ const Styles = styled.div`
     margin-left: 10%;
     
   }
+
+  .showgraph-type-y {
+    margin-left: 10%;
+    margin-bottom: 10px;
+    /* width: 150px; */
+    /* max-width: 800px; */
+    width: max-content;
+    border-radius: 1rem;
+  }
+
+  .showgraph-type-x {
+    position:absolute;
+    right:5%;
+    margin-top: -4.5%;
+    margin-bottom: 10px;
+    /* width: 150px; */
+    /* max-width: 800px; */
+    width: max-content;
+    border-radius: 1rem;
+  }
+  
 }
 
 @media screen and (max-width: 1980px) and (min-width: 1700px) {
   .LineChart {
     margin-left: 20%;
     
+  }
+  
+  .showgraph-type-y {
+    margin-left: 20%;
+    margin-bottom: 10px;
+    /* width: 150px; */
+    /* max-width: 800px; */
+    width: max-content;
+    border-radius: 1rem;
+  }
+
+  .showgraph-type-x {
+    position:absolute;
+    right:15%;
+    margin-top: -3.5%;
+    margin-bottom: 10px;
+    /* width: 150px; */
+    /* max-width: 800px; */
+    width: max-content;
+    border-radius: 1rem;
   }
 }
 `;
@@ -107,14 +184,14 @@ export const Visualize = ({ botID }) => {
 
   const showType = () => {
     if (head == 'daily') {
-      return (<a>เวลา</a>)
+      return (<h4 className="type-x"> เวลา</h4>)
     }
     else if (head == 'day') {
-      return (<a>วัน</a>)
+      return (<h4 className="type-x">วัน</h4>)
 
     } else if (head == 'month') {
-      return (<a>เดือน</a>)
-    } 
+      return (<h4 className="type-x">เดือน</h4>)
+    }
 
   }
 
@@ -130,44 +207,45 @@ export const Visualize = ({ botID }) => {
             <option value="day">By Date</option>
             <option value="month">By Month</option>
           </select>
-        
+
         </div>
 
         <h3 className="header-text" >{header()}</h3>
 
-        
 
-        <LineChart className="LineChart"
-          ref={(ref) => setChart(ref)} // Save the ref of the chart
-          data={dataChart}
-          height={500}
-          width={1000}
-          margin={{ top: 5, right: 40, left: 20, bottom: 25 }}
+        <div className="Linechart-container">
+          <div className='showgraph-type-y'>
+            <h4 className="type-y">รายรับ (บาท) </h4>
+          </div>
 
-        >
-          <XAxis dataKey="name" />
-          <YAxis />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
-          <Legend wrapperStyle={{ bottom: 5 }} />
-          {/* <Line
-          type="monotone"
-          dataKey="Facebook"
-          stroke="#8884d8"
-          activeDot={{ r: 8 }}
-        /> */}
-          <Line type="monotone"
-            dataKey="income (Baht)"
-            stroke="#82ca9d"
-          />
+          <LineChart className="LineChart"
+            ref={(ref) => setChart(ref)} // Save the ref of the chart
+            data={dataChart}
+            height={500}
+            width={1000}
+            margin={{ top: 5, right: 40, left: 20, bottom: 25 }}
 
-        </LineChart>
-        <div className='showgraph-type'>
-            <div className='showgraph-text'>
-              <a>x: {showType()}</a><br></br>
-              <a>y: รายรับ (บาท) </a>
-            </div>
+          >
+            <XAxis dataKey="name" />
+            <YAxis />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Tooltip />
+            <Legend wrapperStyle={{ bottom: 5 }} />
+            <Line type="monotone"
+              dataKey="income"
+              stroke="#82ca9d"
+            />
+
+          </LineChart>
+
+
+          <div className='showgraph-type-x'>
+            {showType()}
+          </div>
+
         </div>
+
+
       </div>
     </Styles>
   );
