@@ -136,7 +136,8 @@ const Styles = styled.div`
 `;
 
 export default function Etcform({botID}) {
-    const [omiseAccesstoken, setOmiseAccesstoken] = useState('');
+    const [OMISE_SECRET_KEY, setOMISE_SECRET_KEY] = useState('');
+    const [OMISE_PUBLIC_KEY, setOMISE_PUBLIC_KEY] = useState('');
     const [liffID, setliffID] = useState('');
     const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+botID+'/facebook')
     const history = useHistory()
@@ -144,7 +145,8 @@ export default function Etcform({botID}) {
     const handleSubmit = (event) => {
         event.preventDefault();
         const editData = {
-            'omiseAccesstoken':omiseAccesstoken, 
+            'OMISE_SECRET_KEY':OMISE_SECRET_KEY,
+            'OMISE_PUBLIC_KEY':OMISE_PUBLIC_KEY,
             'liffID':liffID,
             'creator':localStorage.getItem('user_id'),
             'platform':'etc'
@@ -157,24 +159,14 @@ export default function Etcform({botID}) {
             },
             body: JSON.stringify(editData)
         }).then(response => response.json().then(data => alert(data.message)))
-        // .then( res => res.json())
-        // .then(data=>{
-        //     localStorage.setItem('access_token', data.access_token);
-        //     localStorage.setItem('username', data.username);
-        //     localStorage.setItem('user_id', data.user_id);
-        //     if (localStorage.getItem("access_token") !== null && localStorage.getItem("access_token")!=="undefined") {
-        //       window.location.replace("/")
-        //     }else{
-        //         alert(data.error);  
-        //   }
-        // }).catch(error => console.log(error));
     }
 
     useEffect(() => {
         fetch('/bot/'+botID+'/connect').then(
             response => response.json()
           ).then(data =>{
-            setOmiseAccesstoken(data.omiseAccesstoken);
+            setOMISE_SECRET_KEY(data.OMISE_SECRET_KEY);
+            setOMISE_PUBLIC_KEY(data.OMISE_PUBLIC_KEY)
             setliffID(data.liff_id);
         })
     }, []);
@@ -189,17 +181,21 @@ export default function Etcform({botID}) {
                                 <p className="col mb-4">Optional connection</p>
                                 {/* <i className="col fab fa-facebook"></i> */}
                             </div>
+                            <div className="input-Box">
+                            <div className="ms-2">
+                                <label  className="form-label">OMISE SECRET KEY</label>
+                                <input type="text" value={ omiseAccesstoken } onChange={e => setOMISE_SECRET_KEY(e.target.value)} className="form-control" id="inputpagefacebook" />
+                            </div>
+                            <div className="ms-2">
+                                <label  className="form-label">OMISE PUBLIC KEY</label>
+                                <input type="text" value={ omiseAccesstoken } onChange={e => setOMISE_PUBLIC_KEY(e.target.value)} className="form-control" id="inputpagefacebook" />
+                            </div>
                             <div className="copy-link">
                                 <p>{packageJson.proxy}/liff/{botID}</p>
                                 <button type="button" className="copy-clipboard" onClick={() => {navigator.clipboard.writeText(webhook)}}><i className="fas fa-copy fa-xs copy-clipboard"></i></button>
                             </div>
-                            <div className="input-Box">
-                            <div className="ms-2">
-                                <label  className="form-label">Access token</label>
-                                <input type="text" value={ omiseAccesstoken } onChange={e => setOmiseAccesstoken(e.target.value)} className="form-control" id="inputpagefacebook" />
-                            </div>
                             <div className="col-lg-12 mt-3">
-                                <label  className="form-label">Verify token</label>
+                                <label  className="form-label">Liff ID</label>
                                 <input type="text" value={ liffID } onChange={e => setliffID(e.target.value)} className="form-control" id="inputverity" />
                             </div>
                             </div>

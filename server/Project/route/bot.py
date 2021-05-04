@@ -20,8 +20,6 @@ from linebot.models import (MessageEvent, TextMessage, TextSendMessage, FlexSend
                             PostbackAction, MessageAction, ImageSendMessage,StickerSendMessage,
                             ImageCarouselTemplate, ImageCarouselColumn,CarouselTemplate,CarouselColumn,URIAction,
                             CarouselContainer, ImageComponent)
-from flask_socketio import send, emit, join_room, leave_room
-from .. import socketio
 import datetime
 from reportlab.pdfgen.canvas import Canvas
 
@@ -68,20 +66,20 @@ def push_message(data):
     customer_define = customer_collection.find_one({'$and':[{'userID':data['customerID']},{'botID': ObjectId(data['botID'])}]})
     line_bot_api = LineBotApi(bot_define['access_token'])
     line_bot_api.push_message(data['customerID'], TextSendMessage(text=data['message']))
-    save_message(message=data["message"],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(data['botID']),sender_type="bot",room=data['botID']+'&'+data['customerID'],botId=data['_id'],userID=bot_define['owner'])
+    save_message(message=data['message'],message_type="text",bot_name=bot_define['bot_name'],sender=bot_define['bot_name'],sender_id=ObjectId(data['botID']),sender_type="bot",room=data['botID']+'&'+data['customerID'],botID=data['botID'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
 
 
 
-@socketio.on('send_message')
-def handle_send_message_event(data):
-    bot_collection = mongo.db.bots
-    customer_collection = mongo.db.customers
-    bot_define = bot_collection.find_one({'_id': ObjectId(data['botID'])})
-    customer_define = customer_collection.find_one({'$and':[{'userID':data['customerID']},{'botID': ObjectId(data['botID'])}]})
-    line_bot_api = LineBotApi(bot_define['access_token'])
-    line_bot_api.push_message(data['customerID'], TextSendMessage(text=data['message']))
-    save_message(message=data["message"],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(data['botID']),sender_type="bot",room=data['botID']+'&'+data['customerID'],botId=bot_define['_id'],userID=bot_define['owner'])
-    socketio.emit("message_from_response", {"message":data['message'], "userID":data['customerID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"displayName":bot_define['bot_name'],"sender_type":"bot"},room=data['room'])
+# @socketio.on('send_message')
+# def handle_send_message_event(data):
+#     bot_collection = mongo.db.bots
+#     customer_collection = mongo.db.customers
+#     bot_define = bot_collection.find_one({'_id': ObjectId(data['botID'])})
+#     customer_define = customer_collection.find_one({'$and':[{'userID':data['customerID']},{'botID': ObjectId(data['botID'])}]})
+#     line_bot_api = LineBotApi(bot_define['access_token'])
+#     line_bot_api.push_message(data['customerID'], TextSendMessage(text=data['message']))
+#     save_message(message=data["message"],message_type="text",sender=bot_define['bot_name'],sender_id=ObjectId(data['botID']),sender_type="bot",room=data['botID']+'&'+data['customerID'],botId=bot_define['_id'],userID=bot_define['owner'])
+#     socketio.emit("message_from_response", {"message":data['message'], "userID":data['customerID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"displayName":bot_define['bot_name'],"sender_type":"bot"},room=data['room'])
 
 
 @bot.route('/log/<botID>', methods=['GET', 'POST'])
@@ -94,7 +92,6 @@ def history(botID):
         return data
 
 @bot.route('/<id>/connect', methods=['GET', 'POST'])
-# @login_required
 def connect(id):
     bot_collection = mongo.db.bots
     if request.method == 'POST':
@@ -109,6 +106,12 @@ def connect(id):
             bot_collection.update_one({'_id': ObjectId(id)},
                                       {'$set': {'page_facebook_access_token': connect_data['page_facebook_access_token'],
                                                 'verify_token': connect_data['verify_token']}})
+            return {"message": "connect to platform successfully"}
+        if connect_data['platform'] == 'etc':
+            bot_collection.update_one({'_id': ObjectId(id)},
+                                      {'$set': {'OMISE_SECRET_KEY': connect_data['OMISE_SECRET_KEY'],
+                                                'OMISE_PUBLIC_KEY': connect_data['OMISE_PUBLIC_KEY'],
+                                                'liffID':connect_data['liffID']}})
             return {"message": "connect to platform successfully"}
         return redirect(url_for('home'))
     elif request.method == 'GET':
@@ -161,7 +164,6 @@ def edit(id):
         gender = request.form['gender']
         age = request.form['age']
         file = request.files
-        # print(file)
 
         if "file" not in request.files:
             filename = "Avatar.jpg"
@@ -170,18 +172,15 @@ def edit(id):
                                     'owner':  ObjectId(creator), 'gender': gender, 'age': age}}
         else:
             file = request.files['file']
-            # print(file)
             filename = secure_filename(file.filename)
             
             filename = creator+"&"+bot_name+os.path.splitext(filename)[1]
-            print(filename)
             destination = "/".join([UPLOAD_FOLDER, filename])
             file.save(destination)
             session['uploadFilePath']=destination
             response="success"
 
             info_update = { "$set": {'bot_name': bot_name, 'owner':  ObjectId(creator), 'gender': gender, 'age': age, 'Img' : filename}}
-        # print(info_update)
         done = bots_collection.update_one({'_id': ObjectId(id)}, info_update)
         return {'message': 'add bot successfully'}
     return {'message': 'add bot unsuccessfully'}
@@ -373,7 +372,6 @@ def group(botID):
 @bot.route('/<botID>/group/delete/<groupID>', methods=["POST"])
 def delete_group(botID,groupID):
     if request.method == 'POST':
-        print("Printt")
         groups_collection = mongo.db.groups
         group_delete = request.get_json() #ID
         groups_collection.delete_one({'$and':[{"botID":ObjectId(botID),"_id":ObjectId(groupID)}]})
@@ -388,24 +386,16 @@ def addgroup(botID):
         groupList = []
         groups_collection = mongo.db.groups
         groups_update = request.get_json()
-        print(groups_update)
         groups = groups_update['group']
         creator = groups_update['botID']
         group = groups_collection.find({"botID": ObjectId(botID)})
         groups_info = list(group)
-        print(groups_info)
         flag = True
-        for data in groups_info:
-            print(data)
-            # if  data['name'] == groups:
-            #     flag = False
-            #     return {'error':'This question already exists'}
         if flag == True:
             groups_collection.insert_one(
                     {'name': groups, 'botID':  ObjectId(creator),
                     'message': groupList
                     })
-            print('sun')
             return {"message": "add done"}
     return {"message": "ok"}
 
@@ -414,7 +404,6 @@ def addgroup(botID):
 @bot.route('/<botID>/group/<groupID>/edit', methods=["GET","POST"])
 def edit_group(botID,groupID):
     if request.method == 'GET':
-        print("GETDONEEE")
         groups_collection = mongo.db.groups
         get_group = request.get_json() #findbyID
         info = groups_collection.find_one({'$and':[{"botID": ObjectId(botID)},{'_id':ObjectId(groupID)}]})
@@ -422,16 +411,13 @@ def edit_group(botID,groupID):
         print(data)
         return data
     if request.method == 'POST':
-        print("READY EDITTTTTTTTTTTTTTTT")
         groups_collection = mongo.db.groups
-        print("READY fffffffffffffffffffff")
         info = groups_collection.find_one({'$and':[{"botID": ObjectId(botID)},{'_id':ObjectId(groupID)}]})
         text = request.form['text']
         if info['message'] != []:    
             if (request.files):
                 for i in request.files:
                     file = request.files[i]
-                    print(file)
                     filename = secure_filename(file.name)
                     name, extension = os.path.splitext(filename)
                     value = randint(0, 9999)
@@ -446,11 +432,9 @@ def edit_group(botID,groupID):
                 add = {"$push":{'message': {"data":text,"type":"text"}}}
                 done = groups_collection.update_one({'$and':[{"botID": ObjectId(botID)},{'_id':ObjectId(groupID)}]}, add)
         elif info['message'] == []:
-            print("first time")
             if (request.files):
                 for i in request.files:
                     file = request.files[i]
-                    print(file)
                     filename = secure_filename(file.name)
                     name, extension = os.path.splitext(filename)
                     value = randint(0, 9999)
@@ -466,7 +450,16 @@ def edit_group(botID,groupID):
 
         return "edit done"
 
-
+@bot.route('/<botID>/train', methods=["POST"])
+def train(botID):
+    data = request.get_json()
+    training_collection = mongo.db.training
+    trained_collection = mongo.db.trained
+    for id in data['id']:
+        train_define = training_collection.find_one({"_id": ObjectId(id)})
+        el = train_define.pop('confident', None)
+        trained_collection.insert_one(train_define)
+    return {'message': 'train successfully'}
 
 @bot.route('/<botID>/addword', methods=["POST"])
 def addword(botID):
