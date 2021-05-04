@@ -203,9 +203,6 @@ function History(props) {
                             </div>
                         </div>
                         <Visualize  botID={props.match.params.bot_id}/>
-
-
-
                     </div>
                 </div>
                 
