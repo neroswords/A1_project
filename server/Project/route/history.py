@@ -13,16 +13,16 @@ from bson import ObjectId
 import os.path
 from bson.json_util import dumps, loads
 
-log = Blueprint("history",__name__)
+history = Blueprint("history",__name__)
 
-@log.route('/<botID>', methods=['GET', 'POST'])
+@history.route('/<botID>', methods=['GET', 'POST'])
 def historyy(botID):
     purchased_collection = mongo.db.purchased
     waited_cursor = list(purchased_collection.find({"$and":[{'botID': ObjectId(botID)},{"type":"waited"}]}))
     total_cursor = list(purchased_collection.find({'botID': ObjectId(botID)}))
     return {"waited":len(waited_cursor),"total":len(total_cursor)}
     
-@log.route('/<botID>/<data_type>', methods=['GET', 'POST'])
+@history.route('/<botID>/<data_type>', methods=['GET', 'POST'])
 def getData(botID,data_type):
     if data_type == "waited":
         purchased_collection = mongo.db.purchased

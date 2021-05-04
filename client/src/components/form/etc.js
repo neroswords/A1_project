@@ -146,7 +146,7 @@ export default function Etcform({botID}) {
         event.preventDefault();
         const editData = {
             'OMISE_SECRET_KEY':OMISE_SECRET_KEY,
-            'OMISE_PUBLIC_KEY':OMISE_PUBLIC_KEY
+            'OMISE_PUBLIC_KEY':OMISE_PUBLIC_KEY,
             'liffID':liffID,
             'creator':localStorage.getItem('user_id'),
             'platform':'etc'
