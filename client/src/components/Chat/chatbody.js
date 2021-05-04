@@ -14,17 +14,23 @@ function Chatbody({botID,customerID}){
     const [messages,setMessages] = useState([]);
     const [message,setMessage] = useState("");
     const [username, setUsername] = useState("");
-    const messagesEndRef = useRef(null)
+    const messagesEndRef = useRef(null);
+    const [auto, setAuto] = useState();
 
     const scrollToBottom = () => {
       messagesEndRef.current?.scrollIntoView({ behavior: "auto" })
     } 
+
+    const switched =()=>{
+      setAuto(prev => !prev)
+    }
 
     useEffect(() =>{
         if (customerID !=="main"){
             join_room()
             setMessages([])
             fetch('/bot/'+botID+'/customer/'+customerID).then(res=> res.json().then(data=>{
+                setAuto(data.profile.auto_chat)
                 setUsername(data.profile.display_name);
                 data.message.forEach(ele=>{ 
                   if (ele.sender_type == "bot"){
@@ -104,7 +110,7 @@ function Chatbody({botID,customerID}){
                             </div>
                             
                             <div class="toggle">
-                              <input type="checkbox" class="check"/>
+                              <input type="checkbox" onClick={()=>{switched()}} class="check"/>
                               <b class="b switch"></b>
                               <b class="b track"></b>
                             </div>

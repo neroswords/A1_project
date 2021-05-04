@@ -2,6 +2,7 @@ from flask import Flask, request, abort, render_template, session,url_for,send_f
 from Project.Config import *
 from flask_pymongo import PyMongo
 import bcrypt
+from flask_socketio import SocketIO
 # from flask_jwt_extended import JWTManager
 from base64 import encodebytes
 from hashlib import sha1
@@ -13,10 +14,10 @@ from flask_talisman import Talisman
 from engineio.payload import Payload
 from bson import ObjectId
 
-# Payload.max_decode_packets = 250
+Payload.max_decode_packets = 250
 
 app = Flask(__name__, static_url_path='/static')
-# socketio = SocketIO(app, cors_allowed_origins="*", ping_timeout=5000, ping_interval=25000)
+socketio = SocketIO(app, cors_allowed_origins="*", ping_timeout=5000, ping_interval=25000)
 
 UPLOAD_FOLDER = './Project/static/images'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])

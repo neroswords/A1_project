@@ -38,11 +38,12 @@ def edit_trained():
         edit_data = request.get_json()
         message_id = edit_data["data"]["id"]
         Check_type = edit_data["type"]
+        print(Check_type)
         if Check_type == "Word":
             trained_collection.update_one({'_id': ObjectId(message_id)},
             {'$set':{'question':edit_data['value']}})
         elif Check_type == "ReplyWord":
-             trained_collection.update_one({'_id': ObjectId(message_id)},
+            trained_collection.update_one({'_id': ObjectId(message_id)},
             {'$set':{'answer':edit_data['value']}})
     return "ok"
 

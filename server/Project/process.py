@@ -333,3 +333,4 @@ def create_cover_sheet(purchased_id,botID,customerID):
     pdf_merger.merge(1, str("Project\static\pdf\item_list\list_"+str(botID)+"&"+customerID+".pdf"))
     with Path("Project/static/pdf/"+str(botID)+"&"+customerID+"_"+str(cart_define['purchase_day'])+str(cart_define['purchase_month'])+str(cart_define['purchase_year'])+".pdf").open(mode="wb") as output_file:
         pdf_merger.write(output_file)
+    purchased_collection.update_one({'$and':[{"userID":customerID},{"_id": ObjectId(purchased_id)}]},{"$set":{"file":str(botID)+"&"+customerID+"_"+str(cart_define['purchase_day'])+str(cart_define['purchase_month'])+str(cart_define['purchase_year'])+".pdf"}})

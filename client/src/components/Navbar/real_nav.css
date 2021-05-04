@@ -526,6 +526,7 @@
   color: #959595;
 }
 
+.noti-show-user-type .noti-show-facebook { positon: absolute;   left: 70px; }
 
 .msg-noti-iread img{
   /* border: 1px solid rgb(116, 47, 47); */
