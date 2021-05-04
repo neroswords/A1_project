@@ -120,7 +120,7 @@ function Traintable({showTraintable, setShowTraintable, delete_trained, id, sele
       console.log(newdata)
       
       if (data[0]){
-          fetch('/bot/'+id+'/train/'+data[0].original.id, {
+          fetch('/bot/'+id+'/train', {
               method : 'POST',
               headers : {
                   "Access-Control-Allow-Origin": "*",
@@ -129,7 +129,7 @@ function Traintable({showTraintable, setShowTraintable, delete_trained, id, sele
                   body : JSON.stringify(newdata),
               });
               console.log(data)
-              window.location.reload("bot/"+id+'/trained');
+              // window.location.reload("bot/"+id+'/trained');
       }    
   
   }
