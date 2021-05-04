@@ -555,6 +555,7 @@ def get_message(botID,customerID):
         return data
     elif request.method == "POST":
         data = request.get_json()
+        print(data)
         customer_collection = mongo.db.customers
         customer = customer_collection.update_one({"$and": [{"botID":ObjectId(botID)},{"userID":customerID}]},{"$set":{"auto_chat":data['auto_chat']}})
         return {"message": "switch successfully"}
