@@ -14,7 +14,7 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background :rgba(0, 0, 0, 0.8);
+  background :rgba(0, 0, 0, 0.2);
   position: fixed;
   top: 50%;
   left: 50%;
@@ -24,15 +24,15 @@ const Background = styled.div`
 
 const ModalWrapper = styled.div`
   z-index: 1000;
-  width: 800px;
-  height: 500px;
+  width: 600px;
+  height: 400px;
   background-color: white;
   padding: 3rem;
   border-radius: 0.5rem;
 `;
 
 const ModalContent = styled.div`
-  margin-top: 10%;
+  margin-top: 5%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -69,28 +69,16 @@ const ModalContent = styled.div`
 
   }
 
-  .input-answer{
-    box-shadow: none;
-    outline: none;
-    border: none;
-    border-bottom: 2px solid #000;
-    outline: none;
-    margin-bottom: 20px;
-    font-size: 16px;
-    padding: 5px 0;
-  }
-
   form input{
     width: 100%;
   }
 
   .group-Question{
-    margin-top: 5%;
+    margin-top: 10%;
   }
-
-  .group-Answer{
-    margin-top: 2%;
-  }
+  /* .addtracking{
+    margin-left: -41%;
+  } */
 
 `;
 
@@ -105,87 +93,87 @@ const CloseModalButton = styled(MdClose)`
   z-index: 10;
 `;
 
-
-export const AddWord = ({ showWord, setShowWord,botID}) => {
-  const [message,setMessage] = useState('')
-  const [showMessage,setShowMessage] = useState(false)
+export const AddTracking = ({ showAddTracking, setShowAddTracking, botID, tabletrackingState, info }) => {
+  const [message, setMessage] = useState('')
+  const [showMessage, setShowMessage] = useState(false)
   const modalRef = useRef();
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
 
   console.log(showMessage)
-  const closePop = () =>{
+  const closePop = () => {
     // setFlash('')
-    setShowWord(prev => !prev)
+    setShowAddTracking(prev => !prev)
   }
 
   function handleClick(e) {
+    console.log(e)
     e.preventDefault();
     console.log('The link was clicked.');
-    const qLength = question.replace(/^\s+|\s+$/gm,'').length
-    const aLength = answer.replace(/^\s+|\s+$/gm,'').length
+    const qLength = question.replace(/^\s+|\s+$/gm, '').length
+    const aLength = answer.replace(/^\s+|\s+$/gm, '').length
     console.log(qLength)
-    
-    if (qLength == 0 || aLength == 0 ){
+
+    if (question == '') {
       console.log("null")
       setMessage("Please fill question or answer")
       setShowMessage(true)
     }
-    else{
+    else {
       addword(botID)
     }
   }
 
-  const addword =(id)=>{
-    
-    
-    const data = {'question' : question,'answer' : answer ,'botID' : id}
-    fetch('/bot/'+id+'/addword', {
-    method : 'POST',
-    headers : {
+  const addword = (id) => {
+    console.log(tabletrackingState)
+    console.log(info)
+    const data = { 'tracking': question, 'botID': id }
+    fetch('/bot/' + info.values.id + '/addtracking', {
+      method: 'POST',
+      headers: {
         "Access-Control-Allow-Origin": "*",
-        'Content-Type':'application/json'
-        },
-    body: JSON.stringify(data)}).then(res => res.json().then(data => {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }).then(res => res.json().then(data => {
       // console.log(data)
-      if ("error" in data ){
-        
+      if ("error" in data) {
+
         setMessage(data["error"])
         setShowMessage(true)
 
       }
-      else{
-        
-        window.location.reload("bot/"+id+'/trained');
+      else {
+        window.location.reload("bot/" + id + '/histiory/tracking');
       }
     }))
-    // window.location.reload("bot/"+id+'/trained');
+
   };
 
   const animation = useSpring({
     config: {
       duration: 250
     },
-    opacity: showWord ? 1 : 0,
-    transform: showWord ? `translateY(0%)` : `translateY(-100%)`
+    opacity: showAddTracking ? 1 : 0,
+    transform: showAddTracking ? `translateY(0%)` : `translateY(-100%)`
   });
 
   const closeModal = e => {
     if (modalRef.current === e.target) {
-      setShowWord(false);
+      setShowAddTracking(false);
       // window.location.replace("/login")
     }
   };
 
   const keyPress = useCallback(
     e => {
-      if (e.key === 'Escape' && showWord) {
-        setShowWord(false);
+      if (e.key === 'Escape' && showAddTracking) {
+        setShowAddTracking(false);
         console.log('I pressed');
       }
     },
-    [setShowWord, showWord]
-    
+    [setShowAddTracking, showAddTracking]
+
   );
 
   useEffect(
@@ -198,60 +186,56 @@ export const AddWord = ({ showWord, setShowWord,botID}) => {
 
   useEffect(
     () => {
-      // console.log(showWord)
-      if (showWord == false) {
-        
+      // console.log(showAddTracking)
+      if (showAddTracking == false) {
+
         setShowMessage(false)
       }
     },
-    [showWord]
+    [showAddTracking]
   );
-  
-  return(
+
+  return (
     <div>
-    {showWord ? (
+      {showAddTracking ? (
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
             <Container>
-            <ModalWrapper showWord={showWord}>
-              <ModalContent>
-                <article className="part Addword">
+              <ModalWrapper showAddTracking={showAddTracking}>
+                <ModalContent>
+                  <article className="part Addword">
                   <h1 name="addword-popup">
-                    Add your Question and Answer   
+                    Add Tracking Number   
                   </h1>
                   <form>
                     <div className="group-Question">
-                      <label for="AddQuestion">Question</label>
-                      <input type="text" pattern="[A-Za-z0-9]+" className="input-question" id="question" name="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Question"></input>
+                      <label for="AddQuestion" className="addtracking">Add Tracking Number</label>
+                      <input type="text" pattern="[A-Za-z0-9]+" className="input-question" id="question" name="input-question" onChange={(e)=>setQuestion(e.target.value)} placeholder="Add tracking number"></input>
                     </div>
                     { showMessage &&  
                                   
-                                      <FlashMessage duration={4000}>
-                                        <div className="detect">
-                                          <strong>{message}</strong>
-                                        </div>  
-                                      </FlashMessage>
+                          <FlashMessage duration={4000}>
+                                <div className="detect">
+                                  <strong>{message}</strong>
+                                </div>  
+                          </FlashMessage>
                                   
                       }
-                    <div className="group-Answer">
-                      <label for="AddAnswer">Answer</label>
-                      <input type="text" pattern="[A-Za-z0-9]+" className="input-answer" name="input-answer" id="answer" onChange={(e)=>setAnswer(e.target.value)} placeholder="Answer"></input>
-                    </div>
                   </form>
                 </article>
-              <button type="submit" className="qa-comfirm" variant="success" name="btn-addword-confirm" onClick={handleClick} >Comfirm</button>
-              </ModalContent>
-              <CloseModalButton
-                aria-label="Close modal"
-                onClick={() => closePop()}
-              />
-            </ModalWrapper>
+                  <button type="submit" className="qa-comfirm" variant="success" name="btn-addword-confirm" onClick={handleClick} >Comfirm</button>
+                </ModalContent>
+                <CloseModalButton
+                  aria-label="Close modal"
+                  onClick={() => closePop()}
+                />
+              </ModalWrapper>
             </Container>
           </animated.div>
         </Background>
       ) : null}
     </div>
-    );  
+  );
 };
 
-export default AddWord;
+export default AddTracking;

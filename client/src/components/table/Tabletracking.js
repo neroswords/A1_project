@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
-import  { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination, useRowSelect,useResizeColumns } from 'react-table'
+import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination, useRowSelect } from 'react-table'
 import { matchSorter } from 'match-sorter'
 import { Container } from "react-bootstrap";
+import {Link} from "react-router-dom";
 import Delete_table from "../Delete_table";
-import Traintable from "../Traintable";
-import { MDBNotification, MDBContainer } from "mdbreact";
+import { Button } from 'react-bootstrap';
+import AddGroup from "./AddTable/AddGroup";
+import AddTracking from "./AddTable/AddTracking";
 
 const Styles = styled.div`
-
   .table-show-all > div.container { 
-    /* max-width: max-content; */
-    margin: 0;
-    padding: 20px;
-    min-width: 100% ;
-  }
+      /* max-width: max-content; */
+      margin: 0;
+      padding: 20px;
+      min-width: 100% ;
+    }
 
   table {
     /* font-family: 'Roboto',sans-serif; */
@@ -30,48 +31,42 @@ const Styles = styled.div`
         }
       }
     }
-
     th {
       margin: 0;
       /* padding: 12px 15px; */
       border: 1px solid #efeff5;
       background-color: #393939;
       color: white;
-      /* width: 500px; */
+      width: 500px;
     }
     td {
       font-family: 'Public Sans', sans-serif;
+      font-weight: 0;
       margin: 0;
       padding: 12px 15px;
       border: 1px solid #efeff5;
       font-size: 16px;
-
       :last-child {
         border-right: 0;
       }
-
       input {
-        font-size: 0.9rem;
+        font-size: 50px;
         padding: 0;
         margin: 0;
         border: 0;
-        text-align: center;
-        /* width: 400px; */
+        /* text-align: center; */
       }
     }
-
-  .trained-Word{
-    background-color: transparent;
-    border-radius: 25px; 
-    padding-left:15px;
-    width: 300px;
-  }
+    .customer_input{
+      background-color: transparent;
+      border-radius: 25px;
+      padding-left: 15px;
+      width:300px;
+    }
 }
-
 .table tbody tr:nth-of-type(even){
         background-color: #fafafc;
-    }
-
+}
 
 .button-trained-word .buttondeleteWord{
     padding: 7px 20px !important;
@@ -83,45 +78,37 @@ const Styles = styled.div`
     color: #fff ;
     margin-left: 1%;
     margin-top: 5px;
+
   }
-
-
   .button-trained-word .buttondeleteWord:hover{
     color: #000;
   }
-
-  .buttonaddtrain{
-    padding: 7px 15px;
-    font-size: 12px;
-    border-radius: 25px;
-    border: 1px solid #34a853;
-    transition: 0.5s;
-    background-color: #34a853;
-    color: #fff;
+  .buttonadd-tracking{
+  padding: 7px 15px;
+  font-size: 12px;
+  border-radius: 25px;
+  border: 1px solid #0078ff;
+  transition: 0.5s;
+  background-color: #0078ff;
+  color: #fff;
 }
-
-.buttonaddtrain:hover{
+.buttonadd-tracking:hover{
   color: #000;
 }
-
 .pagination{
-  z-index : -1;
   justify-content:space-between;
   width:100%;
   margin-bottom: 0;
 }
-
 .pagination .parginate-text{
   display:inline;
   padding-top: 7px;
   margin-right: 1%;
   margin-left: 1%;
 }
-
 .parginate-arrow{
   text-align:right;
 }
-
 .parginate-arrow  button{
   border-radius: 15px;
   width: 35px;
@@ -130,14 +117,11 @@ const Styles = styled.div`
   margin-left: 0.5%;
   border: none;
 }
-
 .parginate-arrow  button:hover{
   border-radius: 30px;
   background-color: #fca311;
   color: #000;
 }
-
-
 .searchBox{
   width: 190px;
   height: 30px;
@@ -145,69 +129,15 @@ const Styles = styled.div`
   border: 0.5px solid #A9A9A9;
   margin: 5px 0;
 }
-
 input::placeholder{
   padding-left:15px;
-
 }
-
 .button-trained-word .SearchBar{
   float: right;
 }
-
 .select-pagesize {
   padding: 0 1%;
 }
-.loader {
-  animation:spin 1s infinite linear;
-  border:solid 2vmin transparent;
-  border-radius:50%;
-  border-right-color:#fca311;
-  border-top-color:#fca311;
-  box-sizing:border-box;
-  height:20vmin;
-  left:calc(50% - 10vmin);
-  position:fixed;
-  top:calc(50% - 10vmin);
-  width:20vmin;
-  z-index:1;
-  &:before {
-    animation:spin 2s infinite linear;
-    border:solid 2vmin transparent;
-    border-radius:50%;
-    border-right-color:#fcc111;
-    border-top-color:#fcc111;
-    box-sizing:border-box;
-    content:"";
-    height:16vmin;
-    left:0;
-    position:absolute;
-    top:0;
-    width:16vmin;
-  }
-  &:after {
-    animation:spin 3s infinite linear;
-    border:solid 2vmin transparent;
-    border-radius:50%;
-    border-right-color:#fcd111;
-    border-top-color:#fcd111;
-    box-sizing:border-box;
-    content:"";
-    height:12vmin;
-    left:2vmin;
-    position:absolute;
-    top:2vmin;
-    width:12vmin;
-  }
-}
-
-@keyframes spin {
-  100% {
-    transform:rotate(360deg);
-  }
-}
-
-
 `;
 
 
@@ -260,7 +190,7 @@ function GlobalFilter({
           fontSize: '0.8rem',
           // marginLeft: '1rem'
         }}
-        name="training-search" />
+      />
     </span>
   )
 }
@@ -277,7 +207,7 @@ function DefaultColumnFilter({
         setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
       }}
       placeholder={`Search ${count} records...`}
-       />
+    />
   )
 }
 
@@ -301,8 +231,9 @@ const EditableCell = ({
 
   }
 
-  const onBlur = () => {
+  const onBlur = () => { 
     updateMyData(index, id, value)
+    console.log("test")
   }
 
 
@@ -312,7 +243,7 @@ const EditableCell = ({
 
 
 
-  return <input className="trained-Word" value={value} onChange={onChange} onBlur={onBlur} />
+  return <input className="customer_input" value={value} onChange={onChange} onBlur={onBlur} />
 }
 
 const defaultColumn = {
@@ -320,33 +251,8 @@ const defaultColumn = {
 }
 
 
-function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID ,loading}) {
-
-  const [errorState, setErrorState] = React.useState(false)
-
-  const Ondelete = (e) => {
-    setErrorState(false)
-    if(e.length > 0){
-      
-      openDelete_table(e)
-    }
-    else{
-      setErrorState(true)
-    }
-    console.log(e.length)
-  }
-
-  const OnTrain = (e) => {
-    console.log(e)
-    if(e.length > 0){
-      openTraintable(e)
-    }
-    else{
-      setErrorState(true)
-    }
-    console.log(e.length)
-  }
-
+function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID, info }) {
+  
   const filterTypes = React.useMemo(
     () => ({
       fuzzyText: fuzzyTextFilterFn,
@@ -370,9 +276,10 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     }),
     []
   )
-  const [showTraintable, setShowTraintable] = useState(false);
-  
-  
+  const [showAddGroup, setShowAddGroup] = useState(false);
+  const openAddGroup = () => {
+    setShowAddGroup(prev => !prev);
+  }
 
   const [showDelete_table, setShowDelete_table] = useState(false);
   const openDelete_table = (data) => {
@@ -380,12 +287,16 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
       
   }
 
-  const openTraintable = (data) => {
-    console.log(data)
-    setShowTraintable(prev => !prev);
-    console.log(showTraintable)
-      
+  const [sentTracking, setSenttracking] = useState();
+  const [showAddTracking, setShowAddTracking] = useState(false);
+  const openAddTracking = (e) => {
+    console.log(e)
+    setSenttracking(e)
+    setShowAddTracking(prev => !prev);
   }
+
+  
+  
 
   const {
     getTableProps,
@@ -411,7 +322,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     {
       columns,
       data,
-      defaultColumn,
+      // defaultColumn,
       defaultColumnFilter, // Be sure to pass the defaultColumn option
       filterTypes,
       autoResetPage: !skipPageReset,
@@ -430,7 +341,6 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
         {
           id: 'selection',
-
           Header: ({ getToggleAllPageRowsSelectedProps }) => (
             <div>
               <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
@@ -455,41 +365,11 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     }
 
   )
+  console.log(selectedFlatRows)
   return (
-      
+    <>
       <Container>
-         { errorState &&  
-            <div className="errorstate">
-
-                              
-                                  <MDBNotification
-                                  style={{
-                                    // width: "auto",
-                                    position: "absolute",
-                                    // top: "10px",
-                                    // left: "500px",
-                                    zIndex: 9999
-                                  }}
-                                  autohide={4000}
-                                  bodyClassName="p-4 font-weight-bold white-text "
-                                  className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
-                                  closeClassName="blue-grey-text"
-                                  fade
-                                  icon="bell"
-                                  iconClassName="text-danger"
-                                  message="Please select word to delete"
-                                  show
-                                  
-                                  title="Error"
-                                  titleClassName="elegant-color-dark white-text"
-                    
-                                  />
-                                </div>
-
-                                }
         <div className="button-trained-word">
-          <button className="buttonaddtrain" name="btn-delword" onClick={() => OnTrain(selectedFlatRows)}>Train</button>
-          <button className="buttondeleteWord" name="btn-delword" variant="danger" onClick={() => Ondelete(selectedFlatRows)}>Delete</button>
           <div className='SearchBar'>
             <GlobalFilter
               preGlobalFilteredRows={preGlobalFilteredRows}
@@ -497,12 +377,10 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               setGlobalFilter={setGlobalFilter}
             />
           </div>
-          <Traintable showTraintable={showTraintable} setShowTraintable={setShowTraintable} selectedFlatRows={selectedFlatRows} id={botID} />
-          <Delete_table showDelete_table={showDelete_table} setShowDelete_table={setShowDelete_table} selectedFlatRows={selectedFlatRows} id={botID} delete_trained={delete_trained}/>
+
         </div>
 
-
-        <table {...getTableProps()} className="table" name="training-table">
+        <table {...getTableProps()} className="table">
           <thead>
             {headerGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -512,6 +390,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
                   </th>
                 ))}
+                <th>Add tracking</th>
               </tr>
 
             ))}
@@ -522,26 +401,28 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
                   textAlign: 'right',
                 }}
               >
-
               </th>
             </tr> */}
+
           </thead>
-        
-          {loading ?                    
-                    
-                    <tbody {...getTableBodyProps()}>
-                    {page.map((row, i) => {
-                      prepareRow(row)
-                      return (
-                        <tr {...row.getRowProps()} name="training-row">
-                          {row.cells.map(cell => {
-                            return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                          })}
-                        </tr>
-                      )
-                    })}
-                  </tbody> 
-                    : <div class="loader"></div>}
+
+          <tbody {...getTableBodyProps()}>
+            {page.map((row, i) => {
+              prepareRow(row)
+              console.log(row)
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map(cell => {
+                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  })}
+                  <td><button className='buttonadd-tracking' onClick={() => openAddTracking(row) } >Add tracking</button></td>
+                  <AddTracking showAddTracking={showAddTracking} setShowAddTracking={setShowAddTracking} tabletrackingState={data} info={sentTracking}  botID={botID} />
+
+                </tr>
+                
+              )
+            })}
+          </tbody>
         </table>
 
         <div className="pagination row">
@@ -585,124 +466,89 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
         </div>
       </Container>
-    
+    </>
   )
 }
 
 
 
 
-function Tablecon({ botID, delete_trained, add_data }) {
-  const [TableconState, setTableconState] = useState([]);
-  const [loading,setLoading] = useState(false);
-                                                          
-
-  const [showWord, setShowWord] = useState(false);
-
-
+function Tabletracking({ botID, delete_trained, add_data }) {
+  const [tabletrackingState, setTabletrackingState] = useState([]);
+                                                        
+  const [showAddGroup, setShowAddGroup] = useState(false);
   const columns = React.useMemo(
     () => [
+      {
+        Header: 'ID',
+        accessor: 'id', // accessor is the "key" in the data
+      },
+      {
+        Header: 'Name',
+        accessor: 'Name', // accessor is the "key" in the data
+      },
+      {
+        Header: 'Time',
+        accessor: 'Time', // accessor is the "key" in the data
+      }
       
-      {
-        Header: 'Word',
-        accessor: 'Word', // accessor is the "key" in the data
-      },
-      {
-        Header: 'ReplyWord',
-        accessor: 'ReplyWord',
-        filter: 'fuzzyText',
-       
-        
-      },
-      {
-        Header: 'Confidence',
-        accessor: 'Confidence',
-        
-      },
+      
     ],
     []
   )
 
-  const [originalData] = React.useState(TableconState)
+  const [originalData] = React.useState(tabletrackingState)
   const [skipPageReset, setSkipPageReset] = React.useState(false)
 
-  const updateMyData = (rowIndex, columnId, value) => {
-    setTableconState(old =>
-      old.map((row, index) => {
-        if (index === rowIndex) {
-          const editData = {
-            "value": value,
-            "type": columnId,
-            "data": row
-          }
-          if (row.Word != value && row.ReplyWord != value) {
-            fetch('/train_bot/edit/trained/', {
-              method: 'POST',
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(editData)
-            })
-          }
-          return {
-            ...old[rowIndex],
-            [columnId]: value,
-          }
-        }
-        return row
-      })
-    )
+ 
+
+  const openAddGroup = () => {
+    setShowAddGroup(prev => !prev);
+
   }
-
-  // const openWord = () => {
-  //   setShowWord(prev => !prev);
-
-  // }
+  const [info, setInfo] =React.useState();
 
   useEffect(() => {
-    fetch('/train_bot/' + botID + '/training')
+    fetch('/bot/' + botID + '/tracking')
       .then(res => res.json().then(data => {
-        setTableconState(
+        // console.log(data)
+        setInfo(data)
+        setTabletrackingState(
           data.map(d => {
+            console.log(d)
             return {
               select: false,
               id: d._id.$oid,
-              Word: d.question,
-              ReplyWord: d.answer,
-              Confidence: d.confident
+              Name: d.userID,
+              Time: d.purchase_day+'/'+ d.purchase_month +'/'+ d.purchase_year
+              
             };
           })
           
 
         );
-        setLoading(true)
+
       }))
 
   }, []);
 
 
-  const resetData = () => setTableconState(originalData)
+  const resetData = () => setTabletrackingState(originalData)
+  
   return (
     <Styles>
       <div className="table-show-all">
- 
-         {loading ?                    
-                    
-                  
-                    <TableShow 
-          
-                    columns={columns}
-                    data={TableconState}
-                    updateMyData={updateMyData}
-                    skipPageReset={skipPageReset}
-                    delete_trained={delete_trained}
-                    botID={botID}
-                    loading={loading}
-                  />   : <div class="loader"></div>}
+        <TableShow
+          columns={columns}
+          data={tabletrackingState}
+          skipPageReset={skipPageReset}
+          delete_trained={delete_trained}
+          botID={botID}
+          info={info}
+        />
       </div>
     </Styles>
   );
 }
 
-export default Tablecon;
+export default Tabletracking;

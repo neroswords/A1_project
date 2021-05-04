@@ -254,6 +254,7 @@ const defaultColumn = {
 
 
 function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained ,botID,loading }) {
+  const [errorState, setErrorState] = React.useState(false)
   const Ondelete = (e) => {
     setErrorState(false)
     if(e.length > 0){
@@ -400,7 +401,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained 
                                     // left: "500px",
                                     zIndex: 9999
                                   }}
-                                  // autohide={3000}
+                                  autohide={4000}
                                   bodyClassName="p-4 font-weight-bold white-text "
                                   className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
                                   closeClassName="blue-grey-text"

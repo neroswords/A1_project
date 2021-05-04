@@ -17,31 +17,33 @@ function Todo({todos, completeTodo, removeTodo, updateTodo, groupname}) {
         });
       };
     
-      if (edit.id) {
-        return <GroupForm edit={edit} onSubmit={submitUpdate} />;
-      }
+      // if (edit.id) {
+      //   return <GroupForm edit={edit} onSubmit={submitUpdate} />;
+      // }
 
-
-    return todos.map((todo, index) => (
+      console.log(todos)
+    return (<>{todos.map((todo, index) => (
+      
         <div 
             className={todo.isComplete ? 'todo-row complete' : 'todo-row'}
             key={index}
             >
+              {console.log(todo)}
             <div key={todo.id} onClick={() => completeTodo(todo.id)}>
                 {todo.text}
             </div>
             <div className='icons'>
-                <RiCloseCircleLine
+                {/* <RiCloseCircleLine
                     onClick={() => removeTodo(todo.id)}
                     className='delete-icon'
                 />
                 <TiEdit
                     onClick={() => setEdit({ id: todo.id, value: todo.text })}
                     className='edit-icon'
-                />
+                /> */}
             </div>
         </div>
-    ))
+    ))}</>)
 }
 
 export default Todo
