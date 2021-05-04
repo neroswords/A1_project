@@ -117,7 +117,7 @@ function Footer(){
                     <div className="border-footer"></div>
                     <ul className="list-social list-unstyled">
                         <i onClick={() => window.location.replace('https://www.facebook.com/a1chatbot/')} className="fab fa-facebook-square facebook"></i>
-                        <i onClick={() => window.location.replace('https://liff.line.me/')} className="fab fa-line line"/>
+                        <i onClick={() => window.location.replace('https://lin.ee/Tsx7SfC')} className="fab fa-line line"/>
                         <i onClick={() => window.location.replace('https://github.com/neroswords/A1_project')} class="fab fa-github github"></i>
                     </ul>
                 </div>
