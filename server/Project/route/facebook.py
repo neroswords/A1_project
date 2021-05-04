@@ -22,7 +22,6 @@ import os.path
 import bson.json_util
 
 # from bson.json_util import dumps, loads,json_util
-from .. import socketio
 facebook = Blueprint("facebook", __name__)
 
 
@@ -81,7 +80,6 @@ def call_facebook(botID):
                 #socketio.emit("message_from_webhook", {"message":show, "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},room=botID+'&'+sender_define['userID'])
                 save_message(message=show,message_type="text",sender=profile['name'],sender_id=sender_define['userID'],sender_type="facebook",room=botID+'&'+sender_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=profile['picture']['data']['url'])
             elif message_type == 'q_postback':
-                print(payload)
                 data = {'postback': payload['entry'][0]
                         ['messaging'][0]['message']['quick_reply']}
                 show = payload['entry'][0]['messaging'][0]['message']['text']
@@ -481,12 +479,10 @@ def detail(botID, itemId, userID):
                     cart_collection.update_one({'userID': userID},{"$set": {"total":int(old_price)+total_ob}} )
                     res = "ใส่สินค้า"+item_name+"ลงตระกร้าเรียบร้อยแล้วครับ"
                     flag = True
-                    print("res")
             if(not flag):
                 
                 cart = cart_collection.insert_one({'userID': userID, 'botID': ObjectId(
                     botID),'total':total_ob,'cart': [{'itemid': ObjectId(itemId), 'amount': int(valueitem), 'item_name': item_name, 'price_per_ob': price_per_ob, 'total_ob': total_ob, 'img_name': img_name}]})
-        print("Done")
         res = "ใส่สินค้า"+item_name+"ลงตระกร้าเรียบร้อยแล้วครับ"
         bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
         bot = Bot(bot_define["page_facebook_access_token"], api_version="4.0")
@@ -569,7 +565,6 @@ def save_message(message,message_type,sender,sender_id,sender_type,room,botId,us
         for i in list_cur:
             if(i["readed"] == "unread"):
                 count = count+1
-        print(count)
         info_update = { "$set": {"notification" : count}}
         done = users_collection.update_one({'_id': ObjectId(userID)}, info_update)
 

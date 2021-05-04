@@ -67,16 +67,3 @@ def sentence_get_confident(ss1,ss2,list = "none"):
             return (sentence_similarity(['message'],ss2)+sentence_sound_index(ss1['message'], ss2, list='invert'))/2
         else:
             return False #"ขอโทษครับ ผมพูดได้แค่ภาษาไทย"
-
-
-
-# print(example[inp])
-# print(pythainlp.util.isthai(inp))
-# print(sentence_similarity("ฮัลโหล","โหล"))
-# print(word_tokenize("คนขายของ"))
-# print(word_tokenize("สบายดี"))
-# print(sentence_sound_index('สรา','สา',list='invert'))
-# print(lk82('ไง'))
-# print(lk82('สา'))
-# print(lk82('ไ') == lk82('สา'))
-# print(sentence_get_confident("หวัดดี", "ดี"))

@@ -55,6 +55,5 @@ def check_user(username): #for signup not duplicate username
 
 def get_connection(username):
     for x in bot_collection.find({'username': username}):
-        print(x)
     return x
     #return Connection(user_data['username'],user_data['name_bot'], user_data['Channel_access_token'], user_data['Channel_secret'], user_data['VERIFY_TOKEN'], user_data['basic_id'], user_data['page_facebook_access_token']) if user_data else None

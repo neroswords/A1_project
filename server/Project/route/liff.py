@@ -17,9 +17,8 @@ def check_out(botID,customer):
     if cart_define == None:
         return render_template(
         'checkout.html',
-        key=current_app.config.get("OMISE_PUBLIC_KEY"),
+        key=bot_define["OMISE_PUBLIC_KEY"],
         cart=cart_define,
-        # Price=cart_define['total']*100,
         botID = botID,
         currency=current_app.config.get("STORE_CURRENCY"),
         customer=session.get("customer"),
@@ -28,7 +27,7 @@ def check_out(botID,customer):
         )
     return render_template(
         'checkout.html',
-        key=current_app.config.get("OMISE_PUBLIC_KEY"),
+        key=bot_define["OMISE_PUBLIC_KEY"],
         cart=cart_define,
         Price=cart_define['total']*100,
         botID = botID,

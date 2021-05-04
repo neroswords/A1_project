@@ -132,7 +132,6 @@ def noti(user_id):
         profile_cursor =  users_collection.find_one({'_id': ObjectId(user_id)})
         # list_cur = list(profile_cursor['notification']) 
         json_data = dumps(profile_cursor['notification'], indent = 2) 
-        # print(json_data['notification'])
         return json_data
     if request.method == 'POST':
         users_collection = mongo.db.users
@@ -156,7 +155,6 @@ def getNoti(user_id):
         json_data = dumps(list_cur, indent = 2) 
         return json_data
     if request.method == "POST":
-        print("POSTtttttttttttttttttttttttttttttttttttttttttttttttttttt")
         notification_collection = mongo.db.notification
         users_collection = mongo.db.users
         # notification_collection.delete_many({'userId':ObjectId(user_id)})
