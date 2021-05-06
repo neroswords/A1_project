@@ -6,7 +6,7 @@ from .extensions import mongo
 # from flask_talisman import Talisman
 from engineio.payload import Payload
 from bson import ObjectId
-
+from flask_socketio import SocketIO
 Payload.max_decode_packets = 250
 
 app = Flask(__name__, static_url_path='/static')
