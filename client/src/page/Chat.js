@@ -121,6 +121,13 @@ function Chat(props){
   }, []);
 
     useEffect(() => {
+      fetch('/bot/'+props.match.params.bot_id) .then(response => response.json().then(inf => {
+        setName(inf)
+       
+    }))
+    }, []);
+
+    useEffect(() => {
         setCustomer(props.match.params.customer_id);
       }, [props.match.params.customer_id]);
 

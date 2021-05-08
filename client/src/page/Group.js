@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef } from "react";
 import TableGroup from '../Components/Table/TableGroup';
 import Navbar_member from '../Components/Navbar/navbar_member';
 import styled from 'styled-components';
+import { useHistory } from "react-router-dom";
 
 const Styles = styled.div` 
 .group-page {
@@ -107,6 +108,7 @@ const Styles = styled.div`
 ` 
 
 function Group(props){
+    // let history = useHistory();
     console.log(props)
     const [name, setName] = useState();
     const [loading,setLoading] = useState(false);
@@ -117,9 +119,11 @@ function Group(props){
     }))
     }, []);
     const delete_trained =(data)=>{
+        console.log(data.length)
+        console.log(data)
         var newdata = []
         var i = 0
-    
+        
         // var a = []
         for (i = 0; i < data.length; i++){
             newdata.push(data[i].original)
@@ -133,10 +137,12 @@ function Group(props){
                     'Content-Type':'application/json'
                     },
                     body : JSON.stringify(newdata),
-                })
-            window.location.reload("bot/"+props.match.params.bot_id+'/group');                    
-        }
-            
+                });
+                
+                window.location.reload("bot/"+props.match.params.bot_id+'/group'); 
+                                
+        }   
+        // window.location.reload("bot/"+props.match.params.bot_id+'/group'); 
     }
     return(
         <Styles>

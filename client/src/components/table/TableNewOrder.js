@@ -68,6 +68,19 @@ const Styles = styled.div`
 
 }
 
+.buttondownload-pdf{
+  padding: 7px 15px;
+  font-size: 12px;
+  border-radius: 25px;
+  border: 1px solid #0078ff;
+  transition: 0.5s;
+  background-color: #0078ff;
+  color: #fff;
+}
+.buttondownload-pdf:hover{
+  color: #000;
+}
+
 .table tbody tr:nth-of-type(even){
         background-color: #fafafc
     }
@@ -327,6 +340,12 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
   const openDelete_table = (data) => {
     setShowDelete_table(prev => !prev);
       
+    
+  }
+
+  const pdfDownload = (filename) => {
+    
+    fetch("/file/pdf/"+filename)
   }
  
 
@@ -434,6 +453,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
                 <tr {...row.getRowProps()}>
                    
                   {row.cells.map(cell => {
+                    console.log(cell)
                     //  console.log(cell.row.original.id)
                     return (
                     <><td {...cell.getCellProps()}>{cell.render('Cell')} </td>
@@ -573,6 +593,7 @@ function TableNewOrder({ botID, delete_trained, add_data }) {
   useEffect(() => {
     fetch('/history/' + botID + '/waited')
       .then(res => res.json().then(data => {
+        console.log(data)
         setTableNewOrderState(
           data.data.map(d => {
             console.log(d)
@@ -582,7 +603,8 @@ function TableNewOrder({ botID, delete_trained, add_data }) {
               Date: d.purchased_date.$date,
               Name: d.username,
               Total: d.total,
-              File:d.file
+              File: d.file,
+
             };
           })
           
