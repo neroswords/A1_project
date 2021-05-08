@@ -30,13 +30,13 @@ class User:
 
 
 def socket_api(data,botID,userID):
-    url = 'https://a1server-socket.herokuapp.com/api/message'
+    url = 'http://127.0.0.1:300/api/message'
     myobj = {'data': data, 'botID':botID, 'userID':userID}
     x = requests.post(url, json = myobj, headers = {'Content-type': 'application/json'})
     return x
 
 def socket_noti(data,userID):
-    url = 'https://a1server-socket.herokuapp.com/api/notification'
+    url = 'http://127.0.0.1:300/api/notification'
     myobj = {'data': data,  'userID':userID}
     x = requests.post(url, json = myobj, headers = {'Content-type': 'application/json'})
     return x

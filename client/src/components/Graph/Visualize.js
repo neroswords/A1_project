@@ -119,7 +119,7 @@ const Styles = styled.div`
 
   .showgraph-type-x {
     position:absolute;
-    right:15%;
+    right:10%;
     margin-top: -3.5%;
     margin-bottom: 10px;
     /* width: 150px; */
@@ -138,7 +138,7 @@ export const Visualize = ({ botID }) => {
 
 
   const [loading, setLoading] = React.useState();
-  const [head, setHead] = React.useState();
+  const [head, setHead] = React.useState("daily");
 
   async function getData(event) {
     setHead(event.target.value)
@@ -151,7 +151,7 @@ export const Visualize = ({ botID }) => {
     await setLoading(false)
   }
   useEffect(() => {
-    fetch('/sales/' + botID + '/' + '/month')
+    fetch('/sales/' + botID + '/' + '/daily')
       .then(res => res.json().then(data => {
         setDataChart(data)
 

@@ -156,7 +156,20 @@ input::placeholder{
 .select-pagesize {
   padding: 0 1%;
 }
-  
+
+.buttondownload-pdf{
+  padding: 7px 15px;
+  font-size: 12px;
+  border-radius: 25px;
+  border: 1px solid #0078ff;
+  transition: 0.5s;
+  background-color: #0078ff;
+  color: #fff;
+}
+.buttondownload-pdf:hover{
+  color: #000;
+}
+
 `;
 
 
@@ -275,6 +288,11 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
   const Ondelete = (e) => {
     // delete_trained(e)
     openDelete_table(e)
+  }
+
+  const pdfDownload = (filename) => {
+    
+    fetch("/file/pdf/"+filename)
   }
 
   const filterTypes = React.useMemo(
@@ -428,7 +446,10 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
                   )} 
                   
                       {/* <td><Link to ={'/bot/'+botID+'/mapping/details/'+row.original.id} name="mapping-details"><i className="far fa-edit" ></i></Link></td> */}
-                    <td><button>Download</button></td>
+                    <td><button className="buttondownload-pdf" onClick={(e) => {
+                                                      e.preventDefault();
+                                                      window.location.href='https://f13c53a01233.ngrok.io/file/pdf/'+row.original.File
+                                                      }} >Download</button></td>
                  
                 </tr>
               )
@@ -553,15 +574,15 @@ function TableNewOrder({ botID, delete_trained, add_data }) {
     fetch('/history/' + botID + '/waited')
       .then(res => res.json().then(data => {
         setTableNewOrderState(
-          data.map(d => {
+          data.data.map(d => {
             console.log(d)
             return {
               select: false,
               id: d._id.$oid,
               Date: d.purchased_date.$date,
-              Name: d.userID,
-              Total: d.total
-
+              Name: d.username,
+              Total: d.total,
+              File:d.file
             };
           })
           

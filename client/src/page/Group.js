@@ -144,7 +144,7 @@ function Group(props){
             <Navbar_member botID = {props.match.params.bot_id} path={"group"} />
             <div className="container-fluid">
                 <div className="bot-name-on-page">
-                    <h4> Bot name : {}</h4>
+                    <h4> Bot name : {name}</h4>
                 </div>
                 <div className="group-title d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group</h2>

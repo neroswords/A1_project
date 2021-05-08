@@ -515,7 +515,7 @@ function TableGroup({ botID, delete_trained, add_data }) {
             return {
               select: false,
               Date: d.purchased_date.$date,
-              Name: d.userID,
+              Name: d.username,
               Income: d.total,
               TrackingNumber: d.TrackingNo
 
