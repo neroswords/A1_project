@@ -138,6 +138,54 @@ input::placeholder{
 .select-pagesize {
   padding: 0 1%;
 }
+.loader {
+  animation:spin 1s infinite linear;
+  border:solid 2vmin transparent;
+  border-radius:50%;
+  border-right-color:#fca311;
+  border-top-color:#fca311;
+  box-sizing:border-box;
+  height:20vmin;
+  left:calc(50% - 10vmin);
+  position:fixed;
+  top:calc(50% - 10vmin);
+  width:20vmin;
+  z-index:1;
+  &:before {
+    animation:spin 2s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcc111;
+    border-top-color:#fcc111;
+    box-sizing:border-box;
+    content:"";
+    height:16vmin;
+    left:0;
+    position:absolute;
+    top:0;
+    width:16vmin;
+  }
+  &:after {
+    animation:spin 3s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcd111;
+    border-top-color:#fcd111;
+    box-sizing:border-box;
+    content:"";
+    height:12vmin;
+    left:2vmin;
+    position:absolute;
+    top:2vmin;
+    width:12vmin;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
 `;
 
 
@@ -251,7 +299,7 @@ const defaultColumn = {
 }
 
 
-function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID, info }) {
+function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID, info,loading }) {
   
   const filterTypes = React.useMemo(
     () => ({
@@ -406,23 +454,29 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
           </thead>
 
+          {loading ?                    
+                    
           <tbody {...getTableBodyProps()}>
-            {page.map((row, i) => {
-              prepareRow(row)
-              console.log(row)
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map(cell => {
-                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                  })}
-                  <td><button className='buttonadd-tracking' onClick={() => openAddTracking(row) } >Add tracking</button></td>
-                  <AddTracking showAddTracking={showAddTracking} setShowAddTracking={setShowAddTracking} tabletrackingState={data} info={sentTracking}  botID={botID} />
+          {page.map((row, i) => {
+            prepareRow(row)
+            console.log(row)
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                })}
+                <td><button className='buttonadd-tracking' onClick={() => openAddTracking(row) } >Add tracking</button></td>
+                <AddTracking showAddTracking={showAddTracking} setShowAddTracking={setShowAddTracking} tabletrackingState={data} info={sentTracking}  botID={botID} />
 
-                </tr>
-                
-              )
-            })}
-          </tbody>
+              </tr>
+              
+            )
+          })}
+        </tbody>
+               
+                    : <div class="loader"></div>}
+
+
         </table>
 
         <div className="pagination row">
@@ -508,6 +562,7 @@ function Tabletracking({ botID, delete_trained, add_data }) {
   }
   const [info, setInfo] =React.useState();
 
+  const [loading,setLoading] = useState(false);
   useEffect(() => {
     fetch('/bot/' + botID + '/tracking')
       .then(res => res.json().then(data => {
@@ -519,14 +574,16 @@ function Tabletracking({ botID, delete_trained, add_data }) {
             return {
               select: false,
               id: d._id.$oid,
-              Name: d.userID,
+              Name: d.username,
               Time: d.purchase_day+'/'+ d.purchase_month +'/'+ d.purchase_year
               
             };
           })
           
 
-        );
+        )
+        
+        setLoading(true);
 
       }))
 
@@ -545,6 +602,7 @@ function Tabletracking({ botID, delete_trained, add_data }) {
           delete_trained={delete_trained}
           botID={botID}
           info={info}
+          loading = {loading}
         />
       </div>
     </Styles>

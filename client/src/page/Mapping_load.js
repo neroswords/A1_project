@@ -337,8 +337,8 @@ const changeAnswer =  (evt) =>{
         <div className="save__controls">
           <button className="saveButton" onClick={onSave}>save</button>
           {/* <button onClick={onRestore}>restore</button> */}
-          <button className="addButton" onClick={onAdd}>add node</button>
-          <button className="deleteButton" onClick={onDelete}>delete</button>
+          {/* <button className="addButton" onClick={onAdd}>add node</button>
+          <button className="deleteButton" onClick={onDelete}>delete</button> */}
         </div>
 
         <div className="updatenode__controls">

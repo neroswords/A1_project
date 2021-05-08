@@ -177,7 +177,8 @@ class Edit_bot extends React.Component {
       message : '',
       showMessage: false,
       errorState: false,
-      successState: false
+      successState: false,
+      loading : false
     };
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -321,6 +322,7 @@ class Edit_bot extends React.Component {
           this.setState({ gender : data[0].gender});
           this.setState({ age: data[0].age }) ;
           this.setState({ Image: data[0].Img }); 
+          this.setState({ loading: true }); 
         });
         
       });
@@ -389,47 +391,53 @@ class Edit_bot extends React.Component {
                                         <p className="col">Bot information</p>
                                         <div className="line"></div>
                                 </div>
-                                <div className="row">
-                                        <div className="group col-lg-6">
-                                          <div className="showimage col-lg-8">
-                                          { imagePreviewUrl ?   $imagePreview :  <img src={'/images/bot/bot_pic/'+this.state.Image}/> }            
-                                          </div>
-                                          <div className="mt-3">                                           
-                                              <label for="uploadimage">Upload Proflie</label>
-                                              <input accept="image/x-png,image/gif,image/jpeg" ref={(ref) => { this.uploadInput = ref; }} onChange={(e)=>this._handleImageChange(e)} type="file"  />
-                                            </div>
-                                        </div>  
-                                        <div className=" group col-lg-6">
-                                            <div className="">
-                                              <label  className="form-label">Bot Name</label>
-                                              <span className="req-icon"> *</span>
-                                              <input type="text"  name="bot_name" value = {this.state.bot_name}  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
-                                            </div>
-                                            { this.state.showMessage &&  
-                                        <div className="container">
-                                            <FlashMessage duration={40000}>
-                                              <div className="error">
-                                                <strong>* {this.state.message}</strong>
-                                              </div>  
-                                            </FlashMessage>
-                                        </div>
-                                  }
-                                            <div class="mt-3">
-                                              <label for="inputgender" class="form-label">Gender</label>
-                                              <span className="req-icon"> *</span>
-                                              <select id="inputgender" name="gender" value = {this.state.gender}  ref={(ref) => { this.gender = ref; }} onChange={this.handleChange} class="form-select">
-                                                  <option selected>Choose...</option>
-                                                  <option>Male </option>
-                                                  <option>Female</option>
-                                              </select>
-                                            </div>
-                                            <div className="mt-3">
-                                                <label for="inputFirstname" className="form-label">Age</label>
-                                                <span className="req-icon"> *</span>
-                                                <input type="text" pattern="\d*"  min="1" step="1"  name="age" className="form-control" id="inputfirstname" value = {this.state.age}   ref={(ref) => { this.age = ref; }} onChange={this.handleChange} no-float/>
-                                            </div>
-                                        </div>
-                                </div>
+                              
+                                {this.state.loading ?                    
+                      <div className="row">
+                      <div className="group col-lg-6">
+                        <div className="showimage col-lg-8">
+                        { imagePreviewUrl ?   $imagePreview :  <img src={'/images/bot/bot_pic/'+this.state.Image}/> }            
+                        </div>
+                        <div className="mt-3">                                           
+                            <label for="uploadimage">Upload Proflie</label>
+                            <input accept="image/x-png,image/gif,image/jpeg" ref={(ref) => { this.uploadInput = ref; }} onChange={(e)=>this._handleImageChange(e)} type="file"  />
+                          </div>
+                      </div>  
+                      <div className=" group col-lg-6">
+                          <div className="">
+                            <label  className="form-label">Bot Name</label>
+                            <span className="req-icon"> *</span>
+                            <input type="text"  name="bot_name" value = {this.state.bot_name}  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
+                          </div>
+                          { this.state.showMessage &&  
+                      <div className="container">
+                          <FlashMessage duration={40000}>
+                            <div className="error">
+                              <strong>* {this.state.message}</strong>
+                            </div>  
+                          </FlashMessage>
+                      </div>
+                }
+                          <div class="mt-3">
+                            <label for="inputgender" class="form-label">Gender</label>
+                            <span className="req-icon"> *</span>
+                            <select id="inputgender" name="gender" value = {this.state.gender}  ref={(ref) => { this.gender = ref; }} onChange={this.handleChange} class="form-select">
+                                <option selected>Choose...</option>
+                                <option>Male </option>
+                                <option>Female</option>
+                            </select>
+                          </div>
+                          <div className="mt-3">
+                              <label for="inputFirstname" className="form-label">Age</label>
+                              <span className="req-icon"> *</span>
+                              <input type="text" pattern="\d*"  min="1" step="1"  name="age" className="form-control" id="inputfirstname" value = {this.state.age}   ref={(ref) => { this.age = ref; }} onChange={this.handleChange} no-float/>
+                          </div>
+                      </div>
+              </div>
+               
+                               : <div class="loader"></div>}
+
+
                                 <div className="row row-2">
                                         
                                 </div>

@@ -91,7 +91,7 @@
                             data-default-payment-method="credit_card"
                             data-button-label="จ่าย">
                     </script>
-                    <button type="button" id="closewindowbutton" class="btn btn-danger col-xl-2 col-lg-4 col-md-4 col-sm-4 col-xs-12 ">ยกเลิก</button>
+                    <button type="button" id="closewindowbutton" class="btn btn-danger">ยกเลิก</button>
                 </form>
                 {% else %}
                     <h1>ไม่พบตะกร้า โปรดตรวจสอบใหม่อีกครั้ง</h1>
@@ -107,7 +107,7 @@
         <script src="{{ url_for('static', filename='js/liff-checkout.js') }}"></script>
         <script language="javascript">
             var checkout = document.getElementsByClassName("omise-checkout-button");
-            var classList = ["btn", "btn-success", "col-xl-2", "col-lg-4", "col-md-4", "col-sm-4", "col-xs-12", "mx-4"]
+            var classList = ["btn", "btn-success"]
             classList.forEach(ele => checkout[0].classList.add(ele))
             main(window.location.href,'{{ liffId }}')
             document.getElementById('closewindowbutton').addEventListener('click', function () {

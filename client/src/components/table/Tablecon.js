@@ -526,7 +526,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               </th>
             </tr> */}
           </thead>
-        
+
           {loading ?                    
                     
                     <tbody {...getTableBodyProps()}>
@@ -592,7 +592,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
 
 
-function Tablecon({ botID, delete_trained, add_data }) {
+function Tablecon({ botID, delete_trained, add_data,setReload }) {
   const [TableconState, setTableconState] = useState([]);
   const [loading,setLoading] = useState(false);
                                                           
@@ -659,7 +659,7 @@ function Tablecon({ botID, delete_trained, add_data }) {
   //   setShowWord(prev => !prev);
 
   // }
-  const [reload,setReload] = useState(false)
+
 
   useEffect(() => {
     
@@ -681,7 +681,7 @@ function Tablecon({ botID, delete_trained, add_data }) {
         setLoading(true)
       }))
 
-  }, [reload]);
+  }, []);
 
 
   const resetData = () => setTableconState(originalData)

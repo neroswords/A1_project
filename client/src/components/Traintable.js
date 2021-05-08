@@ -127,7 +127,8 @@ function Traintable({showTraintable, setShowTraintable, delete_trained, id, sele
                   'Content-Type':'application/json'
                   },
                   body : JSON.stringify(newdata),
-              }).then(setReload(prev => !prev));
+              }).then(window.location.replace("/bot/"+id+"/trained")
+              ,setReload(prev => !prev));
               console.log(data)
               // window.location.reload("bot/"+id+'/trained');
       }    

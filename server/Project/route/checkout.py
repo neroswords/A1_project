@@ -81,7 +81,7 @@ def process(chrg, botID, userID, already_redirected=False):
         if customer_define['type'] == "line":
             customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
             cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
-            purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":datetime.datetime.now(),"type":"waited"})
+            new_data = purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":timestamp,"purchased_time":str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second),"purchase_day": timestamp.day,"purchase_month": timestamp.month,"purchase_year": timestamp.year,"type":"waited","username":customer_define['display_name']})              
             cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
             data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
             push_message(data)
@@ -93,7 +93,7 @@ def process(chrg, botID, userID, already_redirected=False):
             timestamp = datetime.datetime.now()
             customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
             cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
-            purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":timestamp,"purchased_time":str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second),"purchase_day": timestamp.day,"purchase_month": timestamp.month,"purchase_year": timestamp.year,"type":"waited"})
+            new_data = purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":timestamp,"purchased_time":str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second),"purchase_day": timestamp.day,"purchase_month": timestamp.month,"purchase_year": timestamp.year,"type":"waited","username":customer_define['display_name']})
             cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
             data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
             receipt_define = purchased_collection.find_one(
@@ -117,19 +117,31 @@ def process(chrg, botID, userID, already_redirected=False):
         return redirect(chrg.authorize_uri)
 
     if charge_is_pending_capture: #facebook
-        # cart_collection = mongo.db.carts
-        # customer_collection = mongo.db.customers
-        # purchased_collection = mongo.db.purchased
-        # timestamp = datetime.datetime.now()
-        # customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
-        # cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
-        # purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":timestamp,"purchased_time":str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second),"purchase_day": timestamp.day,"purchase_month": timestamp.month,"purchase_year": timestamp.year})
-        # cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
-        # data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
-        # receipt_define = purchased_collection.find_one(
-        # {'$and': [{'userID': userID}, {'botID': ObjectId(botID)},{'purchased_date':timestamp}]})
-        # call_receipt(userID,receipt_define['_id'],botID)
-        return render_template("complete.html")
+        cart_collection = mongo.db.carts
+        customer_collection = mongo.db.customers
+        purchased_collection = mongo.db.purchased
+        customer_define = customer_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+        timestamp = datetime.datetime.now()
+        if customer_define['type'] == "line":
+            customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
+            cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+            new_data = purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":timestamp,"purchased_time":str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second),"purchase_day": timestamp.day,"purchase_month": timestamp.month,"purchase_year": timestamp.year,"type":"waited","username":customer_define['display_name']})              
+            cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+            create_cover_sheet(new_data.inserted_id,botID,userID)
+            data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
+            push_message(data)
+            return redirect("https://liff.line.me/1655652942-zNpjoxYV/checkout/complete")
+        elif customer_define['type'] == "facebook":
+            customer_collection.update_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]}, {"$set": {"state": "none"}})
+            cart_define = cart_collection.find_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+            new_data = purchased_collection.insert_one({"userID": cart_define['userID'],"botID":cart_define['botID'],"total":cart_define['total'],"cart":cart_define['cart'],"purchased_date":timestamp,"purchased_time":str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second),"purchase_day": timestamp.day,"purchase_month": timestamp.month,"purchase_year": timestamp.year,"type":"waited","username":customer_define['display_name']})
+            cart_collection.delete_one({'$and':[{"userID": userID},{'botID':ObjectId(botID)}]})
+            data = {'botID':botID,'customerID':cart_define['userID'],'message':'ขอบคุณที่ใช้บริการครับผม'}
+            create_cover_sheet(new_data.inserted_id,botID,userID)
+            receipt_define = purchased_collection.find_one(
+            {'$and': [{'userID': userID}, {'botID': ObjectId(botID)},{'purchased_date':timestamp}]})
+            call_receipt(userID,receipt_define['_id'],botID)
+            return render_template("complete.html")
 
     if chrg.status == "expired":
         flash("Charge expired for order {order_id}.")

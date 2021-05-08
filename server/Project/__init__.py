@@ -17,7 +17,7 @@ from bson import ObjectId
 Payload.max_decode_packets = 250
 
 app = Flask(__name__, static_url_path='/static')
-socketio = SocketIO(app, cors_allowed_origins="*", ping_timeout=5000, ping_interval=25000)
+socketio = SocketIO(app, cors_allowed_origins="*", ping_timeout=5000, ping_interval=25000, async_mode='threading')
 
 UPLOAD_FOLDER = './Project/static/images'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -67,9 +67,9 @@ app.register_blueprint(sales, url_prefix='/sales')
 def serve_image(image_name):
     return send_from_directory(app.config['DOWNLOAD_FOLDER']+"/images/",image_name)
 
-@app.route('/file/<path:file_name>')
+@app.route('/file/pdf/<path:file_name>')
 def serve_file(file_name):
-    return send_from_directory(app.config['DOWNLOAD_FOLDER'],file_name, as_attachment=True)
+    return send_from_directory(app.config['DOWNLOAD_FOLDER']+"/pdf/",file_name)
 
 @app.route('/video/<path:video_name>')
 def serve_video(video_name):
