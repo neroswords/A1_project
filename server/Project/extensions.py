@@ -11,7 +11,8 @@ config = dotenv_values("./.env")
 
 mongo = PyMongo()
 
-server_url = 'https://002165596f9c.ngrok.io'
+server_url = 'https://f13c53a01233.ngrok.io'
+# server_url = 'https://a1server-web.herokuapp.com'
 
 
 class JSONEncoder(json.JSONEncoder):

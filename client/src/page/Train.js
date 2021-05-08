@@ -123,6 +123,7 @@ function Train(props) {
   }))
   }, []);
   const delete_trained =(data)=>{
+    
     var newdata = []
     var i = 0
 

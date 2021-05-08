@@ -90,8 +90,8 @@ img{
 }
 `;
 
-function Delete_table({showDelete_table, setShowDelete_table, delete_trained, id, selectedFlatRows}) {
-   console.log('kaaaa') 
+function Delete_table({showDelete_table, setShowDelete_table,selectedFlatRows, id, delete_trained }) {
+   
   const modalRef = useRef();
   const animation = useSpring({
     config: {

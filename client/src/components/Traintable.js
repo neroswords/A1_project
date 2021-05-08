@@ -91,7 +91,7 @@ img{
 }
 `;
 
-function Traintable({showTraintable, setShowTraintable, delete_trained, id, selectedFlatRows}) {
+function Traintable({showTraintable, setShowTraintable, delete_trained, id, selectedFlatRows, setReload}) {
    console.log('kaaaa') 
   const modalRef = useRef();
   const animation = useSpring({
@@ -127,7 +127,7 @@ function Traintable({showTraintable, setShowTraintable, delete_trained, id, sele
                   'Content-Type':'application/json'
                   },
                   body : JSON.stringify(newdata),
-              });
+              }).then(setReload(prev => !prev));
               console.log(data)
               // window.location.reload("bot/"+id+'/trained');
       }    
