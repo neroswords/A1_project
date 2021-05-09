@@ -226,41 +226,41 @@ useEffect(() => {
     setShownoti(info.map(msg => (
       
         <li> 
-              
-               {/* <Link to={"/chat/"+msg['botID']['$oid']+"/live_chat/"+msg['sender_id']}  > */}
-               <div className={msg['readed'] == "read"? 'msg-noti-iread': "msg-noti-i"} onClick={()=>toggleClass(msg)} > 
-                {/* <div className={isActiveClass ? 'img-noti-i': 'img-noti-inew'} onClick={toggleClass(this)} > */}
-                <div className="msg-noti-all">
-                    <div className="noti-show-img-and-type">
-                      <img className="noti-show-img" src={msg['pictureUrl']}></img>
-                      <div className="noti-show-user-type">
-                        {   msg.sender_type == "line" ||  msg.sender_type == "lineUser" ?
-                              (            
-                                <div className="noti-show-line">
-                                    <i className="fab fa-line"></i>
+               
+                <div className={msg['readed'] == "read"? 'msg-noti-iread': "msg-noti-i"} onClick={()=>toggleClass(msg)} > 
+                  {/* <div className={isActiveClass ? 'img-noti-i': 'img-noti-inew'} onClick={toggleClass(this)} > */}
+                  <div className="msg-noti-all">
+                      <div className="noti-show-img-and-type">
+                        <img className="noti-show-img" src={msg['pictureUrl']}></img>
+                        <div className="noti-show-user-type">
+                          {   msg.sender_type == "line" ||  msg.sender_type == "lineUser" ?
+                                (            
+                                  <div className="noti-show-line">
+                                      <i className="fab fa-line"></i>
+                                        
+                                  </div>
+                                ) : (
+                                  <div className="noti-show-facebook">
+                                      <i className="fab fa-facebook-square"></i>
                                       
-                                </div>
-                              ) : (
-                                <div className="noti-show-facebook">
-                                    <i className="fab fa-facebook-square"></i>
-                                    
-                                </div>    
-                              )
-                        }
-                        </div>
-                      </div> 
-                      {console.log(msg)} 
-                      <div className="noti-show-info-user">
-                        {msg['readed'] == "unread"? <div className="noti-show-new"><p>NEW</p></div>: " "}
-                        <p className="noti-show-name">{msg['sender']}</p>  
-                        <p className="noti-show-msg">{msg['message']}</p>
-                        <p className="noti-show-bot">{msg['bot_name']}</p>
-                        {/* {msg['message']} {msg['botID']['$oid']} */}
-
-                      </div> 
+                                  </div>    
+                                )
+                          }
+                          </div>
+                        </div> 
+                        {console.log(msg)}
+                        <Link className="noti-show-info-user" to={"/chat/"+msg['botID']['$oid']+"/live_chat/"+msg['sender_id']}  >
+                       
+                            {msg['readed'] == "unread"? <div className="noti-show-new"><p>NEW</p></div>: " "}
+                            <p className="noti-show-name">{msg['sender']}</p>  
+                            <p className="noti-show-msg">{msg['message']}</p>
+                            <p className="noti-show-bot">{msg['bot_name']}</p>
+                            {/* {msg['message']} {msg['botID']['$oid']} */}
+                        
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                   {/* </Link> */}
+                   
                 
             </li>
           

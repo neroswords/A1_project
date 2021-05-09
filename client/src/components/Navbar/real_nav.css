@@ -531,10 +531,10 @@
   grid-column-gap: 10px;
 }
 
-
-.noti-show-info-user {
+a.noti-show-info-user {
   display: inline-block;
-  padding: 5px 0;
+  /* padding: 5px 0; */
+  padding: 0 !important;
 }
 
 .noti-show-info-user .noti-show-name{
@@ -549,6 +549,7 @@
   font-size: 14px;
   margin-top: -15px;
 }
+
 
 p.noti-each-msg {
   margin: 0 !important;

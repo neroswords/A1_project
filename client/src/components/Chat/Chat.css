@@ -465,16 +465,17 @@
 }
 
 .customer-send{
-
   /* z-index: 10000; */
   background-color: #e3e9ff;
   color: #000;
   padding: 15px;
   border-radius: 10px 10px 10px 0;
-  max-width: 70%;
+  max-width: 500px;
   min-width: 210px;
   /* width: min(150vw, 100px);  */
   /* justify-content: flex-start; */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 
