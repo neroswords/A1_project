@@ -16,7 +16,7 @@ import styled from 'styled-components';
 const Styles = styled.div`
 
 .head-selector{
-  margin-left: 17%;
+  margin-left: 11%;
 }
 
 .header-text{
@@ -24,7 +24,7 @@ const Styles = styled.div`
 }
 
 .showgraph-type-y {
-    margin-left: 20%;
+    margin-left: 10%;
     margin-bottom: 10px;
     /* width: 150px; */
     /* max-width: 800px; */
@@ -32,6 +32,10 @@ const Styles = styled.div`
     border-radius: 1rem;
   }
 
+  .LineChart {
+    margin-left: 10%;
+    
+  }
   .showgraph-type-x {
     position:absolute;
     right:15%;
@@ -74,7 +78,7 @@ const Styles = styled.div`
   }
 
 
-@media only screen and (max-width: 1600px) {
+  @media only screen and (max-width: 1600px) {
   .LineChart {
     margin-left: 10%;
     
@@ -102,9 +106,9 @@ const Styles = styled.div`
   
 }
 
-@media screen and (max-width: 1980px) and (min-width: 1700px) {
+@media screen and (max-width: 2000px) and (min-width: 1700px) {
   .LineChart {
-    margin-left: 20%;
+    margin-left: 50%;
     
   }
   

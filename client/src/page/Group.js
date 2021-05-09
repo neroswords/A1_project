@@ -119,7 +119,7 @@ function Group(props){
     }))
     }, []);
     const delete_trained =(data)=>{
-        console.log(data.length)
+        
         console.log(data)
         var newdata = []
         var i = 0
@@ -139,7 +139,7 @@ function Group(props){
                     body : JSON.stringify(newdata),
                 });
                 
-                window.location.reload("bot/"+props.match.params.bot_id+'/group'); 
+                // window.location.reload("bot/"+props.match.params.bot_id+'/group'); 
                                 
         }   
         // window.location.reload("bot/"+props.match.params.bot_id+'/group'); 
