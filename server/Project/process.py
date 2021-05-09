@@ -283,7 +283,7 @@ def create_cover_sheet(purchased_id,botID,customerID):
     bot_define = bot_collection.find_one({'_id': ObjectId(botID)})
     customer_define = customer_collection.find_one({'$and':[{"userID":customerID},{"botID": ObjectId(botID)}]})
     user_define = user_collection.find_one({"_id": bot_define['owner']})
-    canvas = Canvas("Project\static\pdf\cover\cover_"+str(botID)+"&"+customerID+"_"+cart_define['purchased_date']+".pdf")
+    canvas = Canvas("Project\static\pdf\cover\cover_"+str(botID)+"&"+customerID+".pdf")
     canvas.setPageSize(landscape(letter))
     textobject = canvas.beginText(50, 550)
     textobject.setFont('Th sarabun New', 26, leading=None)
@@ -316,7 +316,7 @@ def create_cover_sheet(purchased_id,botID,customerID):
     # canvas.drawText(textobject)
     # canvas.showPage()
     canvas.save()
-    doc = SimpleDocTemplate("Project\static\pdf\item_list\list_"+str(botID)+"&"+customerID+"_"+cart_define['purchased_date']+".pdf", pagesize=letter)
+    doc = SimpleDocTemplate("Project\static\pdf\item_list\list_"+str(botID)+"&"+customerID+".pdf", pagesize=letter)
     styles = getSampleStyleSheet()
     styles.add(ParagraphStyle(name='Center', alignment=TA_CENTER, fontName="Th sarabun New"))
     elements = []
@@ -328,16 +328,9 @@ def create_cover_sheet(purchased_id,botID,customerID):
     t=Table(data)
     elements.append(t)
     doc.build(elements)
-    # report_dir = (
-    #     Path.home()
-    #     / "creating-and-modifying-pdfs"
-    #     / "practice_files"
-    #     / "quarterly_report"
-    # )
     pdf_merger = PdfFileMerger()
-    pdf_merger.append(str("Project\static\pdf\cover\cover_"+str(botID)+"&"+customerID+"_"+cart_define['purchased_date']+".pdf"))
-    pdf_merger.merge(1, str("Project\static\pdf\item_list\list_"+str(botID)+"&"+customerID+"_"+cart_define['purchased_date']+".pdf"))
-    with Path("Project/static/pdf/full_report.pdf").open(mode="wb") as output_file:
+    pdf_merger.append("Project\static\pdf\cover\cover_"+str(botID)+"&"+customerID+".pdf")
+    pdf_merger.merge(1, str("Project\static\pdf\item_list\list_"+str(botID)+"&"+customerID+".pdf"))
+    with Path("Project/static/pdf/"+str(botID)+"&"+customerID+"_"+str(cart_define['purchase_day'])+str(cart_define['purchase_month'])+str(cart_define['purchase_year'])+".pdf").open(mode="wb") as output_file:
         pdf_merger.write(output_file)
-
-# create_cover_sheet("22_22",ObjectId('60096576712624a4c1d2db1c'),'U355a58d5a4c7fe37ae1e84a231aff4d5')
+    purchased_collection.update_one({'$and':[{"userID":customerID},{"_id": ObjectId(purchased_id)}]},{"$set":{"file":str(botID)+"&"+customerID+"_"+str(cart_define['purchase_day'])+str(cart_define['purchase_month'])+str(cart_define['purchase_year'])+".pdf"}})

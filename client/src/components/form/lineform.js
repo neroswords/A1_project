@@ -136,10 +136,58 @@ const Styles = styled.div`
     color: #000;
 }
 
+.loader {
+  animation:spin 1s infinite linear;
+  border:solid 2vmin transparent;
+  border-radius:50%;
+  border-right-color:#fca311;
+  border-top-color:#fca311;
+  box-sizing:border-box;
+  height:20vmin;
+  left:calc(50% - 10vmin);
+  position:fixed;
+  top:calc(50% - 10vmin);
+  width:20vmin;
+  z-index:1;
+  &:before {
+    animation:spin 2s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcc111;
+    border-top-color:#fcc111;
+    box-sizing:border-box;
+    content:"";
+    height:16vmin;
+    left:0;
+    position:absolute;
+    top:0;
+    width:16vmin;
+  }
+  &:after {
+    animation:spin 3s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcd111;
+    border-top-color:#fcd111;
+    box-sizing:border-box;
+    content:"";
+    height:12vmin;
+    left:2vmin;
+    position:absolute;
+    top:2vmin;
+    width:12vmin;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
 
 `;
 
-export default function Lineform({botID}) {
+export default function Lineform({botID,setReload,setShowForm}) {
     const [access_token, setAccess_token] = useState('');
     const [channel_secret, setChannel_secret] = useState('');
     const [basic_id, setBasic_id] = useState('');
@@ -162,9 +210,9 @@ export default function Lineform({botID}) {
                 'Content-Type':'application/json'
             },
             body: JSON.stringify(editData)
-        }).then(response => response.json().then(data => alert(data.message)))
+        }).then(response => response.json().then(data => alert(data.message)).then(setReload(prev => !prev)).then(setShowForm(prev => !prev)))
     }
-
+    const [loading,setLoading] = useState(false);
     useEffect(() => {
         fetch('/bot/'+botID+'/connect').then(
             response => response.json()
@@ -172,6 +220,7 @@ export default function Lineform({botID}) {
             setAccess_token(data.access_token);
             setChannel_secret(data.channel_secret);
             setBasic_id(data.basic_id);
+            setLoading(true)
         })
     }, []);
 
@@ -188,20 +237,25 @@ export default function Lineform({botID}) {
                                     <p>{packageJson.proxy}/bot/webhook/{botID}/line</p>
                                     <button type='button' className="copy-clipboard" onClick={() => {navigator.clipboard.writeText(webhook)}}><i className="fas fa-copy fa-xs"></i></button>
                                 </div>
-                                <div className="input-Box">
-                                <div className="ms-2">
-                                    <label  className="form-label">Channel secret</label>
-                                    <input type="text" pattern="[A-Za-z0-9]+" value={channel_secret} onChange={e => setChannel_secret(e.target.value)} className="form-control" id="inputpagefacebook"/>
-                                </div>
-                                <div className="col-lg-12 mt-3">
-                                    <label  className="form-label">Channel access token</label>
-                                    <input type="text" pattern="[A-Za-z0-9]+" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputbotname"/>
-                                </div>
-                                <div className="col-lg-12 mt-3">
-                                    <label  className="form-label">Basic ID</label>
-                                    <input type="text" pattern="[A-Za-z0-9]+" value={basic_id} onChange={e => setBasic_id(e.target.value)} className="form-control" id="inputbotname"/>
-                                </div>
-                                </div>
+                          
+                                {loading ?                    
+                    
+                    <div className="input-Box">
+                    <div className="ms-2">
+                        <label  className="form-label">Channel secret</label>
+                        <input type="text" pattern="[A-Za-z0-9]+" value={channel_secret} onChange={e => setChannel_secret(e.target.value)} className="form-control" id="inputpagefacebook"/>
+                    </div>
+                    <div className="col-lg-12 mt-3">
+                        <label  className="form-label">Channel access token</label>
+                        <input type="text" pattern="[A-Za-z0-9]+" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputbotname"/>
+                    </div>
+                    <div className="col-lg-12 mt-3">
+                        <label  className="form-label">Basic ID</label>
+                        <input type="text" pattern="[A-Za-z0-9]+" value={basic_id} onChange={e => setBasic_id(e.target.value)} className="form-control" id="inputbotname"/>
+                    </div>
+                    </div>
+                    : <div class="loader"></div>}
+
                                 <div id="container-button">
                                     {/* <button className="cancle" type='button' onClick={() => {history.goBack()}} >Back</button> */}
                                     <button className="submit" type='submit'>Connect</button>

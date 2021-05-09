@@ -2,7 +2,7 @@
   "name": "app",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:200",
+  "proxy": "https://761752a11937.ngrok.io",
   "dependencies": {
     "@emotion/react": "^11.1.4",
     "@emotion/styled": "^11.0.0",
@@ -54,7 +54,7 @@
     "reactjs-popup": "^2.0.4",
     "recharts": "^2.0.9",
     "redux": "^4.0.5",
-    "semantic-ui-react": "^2.0.2",
+    "semantic-ui-react": "^2.0.3",
     "socket.io-client": "^4.0.1",
     "styled-components": "^5.2.1",
     "util-deprecate": "^1.0.2",

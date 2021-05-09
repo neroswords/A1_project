@@ -472,6 +472,8 @@
   border-radius: 10px 10px 10px 0;
   max-width: 500px;
   min-width: 210px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   /* width: min(150vw, 100px);  */
   /* justify-content: flex-start; */
   overflow: hidden;

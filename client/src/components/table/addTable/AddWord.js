@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { MdClose } from 'react-icons/md';
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import FlashMessage from 'react-flash-message'
 
 

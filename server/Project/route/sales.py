@@ -47,9 +47,10 @@ def get_sum(botID,type):
                 break
             for x in purchased_list:
                 hour = int(x['purchased_time'].split(':')[0])
-                if x['purchase_time'] == i :
+                if hour == i :
                     sum += x['total']
                 else: continue
-            purchased_list = list(filter(lambda a: int(a['purchased_time'].split(':')[0]) != i+1, purchased_list))
+            purchased_list = list(filter(lambda a: int(a['purchased_time'].split(':')[0]) != i, purchased_list))
             data.append({"name":(("0"+str(i)+".00")*(i<10)+((str(i)+".00")*(i >= 10))),"income":sum})
     return dumps(data)
+

@@ -138,16 +138,16 @@ const ModalContent = styled.div`
 `;
 
 
-export function Connect_bot({ setShowForm, showForm, botID }) {
+export function Connect_bot({ setShowForm, showForm, botID,setReload }) {
   const [platform, setplatform] = useState("facebook")
   const renderSwitch = (platform) => {
     switch (platform) {
       case 'facebook':
-        return <Facebookform botID={botID} />
+        return <Facebookform botID={botID} setReload={setReload} setShowForm={setShowForm} />
       case 'etc':
-        return <Etcform botID={botID} />
+        return <Etcform botID={botID} setReload={setReload} setShowForm={setShowForm}/>
       default:
-        return <Lineform botID={botID} />
+        return <Lineform botID={botID}  setReload={setReload} setShowForm={setShowForm}/>
     }
   }
 

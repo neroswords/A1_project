@@ -42,7 +42,7 @@ def edit_trained():
             trained_collection.update_one({'_id': ObjectId(message_id)},
             {'$set':{'question':edit_data['value']}})
         elif Check_type == "ReplyWord":
-             trained_collection.update_one({'_id': ObjectId(message_id)},
+            trained_collection.update_one({'_id': ObjectId(message_id)},
             {'$set':{'answer':edit_data['value']}})
     return "ok"
 

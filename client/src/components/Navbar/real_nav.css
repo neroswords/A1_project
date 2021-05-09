@@ -15,6 +15,12 @@
     position: fixed;
   }
 
+  a.noti-show-info-user{
+    display : inline-block;
+    padding: 0 !important;
+
+
+  }
   
   
   
@@ -486,7 +492,10 @@
   border-left: 10px solid #7ED957;
 }
 
-
+.msg-noti-i .noti-show-user-type{
+  position: absolute;
+  left: 10px;
+}
 
 .msg-noti-i .noti-show-name{
   color: #000;
@@ -507,7 +516,7 @@
   /* border: 1px solid rgb(113, 113, 122); */
   border-radius: 50%;
   padding: 5px;
-  width: 50px;
+  width: 60px;
   z-index: -10;
 }
 
@@ -517,6 +526,7 @@
   color: #959595;
 }
 
+.noti-show-user-type .noti-show-facebook { positon: absolute;   left: 70px; }
 
 .msg-noti-iread img{
   /* border: 1px solid rgb(116, 47, 47); */
@@ -537,6 +547,12 @@ a.noti-show-info-user {
   padding: 0 !important;
 }
 
+a.noti-show-info-user {
+  padding: 0 !important;
+  
+  
+}
+
 .noti-show-info-user .noti-show-name{
   /* color: #959595; */
   font-size: 16px;
@@ -548,6 +564,9 @@ a.noti-show-info-user {
   /* color: #959595; */
   font-size: 14px;
   margin-top: -15px;
+  max-width: 170px;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
 }
 
 
@@ -624,7 +643,7 @@ p.noti-show-bot{
   border-bottom: 1px solid transparent;
   position: absolute;
   /* margin-top: 5px; */
-  left: 68px;
+  left: 70px;
   margin-top: -25px;
 
 }
@@ -632,4 +651,9 @@ p.noti-show-bot{
 .noti-show-user-type .noti-show-facebook{
   color: #0078ff;
   border-bottom: 1px solid transparent;
+    /* font-size: 20px; */
+    position: absolute;
+    /* margin-top: 5px; */
+    left: 68px;
+    margin-top: -25px;
 }

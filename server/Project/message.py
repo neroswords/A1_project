@@ -93,75 +93,75 @@ def item_list_flexmessage(**kwargs):
             elif "line" == kwargs['platform']:
                 if index['amount'] <= 0:
                   contents = '''{
-            "type": "bubble",
-            "hero": {
-              "type": "image",
-              "url": "https://da37df61a729.ngrok.io/images/bot/bot_pic/Avatar.jpg",
-              "size": "full",
-              "aspectRatio": "20:13",
-              "aspectMode": "cover"
-            },
-            "body": {
-              "type": "box",
-              "layout": "vertical",
-              "spacing": "sm",
-              "contents": [
-                {
-                  "type": "text",
-                  "text": "%s",
-                  "weight": "bold",
-                  "size": "xl",
-                  "wrap": true,
-                  "contents": []
-                },
-                {
-                  "type": "box",
-                  "layout": "baseline",
-                  "contents": [
-                    {
-                      "type": "text",
-                      "text": "฿%d",
-                      "weight": "bold",
-                      "size": "xl",
-                      "flex": 0,
-                      "wrap": true,
-                      "contents": []
+                    "type": "bubble",
+                    "hero": {
+                      "type": "image",
+                      "url": "%s/images/bucket/%s",
+                      "size": "full",
+                      "aspectRatio": "20:13",
+                      "aspectMode": "cover"
+                    },
+                    "body": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "spacing": "sm",
+                      "contents": [
+                        {
+                          "type": "text",
+                          "text": "%s",
+                          "weight": "bold",
+                          "size": "xl",
+                          "wrap": true,
+                          "contents": []
+                        },
+                        {
+                          "type": "box",
+                          "layout": "baseline",
+                          "contents": [
+                            {
+                              "type": "text",
+                              "text": "฿%d",
+                              "weight": "bold",
+                              "size": "xl",
+                              "flex": 0,
+                              "wrap": true,
+                              "contents": []
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "footer": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "spacing": "sm",
+                      "contents": [
+                        {
+                          "type": "button",
+                          "action": {
+                            "type": "postback",
+                            "label": "Add to Cart",
+                            "data": "action=buy&itemid=%s"
+                          },
+                          "style": "secondary"
+                        },
+                        {
+                          "type": "button",
+                          "action": {
+                            "type": "uri",
+                            "label": "Description",
+                            "uri": "https://liff.line.me/%s/product_info/%s"
+                          }
+                        }
+                      ]
                     }
-                  ]
-                }
-              ]
-            },
-            "footer": {
-              "type": "box",
-              "layout": "vertical",
-              "spacing": "sm",
-              "contents": [
-                {
-                  "type": "button",
-                  "action": {
-                    "type": "postback",
-                    "label": "Add to Cart",
-                    "data": "action=buy&itemid=%s"
-                  },
-                  "style": "secondary"
-                },
-                {
-                  "type": "button",
-                  "action": {
-                    "type": "uri",
-                    "label": "Description",
-                    "uri": "https://liff.line.me/1655652942-1EJmM0LZ"
-                  }
-                }
-              ]
-            }
-          }''' % (index['item_name'], index['price'], index['_id'])
+                  }''' % (server_url,index['img'][0],index['item_name'], index['price'], index['_id'],bot_define['liff_id'], index['_id'])
                 else:
                   contents = '''{
             "type": "bubble",
             "hero": {
               "type": "image",
-              "url": "%s/images/bot/items/%s",
+              "url": "%s/images/bucket/%s",
               "size": "full",
               "aspectRatio": "20:13",
               "aspectMode": "cover"
@@ -255,6 +255,7 @@ def item_list_flexmessage(**kwargs):
         }]''' % (contents_block)
         elif "facebook" == kwargs['platform']:
           flex = json.dumps(elements)
+    print(flex)
     return flex
 
 

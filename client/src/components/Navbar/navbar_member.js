@@ -578,7 +578,7 @@ function Navbar_member({ botID, customer_id, path  }) {
                     <i className="fas fa-history"></i>
                   </div>
                 </div>
-                <span className="link-text">History</span>
+                <span className="link-text">Order</span>
               </Link> ) : (
               <Link to={"/bot/" + botID + "/history"} onClick={onSubmit} class="nav-link2" name="menu-history">
                   <div className="fa-group">
@@ -586,7 +586,7 @@ function Navbar_member({ botID, customer_id, path  }) {
                           <i className="far fa-history"></i>
                       </div>
                   </div>
-                  <span className="link-text">History</span>
+                  <span className="link-text">Order</span>
               </Link>
               )
             }  
@@ -666,7 +666,7 @@ function Navbar_member({ botID, customer_id, path  }) {
                       <i className="fas fa-user-chart"></i>
                   </div>
                 </div>
-                <span className="link-text">Dashcoard</span>
+                <span className="link-text">Dashboard</span>
               </Link> ) : (
               <Link to={"/bot/" + botID + "/dashboard"} onClick={onSubmit} class="nav-link2" name="menu-customer">
                   <div className="fa-group">

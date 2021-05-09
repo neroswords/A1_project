@@ -108,11 +108,24 @@ const Styles = styled.div`
 function Chat(props){
     const [customerList, setCustomerList] =  useState([])
     const [customer, setCustomer] =  useState(props.match.params.customer_id)
+    const [name ,setName] = useState("")
 
     const [toggleState, setToggleState] = useState("All");
     const toggleTab = (index) => {
       setToggleState(index);
     };
+    useEffect(() => {
+      fetch('/bot/' + props.match.params.bot_id).then(response => response.json().then(inf => {
+          setName(inf)
+      }))
+  }, []);
+
+    useEffect(() => {
+      fetch('/bot/'+props.match.params.bot_id) .then(response => response.json().then(inf => {
+        setName(inf)
+       
+    }))
+    }, []);
 
     useEffect(() => {
         setCustomer(props.match.params.customer_id);
@@ -130,7 +143,7 @@ function Chat(props){
                     <Navbar_member botID = {props.match.params.bot_id} path={"chat"} />
                 <div className="container-fluid">
                 <div className="bot-name-on-page">
-                        <h4> Bot name :</h4>
+                        <h4> Bot name : {name}</h4>
                     </div>
                     <div className="main-chatlist row">
                     

@@ -135,9 +135,57 @@ const Styles = styled.div`
 #container-button .cancle:hover{
     color: #000;
 }
+.loader {
+  animation:spin 1s infinite linear;
+  border:solid 2vmin transparent;
+  border-radius:50%;
+  border-right-color:#fca311;
+  border-top-color:#fca311;
+  box-sizing:border-box;
+  height:20vmin;
+  left:calc(50% - 10vmin);
+  position:fixed;
+  top:calc(50% - 10vmin);
+  width:20vmin;
+  z-index:1;
+  &:before {
+    animation:spin 2s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcc111;
+    border-top-color:#fcc111;
+    box-sizing:border-box;
+    content:"";
+    height:16vmin;
+    left:0;
+    position:absolute;
+    top:0;
+    width:16vmin;
+  }
+  &:after {
+    animation:spin 3s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcd111;
+    border-top-color:#fcd111;
+    box-sizing:border-box;
+    content:"";
+    height:12vmin;
+    left:2vmin;
+    position:absolute;
+    top:2vmin;
+    width:12vmin;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
 `;
 
-export default function Facebookform({botID}) {
+export default function Facebookform({botID,setReload,setShowForm}) {
     const [access_token, setAccess_token] = useState('');
     const [verify_token, setVerify_token] = useState('');
     const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+botID+'/facebook')
@@ -158,7 +206,7 @@ export default function Facebookform({botID}) {
                 'Content-Type':'application/json'
             },
             body: JSON.stringify(editData)
-        }).then(response => response.json().then(data => alert(data.message)))
+        }).then(response => response.json().then(data => alert(data.message)).then(setReload(prev => !prev)).then(setShowForm(prev => !prev)))
         // .then( res => res.json())
         // .then(data=>{
         //     localStorage.setItem('access_token', data.access_token);
@@ -172,12 +220,14 @@ export default function Facebookform({botID}) {
         // }).catch(error => console.log(error));
     }
 
+    const [loading,setLoading] = useState(false);
     useEffect(() => {
         fetch('/bot/'+botID+'/connect').then(
             response => response.json()
           ).then(data =>{
             setAccess_token(data.page_facebook_access_token);
             setVerify_token(data.verify_token);
+            setLoading(true)
         })
     }, []);
 
@@ -195,16 +245,21 @@ export default function Facebookform({botID}) {
                                 <p>{packageJson.proxy}/bot/webhook/{botID}/facebook</p>
                                 <button type="button" className="copy-clipboard" onClick={() => {navigator.clipboard.writeText(webhook)}}><i className="fas fa-copy fa-xs copy-clipboard"></i></button>
                             </div>
-                            <div className="input-Box">
-                            <div className="ms-2">
-                                <label  className="form-label">Access token</label>
-                                <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputpagefacebook" />
-                            </div>
-                            <div className="col-lg-12 mt-3">
-                                <label  className="form-label">Verify token</label>
-                                <input type="text" value={ verify_token } onChange={e => setVerify_token(e.target.value)} className="form-control" id="inputverity" />
-                            </div>
-                            </div>
+                         
+                            {loading ?                    
+                       <div className="input-Box">
+                       <div className="ms-2">
+                           <label  className="form-label">Access token</label>
+                           <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputpagefacebook" />
+                       </div>
+                       <div className="col-lg-12 mt-3">
+                           <label  className="form-label">Verify token</label>
+                           <input type="text" value={ verify_token } onChange={e => setVerify_token(e.target.value)} className="form-control" id="inputverity" />
+                       </div>
+                       </div>
+               
+                    : <div class="loader"></div>}
+
                             <div id="container-button">
                                 {/* <button className="cancle" type='button' onClick={() => {history.goBack()}} >Back</button> */}
                                 <button className="submit" type='submit'>Connect</button>
@@ -213,6 +268,7 @@ export default function Facebookform({botID}) {
                     </div>
                 </div>
             </div>
+            
         </Styles>
     )
 }

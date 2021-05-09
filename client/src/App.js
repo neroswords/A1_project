@@ -32,6 +32,8 @@ import Chat from './Page/Chat';
 import NewOrder from './Page/NewOrder';
 import DragText from './Page/DragText';
 import Dashboard from './Page/Dashboard';
+import TrackingNumber from './Page/TrackingNumber';
+import TotalOrder from './Page/TotalOrder';
 function App() {
   return (
     <Router>
@@ -60,6 +62,8 @@ function App() {
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/customer_infomation" component={ Customer_infomation } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/history" component={ History } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/history/new" component={ NewOrder } />
+            <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/history/totalorder" component={ TotalOrder } />
+            <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/history/tracking" component={ TrackingNumber } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/inventory/product_detail/:product_id" component={ Product_detail } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/bot/:bot_id/inventory/product_edit/:product_id" component={ Product_edit } />
             <PrivateRoute isLoggedIn={isLoggedIn()} exact path="/chat/:bot_id/live_chat/:customer_id" component={ Chat } />
