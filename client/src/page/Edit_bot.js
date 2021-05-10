@@ -184,7 +184,10 @@ class Edit_bot extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
   
- 
+  sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+  }
+
   handleChange (evt) {
     
     this.setState({ [evt.target.name]: evt.target.value });
@@ -304,6 +307,7 @@ class Edit_bot extends React.Component {
                 console.log(body.file)
                 this.setState({ imageURL: `/${body.file}` });
                 this.setState({ bot_id : data.id})
+                
                 this.setState({ redirect: true }) 
               });
             });
@@ -407,7 +411,7 @@ class Edit_bot extends React.Component {
                           <div className="">
                             <label  className="form-label">Bot Name</label>
                             <span className="req-icon"> *</span>
-                            <input type="text"  name="bot_name" value = {this.state.bot_name}  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
+                            <input type="text"  name="bot_name" value = {this.state.bot_name}  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname" maxLength={12}/>
                           </div>
                           { this.state.showMessage &&  
                       <div className="container">

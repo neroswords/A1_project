@@ -373,6 +373,7 @@ def delete_group(botID,groupID):
     if request.method == 'POST':
         groups_collection = mongo.db.groups
         group_delete = request.get_json() #ID
+        print(group_delete)
         groups_collection.delete_one({'$and':[{"botID":ObjectId(botID),"_id":ObjectId(groupID)}]})
         # listcursor = list(groups_collection.find({"botID": ObjectId(botID)}))
         # listcursor.reverse()
@@ -618,6 +619,8 @@ def getTracking(botID):
     info_cur.reverse()
     data = dumps(info_cur, indent=2)
     return data
+
+
 
 
 

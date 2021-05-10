@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import packageJson from '../../../package.json';
 import { useHistory } from 'react-router-dom'
+import { MDBNotification, MDBContainer } from "mdbreact";
+import FlashMessage from 'react-flash-message'
 
 const Styles = styled.div`
 .container {
@@ -190,34 +192,42 @@ export default function Facebookform({botID,setReload,setShowForm}) {
     const [verify_token, setVerify_token] = useState('');
     const [webhook, setWebhook] = useState(packageJson.proxy+'bot/webhook/'+botID+'/facebook')
     const history = useHistory()
+    const [successState, setSuccessState] = useState(false)
 
     const handleSubmit = (event) => {
+
         event.preventDefault();
-        const editData = {
+        
+        
+        
+          
+              const editData = {
             'page_facebook_access_token':access_token, 
             'verify_token':verify_token,
             'creator':localStorage.getItem('user_id'),
             'platform':'facebook'
-        }
-        fetch('/bot/'+botID+'/connect', {
-            method: 'POST',
-            headers : {
-                "Access-Control-Allow-Origin": "*",
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify(editData)
-        }).then(response => response.json().then(data => alert(data.message)).then(setReload(prev => !prev)).then(setShowForm(prev => !prev)))
-        // .then( res => res.json())
-        // .then(data=>{
-        //     localStorage.setItem('access_token', data.access_token);
-        //     localStorage.setItem('username', data.username);
-        //     localStorage.setItem('user_id', data.user_id);
-        //     if (localStorage.getItem("access_token") !== null && localStorage.getItem("access_token")!=="undefined") {
-        //       window.location.replace("/")
-        //     }else{
-        //         alert(data.error);  
-        //   }
-        // }).catch(error => console.log(error));
+            }
+            fetch('/bot/'+botID+'/connect', {
+                method: 'POST',
+                headers : {
+                    "Access-Control-Allow-Origin": "*",
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(editData)
+            }).then(response => response.json().then(setSuccessState(true)).then(setReload(prev => !prev)).then(setShowForm(prev => !prev)))
+            // .then( res => res.json())
+            // .then(data=>{
+            //     localStorage.setItem('access_token', data.access_token);
+            //     localStorage.setItem('username', data.username);
+            //     localStorage.setItem('user_id', data.user_id);
+            //     if (localStorage.getItem("access_token") !== null && localStorage.getItem("access_token")!=="undefined") {
+            //       window.location.replace("/")
+            //     }else{
+            //         alert(data.error);  
+            //   }
+            // }).catch(error => console.log(error));
+            
+        
     }
 
     const [loading,setLoading] = useState(false);
@@ -233,6 +243,36 @@ export default function Facebookform({botID,setReload,setShowForm}) {
 
     return (
         <Styles>
+             { successState && 
+             <div className="successstate">
+
+                              
+                    <MDBNotification
+                    style={{
+                    // width: "auto",
+                    position: "absolute",
+                    // top: "10px",
+                    // left: "500px",
+                    zIndex: 9999
+                    }}
+                    bodyClassName="p-2 font-weight-bold white-text "
+                    className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
+                    closeClassName="blue-grey-text"
+                    fade
+                    icon="bell"
+                    iconClassName="text-danger"
+                    message="Connect bot successfully"
+                    show
+
+                    title="Success"
+                    titleClassName="elegant-color-dark white-text"
+
+                    />
+                    </div>
+            
+            
+
+                }
             <div className="container">
                  <div className="row my-3">
                     <div className="group facebook-card col-lg-12">
@@ -250,11 +290,12 @@ export default function Facebookform({botID,setReload,setShowForm}) {
                        <div className="input-Box">
                        <div className="ms-2">
                            <label  className="form-label">Access token</label>
-                           <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputpagefacebook" />
+                           <input type="text" value={access_token} onChange={e => setAccess_token(e.target.value)} className="form-control" id="inputpagefacebook" required/>
                        </div>
+                      
                        <div className="col-lg-12 mt-3">
                            <label  className="form-label">Verify token</label>
-                           <input type="text" value={ verify_token } onChange={e => setVerify_token(e.target.value)} className="form-control" id="inputverity" />
+                           <input type="text" value={ verify_token } onChange={e => setVerify_token(e.target.value)} className="form-control" id="inputverity" required/>
                        </div>
                        </div>
                
