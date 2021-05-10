@@ -20,6 +20,7 @@ UPLOAD_FOLDER_ITEMS = './Project/static/images/bucket'
 @inventory.route('/bot/<botID>/', methods=['GET'])
 def call_inventory(botID):
     if request.method == 'GET':
+        print("GETDA")
         inventory_collection = mongo.db.inventory
         inventory_cursor = inventory_collection.find({"botID": ObjectId(botID)})
         inventory_cursor = list(inventory_cursor)

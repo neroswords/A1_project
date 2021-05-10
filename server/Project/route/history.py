@@ -32,4 +32,4 @@ def getData(botID,data_type):
         purchased_collection = mongo.db.purchased
         purchased_cursor = purchased_collection.find({'botID': ObjectId(botID)})
         data = list(purchased_cursor)
-    return data
+    return dumps({"data":data}, indent=2)

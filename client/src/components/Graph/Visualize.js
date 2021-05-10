@@ -39,12 +39,14 @@ const Styles = styled.div`
   .showgraph-type-x {
     position:absolute;
     right:15%;
+    
     margin-top: -5%;
     margin-bottom: 10px;
     /* width: 150px; */
     /* max-width: 800px; */
     width: max-content;
     border-radius: 1rem;
+    margin-left: 50%;
   }
 
 
@@ -60,6 +62,7 @@ const Styles = styled.div`
     background-color : #fca311;
     border-radius: 1rem;
     padding: 5px 20px; 
+  
   }
 
   
@@ -75,6 +78,7 @@ const Styles = styled.div`
     background-color : #fca311;
     border-radius: 1rem;
     padding: 5px 20px; 
+    /* margin-left: 50%; */
   }
 
 
@@ -123,7 +127,7 @@ const Styles = styled.div`
 
   .showgraph-type-x {
     position:absolute;
-    right:15%;
+    right:10%;
     margin-top: -3.5%;
     margin-bottom: 10px;
     /* width: 150px; */
@@ -142,7 +146,7 @@ export const Visualize = ({ botID }) => {
 
 
   const [loading, setLoading] = React.useState();
-  const [head, setHead] = React.useState();
+  const [head, setHead] = React.useState("daily");
 
   async function getData(event) {
     setHead(event.target.value)
@@ -155,7 +159,7 @@ export const Visualize = ({ botID }) => {
     await setLoading(false)
   }
   useEffect(() => {
-    fetch('/sales/' + botID + '/' + '/month')
+    fetch('/sales/' + botID + '/' + '/daily')
       .then(res => res.json().then(data => {
         setDataChart(data)
 

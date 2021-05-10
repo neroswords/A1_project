@@ -369,7 +369,7 @@ flash = (e) =>{
                                 <div className="my-3">
                                   <label for="exampleInputEmail1" className="form-label">Username</label>
                                   <span className="req-icon"> *</span>
-                                  <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputusername" name='username' required minLength={5} maxLength={16} required value={this.state.username} onChange={this.handleChange}/>
+                                  <input type="text" className="form-control" pattern="[A-Za-z0-9]+" id="inputusername" name='username' required minLength={5} maxLength={12} required value={this.state.username} onChange={this.handleChange}/>
                                   { this.state.showMessageUsername &&  
                                         <div className="container">
                                             <FlashMessage duration={4000}>
@@ -378,8 +378,9 @@ flash = (e) =>{
                                               </div>  
                                             </FlashMessage>
                                         </div>
-                                  }
+                                  }<span for="examplePassword" className="ex-password">*  Please input only alphabet or number (more than 5 character)</span>
                                 </div>
+                                
                                 <div className="row">
                                   <div className="col ">
                                     <label for="exampleInputPassword1" className="form-label">Password</label>
@@ -401,7 +402,7 @@ flash = (e) =>{
                                           </FlashMessage>
                                       </div>
                                 }
-                                <span for="examplePassword" className="ex-password">*  A combination of upper, lowercase letters, numbers or special characters <br/>(more than 5 character)</span>
+                                <span for="examplePassword" className="ex-password">*  Please input only alphabet or number <br/>(more than 5 character)</span>
                                 </div>
                                 <div className="title_part-regis">
                                   <p className="col">Personal infomation</p>

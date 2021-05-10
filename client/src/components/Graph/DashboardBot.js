@@ -118,7 +118,7 @@ const Styles = styled.div`
 
   .showgraph-type-x {
     position:absolute;
-    right:15%;
+    right:10%;
     margin-top: -3.5%;
     margin-bottom: 10px;
     /* width: 150px; */
@@ -138,7 +138,7 @@ export const DashboardBot = ({ botID }) => {
 
 
   const [loading, setLoading] = React.useState();
-  const [head, setHead] = React.useState();
+  const [head, setHead] = React.useState('daily');
   async function getData(event) {
     setHead(event.target.value)
     await setLoading(true)
@@ -150,6 +150,15 @@ export const DashboardBot = ({ botID }) => {
       }))
     await setLoading(false)
   }
+
+  useEffect(() => {
+    fetch('/bot/' + botID + '/dashboard/daily')
+      .then(res => res.json().then(data => {
+        setDataChart(data)
+
+      }))
+
+  }, []);
 
   const data = [
     { name: "Page A", Line: 4000 },

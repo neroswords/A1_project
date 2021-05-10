@@ -48,7 +48,7 @@ def save_message(message,message_type,sender,sender_id,sender_type,room,botId,us
             # noti = profile_define['notification']
             # info_update = { "$set": {"notification" : noti+1}}
             # done = users_collection.update_one({'_id': ObjectId(userId)}, info_update)
-        message_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"bot_name":bot_name,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now(),"botId":botId,"readed":"unread","time":str(datetime.datetime.now().hour)+":"+str(datetime.datetime.now().minute)+":"+str(datetime.datetime.now().second),"day":datetime.datetime.now().day,"month":datetime.datetime.now().month,"year":datetime.datetime.now().year,})
+        message_collection.insert_one({"message": message, "message_type": message_type, "sender":sender,"bot_name":bot_name,"sender_id":sender_id, "sender_type": sender_type, "room":room,"date":datetime.datetime.now(),"botID":botId,"readed":"unread","time":str(datetime.datetime.now().hour)+":"+str(datetime.datetime.now().minute)+":"+str(datetime.datetime.now().second),"day":datetime.datetime.now().day,"month":datetime.datetime.now().month,"year":datetime.datetime.now().year,})
         notification_define = notification_collection.find({"userID":userID})
         list_cur = list(notification_define) 
         count = 0
@@ -66,7 +66,7 @@ def push_message(data):
     customer_define = customer_collection.find_one({'$and':[{'userID':data['customerID']},{'botID': ObjectId(data['botID'])}]})
     line_bot_api = LineBotApi(bot_define['access_token'])
     line_bot_api.push_message(data['customerID'], TextSendMessage(text=data['message']))
-    save_message(message=data['message'],message_type="text",bot_name=bot_define['bot_name'],sender=bot_define['bot_name'],sender_id=ObjectId(data['botID']),sender_type="bot",room=data['botID']+'&'+data['customerID'],botID=data['botID'],userID=bot_define['owner'],pictureUrl=profile.picture_url)
+    # save_message(message=data['message'],message_type="text",bot_name=bot_define['bot_name'],sender=bot_define['bot_name'],sender_id=ObjectId(data['botID']),sender_type="bot",room=data['botID']+'&'+customer_define['userID'],botId=bot_define['_id'],userID=bot_define['owner'],pictureUrl=customer_define['pictureUrl'])
 
 
 
@@ -267,7 +267,6 @@ def webhook(platform, botID):
                     socket_api({"message":"unavailable to show content", "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile.picture_url,"sender":profile.display_name,"sender_type":"customer"},str(bot_define['_id']),sender_define['userID'])
                     res = {"message":"ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
                     
-
                 if "message" in res.keys():
                     response = [TextSendMessage(text = res['message'])]
                     socket_api({"message":res['message'], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":server_url+'images/bot/bot_pic/'+bot_define['Img'],"sender":bot_define['bot_name'],"sender_type":"bot"},str(bot_define['_id']),sender_define['userID'])
@@ -564,12 +563,12 @@ def get_message(botID,customerID):
     
 
 
-@bot.route('/<botID>/dashboard/<type>', methods=['GET'])
-def dashboard(botID,type):
+@bot.route('/<botID>/dashboard/<d_type>', methods=['GET'])
+def dashboard(botID,d_type):
     messages_collection = mongo.db.messages
     date = datetime.datetime.now()
     data = []
-    if type == "day":
+    if d_type == "day":
         message_list = list(messages_collection.find({"$and":[{"botID":ObjectId(botID)},{"month":int(date.month)},{"year":int(date.year)},{"$or":[{"sender_type":"line" },{"sender_type":"facebook"}]}]}))
         for i in range(31):
             count = 0
@@ -581,7 +580,7 @@ def dashboard(botID,type):
                 else: continue
             message_list = list(filter(lambda a: a['day'] != i+1, message_list))
             data.append({"name":i+1,"count":count})
-    elif type == "month":
+    elif d_type == "month":
         month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
         message_list = list(messages_collection.find({"$and":[{"botID":ObjectId(botID)},{"year":int(date.year)},{"$or":[{"sender_type":"line" },{"sender_type":"facebook"}]}]}))
         for i in range(12):
@@ -594,7 +593,7 @@ def dashboard(botID,type):
                 else: continue
             message_list = list(filter(lambda a: a['month'] != i+1, message_list))
             data.append({"name":month[i],"count":count})
-    elif type == "daily":
+    elif d_type == "daily":
         message_list = list(messages_collection.find({"$and":[{"botID":ObjectId(botID)},{"month":int(date.month)},{"day":int(date.day)},{"year":int(date.year)},{"$or":[{"sender_type":"line" },{"sender_type":"facebook"}]}]}))
         for i in range(24):
             count = 0
@@ -602,10 +601,9 @@ def dashboard(botID,type):
                 break
             for x in message_list:
                 hour = int(x['time'].split(':')[0])
-                if x['time'] == i :
+                if hour == i :
                     count += 1
-                else: continue
-            message_list = list(filter(lambda a: int(a['time'].split(':')[0]) != i+1, message_list))
+            message_list = list(filter(lambda a: int(a['time'].split(':')[0]) != i, message_list))
             data.append({"name":(("0"+str(i)+".00")*(i<10)+((str(i)+".00")*(i >= 10))),"count":count})
     return dumps(data)
 
@@ -617,16 +615,6 @@ def getTracking(botID):
     info_cur.reverse()
     data = dumps(info_cur, indent=2)
     return data
-
-@bot.route('/<botID>/tracking',methods=["GET"])
-def load_tracking(botID):
-    
-    if request.method == 'GET' :
-        purchased_collection = mongo.db.purchased
-        purchased_cursor = purchased_collection.find({"botID" : ObjectId(botID)})
-        listcursor = list(purchased_cursor)
-        data = dumps(listcursor,indent = 2)
-        return data
 
 
 
@@ -644,7 +632,7 @@ def addTracking(trackingNo):
 @bot.route('/<botID>/totalorder', methods=['GET'])
 def successTracking(botID):
     purchased_collection = mongo.db.purchased
-    info_cur = list(purchased_collection.find({"$and":[{"botID":ObjectId(botID)},{"type":"success"}]}))
+    info_cur = list(purchased_collection.find({"botID":ObjectId(botID)}))
     info_cur.reverse()
     data = dumps(info_cur, indent=2)
     return data

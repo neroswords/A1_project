@@ -116,12 +116,13 @@ function Train(props) {
   const [deleteState, setdeleteState] = useState([]);
   const [name, setName] = useState();
   const [loading,setLoading] = useState(false);
+  const [reload,setReload] = useState(false)
   useEffect(() => {
     fetch('/bot/'+props.match.params.bot_id) .then(response => response.json().then(inf => {
       setName(inf)
       setLoading(true)
   }))
-  }, []);
+  }, [reload]);
   const delete_trained =(data)=>{
     
     var newdata = []
@@ -177,7 +178,7 @@ function Train(props) {
                         
                       <div className="showtablecon">
                                      <Tablecon
-                                       botID={props.match.params.bot_id} delete_trained={delete_trained}
+                                       botID={props.match.params.bot_id} delete_trained={delete_trained}  setReload={setReload}
                                      />
                                      </div>
                          </div>

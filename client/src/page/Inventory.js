@@ -146,11 +146,14 @@ const Styles = styled.div`
 ` 
 
 function Inventory(props){
-    const [inventory,setinventory] = useState([]);
+    const [inventory,setInventory] = useState([]);
     const [loading,setLoading] = useState(false);
-    useEffect(async () => {
-        fetch('/inventory/bot/'+props.match.params.bot_id).then(res => res.json().then(data => setinventory(data)))
-    },[])
+
+    useEffect(() => {
+        fetch('/inventory/bot/'+props.match.params.bot_id).then(res => res.json().then(data => {
+            setInventory(data)
+      }))
+      }, []);
     console.log(inventory)
     const card = inventory.map((inventory) => 
 
