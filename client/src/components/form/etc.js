@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+
 import packageJson from '../../../package.json';
 import { useHistory } from 'react-router-dom'
-
+import styled from 'styled-components';
 const Styles = styled.div`
 .container {
     margin-top: 2%;

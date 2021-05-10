@@ -26,7 +26,7 @@ mongo.init_app(app)
 
 app.config['JWT_SECRET_KEY'] = 'boost-is-the-secret-of-our-app'
 jwt=JWTManager(app)
-server_url = 'https://f13c53a01233.ngrok.io'
+server_url = 'https://www.zenige-project.xyz'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = './static'
