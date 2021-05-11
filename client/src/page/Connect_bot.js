@@ -140,6 +140,7 @@ const ModalContent = styled.div`
 
 export function Connect_bot({ setShowForm, showForm, botID,setReload }) {
   const [platform, setplatform] = useState("facebook")
+  
   const renderSwitch = (platform) => {
     switch (platform) {
       case 'facebook':
