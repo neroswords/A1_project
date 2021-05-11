@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import '../Chat/Chat.css';
 
-let endPoint = "https://a1server-socket.herokuapp.com";
+let endPoint = "http://127.0.0.1:300";
 
 let socket = io.connect(`${endPoint}`);
  
@@ -50,9 +50,9 @@ function Chatbody({botID,customerID}){
                     setMessages(messages=> [...messages,<div><p className="head-name from-cust msg">{ele.sender}</p><p className="msg customer-send">{ele.message}</p></div>])
                   }
             })
-          })).then(scrollToBottom())
+          }))
         }
-        
+        scrollToBottom()
     },[customerID])
 
     

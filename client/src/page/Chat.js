@@ -34,6 +34,7 @@ const Styles = styled.div`
   }
 
   .bot-name-on-page h4{
+    max-width: 900px;
     position: relative;
     right: 0;
     font-size: 14px;
@@ -108,11 +109,17 @@ const Styles = styled.div`
 function Chat(props){
     const [customerList, setCustomerList] =  useState([])
     const [customer, setCustomer] =  useState(props.match.params.customer_id)
-    const [name, setName] = useState();
+    const [name ,setName] = useState("")
+
     const [toggleState, setToggleState] = useState("All");
     const toggleTab = (index) => {
       setToggleState(index);
     };
+    useEffect(() => {
+      fetch('/bot/' + props.match.params.bot_id).then(response => response.json().then(inf => {
+          setName(inf)
+      }))
+  }, []);
 
     useEffect(() => {
       fetch('/bot/'+props.match.params.bot_id) .then(response => response.json().then(inf => {

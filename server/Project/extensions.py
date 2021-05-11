@@ -11,7 +11,7 @@ config = dotenv_values("./.env")
 
 mongo = PyMongo()
 
-server_url = 'https://f13c53a01233.ngrok.io'
+server_url = 'https://www.zenige-project.xyz/'
 # server_url = 'https://a1server-web.herokuapp.com'
 
 
@@ -30,13 +30,13 @@ class User:
 
 
 def socket_api(data,botID,userID):
-    url = 'https://a1server-socket.herokuapp.com/api/message'
+    url = 'http://157.230.180.204:5000/api/message'
     myobj = {'data': data, 'botID':botID, 'userID':userID}
     x = requests.post(url, json = myobj, headers = {'Content-type': 'application/json'})
     return x
 
 def socket_noti(data,userID):
-    url = 'https://a1server-socket.herokuapp.com/api/notification'
+    url = 'http://157.230.180.204:5000/api/notification'
     myobj = {'data': data,  'userID':userID}
     x = requests.post(url, json = myobj, headers = {'Content-type': 'application/json'})
     return x

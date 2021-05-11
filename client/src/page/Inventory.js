@@ -81,6 +81,7 @@ const Styles = styled.div`
   }
 
   .bot-name-on-page h4{
+    max-width: 900px;
     position: relative;
     right: 0;
     font-size: 14px;
@@ -146,11 +147,14 @@ const Styles = styled.div`
 ` 
 
 function Inventory(props){
-    const [inventory,setinventory] = useState([]);
+    const [inventory,setInventory] = useState([]);
     const [loading,setLoading] = useState(false);
-    useEffect(async () => {
-        fetch('/inventory/bot/'+props.match.params.bot_id).then(res => res.json().then(data => setinventory(data)))
-    },[])
+
+    useEffect(() => {
+        fetch('/inventory/bot/'+props.match.params.bot_id).then(res => res.json().then(data => {
+            setInventory(data)
+      }))
+      }, []);
     console.log(inventory)
     const card = inventory.map((inventory) => 
 

@@ -41,11 +41,13 @@ def call_facebook(botID):
     event = payload['entry'][0]['messaging']
     for msg in event:
         sender_id = msg['sender']['id']
+        print(sender_id)
         field = ['name', 'picture']
         profile = bot.get_user_info(sender_id,fields = field)
+        print(profile)
         if('message' in payload['entry'][0]['messaging'][0].keys()):
             if('attachments' in payload['entry'][0]['messaging'][0]['message'].keys()):
-                res = {"message": "ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
+                message_type = "error"
             elif('quick_reply' in payload['entry'][0]['messaging'][0]['message'].keys()):
                 message_type = 'q_postback'
             else:
@@ -62,8 +64,7 @@ def call_facebook(botID):
             customer_collection.insert_one(sender_define)
         if sender_define['status'] == 'open':
             if message_type == 'text':
-                data = {"message": payload['entry'][0]
-                        ['messaging'][0]['message']['text'],"pictureUrl":profile['picture']['data']['url'],"display_name":profile['name']}
+                data = {"message": payload['entry'][0]['messaging'][0]['message']['text'],"pictureUrl":profile['picture']['data']['url'],"display_name":profile['name']}
                 socket_noti({"bot_name": bot_define['bot_name'],"readed":"unread", "message":data["message"], "sender_id":sender_define['userID'], "botID":{"$oid":str(bot_define['_id'])},"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"type":"customer"},userID=str(bot_define['owner']))
                 socket_api({"message":data["message"], "userID":sender_define['userID'], "botID":str(bot_define['_id']),"pictureUrl":profile['picture']['data']['url'],"sender":profile['name'],"sender_type":"facebook"},botID,sender_define['userID'])
                 res = stateHandler(

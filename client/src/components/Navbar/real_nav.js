@@ -13,7 +13,7 @@ import { Info } from "material-ui-icons";
 import { Redirect } from 'react-router';
 // import Notifier from "react-desktop-notification"
 
-let endPoint = "https://a1server-socket.herokuapp.com/";
+let endPoint = "http://127.0.0.1:300";
 let socket = io.connect(`${endPoint}`);
 let flag = false
 let flag2 = false
@@ -74,8 +74,8 @@ function Loged_in_nav(props) {
           className="click"
           href={"/bot_list/" + localStorage.getItem("user_id") + "#main"}
         >
-          <i class="fas fa-user-circle"></i>
-          {props}
+          <i className="fas fa-user-circle"></i>
+            <span className="username-showuser">{props}</span>
         </a>
       </div>
 

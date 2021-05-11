@@ -33,4 +33,3 @@ def getData(botID,data_type):
         purchased_cursor = purchased_collection.find({'botID': ObjectId(botID)})
         data = list(purchased_cursor)
     return dumps({"data":data}, indent=2)
-
