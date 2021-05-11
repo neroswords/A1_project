@@ -66,6 +66,7 @@ const Styles = styled.div`
   }
 
   .bot-name-on-page h4{
+    max-width: 900px;
     position: relative;
     right: 0;
     font-size: 14px;

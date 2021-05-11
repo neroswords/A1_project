@@ -38,7 +38,6 @@ const Styles = styled.div`
   }
 
   .bot-name-on-page {
-    
     margin-bottom: 10px;
     /* width: 150px; */
     /* max-width: 800px; */
@@ -47,6 +46,7 @@ const Styles = styled.div`
   }
 
   .bot-name-on-page h4{
+    max-width: 900px;
     position: relative;
     right: 0;
     font-size: 14px;
@@ -59,6 +59,13 @@ const Styles = styled.div`
     border-radius: 1rem;
     padding: 5px 20px; 
   }
+
+
+  /* span.show-botname{
+    width: 50px;
+    overflow-x: hidden;
+  } */
+
   .loader {
   animation:spin 1s infinite linear;
   border:solid 2vmin transparent;
@@ -160,7 +167,7 @@ function Train(props) {
                          <Navbar_member botID={props.match.params.bot_id} path={"training"} />
                          <div className="container-fluid">
                          <div className="bot-name-on-page">
-                           <h4> Bot name : {name}</h4>
+                           <h4> Bot name :{name}</h4>
                          </div>
                          
                            <div className="training-title">
