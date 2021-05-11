@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import {Link} from "react-router-dom";
 import FlashMessage from 'react-flash-message'
+import Regis_submit from '../Components/Regis_submit';
+import { MDBNotification, MDBContainer } from "mdbreact";
 
 const Styles = styled.div`
   .container {
@@ -58,6 +60,55 @@ const Styles = styled.div`
     text-align: center;
     align-items: center;
   }
+
+  .loader {
+  animation:spin 1s infinite linear;
+  border:solid 2vmin transparent;
+  border-radius:50%;
+  border-right-color:#fca311;
+  border-top-color:#fca311;
+  box-sizing:border-box;
+  height:20vmin;
+  left:calc(50% - 10vmin);
+  position:fixed;
+  top:calc(50% - 10vmin);
+  width:20vmin;
+  z-index:1;
+  &:before {
+    animation:spin 2s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcc111;
+    border-top-color:#fcc111;
+    box-sizing:border-box;
+    content:"";
+    height:16vmin;
+    left:0;
+    position:absolute;
+    top:0;
+    width:16vmin;
+  }
+  &:after {
+    animation:spin 3s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcd111;
+    border-top-color:#fcd111;
+    box-sizing:border-box;
+    content:"";
+    height:12vmin;
+    left:2vmin;
+    position:absolute;
+    top:2vmin;
+    width:12vmin;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
 
   .btn-regis .btn {
     text-align: center;
@@ -162,7 +213,8 @@ class Profile_edit extends React.Component {
       showMessagePassword: false,
       showMessageShopname: false,
       showMessageFirstname: false,
-      showMessageLastname: false
+      showMessageLastname: false,
+      successState: false
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -226,6 +278,7 @@ class Profile_edit extends React.Component {
       
     }
       else{
+        this.setState({ successState: true})
           const profile = {
             email: this.state.email,
             username: this.state.username,
@@ -245,8 +298,8 @@ class Profile_edit extends React.Component {
           },
           body: JSON.stringify(profile)
         })
-      alert("Edit Profile Successfully")
-      window.location.replace("/login")
+      
+      window.location.replace("/")
     }
     
           }
@@ -276,6 +329,13 @@ componentDidMount ()  {
   render() {
     return(
         <Styles>
+          {this.state.successState ? 
+                  <div>
+                    {/* <img src={ImageWarnning} alt="warnning" className="warnning_img" /> */}
+                    <div class="loader">Loading...</div>
+                  </div>
+                  
+                  :  
               <div className="container">
                     <div className="col-sm-10 col-md-9 col-lg-8 mx-auto">
                       <div className="card card-regis">
@@ -388,7 +448,7 @@ componentDidMount ()  {
                       </div>
                     </div>
                     
-                </div>
+                </div>}
         </Styles>
         
     );

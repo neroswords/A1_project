@@ -429,7 +429,7 @@ function DropdownMenu() {
             </DropdownItem>
           </a>
 
-          {/* <a
+          <a
             onClick={() => {
               window.location.replace("/manual");
             }}
@@ -437,7 +437,7 @@ function DropdownMenu() {
             <DropdownItem leftIcon={<i class="fas fa-book-open"></i>}>
               Manual
             </DropdownItem>
-          </a> */}
+          </a>
           <a
             name="signout"
             onClick={() => {

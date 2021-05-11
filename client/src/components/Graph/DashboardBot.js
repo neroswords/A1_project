@@ -15,7 +15,7 @@ import styled from 'styled-components';
 const Styles = styled.div`
 
 .head-selector{
-  margin-left: 17%;
+  margin-left: 10%;
 }
 
 .header-text{
@@ -118,7 +118,7 @@ const Styles = styled.div`
 
   .showgraph-type-x {
     position:absolute;
-    right:15%;
+    right:10%;
     margin-top: -3.5%;
     margin-bottom: 10px;
     /* width: 150px; */
