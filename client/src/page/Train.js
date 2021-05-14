@@ -167,7 +167,7 @@ function Train(props) {
                          <Navbar_member botID={props.match.params.bot_id} path={"training"} />
                          <div className="container-fluid">
                          <div className="bot-name-on-page">
-                           <h4> Bot name :{name}</h4>
+                           <h4> Bot name : {name}</h4>
                          </div>
                          
                            <div className="training-title">

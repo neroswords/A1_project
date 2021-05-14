@@ -68,6 +68,16 @@ const Styles = styled.div`
 //     }
 // }
 function TrackingNumber(props){
+    const [name, setName] = useState();
+    const [loading,setLoading] = useState(false);
+    const [reload,setReload] = useState(false)
+    useEffect(() => {
+        fetch('/bot/'+props.match.params.bot_id) .then(response => response.json().then(inf => {
+        setName(inf)
+        setLoading(true)
+    }))
+    })
+    
     const [deleteState,setdeleteState] = useState([]);
     const  [Info,setInfo] = useState([]);
     
@@ -86,7 +96,7 @@ function TrackingNumber(props){
             <Navbar_member botID = {props.match.params.bot_id} path={"history"}  />
             <div className="container-fluid">
                 <div className="bot-name-on-page">
-                    <h4> Bot name :</h4>
+                    <h4> Bot name : {name}</h4>
                 </div>
                 <div className="learned-title-page d-flex bd-highlight">
                     <h2 className='p-2 flex-grow-1 bd-highlight' id="trained-header">Tracking Number</h2>
