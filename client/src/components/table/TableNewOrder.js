@@ -343,10 +343,6 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     
   }
 
-  const pdfDownload = (filename) => {
-    
-    fetch("/file/pdf/"+filename)
-  }
  
 
   const {
