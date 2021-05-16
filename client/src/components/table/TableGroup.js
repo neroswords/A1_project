@@ -303,6 +303,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
   const [errorState, setErrorState] = React.useState(false)
   
   const Ondelete = (e) => {
+    
     setErrorState(false)
     if(e.length > 0){
       openDelete_table(e)
@@ -310,7 +311,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     else{
       setErrorState(true)
     }
-    console.log(e.length)
+    
     
   }
 
@@ -344,6 +345,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
 
   const [showDelete_table, setShowDelete_table] = useState(false);
   const openDelete_table = (data) => {
+    console.log(data)
     setShowDelete_table(prev => !prev);
       
   }
@@ -416,7 +418,7 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
     }
 
   )
-  console.log(selectedFlatRows)
+  // console.log(selectedFlatRows)
   return (
     <>
       <Container>

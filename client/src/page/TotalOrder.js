@@ -66,6 +66,7 @@ function TotalOrder(props){
     const [reload,setReload] = useState(false)
     useEffect(() => {
         fetch('/bot/'+props.match.params.bot_id) .then(response => response.json().then(inf => {
+            console.log(inf)
         setName(inf)
         setLoading(true)
     }))

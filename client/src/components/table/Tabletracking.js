@@ -574,7 +574,7 @@ function Tabletracking({ botID, delete_trained, add_data }) {
             return {
               select: false,
               id: d._id.$oid,
-              Name: d.userID,
+              Name: d.username,
               Date: d.purchase_day+'/'+ d.purchase_month +'/'+ d.purchase_year
               
             };

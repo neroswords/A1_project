@@ -571,7 +571,7 @@ const [loading,setLoading] = useState(false);
             return {
               select: false,
               Date: d.purchase_day+'/'+ d.purchase_month +'/'+ d.purchase_year,
-              Name: d.display_name,
+              Name: d.username,
               Income: d.total,
               TrackingNumber: d.TrackingNo
 

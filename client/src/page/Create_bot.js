@@ -481,7 +481,7 @@ _handleImageChange(e) {
                                             <div className="mt-3">
                                                 <label for="inputFirstname" className="form-label">Age</label>
                                                 <span className="req_infobot"> *</span>
-                                                <input required type="text" pattern="\d*"  min="1" step="1"  name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
+                                                <input required type="text" pattern="\d*"  min="2" step="1"  name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
                                                 
                                             </div>
                                         </div>
