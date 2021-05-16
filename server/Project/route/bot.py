@@ -58,7 +58,7 @@ def save_message(message,message_type,sender,sender_id,sender_type,room,botId,us
         info_update = { "$set": {"notification" : count}}
         done = users_collection.update_one({'_id': ObjectId(userID)}, info_update)
 
-
+ 
 def push_message(data):
     bot_collection = mongo.db.bots
     customer_collection = mongo.db.customers
@@ -111,7 +111,7 @@ def connect(id):
             bot_collection.update_one({'_id': ObjectId(id)},
                                       {'$set': {'OMISE_SECRET_KEY': connect_data['OMISE_SECRET_KEY'],
                                                 'OMISE_PUBLIC_KEY': connect_data['OMISE_PUBLIC_KEY'],
-                                                'liffID':connect_data['liffID']}})
+                                                'liff_id':connect_data['liffID']}})
             return {"message": "connect to platform successfully"}
         return redirect(url_for('home'))
     elif request.method == 'GET':
@@ -422,9 +422,11 @@ def edit_group(botID,groupID):
                     file = request.files[i]
                     filename = secure_filename(file.name)
                     name, extension = os.path.splitext(filename)
+                    print("name",name)
+                    print("exten",extension)
                     value = randint(0, 9999)
                     filename = info['name']+"&" + \
-                    str(value)+"&"+str(info["_id"])+"&"+extension
+                    str(value)+"&"+str(info["_id"])+"&"+text+os.path.splitext(filename)[1]
                     destination = "/".join([UPLOAD_FOLDER_Group, filename])
                     file.save(destination)
                     session['uploadFilePath'] = destination
@@ -439,9 +441,11 @@ def edit_group(botID,groupID):
                     file = request.files[i]
                     filename = secure_filename(file.name)
                     name, extension = os.path.splitext(filename)
+                    print("name",name)
+                    print("exten",extension)
                     value = randint(0, 9999)
                     filename = info['name']+"&" + \
-                    str(value)+"&"+str(info["_id"])+"&"+extension
+                    str(value)+"&"+str(info["_id"])+"&"+text+os.path.splitext(filename)[1]
                     destination = "/".join([UPLOAD_FOLDER_Group, filename])
                     file.save(destination)
                     session['uploadFilePath'] = destination

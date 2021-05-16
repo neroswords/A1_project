@@ -187,7 +187,7 @@ const Styles = styled.div`
   span.ex-password {
     margin-top: 5px;
     font-size: 14px;
-    color: red;
+    color: gray;
   }
 `;
 

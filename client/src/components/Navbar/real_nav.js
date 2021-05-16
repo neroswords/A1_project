@@ -74,8 +74,8 @@ function Loged_in_nav(props) {
           className="click"
           href={"/bot_list/" + localStorage.getItem("user_id") + "#main"}
         >
-          <i class="fas fa-user-circle"></i>
-          {props}
+          <i className="fas fa-user-circle"></i>
+            <span className="username-showuser">{props}</span>
         </a>
       </div>
 
@@ -429,7 +429,7 @@ function DropdownMenu() {
             </DropdownItem>
           </a>
 
-          {/* <a
+          <a
             onClick={() => {
               window.location.replace("/manual");
             }}
@@ -437,7 +437,7 @@ function DropdownMenu() {
             <DropdownItem leftIcon={<i class="fas fa-book-open"></i>}>
               Manual
             </DropdownItem>
-          </a> */}
+          </a>
           <a
             name="signout"
             onClick={() => {

@@ -542,8 +542,8 @@ function Tabletracking({ botID, delete_trained, add_data }) {
         accessor: 'Name', // accessor is the "key" in the data
       },
       {
-        Header: 'Time',
-        accessor: 'Time', // accessor is the "key" in the data
+        Header: 'Date',
+        accessor: 'Date', // accessor is the "key" in the data
       }
       
       
@@ -575,7 +575,7 @@ function Tabletracking({ botID, delete_trained, add_data }) {
               select: false,
               id: d._id.$oid,
               Name: d.username,
-              Time: d.purchase_day+'/'+ d.purchase_month +'/'+ d.purchase_year
+              Date: d.purchase_day+'/'+ d.purchase_month +'/'+ d.purchase_year
               
             };
           })

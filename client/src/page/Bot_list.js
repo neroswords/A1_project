@@ -103,7 +103,7 @@ export default function Bot_list(props) {
     );
 
     return(
-            <Styles>
+        <Styles>
                 <div className="botlist-page">
                     			{/* <Loader type="Oval" color="#00BFFF" height={50} width={50} secondaryColor="Red" timeout={6000}/> */}
                     <div className="popup-del-connect">
@@ -146,8 +146,8 @@ export default function Bot_list(props) {
                     : <div class="loader"></div>}
 
                 </div>    
-               
-                </Styles> 
+                </Styles>
+        
     );
 }
 

@@ -165,6 +165,8 @@ const Styles = styled.div`
   padding: 16px;
   border-radius: 5px;
   width: 75%;
+  overflow-x: auto;
+  text-overflow: ellipsis;
 }
 
 .todo-row:nth-child(2n + 1) {
