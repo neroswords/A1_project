@@ -277,9 +277,7 @@ function DragText(props) {
 
           <div className="container-fluid">
             
-            <div className="group-title container-top d-flex bd-highlight">
-              <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group</h2>
-            </div>
+            
             
             <GroupList groupID={props.match.params.group_id} botID={props.match.params.bot_id} />
           </div>

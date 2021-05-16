@@ -652,7 +652,7 @@ function TableNewOrder({ botID, delete_trained, add_data }) {
             return {
               select: false,
               id: d._id.$oid,
-              Date: d.purchased_date.$date,
+              Date: d.purchase_day+'/'+ d.purchase_month +'/'+ d.purchase_year,
               Name: d.username,
               Total: d.total,
               File: d.file,

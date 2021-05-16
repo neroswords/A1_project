@@ -570,7 +570,7 @@ const [loading,setLoading] = useState(false);
             console.log(d)
             return {
               select: false,
-              Date: d.purchased_date.$date,
+              Date: d.purchase_day+'/'+ d.purchase_month +'/'+ d.purchase_year,
               Name: d.username,
               Income: d.total,
               TrackingNumber: d.TrackingNo

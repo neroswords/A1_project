@@ -12,7 +12,7 @@ import ReactFlow, {
     removeElements,
     } from 'react-flow-renderer';
 
-
+import { MDBNotification, MDBContainer } from "mdbreact";
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 
@@ -130,7 +130,8 @@ function Mapping_load(props){
   const [nodeName, setNodeName] = useState();
   const [Keyword, setKeyword] = useState();
   const [Parameter, setParameter] = useState();
-  const [selectNode, setselectNode] = useState("1");
+  const [selectNode, setselectNode] = useState("0");
+  const [errorState, setErrorState] = useState(false);
   const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
   const onConnect = (params) => setElements((els) => addEdge(params, els));
 
@@ -182,18 +183,46 @@ function Mapping_load(props){
 
   const onSave = () => {
     
-    const data = {
-      name: name,
-      node: elements,
-      details: details
+    if(selectNode == "0"){
+      const data = {
+        name: name,
+        node: elements,
+        details: details
+      }
+      setErrorState(false)
+      // console.log(data)
+      fetch('/mapping/'+botID+'/detail/'+mapID+'/update', {
+        method : "POST",
+        headers : {"Access-Control-Allow-Origin": "*",'Content-Type':'application/json'},
+        body: JSON.stringify(data)})
+        history.push("/bot/"+botID+"/mapping");
+        // window.location.replace("/bot/"+botID+"/mapping") 
     }
-    // console.log(data)
-    fetch('/mapping/'+botID+'/detail/'+mapID+'/update', {
-      method : "POST",
-      headers : {"Access-Control-Allow-Origin": "*",'Content-Type':'application/json'},
-      body: JSON.stringify(data)})
-      history.push("/bot/"+botID+"/mapping");
-      // window.location.replace("/bot/"+botID+"/mapping")    
+    else{
+      const nameLength = name.replace(/^\s+|\s+$/gm,'').length
+      const answerLength = nodeName.replace(/^\s+|\s+$/gm,'').length
+      const kwLength = Keyword.replace(/^\s+|\s+$/gm,'').length
+      const paramLength = Parameter.replace(/^\s+|\s+$/gm,'').length
+      if (nameLength == 0 ||  answerLength == 0 || kwLength == 0 || paramLength ==0 ){
+          setErrorState(true)
+      }
+      else{
+          const data = {
+          name: name,
+          node: elements,
+          details: details
+        }
+        setErrorState(false)
+        // console.log(data)
+        fetch('/mapping/'+botID+'/detail/'+mapID+'/update', {
+          method : "POST",
+          headers : {"Access-Control-Allow-Origin": "*",'Content-Type':'application/json'},
+          body: JSON.stringify(data)})
+          history.push("/bot/"+botID+"/mapping");
+          // window.location.replace("/bot/"+botID+"/mapping") 
+      }
+  }
+       
 
       
   }
@@ -312,12 +341,39 @@ const changeAnswer =  (evt) =>{
   // console.log(name)
       return(
         <Styles>
-        
+         { errorState &&  
+            <div className="errorstate">
+
+                              
+                                  <MDBNotification
+                                  style={{
+                                    // width: "auto",
+                                    position: "absolute",
+                                    // top: "10px",
+                                    // left: "500px",
+                                    zIndex: 9999
+                                  }}
+                                  bodyClassName="p-2 font-weight-bold white-text "
+                                  className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
+                                  closeClassName="blue-grey-text"
+                                  fade
+                                  icon="bell"
+                                  iconClassName="text-danger"
+                                  message="Please enter all required data"
+                                  show
+                                  
+                                  title="Error"
+                                  titleClassName="elegant-color-dark white-text"
+                    
+                                  />
+                                </div>
+
+                                }
         <div className="mapping-page">
             <Navbar_member botID = {props.match.params.bot_id} path={"mapping"} />
             <div className="container-fluid">
                 <div className="mapping-create-title d-flex bd-highlight">
-                    <h2 className='p-2 flex-grow-1 bd-highlight' id="mapping-load-header">Create Mapping Word</h2>
+                    <h2 className='p-2 flex-grow-1 bd-highlight' id="mapping-load-header">Mapping Load</h2>
                     
                 </div>
              
@@ -344,7 +400,7 @@ const changeAnswer =  (evt) =>{
         <div className="updatenode__controls">
         <div className="name__node">
         <label >Name:</label>
-        <input className="updateNode"
+        <input required className="updateNode"
           value={name}
           onChange={(evt) => changeName(evt.target.value)}
         />

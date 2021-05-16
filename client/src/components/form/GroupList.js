@@ -3,13 +3,15 @@ import GroupForm from './GroupForm';
 import Todo from './Todo';
 import {Link} from "react-router-dom";
 
-function GroupList({groupID, botID, groupname}) {
+function GroupList({groupID, botID}) {
   const [todos, setTodos] = useState([]);
+  const [groupname, setGroupname] = useState("")
   // const [file, setFile] = useState([]);
   
   useEffect(() => {
     fetch('/bot/'+botID+'/group/'+groupID +'/edit',)
       .then(res => res.json().then(data => {
+       setGroupname(data.name)
         data.message.map((value,idx)=>{
           setTodos(old => [...old,{'id':idx,'text':value.data}])
         })
@@ -89,6 +91,9 @@ function GroupList({groupID, botID, groupname}) {
     <>
       
       <div className='todo-app'>
+      <div className="group-title container-top d-flex bd-highlight">
+              <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group : {groupname}</h2>
+            </div>
         <GroupForm onSubmit={addTodo} />
         <Todo
           todos={todos}
@@ -100,7 +105,7 @@ function GroupList({groupID, botID, groupname}) {
         
       </div>
       <div id="container-button">
-          <Link className="link-group" to ={'/bot/'+botID+'/group/'}><button className="submit" type='submit' >success</button></Link>
+          {/* <Link className="link-group" to ={'/bot/'+botID+'/group/'}><button className="submit" type='submit' >success</button></Link> */}
       </div>
     </>
   );
