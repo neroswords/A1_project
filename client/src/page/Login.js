@@ -216,6 +216,7 @@ class Login extends React.Component {
             this.setState({ successState: false})
             window.location.replace("/")
           }else{
+            this.setState({ successState: false})
             this.setState({ showMessage: true })
             this.setState({ message: data.error })
         }

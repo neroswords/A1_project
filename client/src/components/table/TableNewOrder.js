@@ -182,6 +182,55 @@ input::placeholder{
 .buttondownload-pdf:hover{
   color: #000;
 }
+.loader {
+  animation:spin 1s infinite linear;
+  border:solid 2vmin transparent;
+  border-radius:50%;
+  border-right-color:#fca311;
+  border-top-color:#fca311;
+  box-sizing:border-box;
+  height:20vmin;
+  left:calc(50% - 10vmin);
+  position:fixed;
+  top:calc(50% - 10vmin);
+  width:20vmin;
+  z-index:1;
+  &:before {
+    animation:spin 2s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcc111;
+    border-top-color:#fcc111;
+    box-sizing:border-box;
+    content:"";
+    height:16vmin;
+    left:0;
+    position:absolute;
+    top:0;
+    width:16vmin;
+  }
+  &:after {
+    animation:spin 3s infinite linear;
+    border:solid 2vmin transparent;
+    border-radius:50%;
+    border-right-color:#fcd111;
+    border-top-color:#fcd111;
+    box-sizing:border-box;
+    content:"";
+    height:12vmin;
+    left:2vmin;
+    position:absolute;
+    top:2vmin;
+    width:12vmin;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
+
 
 `;
 
@@ -296,7 +345,7 @@ const defaultColumn = {
 }
 
 
-function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID }) {
+function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained, botID ,loading}) {
   // console.log(data)
   const Ondelete = (e) => {
     // delete_trained(e)
@@ -439,7 +488,10 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               </th>
             </tr> */}
           </thead>
-          <tbody {...getTableBodyProps()}>
+     
+          {loading ?                    
+                    
+                    <tbody {...getTableBodyProps()}>
           {/* {  console.log(page[0]) } */}
             {page.map((row, i) => {
               prepareRow(row)
@@ -471,6 +523,9 @@ function TableShow({ columns, data, updateMyData, skipPageReset, delete_trained,
               )
             })}
           </tbody>
+                    : <div class="loader"></div>}
+
+
         </table>
         <div className="pagination">
         <div className="parginate-tex col">
@@ -586,6 +641,7 @@ function TableNewOrder({ botID, delete_trained, add_data }) {
 
   }
 
+  const [loading,setLoading] = useState(false);
   useEffect(() => {
     fetch('/history/' + botID + '/waited')
       .then(res => res.json().then(data => {
@@ -596,7 +652,7 @@ function TableNewOrder({ botID, delete_trained, add_data }) {
             return {
               select: false,
               id: d._id.$oid,
-              Date: d.purchased_date.$date,
+              Date: d.purchase_day+'/'+ d.purchase_month +'/'+ d.purchase_year,
               Name: d.username,
               Total: d.total,
               File: d.file,
@@ -605,7 +661,8 @@ function TableNewOrder({ botID, delete_trained, add_data }) {
           })
           
 
-        );
+        )
+        setLoading(true);
 
       }))
 
@@ -622,6 +679,7 @@ function TableNewOrder({ botID, delete_trained, add_data }) {
         skipPageReset={skipPageReset}
         delete_trained={delete_trained}
         botID={botID}
+        loading={loading}
         // mapID ={TablemapState[0].id}
       />
       </div>

@@ -476,6 +476,8 @@
   text-overflow: ellipsis;
   /* width: min(150vw, 100px);  */
   /* justify-content: flex-start; */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 

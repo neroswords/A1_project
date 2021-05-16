@@ -46,6 +46,7 @@ const Styles = styled.div`
   }
 
   .bot-name-on-page h4{
+    max-width: 900px;
     position: relative;
     right: 0;
     font-size: 14px;
@@ -61,6 +62,16 @@ const Styles = styled.div`
 ` 
 
 function NewOrder(props){
+    const [name, setName] = useState();
+    const [loading,setLoading] = useState(false);
+    const [reload,setReload] = useState(false)
+    useEffect(() => {
+        fetch('/bot/'+props.match.params.bot_id) .then(response => response.json().then(inf => {
+        setName(inf)
+        setLoading(true)
+    }))
+    })
+
   
     return(
         <Styles>
@@ -69,7 +80,7 @@ function NewOrder(props){
             <Navbar_member botID = {props.match.params.bot_id} path={"history"} />
             <div className="container-fluid">
                 <div className="bot-name-on-page">
-                    <h4> Bot name :</h4>
+                    <h4> Bot name : {name}</h4>
                 </div>
                 <div className="newoder-title">
                     <h2 className='p-2 flex-grow-1 bd-highlight' id="mapping-header">New Order</h2>

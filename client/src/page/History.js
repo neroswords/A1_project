@@ -47,12 +47,12 @@ const Styles = styled.div`
 }
 
 .widget{
-    height: 200px;
+    height: 175px;
     
 }
 
 .inner-widget{
-    height: 170px;
+    height: 145px;
     padding: 10px;
 }
 
@@ -66,6 +66,7 @@ const Styles = styled.div`
   }
 
   .bot-name-on-page h4{
+    max-width: 900px;
     position: relative;
     right: 0;
     font-size: 14px;
@@ -137,7 +138,7 @@ function History(props) {
         fetch('/history/' + props.match.params.bot_id)
             .then(res => res.json().then(data => {
                 setHistoryState(data)
-
+                setLoading(true)
             }))
 
     }, []);
@@ -145,71 +146,79 @@ function History(props) {
     useEffect(() => {
         fetch('/bot/' + props.match.params.bot_id).then(response => response.json().then(inf => {
             setName(inf)
-            setLoading(true)
+          
         }))
     }, []);
 
     return (
         <Styles>
-            <div className="history-page">
-                <Navbar_member botID={props.match.params.bot_id} path={"history"} />
-                <div className="container-fluid">
-                    <div className="bot-name-on-page">
-                        <h4> Bot name : {name}</h4>
-                    </div>
-                    <div className="title-history">
-                        <h2 className='p-2 flex-grow-1 bd-highlight' id="history-header">Order</h2>
-                    </div>
+      
+            {loading ?                    
+                          <div className="history-page">
+                          <Navbar_member botID={props.match.params.bot_id} path={"history"} />
+                          <div className="container-fluid">
+                              <div className="bot-name-on-page">
+                                  <h4> Bot name : {name}</h4>
+                              </div>
+                              <div className="title-history">
+                                  <h2 className='p-2 flex-grow-1 bd-highlight' id="history-header">Order</h2>
+                              </div>
+          
+                              <div className="row p-3">
+                                  <div class="col">
+                                      <div className="widget small-box bg-info">
+                                          <div className="inner-widget">
+                                              <h3>{history.waited}</h3>
+                                              <p>New Orders</p>
+                                          </div>
+                                          <div className="icon">
+                                              <i className="icon-widget far fa-shopping-basket"></i>
+                                          </div>
+                                          <Link to={'/bot/' + props.match.params.bot_id + '/history/new'}><a href="#" className=" MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
+                                      </div>
+                                  </div>
+          
+          
+                                  <div class="col">
+                                      <div className="widget small-box bg-success">
+                                          <div className="inner-widget">
+                                              <h3>{history.total}</h3>
+                                              <p>Total Order</p>
+                                              <br></br>
+                                          </div>
+                                          <div className="icon">
+                                              <i class="icon-widget far fa-clipboard-list-check"></i>
+                                          </div>
+                                          <Link to={'/bot/' + props.match.params.bot_id + '/history/totalorder'}><a href="#" className=" MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
+                                      </div>
+                                  </div>
+          
+                                  <div class="col">
+                                      <div className="widget small-box bg-warning">
+                                          <div className="inner-widget">
+                                              <h3>{history.tracking}</h3>
+                                              <p>Tracking number</p>
+                                          </div>
+                                          <div className="icon">
+                                              <i class="far fa-truck-moving"></i>
+                                          </div>
+                                          <Link to={'/bot/' + props.match.params.bot_id + '/history/tracking'}><a href="#" className=" MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
+                                      </div>
+                                  </div>
+                         
+          
+                                  <Visualize  botID={props.match.params.bot_id}/>
+          
+          
+          
+                              </div>
+                          </div>
+                          
+                      </div>
+               
+                    : <div class="loader"></div>}
 
-                    <div className="row p-3">
-                        <div class="col">
-                            <div className="widget small-box bg-info">
-                                <div className="inner-widget">
-                                    <h3>{history.waited}</h3>
-                                    <p>New Orders</p>
-                                </div>
-                                <div className="icon">
-                                    <i className="icon-widget far fa-shopping-basket"></i>
-                                </div>
-                                <Link to={'/bot/' + props.match.params.bot_id + '/history/new'}><a href="#" className=" MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
-                            </div>
-                        </div>
 
-
-                        <div class="col">
-                            <div className="widget small-box bg-success">
-                                <div className="inner-widget">
-                                    <h3>{history.total}</h3>
-                                    <p>Total Order</p>
-                                    <br></br>
-                                </div>
-                                <div className="icon">
-                                    <i class="icon-widget far fa-clipboard-list-check"></i>
-                                </div>
-                                <Link to={'/bot/' + props.match.params.bot_id + '/history/totalorder'}><a href="#" className=" MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div className="widget small-box bg-warning">
-                                <div className="inner-widget">
-                                    <h3>{history.tracking}</h3>
-                                    <p>Tracking number</p>
-                                </div>
-                                <div className="icon">
-                                    <i class="far fa-truck-moving"></i>
-                                </div>
-                                <Link to={'/bot/' + props.match.params.bot_id + '/history/tracking'}><a href="#" className=" MoreInfo">More info <i class="fas fa-arrow-circle-right CircleRight"></i></a></Link>
-                            </div>
-                        </div>
-                        <Visualize  botID={props.match.params.bot_id}/>
-
-
-
-                    </div>
-                </div>
-                
-            </div>
         </Styles>
     );
 }

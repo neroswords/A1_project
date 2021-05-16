@@ -15,7 +15,7 @@ import styled from 'styled-components';
 const Styles = styled.div`
 
 .head-selector{
-  margin-left: 17%;
+  margin-left: 10%;
 }
 
 .header-text{

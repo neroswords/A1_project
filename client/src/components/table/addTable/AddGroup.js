@@ -99,7 +99,7 @@ export const AddGroup = ({ showAddGroup, setShowAddGroup,botID}) => {
   const modalRef = useRef();
   const [question, setQuestion] = useState('')
 
-  console.log(showMessage)
+  // console.log(showMessage)
   const closePop = () =>{
     // setFlash('')
     setShowAddGroup(prev => !prev)

@@ -457,7 +457,7 @@ _handleImageChange(e) {
                                               <label  className="form-label">Bot Name</label>  
                                               <span className="req_infobot"> *</span>
                                               <label  className="form-label" >{this.state.errorMessage['bot_name'] != "start" ? this.state.errorMessage['bot_name'] : ""}</label>
-                                              <input type="text"   name="bot_name" required  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname"/>
+                                              <input type="text"   name="bot_name" required  ref={(ref) => { this.bot_name = ref; }} onChange={this.handleChange} className="form-control" id="inputbotname" maxLength={12}/>
                                             </div>
                                             { this.state.showMessage &&  
                                         <div className="container">
@@ -481,7 +481,7 @@ _handleImageChange(e) {
                                             <div className="mt-3">
                                                 <label for="inputFirstname" className="form-label">Age</label>
                                                 <span className="req_infobot"> *</span>
-                                                <input required type="text" pattern="\d*"  min="1" step="1"  name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
+                                                <input required type="text" pattern="\d*"  min="2" step="1"  name="age" required className="form-control" id="inputfirstname"  ref={(ref) => { this.age = ref; }} onChange={this.handleChange} />
                                                 
                                             </div>
                                         </div>

@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import FlashMessage from 'react-flash-message'
 import Regis_submit from '../Components/Regis_submit';
 import { MDBNotification, MDBContainer } from "mdbreact";
-
+import Login from './Login'
 const Styles = styled.div`
   .container {
     font-family: 'Public Sans', sans-serif;
@@ -214,7 +214,8 @@ class Profile_edit extends React.Component {
       showMessageShopname: false,
       showMessageFirstname: false,
       showMessageLastname: false,
-      successState: false
+      successState: false,
+      test : false
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -237,6 +238,9 @@ class Profile_edit extends React.Component {
       return
     }
   }
+  sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
 
   handleSubmit = (e) => {
     
@@ -278,6 +282,7 @@ class Profile_edit extends React.Component {
       
     }
       else{
+
         this.setState({ successState: true})
           const profile = {
             email: this.state.email,
@@ -297,9 +302,11 @@ class Profile_edit extends React.Component {
                 'Content-Type':'application/json'
           },
           body: JSON.stringify(profile)
-        })
+        }).then(
       
-      window.location.replace("/")
+          window.location.replace("/"))
+        
+     
     }
     
           }
@@ -329,17 +336,23 @@ componentDidMount ()  {
   render() {
     return(
         <Styles>
+          
           {this.state.successState ? 
+          
                   <div>
                     {/* <img src={ImageWarnning} alt="warnning" className="warnning_img" /> */}
                     <div class="loader">Loading...</div>
                   </div>
+             
                   
                   :  
+                  this.state.test ? <button>d</button>:
+          
               <div className="container">
                     <div className="col-sm-10 col-md-9 col-lg-8 mx-auto">
                       <div className="card card-regis">
-                          
+
+               
                         <div className="card-body">
                           <h4 className="card-title-edit-profile text-center">Edit Profile</h4>
                           <form className="form-regis"  onSubmit={this.handleSubmit}>

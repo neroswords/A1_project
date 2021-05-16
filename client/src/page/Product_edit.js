@@ -714,7 +714,7 @@ export default class Product_edit extends React.Component {
                     
                     <hr className="mt-5"></hr>
                     <div className="btn-submitinv">
-                      <button className="btn btn-success text-uppercase" onClick={this.handleUploadImage} type="submit">Edit</button>
+                      <button className="btn btn-success text-uppercase" onSubmit={this.handleUploadImage} type="submit">Edit</button>
                     </div>
                   </form>
 

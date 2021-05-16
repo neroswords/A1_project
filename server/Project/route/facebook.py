@@ -41,11 +41,13 @@ def call_facebook(botID):
     event = payload['entry'][0]['messaging']
     for msg in event:
         sender_id = msg['sender']['id']
+        print(sender_id)
         field = ['name', 'picture']
         profile = bot.get_user_info(sender_id,fields = field)
+        print(profile)
         if('message' in payload['entry'][0]['messaging'][0].keys()):
             if('attachments' in payload['entry'][0]['messaging'][0]['message'].keys()):
-                res = {"message": "ขอโทษครับ ผมรับเป็นตัวหนังสือเท่านั้น"}
+                message_type = "error"
             elif('quick_reply' in payload['entry'][0]['messaging'][0]['message'].keys()):
                 message_type = 'q_postback'
             else:
