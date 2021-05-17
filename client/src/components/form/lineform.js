@@ -101,7 +101,7 @@ const Styles = styled.div`
 
 #container-button{
     text-align: center;
-    margin-top: 15%;
+    /* margin-top: 15%; */
 }
 
 #container-button .submit{

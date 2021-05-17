@@ -99,17 +99,16 @@ const Styles = styled.div`
 
 #container-button{
     text-align: center;
-    margin-top: 40%;
+    /* margin-top: 0%; */
 }
 
 #container-button .submit{
     padding: 5px 30px;
-    margin-top: 15px;
+    margin-top: 10px;
     font-size: 19px;
     border-radius: 25px;
     border: 3px solid #fca311;
     transition: 0.5s;
-    margin: 10px;
     background-color: #fca311;
     color: #fff;
 }
@@ -243,17 +242,18 @@ export default function Etcform({botID,setReload,setShowForm}) {
                               <label  className="form-label">OMISE PUBLIC KEY</label>
                               <input type="text" value={ OMISE_PUBLIC_KEY } onChange={e => setOMISE_PUBLIC_KEY(e.target.value)} className="form-control" id="inputpagefacebook" />
                           </div>
-                          <div className="copy-link">
+                          <div className="ms-2 copy-link mt-4">
+                                <label  className="form-label">Liff Link</label>
                               <p>{packageJson.proxy}/liff/{botID}</p>
                               <button type="button" className="copy-clipboard" onClick={() => {navigator.clipboard.writeText(webhook)}}><i className="fas fa-copy fa-xs copy-clipboard"></i></button>
                           </div>
-                          <div className="col-lg-12 mt-3">
+                          <div className="ms-2">
                               <label  className="form-label">Liff ID</label>
                               <input type="text" value={ liffID } onChange={e => setliffID(e.target.value)} className="form-control" id="inputverity" />
                           </div>
                           </div>
                
-                    : <div class="loader">5555555555</div>}
+                    : <div class="loader"></div>}
 
 
                             <div id="container-button">
