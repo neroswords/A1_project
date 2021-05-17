@@ -55,14 +55,16 @@ const Styles = styled.div`
 }
 `
 
-function GroupList({groupID, botID, groupname}) {
+function GroupList({groupID, botID}) {
   const [todos, setTodos] = useState([]);
+  const [groupname, setGroupname] = useState("")
   const [reload, setReload] = useState(false);
   // const [file, setFile] = useState([]);
   
   useEffect(() => {
     fetch('/bot/'+botID+'/group/'+groupID +'/edit',)
       .then(res => res.json().then(data => {
+       setGroupname(data.name)
         data.message.map((value,idx)=>{
           setTodos(old => [...old,{'id':idx,'text':value.data}])
           setReload(true)
@@ -83,17 +85,12 @@ function GroupList({groupID, botID, groupname}) {
     const newTodos = [todo, ...todos];
     console.log('1')
     setTodos(newTodos);
-    // console.log(todo['file'])
-    // console.log(todo.file)
     let list=todo
     const data = new FormData()
     data.append('file',list.file)
     data.append('text',list.text)
     console.log(list)
-    // console.log(data)
     console.log(...todos);
-    // console.log(todo)
-    // console.log('/bot/'+botID+'/group/'+groupID +'/edit',)
     console.log(todo)
     fetch('/bot/'+botID+'/group/'+groupID +'/edit', {
       method : 'POST',
@@ -143,7 +140,18 @@ function GroupList({groupID, botID, groupname}) {
  
       <Styles>
            <>
-        {reload ?         <div className='todo-app'>
+        {reload ?         
+        
+        <div className='todo-app' >
+            <div className="previous-page">
+              <Link  to ={'/bot/'+botID+'/group/'}><i className="link-back-pd back-pd fas fa-arrow-left"></i></Link>
+            </div>
+            
+            <div className="group-title container-top d-flex bd-highlight center-form">
+              <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group : {groupname}</h2>
+            </div>
+
+            
         <GroupForm onSubmit={addTodo} />
         <Todo
           todos={todos}
@@ -156,9 +164,7 @@ function GroupList({groupID, botID, groupname}) {
       </div> 
 
       : <div class="loader"></div>}
-        <div id="container-button">
-        <Link className="link-group" to ={'/bot/'+botID+'/group/'}><button className="submit" type='submit' >success</button></Link>
-    </div>
+        
     </>
       </Styles>
   

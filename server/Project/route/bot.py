@@ -374,7 +374,9 @@ def delete_group(botID,groupID):
         groups_collection = mongo.db.groups
         group_delete = request.get_json() #ID
         print(group_delete)
-        groups_collection.delete_one({'$and':[{"botID":ObjectId(botID),"_id":ObjectId(groupID)}]})
+        for group in group_delete:
+            groups_collection.delete_one({'$and':[{"botID":ObjectId(botID),"_id":ObjectId(group['id'])}]})
+        # groups_collection.delete_one({'$and':[{"botID":ObjectId(botID),"_id":ObjectId(groupID)}]})
         # listcursor = list(groups_collection.find({"botID": ObjectId(botID)}))
         # listcursor.reverse()
         # data = dumps(listcursor, indent=2)

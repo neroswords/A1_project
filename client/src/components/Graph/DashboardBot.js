@@ -131,7 +131,6 @@ const Styles = styled.div`
 `;
 
 export const DashboardBot = ({ botID }) => {
-  const [containerRef, { width: containerWidth }] = useMeasure();
   const [chart, setChart] = React.useState();
   console.log(botID)
   const [dataChart, setDataChart] = React.useState();
@@ -159,17 +158,6 @@ export const DashboardBot = ({ botID }) => {
       }))
 
   }, []);
-
-  const data = [
-    { name: "Page A", Line: 4000 },
-    { name: "Page B", Line: 3000 },
-    { name: "Page C", Line: 2000 },
-    { name: "Page D", Line: 2780 },
-    { name: "Page E", Line: 1890 },
-    { name: "Page F", Line: 2390 },
-    { name: "Page G", Line: 3490 }
-  ];
-
 
   const header = () => {
     if (head == 'daily') {
@@ -200,7 +188,7 @@ export const DashboardBot = ({ botID }) => {
 
   return (
     <Styles>
-      <div id="container-graph" ref={containerRef}>
+      <div id="container-graph" >
 
         <br />
         <div className="head-selector">

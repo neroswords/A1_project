@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { MDBNotification, MDBContainer } from "mdbreact";
 
 
 function GroupForm(props) {
     console.log(props)
     const [input, setInput] = useState('');
     const [file, setFile] = useState();
+    const [errorState, setErrorState] = useState(false);
+    const [imgState, setImgState] = useState(false);
     // const [upload, setUpload] = useState();
     const [panel, setpanel] = useState(true);
 
@@ -25,9 +28,10 @@ function GroupForm(props) {
         e.preventDefault();
 
         if(input == ''){
-            alert("please input yout text")
+            setErrorState(true)
         }
         else{
+            setErrorState(false)
             props.onSubmit({
             id: Math.floor(Math.random() * 10000),
             text: input,
@@ -40,9 +44,10 @@ function GroupForm(props) {
     };
 
     const _handleImageChange = (e) =>{
+        setImgState(false)
         console.log(e)
         if (e.target.files[0].type != "image/jpeg" && e.target.files[0].type != "image/png" ){
-            alert("Only PNG or JPG is accepted")
+            setImgState(true)
         }
         else{
             setFile(e.target.files[0])
@@ -52,14 +57,15 @@ function GroupForm(props) {
 
 
     const insertImage = (e) => {
-
+        setImgState(false)
         e.preventDefault();
 
         console.log(file);
         if(file == null){
-            alert('Please select PNG or JPEG file')
+            setImgState(true)
         }
         else{
+            setImgState(false)
             props.onSubmit({
             
             id: Math.floor(Math.random() * 10000),
@@ -76,6 +82,63 @@ function GroupForm(props) {
 
     return (
         <div>
+            { errorState &&  
+            <div className="errorstate">
+
+                              
+                                  <MDBNotification
+                                  style={{
+                                    // width: "auto",
+                                    position: "absolute",
+                                    // top: "10px",
+                                    // left: "500px",
+                                    zIndex: 9999
+                                  }}
+                                  bodyClassName="p-2 font-weight-bold white-text "
+                                  className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
+                                  closeClassName="blue-grey-text"
+                                  fade
+                                  icon="bell"
+                                  iconClassName="text-danger"
+                                  message="Please input group text"
+                                  show
+                                  
+                                  title="Error"
+                                  titleClassName="elegant-color-dark white-text"
+                    
+                                  />
+                                </div>
+
+                                }
+
+            { imgState &&  
+            <div className="errorstate">
+
+                              
+                                  <MDBNotification
+                                  style={{
+                                    // width: "auto",
+                                    position: "absolute",
+                                    // top: "10px",
+                                    left: "500px",
+                                    zIndex: 9999
+                                  }}
+                                  bodyClassName="p-2 font-weight-bold white-text "
+                                  className="stylish-color-dark position-absolute top-0 start-50 translate-middle-x"
+                                  closeClassName="blue-grey-text"
+                                  fade
+                                  icon="bell"
+                                  iconClassName="text-danger"
+                                  message="Only PNG or JPG is accepted."
+                                  show
+                                  
+                                  title="Error"
+                                  titleClassName="elegant-color-dark white-text"
+                    
+                                  />
+                                </div>
+
+                                }
             <div className='container-GroupForm'>
                 <div className="IconTextImage">
                 
@@ -85,7 +148,7 @@ function GroupForm(props) {
                 <div>
                     {panel ?
 
-                        <form onSubmit={handleSubmit} className='todo-form'>
+                        <form onSubmit={handleSubmit} className='todo-form center-form'>
                             {props.edit ? (
                                 <>
                                     <input

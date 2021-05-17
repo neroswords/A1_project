@@ -57,7 +57,7 @@ const Styles = styled.div`
   width: 510px;
   min-height: 550px;
   background-color: #fff;
-  text-align: center;
+  /* text-align: center; */
   margin: 25px auto;
   border-radius: 2rem;
   padding-bottom: 32px;
@@ -251,21 +251,16 @@ const Styles = styled.div`
     padding: 5px 20px; 
   }
 
-  #container-button .submit{
-    padding: 5px 30px;
-    font-size: 19px;
-    border-radius: 25px;
-    border: 3px solid #34a853;
-    transition: 0.5s;
-    margin-left: 46%;
-    background-color: #34a853;
-    color: #fff;
-}
-
-  #container-button .submit:hover{
-      color: #000;
+  .previous-page{
+    margin-top: 5%;
+    margin-left: 5%;
   }
-
+  .link-back-pd{
+    color: black;
+  }
+  .center-form{
+    text-align: center;
+  }
 
 `
 function DragText(props) {
@@ -279,9 +274,7 @@ function DragText(props) {
 
           <div className="container-fluid">
             
-            <div className="group-title container-top d-flex bd-highlight">
-              <h2 className='p-2 flex-grow-1 bd-highlight' id="group-header">Group</h2>
-            </div>
+            
             
             <GroupList groupID={props.match.params.group_id} botID={props.match.params.bot_id} />
           </div>
