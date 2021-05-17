@@ -115,6 +115,7 @@ const Styles = styled.div`
 //         ichange : state
 //     }
 // }
+
 function Learned(props){
     const [deleteState,setdeleteState] = useState([]);
     const  [Info,setInfo] = useState([]);
@@ -165,9 +166,7 @@ function Learned(props){
 
     return(
         <Styles>
-
             {loading ?                    
-                    
                     <div className="learned-page">
                     <Navbar_member botID = {props.match.params.bot_id} path={"trained"}  />
                     <div className="container-fluid">
@@ -182,10 +181,8 @@ function Learned(props){
                             <Table botID={props.match.params.bot_id} delete_trained={delete_trained}/>
                         </div>
                     </div>
-        
                     </div>
                     : <div class="loader"></div>}
-                
         </Styles>
     );
 

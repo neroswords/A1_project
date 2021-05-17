@@ -49,7 +49,7 @@ const Styles = styled.div`
     margin-left: 50%;
   }
 
-
+ 
   .showgraph-type-y h4{
     position: relative;
     right: 0;
@@ -112,7 +112,7 @@ const Styles = styled.div`
 
 @media screen and (max-width: 2000px) and (min-width: 1700px) {
   .LineChart {
-    margin-left: 50%;
+    margin-left: 20%;
     
   }
   
