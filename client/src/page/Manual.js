@@ -128,9 +128,8 @@ function Manual() {
                     </div>
                     <li><span>หลังจากนั้นกดคัดลอก token ที่ Create token เสร็จเรียบร้อยแล้ว และจึงนำไปวางไปที่ "Access token" ในข้อ2</span></li>
                     <li><span>สร้าง Verify token</span></li>
-                    <li><span></span></li>
-            Verify token สารมารถตั้งค่าได้ตามที่ต้องการ (กรุณากรอกใน webhook ของ Facebook ให้เหมือนกับในเว็ป A1 chatbot)
-            <br></br>
+                    <li><span> Verify token สารมารถตั้งค่าได้ตามที่ต้องการ (กรุณากรอกใน webhook ของ Facebook ให้เหมือนกับในเว็ป A1 chatbot)</span></li>
+           
             จากนั้น set page webhook เลือก message และกดบันทึก <br></br>
                     <div className="img-manual">
                       <img className="connectbot3-setwebhook" src="./images/manual/connectbot3-setwebhook.jpg" /> <br></br>
@@ -189,8 +188,8 @@ function Manual() {
                 <section id='TrainingBot'>
                   <h5>Training bot</h5>
                   <span>
-                      หน้า training bot เป็นหน้าที่แสดงข้อความที่รับเข้ามาผ่าน chat โดยข้อมูลที่แสดงประกอบด้วย
-                      word, reply word และ confidence
+                      หน้า Training bot เป็นหน้าที่แสดงข้อความที่รับเข้ามาผ่าน Chat โดยข้อมูลที่แสดงประกอบด้วย
+                      Word, Reply word และ Confidence
                   </span>
                   <ul>
                     <li><span>Word คือ คำที่ลูกค้าส่งมาหา Bot</span> </li>
@@ -234,14 +233,14 @@ function Manual() {
 
                 <section id='Trained'>
                   <h5>Trained</h5>
-                  <span>หน้า trained เป็นหน้าที่แสดงข้อความที่ได้รับการยืนยันแล้ว หรือ บอทได้รับการเรียนรู้แล้ว
-                    โดยข้อมูลที่แสดงประกอบด้วย word, reply word </span>
+                  <span>หน้า Trained เป็นหน้าที่แสดงข้อความที่ได้รับการยืนยันแล้ว หรือ บอทได้รับการเรียนรู้แล้ว
+                    โดยข้อมูลที่แสดงประกอบด้วย Word, Reply word </span>
                   <ul>
                     <li>
-                      <span>word คือ คำที่ลูกค้าถาม</span>
+                      <span>Word คือ คำที่ลูกค้าถาม</span>
                     </li>
                     <li>
-                      <span> reply word คือ คำที่ bot ตอบกลับลูกค้า</span>
+                      <span>Reply word คือ คำที่ bot ตอบกลับลูกค้า</span>
                     </li>
                   </ul>
                   <span>ฟังก์ชั่นที่สามารถใช้งานได้</span>
@@ -287,14 +286,14 @@ function Manual() {
 
                 <section id='Group'>
                   <h5>Group</h5>
-                  <span>หน้า group เป็นหน้าที่แสดงกลุ่มของข้อความ
-                        โดยข้อมูลที่แสดงประกอบด้วย group และปุ่ม edit group</span>
+                  <span>หน้า Group เป็นหน้าที่แสดงกลุ่มของข้อความ
+                        โดยข้อมูลที่แสดงประกอบด้วย Group และปุ่ม Edit group</span>
                   <ul>
                     <li>
                       <span>Group คือ กลุ่มของประโยคที่จะให้bot ตอบกลับ</span>
                     </li>
                     <li>
-                      <span>edit group คือ ปุ่มที่คุณสามารถกดแล้วสามาถแก้ไข, เพิ่มประโยคได้</span>
+                      <span>Edit group คือ ปุ่มที่คุณสามารถกดแล้วสามาถแก้ไข, เพิ่มประโยคได้</span>
                     </li>
                   </ul>
                   <span>ฟังก์ชั่นที่สามารถใช้งานได้</span>
@@ -434,8 +433,18 @@ function Manual() {
 
                 <section id='Inventory'>
                   <h5>Inventory</h5>
-                  <p>หน้า inventory เป็นหน้าที่แสดงสินค้าในคลังของร้านคุณ คุณสามารถเพิ่มสินค้าได้ในหน้านี้ <br></br>
-            ถ้าคุณต้องการ เพิ่มสินค้าใหม่ กดที่ ปุ่ม create เมื่อกรอกข้อมูลครบถ้วนและถูกต้อง  กด submit ข้อมูลสินค้าจะถูกนำมาแสดงที่หน้า inventory </p>
+                  <span>หน้า inventory เป็นหน้าที่แสดงสินค้าในคลังของร้านคุณ คุณสามารถเพิ่มสินค้าได้ในหน้านี้ </span>
+                  <li><span>การเพิ่มสินค้าใหม่</span></li>
+                  <ul>
+                  <ol>
+                    <li>
+                      <span>ถ้าคุณต้องการ เพิ่มสินค้าใหม่กดที่ปุ่ม Create</span>
+                    </li>
+                    <li><span>เมื่อกรอกข้อมูลครบถ้วนและถูกต้อง กด Submit ข้อมูลสินค้าจะถูกนำมาแสดงที่หน้า Inventory </span>
+                    </li>
+                  </ol>
+                  </ul>
+                    
                 </section>
 
                 <section id='CustomerInformation'>
@@ -474,7 +483,12 @@ function Manual() {
                     </ol>
                   </ul>
                   <ul>
-                  <span>การเปิด-ปิด ฟังก์ชั่นการตอบกลับอัติโนมัติของบอท</span>
+                  <li><span>การเปิด-ปิด ฟังก์ชั่นการตอบกลับอัติโนมัติของบอท</span></li>
+                  <ol>
+                    <li>
+                      <span>กดปุ่ม  <i className=" fa-2x fad fa-toggle-off "></i>ด้านบนขวา bot จะถูกปิดการทำงานและคุณสามารถตอบกลับลูกค้าได้ทันที (ปุ่มขึ้นสีเทา = ปิดการทำงาน , ปุ่มขึ้นสีเขียว = เปิดการทำงาน)</span>
+                    </li>
+                  </ol>
                     <li><span>Link</span></li>
                     <ol>
                       <li>
@@ -491,20 +505,16 @@ function Manual() {
                       </li>
                     </ol>
                   </ul>
-                  <p><br></br>
-              และคุณสามารถตอบลูกค้าได้จากทางนี้เมื่อคุณกดปุ่ม ปิดให้ขึ้นสีแดง <i className=" fa-2x fad fa-toggle-off "></i> ด้านบนขวา bot จะถูกปิดการทำงานและคุณสามารถตอบกลับลูกค้าได้ทันที <br></br>
-              โดยจะมีปุ่ม all message เป็นปุ่มรวมแชทของลูกค้า ทั้ง Facebook และ line <br></br>
-              ปุ่ม line คือ ปุ่มรวมแชทของลูกค้าที่ผ่านทางไลน์<br></br>
-              ปุ่ม Facebook คือ ปุ่มรวมแชทของลูกค้าที่ผ่านทาง Facebook<br></br>
-                  </p>
+                 
                 </section>
 
                 <section id='DashboardBot'>
                   <h5>Dashboard Bot</h5>
                   <span>หน้า Dashboard bot เป็นหน้าที่แสดงกราฟยอดการตอบกลับของ Bot</span>
-                  <span>ฟังก์ชั่นที่สามารถใช้งานได้</span>
+                  
                   <ul>
-                    
+                    <li><span>ฟังก์ชั่นที่สามารถใช้งานได้</span></li>
+                    <ol>
                       <li>
                         <span>Today กราฟที่แสดงจะเป็น ยอดการตอบกลับของ botของวันนั้นๆ</span>
                       </li>
@@ -514,6 +524,7 @@ function Manual() {
                       <li>
                         <span>กดเลือก By month กราฟที่แสดงจะเป็น ยอดการตอบกลับของ botที่แสดงค่าแต่ละเดือนของปีนั้นๆ</span>
                       </li>
+                      </ol>
                   </ul>  
                 </section>
               </div>
