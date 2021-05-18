@@ -111,11 +111,13 @@ function Manual() {
         
                     <h6>Connect to Facebook</h6>
                   <ol>
-                    <li><span>ถ้าคุณต้องการเชื่อมต่อบอทกับเฟซบุ๊ก ให้กด "Icon Facebook"</span></li>
+                    <li><span>ถ้าคุณต้องการเชื่อมต่อ Bot กับเฟซบุ๊ก ให้กด <i className="fab fa-facebook-square"></i></span></li>
                     <li><span>จะแสดง pop up ของการเชื่อมต่อ</span></li>
                     <li><span>กดปุ่ม copy เพื่อนำ URL ไปใส่ที่ "URL ติดต่อกลับ" ของ Facebook for developer</span></li>
-                    <li><span>เข้าสู่ระบบเว็บไซต์ Facebook developer </span></li>
+                    <li><span>เข้าสู่ระบบเว็บไซต์ <a href="https://developers.facebook.com/">Facebook developer</a></span></li>
                     <li><span>กดเลือก "แอพของฉัน"</span></li>
+                    <li><span>หากยังไม่มีแอพให้เลือก ให้ทำการสร้างแอพขึ้นาก่อนโดยกดไปที่ "สร้างแอพ"</span></li>
+                    <li><span>หากมีแอพอยู่แล้วให้กดเลือกแอพที่ต้องการ</span></li>
                     <li><span>กดไปที่ "Messenger" เลือก "การตั้งค่า"</span></li>
                     <li><span>เลื่อนหาหัวข้อ "Webhooks"</span></li>
                     <div className="img-manual">
@@ -129,50 +131,67 @@ function Manual() {
                     <li><span>หลังจากนั้นกดคัดลอก token ที่ Create token เสร็จเรียบร้อยแล้ว และจึงนำไปวางไปที่ "Access token" ในข้อ2</span></li>
                     <li><span>สร้าง Verify token</span></li>
                     <li><span> Verify token สารมารถตั้งค่าได้ตามที่ต้องการ (กรุณากรอกใน webhook ของ Facebook ให้เหมือนกับในเว็ป A1 chatbot)</span></li>
-           
-            จากนั้น set page webhook เลือก message และกดบันทึก <br></br>
+                    <li><span>จากนั้น set page webhook เลือก message และกดบันทึก</span></li>
+            
                     <div className="img-manual">
                       <img className="connectbot3-setwebhook" src="./images/manual/connectbot3-setwebhook.jpg" /> <br></br>
                     </div>
-            เมื่อใส่ข้อมูลครบแล้วสามารถกดบันทึกได้เลย
                   </ol>
-
+                  <br/>
                   <h6>Connect to Line</h6>
                   <ol>
-                    <li><span>ถ้าคุณต้องการเชื่อต่อบอทกับ line ให้ click ที่ icon line</span></li>
-                    <li><span>จากนั้น กดปุ่ม copy URL นำไปว่างที่ webhook URL ใน line developer</span></li>
-                    <li><span>เข้าสู่ระบบเว็บไซต์ Line developer</span></li>
+                    <li><span>ถ้าคุณต้องการเชื่อต่อ Bot กับ line ให้ click ที่ <i className="fab fa-line"></i></span></li>
+                    <li><span>จากนั้น กดปุ่ม copy URL นำไปวางที่ webhook URL ใน line developer</span></li>
+                    <li><span>เข้าสู่ระบบเว็บไซต์ <a href="https://developers.line.biz/en/">Line developer</a></span></li>
+                    <li><span>จากนั้นศึกษาขั้นตอนได้จาก <a href="https://developers.line.biz/en/docs/messaging-api/getting-started/#using-console">Getting started with the Messaging API</a></span></li>
+                    <li><span>หลังจากนั้นการสร้างและเชื่อมต่อ Bot กับ Line โดยศึกษาได้จาก <a href="https://developers.line.biz/en/docs/messaging-api/building-bot/">Building a bot and Set a Webhook URL</a></span></li>
                     <div className="img-manual">
                       <img className="connectbot4-URL-line" src="./images/manual/connectbot4-URL-line.jpg" /> <br></br>
                     </div>
-                  </ol>
-                    
-            และกรอกรายละเอียกอื่นๆเพิ่มเติมได้แก่ <br></br>
-            Channel secret, Channel access token, Basic ID สามารถ copy จาก line developer นำมาวางได้เลย <br></br>
+                    <li><span>และกรอกรายละเอียกอื่นๆเพิ่มเติมได้แก่ Channel secret, Channel access token, Basic ID สามารถ copy จาก line developer นำมาวางไว้ที่ฟอร์มของการ Connect Line Bot (ข้อ1 ของการConnect to Line)</span></li>
+                  
                     <div className="img-manual">
                       <img className="channel-secret-1" src="./images/manual/channel-secret-1.jpg" /> <br></br>
                       <img className="channel-access-token-2" src="./images/manual/channel-access-token-2.jpg" /> <br></br>
                       <img className="connectbot-line-basicID-3" src="./images/manual/connectbot-line-basicID-3.jpg" /> <br></br>
                     </div>
-            เมื่อกรอกเสร็จสิ้น กด connect
-
-            <h6>Connect to Omise</h6>
-            ถ้าคุณต้องการเชื่อมต่อระบบชำระเงินกับ omise
-            คุณต้องสมัครสมาชิกบน web omise จากนั้น นำ SECRET KEY, PUBLIC KEY มาใส่ในเว็ป A1 chatbot <br></br>
+                    <li><span>เมื่อกรอกเสร็จสิ้น กด connect เพื่อเสร็จสิ้นกระบวนการเชื่อมต่อกับ Line</span></li>
+                    </ol>
+                  <br/>
+                  <h6>Connect to Optional</h6>
+                  <ol>
+                    <span>ถ้าหากคุณต้องการที่จะเชื่อมต่อเพื่อใช้ Feature อื่นๆ ให้กดไปที่ <i className="icon-connect fas fa-filter "></i> โดยกำหนดให้มีการเชื่อมต่อกับ Feature ได้แก้ Omise และ Liff ของ Line developer เท่านั้น ซึ่งไม่ได้บังคับว่าจะต้องทำการเชื่อมต่อทั้งหมด แต่หากเชื่อมต่อก็จะสามารถใช้งานได้</span>
+                  </ol>
+                  <ul>
+                    <br/>
+                    <li>Connect Omise</li>
+                    <span>ถ้าคุณต้องการเชื่อมต่อระบบชำระเงินกับ Omise คุณต้องสมัครสมาชิกบนเว็บไซต์ <a href="https://www.omise.co/">Omise</a> จากนั้น นำ SECRET KEY, PUBLIC KEY มาใส่ในเว็ป A1 chatbot</span><li></li>
+                  </ul>
+                  <ul>
                     <div className="img-manual">
                       <img className="connectbot-omise-1" src="./images/manual/connectbot-omise-1.jpg" /> <br></br>
                     </div>
-            คุณสามารถ copy URL ใน form นำไปใส่ใน endpoint URL ของ line developer ได้เลย <br></br>
                     <div className="img-manual">
-                      <img className="endpoint-URL" src="./images/manual/endpoint-URL.jpg" /> <br></br>
-                    </div>
-            เมื่อสร้างเสร็จคุณจะได้ Liff ID คุณสามารถ copy Liff ID ใน line developer นำมาวางใน form ได้เลย<br></br>
-                    <div className="img-manual">
-                      <img className="LIFF-ID" src="./images/manual/LIFF-ID.jpg" /> <br></br>
-                    </div>
-            เมื่อกรอกข้อมูลครบถ้วน กด submit
-            
+                        <img className="endpoint-URL" src="./images/manual/endpoint-URL.jpg" />
+                      </div>
+                  </ul>    
+                  <ul>
+                    <br/>
+                    <li>Connect Liff </li>
+                    <span>ถ้าคุณต้องการเชื่อมต่อ Liff กับ Line Developer สามารถทำตามขั้นตอนได้จาก <a href="https://developers.line.biz/en/docs/line-login/getting-started/">Getting started with LINE Login</a></span>
+                  </ul>
+                  <ol>
+                    <li><span>คุณสามารถ copy URL ในฟอร์มของการ Connect Optional และนำไปใส่ใน Endpoint URL ของ Line developer ได้เลย</span></li>
+                    <li><span>เมื่อสร้างเสร็จคุณจะได้ Liff ID คุณสามารถ copy Liff ID ใน line developer นำมาวางในฟอร์มวางไว้ที่ฟอร์มของการ Connect Optional ได้เลย</span></li>
+                      <br/>
+                      <div className="img-manual">
+                        <img className="LIFF-ID" src="./images/manual/LIFF-ID.jpg" />
+                      </div>
+                      <li><span>เมื่อกรอกข้อมูลครบถ้วน กด submit</span></li>
+                  </ol>
                 </section>
+              
+              <span></span>
             </div>
             <div className="container-manual-inside">
                 <section id='TrainBot'>
@@ -486,24 +505,9 @@ function Manual() {
                   <li><span>การเปิด-ปิด ฟังก์ชั่นการตอบกลับอัติโนมัติของบอท</span></li>
                   <ol>
                     <li>
-                      <span>กดปุ่ม  <i className=" fa-2x fad fa-toggle-off "></i>ด้านบนขวา bot จะถูกปิดการทำงานและคุณสามารถตอบกลับลูกค้าได้ทันที (ปุ่มขึ้นสีเทา = ปิดการทำงาน , ปุ่มขึ้นสีเขียว = เปิดการทำงาน)</span>
+                      <span>กดปุ่ม <i className=" fa-2x fad fa-toggle-off "> </i>ด้านบนขวา bot จะถูกปิดการทำงานการตอบกลับอัติโนมัติและคุณสามารถตอบกลับลูกค้าได้ทันที (ปุ่มขึ้นสีเทา = ปิดการทำงาน , ปุ่มขึ้นสีเขียว = เปิดการทำงาน)</span>
                     </li>
                   </ol>
-                    <li><span>Link</span></li>
-                    <ol>
-                      <li>
-                        <span>สามารถกดที่ <i className="far fa-edit"></i> เพื่อสามารถเปิดหน้าที่เก็บข้อมูลการถามชื่อ ถามที่อยู่ ถามเบอร์โทรศัพท์</span>
-                      </li>
-                      <li>
-                        <span>คุณสามารถแก้ไขข้อมูลได้โดยการกดไปที่กล่องข้อความที่คุณต้องการจะแก้</span>
-                      </li>
-                      <li>
-                        <span>จากนั้นไปแก้ที่กล่องข้อความของ Answer และสามารถแก้ไขข้อความได้</span>
-                      </li>
-                      <li>
-                        <span>เมื่อเสร็จแล้วทำการบันทึกด้วยการกด Save</span>
-                      </li>
-                    </ol>
                   </ul>
                  
                 </section>
