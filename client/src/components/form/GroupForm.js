@@ -183,7 +183,7 @@ function GroupForm(props) {
 
                         :
                         //form upload image 
-                        <form onSubmit={insertImage}>
+                        <form onSubmit={insertImage} className='center-form'>
                             <input accept="image/x-png,image/gif,image/jpeg" className='todo-input-img'  type="file" onChange={e => _handleImageChange(e)}></input>
                             <button className='todo-button-img' onClick={insertImage}>
                                 Add
