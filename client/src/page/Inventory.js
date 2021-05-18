@@ -5,7 +5,6 @@ import Invenlist from '../Components/Inventory/Inven_list';
 import { Link } from "react-router-dom";
 
 const Styles = styled.div` 
-
 .inventory-page {
     display: flex;
     min-height:92vh;
@@ -14,20 +13,16 @@ const Styles = styled.div`
     padding: 20px 40px;
     width: 100%;
 }
-
 .inven-title{
     padding: 4px;
     width: 100% ;
     background-color: white;
     border-radius: 0.25rem;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-    
 }
-
 .inven-title h2 {
     font-weight:600;
 }
-
 .inventory-body {
     min-height: 70vh;
     margin-top: 1%;
@@ -37,30 +32,25 @@ const Styles = styled.div`
     border-radius: 0.25rem;
     /* border: 1px solid #ececec; */
 }
-
 .inven-showlist{
     display: grid;
     grid-template-columns: repeat(5, 1fr);
 }
-
-@media (min-width: 800px) {
+@media only screen and (min-width: 800px) {
     .inven-showlist { 
         grid-template-columns: repeat(2, 1fr); 
         }
 }
-
-@media (min-width: 1200px) {
+@media only screen and (min-width: 1200px) {
     .inven-showlist { 
         grid-template-columns: repeat(3, 1fr); 
         }
 }
-
-  @media (min-width: 1600px) {
+@media only screen and (min-width: 1600px) {
     .inven-showlist { 
         grid-template-columns: repeat(5, 1fr); 
     }
   }
-
 .create-inven{
     padding: 7px 20px;
     margin-bottom: 1%;
@@ -72,7 +62,6 @@ const Styles = styled.div`
     color: #fff;
 }
 .bot-name-on-page {
-    
     margin-bottom: 10px;
     /* width: 150px; */
     /* max-width: 800px; */
@@ -80,7 +69,7 @@ const Styles = styled.div`
     border-radius: 1rem;
   }
 
-  .bot-name-on-page h4{
+.bot-name-on-page h4{
     max-width: 900px;
     position: relative;
     right: 0;
@@ -93,8 +82,8 @@ const Styles = styled.div`
     background-color : #fca311;
     border-radius: 1rem;
     padding: 5px 20px; 
-  }
-  .loader {
+}
+.loader {
   animation:spin 1s infinite linear;
   border:solid 2vmin transparent;
   border-radius:50%;
@@ -120,7 +109,7 @@ const Styles = styled.div`
     position:absolute;
     top:0;
     width:16vmin;
-  }
+}
   &:after {
     animation:spin 3s infinite linear;
     border:solid 2vmin transparent;
@@ -142,8 +131,6 @@ const Styles = styled.div`
     transform:rotate(360deg);
   }
 }
-
-
 ` 
 
 function Inventory(props){
@@ -157,7 +144,6 @@ function Inventory(props){
       }, []);
     console.log(inventory)
     const card = inventory.map((inventory) => 
-
         <Invenlist props={inventory}/>
         ,console.log(inventory)
     );
@@ -181,7 +167,6 @@ function Inventory(props){
                     <div className="inven-title">
                        <h2 className="p-2 flex-grow-1 bd-highlight" id="inventory-header">Inventories</h2>
                    </div> 
-
                    {loading ?                    
                       <div className="inventory-body">        
                       <Link to={"/bot/"+props.match.params.bot_id+"/add_item"}>
@@ -191,14 +176,9 @@ function Inventory(props){
                       <div className="inven-showlist">
                           {card}
                       </div>
-                  
                   </div>  : <div class="loader"></div>}
-                
-                                      
-                 
                 </div> 
             </div>
-            
         </Styles>
     );
 }
